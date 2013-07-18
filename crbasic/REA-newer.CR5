@@ -1,120 +1,96 @@
-''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
-' Relaxed Eddy Accumulator - Datalogger Control Program
-' Version 2010.10.13a
+''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+' Denuder-based Relaxed Eddy Accumulation (REA) Flux Measurement System
 '
-' Patrick O'Keeffe     patrick.okeeffe@email.wsu.edu
-'                      (509) 335-7246
-' Heavily adapted from a program by Jay Ham
-'''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
-
-'''''''''''''''''''' TABLE OF CONTENTS ''''''''''''''''''''''''''''''''''
-' CONSTANTS
-'   Editable constants (forces program recompilation)
-'   Program control
-'   Named
-'   Physical
-' WIRING DETAILS
-' VARIABLES
-'   Raw sensor input 
-'   Working values 
-'   Storage values
-'   Program control
-' DATA TABLE DEFINITIONS
-'   
+' Laboratory for Atmospheric Research
+' Department of Civil & Environmental Engineering
+' Washington State University
 '
+' Contact:  Patrick O'Keeffe
+'           pokeeffe@wsu.edu
+'           (509) 335-7246
+'
+' Adapted from potentially copyrighted works obtained from Jay Ham, Kansas State University
+' 
+' Not for public release (yet)
+''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+
+'==========  DEVICE CONFIGURATION  ==========
+
+'----- WIRING -----
+Const HMP_T_DF = 11
+Const HMP_RH_DF = 12
+
+Const PTB_DF = 17
+
+Const MFC_UP_DF = 1
+Const MFC_DN_DF = 2
+Const MFC_UPDN_CAO = 1 'MFCs share port
+Const MFC_UPDN_C = 1   'C1 - digital output
+
+Const MFC_ZERO_SE = 5  'note: single-ended
+Const MFC_ZERO_CAO = 2
+
+'----- ANALOG SCALING -----
+'LO: value @ 0V; HI: value @ high voltage; VR = voltage range (from 0V), V
+Const HMP_T_LO = -40
+Const HMP_T_HI = 60 'degC
+Const HMP_T_VR = 1
+Const HMP_RH_LO = 0
+Const HMP_RH_HI = 100 '%
+Const HMP_RH_VR = 1
+
+Const PTB_LO = 60     '600 hPa * 0.1 kPa/hPa
+Const PTB_HI = 106    '1060 hPa = 106 kPa
+Const PTB_VR = 2.5 
+
+Const MFC_UP_LO = 0
+Const MFC_UP_HI = 10 'sLpm
+Const MFC_UP_VR = 5
+
+Const MFC_DN_LO = MFC_UP_LO
+Const MFC_DN_HI = MFC_UP_HI
+Const MFC_DN_VR = MFC_UP_VR
+
+Const MFC_ZERO_LO = 0
+Const MFC_ZERO_HI = 5 'sLpm
+Const MFC_ZERO_VR = 5
+
+'----- SDM DEVICES -----
+Const CSAT_ADDR = 3  'default CSAT3 SDM address: 3
+Const LI7500_ADDR = 7  'default LI7500 SDM address: 7
+Const EC100_ADDR = 1 'default EC100/EC150/CSAT3A address: 1
+
+'----- CONTROL PORT MASKS ------
+Const MFC_MASK  = &b00000001 'C1 - MFCs valve off control
+Const PTB_MASK  = &b00000010 'C2 - pressure on/off control
+'C3, C4 not in use
+Const UP_NOT_DN = &b00010000 'C5
+Const DN_NOT_UP = &b00100000 'C6
+Const PUMP_MASK = &b01000000 'C7
+Const ZERO_MASK = &b10000000 'C8
+
+Const UPDN_MASK = &b00110000 'C5 & C6
+Const ON_MASK   = &b11111111 'all ports on
+Const OFF_MASK  = &b00000000 'all ports off
+
+'----- FIXED ANALOG INPUT SCALING CALCS -----
+Const HMP_T_MULT = (HMP_T_HI - HMP_T_LO) / HMP_T_VR
+Const HMP_T_OFF = HMP_T_LO
+Const HMP_RH_MULT = (HMP_RH_HI -  HMP_RH_LO) / HMP_RH_VR
+Const HMP_RH_OFF = HMP_RH_LO
+Const PTB_MULT = (PTB_HI - PTB_LO) / PTB_VR
+Const PTB_OFF = PTB_LO
+Const MFC_UP_MULT = (MFC_UP_HI - MFC_UP_LO) / MFC_UP_VR
+Const MFC_UP_OFF = MFC_UP_LO
+Const MFC_DN_MULT = (MFC_DN_HI - MFC_DN_LO) / MFC_DN_VR
+Const MFC_DN_OFF = MFC_DN_LO
+Const MFC_ZERO_MULT = (MFC_ZERO_HI - MFC_ZERO_LO) / MFC_ZERO_VR
+Const MFC_ZERO_OFF = MFC_ZERO_LO
 
 
-''''''''''''''''''''' CONSTANTS: Editable '''''''''''''''''''''''''''''''''
-ConstTable
-  Const SCAN_HERTZ = 10                       'Select sample rate of 10 or 20 hertz
-  Const FLUX_INTERVAL = 30                    'Calculate & output fluxes every XX minutes
-  Const SDM_SPEED = 30		                    'SDM clock speed (default: 30)
-    'If long distances cause data loss, reduce this from its default value
-  Const SCAN_BUF_TIME = 1                     'Amount of buffering to do (minutes)
-  Const DEF_RUN_TIME = 30                     'Default length of time to run REA (minutes)
-  Const CSAT3_SDM = 3                         'Physical SDM address of CSAT3 sonic
-  Const LI7500_SDM = 5                        'Physical SDM address of LI-7500 irga 
-  Const ZM = 1.2 	                            'Measurement height above surface, meters
-  Const ZO =0.04		                          'Est. roughness length, meters
-  Const SRC_BOUND_N = 500	                    'Define source boundaries as footprint thresholds, meters
-  Const SRC_BOUND_S = 500  
-  Const SRC_BOUND_E = 500	
-  Const SRC_BOUND_W = 500	
-  Const SRC_MIN_WD = 0			                  'Define WD boundaries as footprint thresholds, degrees
-  Const SRC_MAX_WD = 360		                  'Min() compared inclusively, Max() compared exclusively
-  Const CSAT3_AZIMUTH = 0	                    'Compass azimuth of the -x axis. In fig below, CSAT3_AZIMUTH = 90
-    ' () -> Compass coordinate system
-    ' {} -> Right handed coordinate system aligned to north
-    '
-    '                               (N) 0
-    '                               {-y}
-    '                                |
-    '                                |
-    '                                |
-    '                                |
-    '          270 (W) {+x} --------[ ]----X---> {-x} (E) 90
-    '                              / |      \
-    '                    CSAT3 Block |      CSAT3 Transducers
-    '                                |
-    '                                |
-    '                                v
-    '                               {+y}
-    '                               (S) 180
-  Const CSAT3_DECLIN = 0                      'Magnetic declination at the site
-  Const HMP_T_MULT = 0.1                      'mult = (60 - -40)/1000 = 0.1 degC/mv
-  Const HMP_T_OFF = -40                       'off  = -40 degC
-  Const HMP_RH_MULT = 0.1                     'mult = (100 - 0)/1000 = 0.1 %/mv
-  Const HMP_RH_OFF = 0                        'off  = 0%
-    'HMP45AC outputs temperature: -40 to 60 degC over 0-1V
-    '              rel. humidity: 0-100% over 0-1V
-  Const PTB_MULT = 0.0184                     'mult = (1060-600)/2500 = 0.184 mb/mv = 0.0184 kPa/mv
-  Const PTB_OFF = 60                          'off  = 600 mb = 60 kPa
-    'PTB101B outputs 600-1060 hPa over 0-2.5V             (1 hPa = 1 mb; 1 kPa = 10 mb)
-  Const MFC_UPDN_MULT = 0.002                 'mult = (10-0)/5000 = 0.002 sLPM/mv
-  Const MFC_UPDN_OFF = 0                      'off  = 0 sLPM
-    'AFC26S-VADN5-C0 outputs 0-10 sLPM over 0-5V
-  Const MFC_ZERO_MULT = 0.001                 'mult = (5-0)/5000 = 0.001 sLPM/mv
-  Const MFC_ZERO_OFF = 0                      'off  = 0 sLPM
-    'FC-260 outputs 0-5 sLPM over 0-5V
-EndConstTable
+'==========  IMPORTANT CONSTANTS  =========
 
-
-
-
-'''''''''''''''''''''' CONSTANTS: Program Control '''''''''''''''''''''''''''
-Const SCAN_INTERVAL = INT(1000/SCAN_HERTZ)        'Calculate scan interval (ms) from hertz
-Const SCAN_BUF_SIZE = SCAN_BUF_TIME*60*SCAN_HERTZ	'Compute 5 minute scan buffer
-Const LAG_SCANS = 10	    	                      'Lag storage of final data by this many records
-Const CSAT3_DELAY = 2		                          'Delay fixed @ 2 scans for any output (CSAT manual, pg 17)
-Const CSAT3_CMD = 91                              'Trigger and get wind & sonic temp data
-Const CSAT3_OPT = SCAN_HERTZ                      'CSAT3 parameter (10/20 Hz)
-Const LI7500_DELAY = INT(200/SCAN_INTERVAL)	      'Delay = BaseDelay + DelayStep*6.5ms (LI7500 manual, pg 3-31)
-  'DAC outputs: BaseDelay=240ms; with DelayStep=9 -> Delay=299ms
-  'SDM/RS232 outputs: BaseDelay=186ms; with DelayStep=2 -> Delay=199ms
-Const LI7500_OPT = 6                              'CO2&H2O density (mmol/m3), press est (kPa) & diag val
-
-
-
-
-
-''''''''''''''''''''''' CONSTANTS: Named '''''''''''''''''''''''''''''''''''''''
-Const YES = -1		                                'Yes defined -1 (TRUE)
-Const NO = 0		                                  'No defined 0 (FALSE)
-
-Const ScanMetOnly   = -4999                       'Only saving met data
-Const ScanRunWait   = -4998                       'Waiting to start REA run
-Const ScanRunActive = -4997                       'Performing REA run
-Const ScanRunDone   = -4996                       'Just finished REA run
-
-Const Waiting       = -4995                       'displayed in menu when not in REA run
-Const Scheduled     = -4994                       'displayed in menu to permit starting run
-
-
-
-
-
-
-''''''''''''''''''''''' CONSTANTS: Physical ''''''''''''''''''''''''''''''''''''
+'----- PHYSICAL -----
 Const Cpd = 1005.7 	          'specific heat capacity of dry air, J/(kg K)
 Const Cw = 1820               'specific heat capacity of water, J/(kg K)
 Const MW_h2o = 18.01528       'molecular weight of water, g/mol
@@ -129,151 +105,360 @@ Const RperD = PI/180          'radians per degree
 Const DperR = 180/PI          'degrees per radian
 
 
+'----- CUSTOM MENU DEFINITIONS -----
+Const Disable = False
+Const Enable = True
+Const Cancel = 1000
+Const Discard = 1001
+Const Save = 1002
+Const CSAT3_ = 1003
+Const LI7500_ = 1004
+Const EC100_ = 1005
+
+
+'==========  PROGRAM OPERATION  ==========
+
+'----- META-SETTINGS -----
+Const INTEG = 250     'analog integration time: 250, _50Hz, or _60Hz
+'TODO: make fast_intv derive from 10/20hz choice in menu
+Const FAST_INTV = 50  'length of scan, msec
+Const FAST_UNIT = mSec
+Const SELF_INTV = 1   'self-check loop, second
+Const SELF_UNIT = Sec
+
+'----- SDM device options -----
+Const CSAT_CMD = 91  'trigger + get wind & temp data
+Const CSAT_OPT = INT(1000/FAST_INTV) 'calc Hz from interval
+Const LI7500_CMD = 6  'get co2, h2o, press & diagnostic
+Const EC100_CMD = 1  'get Ux/Uy/Uz, Ts, sonic diag, CO2, H2O, 
+'** The LI7500 reports co2/h2o in _MOLAR_ density while EC100 reports in _MASS_ density **
+
+'----- SETTINGS FILE -----
+Dim filehandle As Long
+Dim save_changes
+Const SETTINGS_FILE = "CPU:rea_settings.dat"
+Const NUM_SETTINGS = {11}
+Const WRITEFILE = 0
+Const READFILE = 1
+
+Dim choices(NUM_SETTINGS)
+Alias choices(1)  = cho_irga_src      'either EC100_ or LI7500_
+Alias choices(2)  = cho_son_src       'either EC100_ or CSAT3_
+Alias choices(3)  = cho_son_azimuth   'degrees E of N
+Alias choices(4)  = cho_son_height    'decimal meters
+Alias choices(5)  = cho_site_declin   'degrees E of TN
+Alias choices(6)  = cho_site_rufness  'decimal meters
+Alias choices(7)  = cho_samp_flow     'sLpm
+Alias choices(8)  = cho_zero_flow     'sLpm
+Alias choices(9)  = cho_dband_mult    'ratio
+Alias choices(10) = cho_dband_min     'm/s
+Alias choices(11) = cho_dband_def     'm/s
+
+Dim settings(NUM_SETTINGS)
+Alias settings(1)  = set_irga_src
+Alias settings(2)  = set_son_src
+Alias settings(3)  = set_son_azimuth
+Alias settings(4)  = set_son_height
+Alias settings(5)  = set_site_declin
+Alias settings(6)  = set_site_rufness
+Alias settings(7)  = set_samp_flow
+Alias settings(8)  = set_zero_flow
+Alias settings(9)  = set_dband_mult
+Alias settings(10) = set_dband_min
+Alias settings(11) = set_dband_def
+
+
+'==========  VARIABLES  ==========
+
+'----- SENSORS -----
+Dim csat_raw(5) 'Campbellsci CSAT3
+Dim li7500_raw(4) 'Licor LI-7500
+Dim ec100_raw(12) 'Campbellsci EC100/EC150/CSAT3A
+
+Alias csat_raw(3) = Uz_raw 
+Public Uz_rot 
+
+Public sonic(5) 
+Alias sonic(1) = Ux
+Alias sonic(2) = Uy
+Alias sonic(3) = Uz
+Alias sonic(4) = Ts
+Alias sonic(5) = sonic_diag
+Units sonic = m/s
+Units Ts = C
+Units sonic_diag = bitmap
+
+Public irga(4) 
+Alias irga(1) = irga_CO2
+Alias irga(2) = irga_H2O
+Alias irga(3) = irga_press
+Alias irga(4) = irga_diag
+Units irga_CO2 = mmol/m^3
+Units irga_H2O = mmol/m^3
+Units irga_press = kPa
+Units irga_diag = bitmap
+
+Public ptb101(1)
+Alias ptb101(1) = press
+Units ptb101 = kPa
+
+Public hmp45c(2)
+Alias hmp45c(1) = hmp_T
+Alias hmp45c(2) = hmp_RH
+Units hmp_T = degC
+Units hmp_RH = %
+
+Public flow(3)
+Alias flow(1) = flow_up
+Alias flow(2) = flow_dn
+Alias flow(3) = flow_zero
+Units flow = sLpm
+
+Public cr5k(2)
+Alias cr5k(1) = LoggerTemp
+Alias cr5k(2) = LoggerVoltage
+Units LoggerTemp = degC
+Units LoggerVoltage = Volts
 
 
 
-'''''''''''''''''''''''' WIRING DETAILS '''''''''''''''''''''''''''''''''''''''''
-' CR5000     Sensor                     Non-CR5000
-'
-'3-dimensional sonic anemometer: CSAT3 (Campbell Scientific Inc; Logan, UT)
-' SDM-C1     SDM data (green)
-' SDM-C2     SDM clock (white)
-' SDM-C3     SDM enable (brown)
-' G          SDM ref (black) 
-' grndsym    SDM shield (clear)
-' 12V        power (red) 
-' G          power grnd (black)
-' G          power shield (clear)
-'
-'CO2/H2O open-path infrared gas analyzer: LI-7500 (LI-COR; Lincoln, NE)
-' SDM-C1     SDM data (gray)
-' SDM-C2     SDM clock (blue)
-' SDM-C3     SDM enable (brown)
-' G          SDM ref (black)
-' grndsymb   SDM shield (white)
-'            power (red/white)          (+) 13.8vDC power supply
-'            power ground (green)       (-) 13.8vDC power supply
-' 
-'Temp/RH sensor: HMP45AC (Vaisala through CSI; Logan, UT)
-' D19H       temp signal output (yellow)
-' D19L       signal ref (white)
-' D20H       RH signal ouput (blue)
-' D20L       jumpered to signal ref 
-' grndsymb   shield (clear)
-' 12V        power (red)
-' G          power grnd (black)
-'
-'Barometric pressure sensor: PTB101B (Campbell Scientific; Logan, UT)
-' D6H        signal output (orange)
-' D6L        signal ref (white)
-' grndsymb   shield (clear)
-' C2         control (yellow)
-' 12V        power (red)
-' G          ground (purple)
-'
-'Solid state relay: 120D10 (Opto 22; Temecula, CA)
-'            terminal #1 (black)        Pump outlet, smaller slot
-'            terminal #2 (black)        Hot lead from AC power
-'            terminal #3 (red)          Relay rack: Field 7
-'            terminal #4 (black)        (-) 13.8vDC power supply
-'
-'Three-way solenoid valves: 091-0094-900 (Parker Hannifin Corp.; Cleveland, OH)
-'            UP valve (+) (white)       Relay rack: Field 3
-'            DN valve (+) (red)         Relay rack: Field 5
-'            both (-) (black)           (-) 13.8vDC power supply
-'
-'Two-way solenoid valve: C-01367-70 (Cole Parmer; Vernon Hills, IL)
-'            one wire (+) (yellow)      Relay rack: Field 9
-'            other wire (-) (yellow)    (-) 13.8vDC power supply
-'
-'4-channel relay rack: G4PB45/G40DC5 (Opto 22; Temecula, CA)
-' C5         Control 2
-' G          Control 3 (black)
-' C6         Control 4
-'            Control 5 (black)          jumper to Control 3
-' C7         Control 6
-'            Control 7 (black)          jumper to Control 5
-' C8         Control 8
-'            Control 9 (black)          jumper to Control 7
-'            Field 2 (red)              jumper to Field 4
-'            Field 3 (white)            3-way solenoid valve UP (+)
-'            Field 4 (red)              jumper to Field 7
-'            Field 5 (red)              3-way solenoid valve DN (+)
-'            Field 6 (red)              (+) 13.8vDC power supply
-'            Field 7 (red)              Solid state relay terminal #3
-'            Field 8 (red)              jumper to Field 6
-'            Field 9 (yellow)           2-way solenoid valve (+)
-'
-'Bipolar +/-15vDC power supply: REL110-2005 (Astrodyne; Mansfield, MA)
-'            +15v (red - purple)        0-10 sLPM MFCs (+15v) 
-'                 (red - red)           0-5 sLPM MFC (+15v)
-'            common (black - blue)      0-10 sLPM MFCs (common)
-'                   (black - white)     0-5 sLPM MFC (common)
-'            -15v (red - red)           0-10 sLPM MFCs (-15v)
-'                 (red - black)         0-5 sLPM MFC (-15v)
-'
-'External battery charger/power supply: PS12 (Campbell Scientific; Logan, UT)
-' G          ground symbol    
-' 12V        +12V
-'            CHG                        Bipolar power supply (+15v)
-'            CHG                        Bipolar power supply (common)
-'            EXT BATT +                 Ext. 12V gel cell battery (+)
-'            EXT BATT -                 Ext. 12V gel cell battery (-)
-'
-'12V housing fan
-' SW12       power (red)
-' G          power ground (blue)
-'
-'0-10 sLPM MFCs: AFC26S-VADN5-C0 10SLPM [air] XX PSIG (Aalborg; Orangeburg, NY)
-' C1         both TTL controls (outside green)
-' CAO1       both control set (outside red)
-' G          both control common (inside yellow)
-' grndsymb   both chassis grnd (outside brown)
-' D11H       UP output signal (inside green)
-' D11L       UP output grnd (outside orange)
-' D12H       DN output signal (inside green)
-' D12L       DN output grnd (outside orange)
-'            both power +15v            Bipolar power supply (+15v)
-'            both power common          Bipolar power supply (common)
-'            both power -15v            Bipolar power supply (-15v)
-' 
-'0-5 sLPM MFC: FC-260 (Millipore, formerly Tylan General; Allen, TX)
-' CAO2       control set (green)
-' SE25       output (brown)
-'            power +15v                 Bipolar power supply (+15v)
-'            power common               Bipolar power supply (common)
-'            power -15v                 Bipolar power supply (-15v)
+
+Public valves(3) As Boolean
+Alias valves(1) = valve_up_ON
+Alias valves(2) = valve_dn_ON
+Alias valves(3) = valve_zero_ON
+
+Public flow_setpnt(2)
+Alias flow_setpnt(1) = setpnt_sample
+Alias flow_setpnt(2) = setpnt_zero
 
 
 
 
+
+'==========  DATA TABLES  ==========
+DataTable(progsettings,True,1000)
+  CardOut(1,1000)
+  'irga/sonic data sources not tracked, should be evident from logbooks 
+  Sample(1,set_son_azimuth,FP2)
+    FieldNames("sonic_azimuth")
+    Units sonic_azimuth = degEofN
+  Sample(1,set_son_height,FP2)
+    FieldNames("sonic_height")
+    Units sonic_height = meter
+  Sample(1,set_site_declin,FP2)
+    FieldNames("site_magdeclin")
+    Units site_magdeclin = degEofTN
+  Sample(1,set_site_rufness,FP2)
+    FieldNames("site_roughness")
+    Units site_roughness = meter
+  'changes to flow setpoints should be obvious from data files
+  'XXX may record them to distinguish operator changes from issues?
+  Sample(1,set_dband_mult,FP2)
+    FieldNames("deadband_mult")
+    Units deadband_mult = ratio
+  Sample(1,set_dband_min,FP2)
+    FieldNames("deadband_min")
+    Units deadband_min = m/s
+  Sample(1,set_dband_def,FP2)
+    FieldNames("deadband_default")
+    Units deadband_default = m/s
+EndTable
+
+
+'==========  CUSTOM MENU  ==========
+DisplayMenu("MainScreen",-1) 'or -2
+  SubMenu("Program Setup")
+    SubMenu("Schedule")
+      'TODO
+    EndSubMenu
+    SubMenu("Flow rates")
+      MenuItem("Sampling (sLpm)", cho_samp_flow)
+      MenuItem("Zero air (sLpm)", cho_zero_flow)
+    EndSubMenu
+    SubMenu("Deadband")
+      MenuItem("DB mult (0-1)", cho_dband_mult)
+      MenuItem("Minimum DB", cho_dband_min)
+      MenuItem("Default DB", cho_dband_def)
+    EndSubMenu
+    SubMenu("Site specific")
+      MenuItem("Declination", cho_site_declin)
+    EndSubMenu
+    SubMenu("Sensors")
+      SubMenu("Sonic anemometer")
+        MenuItem("Data source", cho_son_src)
+          MenuPick(CSAT3_, EC100_)
+        MenuItem("Azimuth, degEofN", cho_son_azimuth)
+        MenuItem("Height, m", cho_son_height)
+      EndSubMenu
+      SubMenu("co2/h2o IRGA")
+        MenuItem("Data source", cho_irga_src)
+          MenuPick(LI7500_, EC100_)
+      EndSubMenu
+    EndSubMenu
+    SubMenu("Save changes")
+      MenuItem("Save now?", save_changes)
+      MenuPick(Cancel, Discard, Save)
+    EndSubMenu
+  EndSubMenu
+EndMenu
+
+
+'==========  SUBROUTINES  ===========
+Sub set_default_choices()  'assume:
+  cho_irga_src = LI7500_     'Licor LI-7500
+  cho_son_src = CSAT3_       'Campbellsci CSAT3
+  cho_son_azimuth = 0        'north; with declin=0, means magnetic north
+  cho_son_height = 0         'forego height-derived analysis
+  cho_site_declin = 0        'easterly=(+), westerly=(-)
+  cho_site_rufness = 0       'forego roughness-length stuff
+  cho_samp_flow = 10         'run @ max capacity
+  cho_zero_flow = 2          'default from Jay's version
+  cho_dband_mult = 0.5       'determine width of deadband (db = sigma(Uz) * db_mult)
+  cho_dband_min = 0.05       'm/s
+  cho_dband_def = 0.05       'm/s
+EndSub
+
+Sub populate_choices()
+  Move(choices(1),NUM_SETTINGS,settings(1),NUM_SETTINGS)
+EndSub
+
+Sub save_current_choices()
+  Move(settings(1),NUM_SETTINGS,choices(1),NUM_SETTINGS)
+  Calfile(settings,NUM_SETTINGS,SETTINGS_FILE,WRITEFILE)
+EndSub
+
+
+
+
+'==========  MAIN PROGRAM  ==========
+BeginProg
+  filehandle = FileOpen(SETTINGS_FILE,"rb",0)
+  FileClose(filehandle)
+  If (filehandle=0) Then  'file not found
+    set_default_choices()
+  Else
+    Calfile(settings,NUM_SETTINGS,SETTINGS_FILE,READFILE)
+    populate_choices()
+  EndIf
+  save_current_choices()
+  
+  CallTable(info)
+  Scan(FAST_INTV,mSec,0,0)
+    
+    If (set_son_src=EC100_ OR set_irga_src=EC100_) Then
+      EC100(ec100_raw(1),EC100_ADDR,1)
+      If (set_son_src = EC100_) Then
+        Move(sonic(1),5,ec100_raw(1),5)
+      EndIf
+      If (set_irga_src = EC100_) Then
+        irga_CO2 = ec100data(6)
+        irga_H2O = ec100data(7)
+        irga_diag = ec100data(8)
+        irga_press = ec100data(10)
+      EndIf
+    EndIf
+    
+    If (set_irga_src = LI7500_) Then
+      CS7500(irga_CO2,1,LI7500_ADDR,LI7500_CMD)
+      'TODO: diagnostics
+    EndIf
+    
+    If (set_son_src = CSAT3_) Then
+      CSAT3(Ux,1,CSAT_ADDR,CSAT_CMD,CSAT_OPT)
+      'TODO: diagnostics
+      'also, manipulate CSAT diatnostic timer to be compatible with EC100 diagnostic word
+    EndIf
+
+    Uz_rot = Uz
+    If (Uz_rot >= deadband) Then
+      WriteIO(UPDN_MASK,UP_NOT_DN)
+      valve_up_ON = True
+      valve_dn_ON = False
+    ElseIf (Uz_rot <= neg_deadband) Then
+      WriteIO(UPDN_MASK,DN_NOT_UP)
+      valve_up_ON = True
+      valve_dn_ON = False
+    Else
+      WriteIO(UPDN_MASK,OFF_MASK)
+      valve_up_ON = False
+      valve_dn_ON = False
+    EndIf
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+'>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>><<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+Const SCAN_HERTZ = 10                       'Select sample rate of 10 or 20 hertz
+Const SDM_SPEED = 30		                    'SDM clock speed (default: 30)
+
+Const SCAN_BUF_TIME = 1                     'Amount of buffering to do (minutes)
+
+Const FLUX_INTERVAL = 30                    'Calculate & output fluxes every XX minutes
+
+Const SCAN_INTERVAL = INT(1000/SCAN_HERTZ)        'Calculate scan interval (ms) from hertz
+Const SCAN_BUF_SIZE = SCAN_BUF_TIME*60*SCAN_HERTZ	'Compute 5 minute scan buffer
+Const LAG_SCANS = 10	    	                      'Lag storage of final data by this many records
+Const CSAT3_DELAY = 2		                          'Delay fixed @ 2 scans for any output (CSAT manual, pg 17)
+Const CSAT3_CMD = 91                              'Trigger and get wind & sonic temp data
+Const CSAT3_OPT = SCAN_HERTZ                      'CSAT3 parameter (10/20 Hz)
+Const LI7500_DELAY = INT(200/SCAN_INTERVAL)	      'Delay = BaseDelay + DelayStep*6.5ms (LI7500 manual, pg 3-31)
+  'DAC outputs: BaseDelay=240ms; with DelayStep=9 -> Delay=299ms
+  'SDM/RS232 outputs: BaseDelay=186ms; with DelayStep=2 -> Delay=199ms
+Const LI7500_OPT = 6                              'CO2&H2O density (mmol/m3), press est (kPa) & diag val
+
+
+''''''''''''''''''''' CONSTANTS: Editable '''''''''''''''''''''''''''''''''
+ConstTable
+  Const DEF_RUN_TIME = 30                     'Default length of time to run REA (minutes)
+  Const SRC_BOUND_N = 500	                    'Define source boundaries as footprint thresholds, meters
+  Const SRC_BOUND_S = 500  
+  Const SRC_BOUND_E = 500	
+  Const SRC_BOUND_W = 500	
+  Const SRC_MIN_WD = 0			                  'Define WD boundaries as footprint thresholds, degrees
+  Const SRC_MAX_WD = 360		                  'Min() compared inclusively, Max() compared exclusively
+EndConstTable
+
+''''''''''''''''''''''' CONSTANTS: Named '''''''''''''''''''''''''''''''''''''''
+Const ScanMetOnly   = -4999                       'Only saving met data
+Const ScanRunWait   = -4998                       'Waiting to start REA run
+Const ScanRunActive = -4997                       'Performing REA run
+Const ScanRunDone   = -4996                       'Just finished REA run
+
+Const Waiting       = -4995                       'displayed in menu when not in REA run
+Const Scheduled     = -4994                       'displayed in menu to permit starting run
 
 '''''''''''''''''''''''''' VARIABLES: Raw sensor input '''''''''''''''''''''''''''''''''''
-Public wind_raw(5)           'CSAT3 unaligned data
-	Alias wind_raw(1) = Ux_raw
-	Alias wind_raw(2) = Uy_raw
-	Alias wind_raw(3) = Uz_raw
-	Alias wind_raw(4) = Ts_raw
-	Alias wind_raw(5) = diag_csat_raw
-	Units wind_raw = m/s
-	Units Ts_raw = degC
-	Units diag_csat_raw = unitless
-Public irga_raw(4)          'LI7500 IRGA unaligned data
-	Alias irga_raw(1) = co2_raw
-	Alias irga_raw(2) = h2o_raw
-	Alias irga_raw(3) = est_press_raw
-  Alias irga_raw(4) = diag_irga_raw
-	Units co2_raw = mmol/m^3
-	Units h2o_raw = mmol/m^3
-	Units est_press_raw = kPa
-	Units diag_irga_raw = unitless
-Public hmp_raw(2)          'unaligned temp/RH from HMP45AC
-  Alias hmp_raw(1) = T_raw
-  Alias hmp_raw(2) = rh_raw
-  Units T_raw = degC
-  Units rh_raw = percent
-Public press_raw          'barometric pressure
-  Units press_raw = kPa
 Public PortOn_raw(8) As Boolean   'control port states (0=false/off, else=true/on)
   Alias PortOn_raw(1) = PortOn_1    'up/dn MFCs off/on
   Alias PortOn_raw(2) = PortOn_2    'press transducer off/on
@@ -283,57 +468,20 @@ Public PortOn_raw(8) As Boolean   'control port states (0=false/off, else=true/o
   Alias PortOn_raw(6) = PortOn_6    'REA valve dn
   Alias PortOn_raw(7) = PortOn_7    'air pump off/on
   Alias PortOn_raw(8) = PortOn_8    'zero MFC off/on
+  
 Public MFC_raw(3)        'mass flow controllors
   Alias MFC_raw(1) = flow_up_raw
   Alias MFC_raw(2) = flow_dn_raw
   Alias MFC_raw(3) = flow_zero_raw
   Units MFC_raw = sLPM
+  
 Public W_valve_raw       'vertical rotated WS value, used for real time valve control
   Units W_valve_raw = m/s
-Public panel_temp_raw    'CR5000 panel temp
-  Units panel_temp_raw = C
-Public batt_volt_raw	    'cr5000 battery voltage.
-  Units batt_volt_raw = V
-
-
-
-
-''''''''''''''''''''''''''' VARIABLES: Working values ''''''''''''''''''''''''''''''''''''
-
-
-
-''''''''''''''''''''''''''' VARIABLES: Storage values ''''''''''''''''''''''''''''''''''''
 
 
 
 
 
-''''''''''''''''''''''''''' VARIABLES: Program control ''''''''''''''''''''''''''''''''''''
-Dim scan_state                      'Tracks current state of program
-Dim ctrl_state                      'Tracks current state of menu selection
-Dim ctrl_input                      'Accepts new menu selection from user
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-'' ================================================================================================================
-
-Const DAYS = 3                'Days of data to reserve memory for
 
 Const NonStop = 10000
 Const Now = 0
@@ -341,23 +489,6 @@ Const DEF_SAMP_HRS = NonStop
 
 Const INST_TBL_SIZE = DAYS*24*60*60*1000*1/SCAN_INTERVAL  '(X day)(24hr/1day)(60min/hr)(60sec/min)(1000ms/sec)(1row/SCAN_INTERVAL)
 Const FLUX_TBL_SIZE = DAYS*24*60*1/FLUX_INTERVAL          '(X day)(24hr/1day)(60min/hr)(1row/FLUX_INTERVAL)
-
-
-
-Const MetOnly = -10	    
-Const NewRun = -11	
-Const EndRun = -12	
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -378,9 +509,6 @@ Public timers(2)
   Units timers = min
 
 
-' UNALIGNED DATA VARIABLES
-
-
 ' DIAGNOSTIC VARIABLES
 Public diag_csat_work 		
 Public diag_csat_bits(4)	As Boolean	'CSAT Warning flags.
@@ -389,6 +517,7 @@ Public diag_csat_bits(4)	As Boolean	'CSAT Warning flags.
 	Alias diag_csat_bits(3) = amp_h_f		'Amplitude high 
 	Alias diag_csat_bits(4) = amp_l_f		'Amplitude low 
 	Units diag_csat_bits = samples
+	
 Public diag_irga_work
 Public diag_irga_bits(4) As Boolean  'LI-7500 warning flags
 	Alias diag_irga_bits(1) = chopper_f   'Chopper 
@@ -396,12 +525,15 @@ Public diag_irga_bits(4) As Boolean  'LI-7500 warning flags
 	Alias diag_irga_bits(3) = pll_f       'PLL
 	Alias diag_irga_bits(4) = sync_f      'synchronization
 	Units diag_irga_bits = samples
+	
 Public agc As Long                   'LI-7500 automatic gain control
   Units agc = unitless
+  
 Public diags(2) 
   Alias diags(1) = diag_csat        'csat warning word
   Alias diags(2) = diag_irga        'irga warning word
   Units diags = unitless
+  
 Public disable_flag(4)		'Intermediate processing disable flags.
   'disable_flag(1)			'TRUE: CSAT3 diag warn flags on or no data sent
   'disable_flag(2)			'TRUE: CSAT3 diag warn flags on. Used to filter out diag flags
@@ -409,7 +541,6 @@ Public disable_flag(4)		'Intermediate processing disable flags.
   'disable_flag(4)      'TRUE: LI-7500 diag warn flags on. Used to filter out diag flags
 Public n					        'samples taken
   Units n = samples
-
 
 ' WORKING VARIABLES
 Public scans              '# of scans done
@@ -438,12 +569,14 @@ Public rTime(9)
   Alias rTime(7) = ruSecond	
   Alias rTime(8) = WeekDay	
   Alias rTime(9) = Day_of_Year	
+  
 Public rot(4)             'coordinate rotation angles
   Alias rot(1) = CT
   Alias rot(2) = ST
   Alias rot(3) = CE
   Alias rot(4) = SE
   Units rot = radians
+  
 Public MFC_control(5)    'variables affecting mass flow controllor setting
   Alias MFC_control(1) = Dband          'deadband, zero-centered
   Alias MFC_control(2) = CAO_1_mv       'analog output for denuder MFCs
@@ -455,6 +588,7 @@ Public MFC_control(5)    'variables affecting mass flow controllor setting
   Units CAO_2_mv = mv
   Units chemc_flow = L/min
   Units makeup_flow = L/min
+  
 Public covary(6)            'array to perform covariance upon
   'covary(1) = Uz_m_s
   'covary(2) = Ux_m_s
@@ -462,6 +596,7 @@ Public covary(6)            'array to perform covariance upon
   'covary(4) = Ts_C
   'covary(5) = co2_mg_m3
   'covary(6) = h2o_g_m3
+  
 Public covaried(23)          'array holds output of covary datatable
   Alias covaried(1)  = Ux_mean
   Alias covaried(2)  = Uy_mean
@@ -486,12 +621,14 @@ Public covaried(23)          'array holds output of covary datatable
   Alias covaried(21) = press_mean
   Alias covaried(22) = co2_mean
   Alias covaried(23) = h2o_mean 
+  
 Public itt_test(5) 
   Alias itt_test(1) = itt_model    'modelled ITT value for specified zeta
   Alias itt_test(2) = itt_meas     'actual ITT value  
   Alias itt_test(3) = Dh           'for Hsieh footprint model
   Alias itt_test(4) = Ph           '  " "
   Alias itt_test(5) = zu           '  " "       
+  
 Public fetch(4)                'estimated fetch along cardinal directions
   Alias fetch(1) = fetch_N
   Alias fetch(2) = fetch_E
@@ -502,6 +639,7 @@ Public fetch(4)                'estimated fetch along cardinal directions
 
 ' OUTPUT DATA VARIABLES
 Public tStamp As Long
+
 Public wind(13)
   Alias wind(1)  = Ux_m_s        'aligned Ux meteorological wind component
   Alias wind(2)  = Uy_m_s        'aligned Uy met. wind component
@@ -521,16 +659,14 @@ Public wind(13)
   Units WD_unit_sdev = deg
   Units WD_rslt_deg = deg
   Units WD_rslt_sdev = deg
+  
 Public temp(4)
   Alias temp(1) = T_C          'aligned hmp temp
   Alias temp(2) = Ts_C         'aligned sonic temp
   Alias temp(3) = Tc_C         'aligned, corrected sonic temp
   Alias temp(4) = Td_C         'calculated dewpoint temp
   Units temp = degC
-Public press(2)
-  Alias press(1) = press_kPa   'aligned hmp press
-  Alias press(2) = press_irga_kPa 'est. press reported by irga
-  Units press = kPa
+
 Public co2(7)
   Alias co2(1) = co2_mm_m3	   'aligned CO2 molar conc
   Alias co2(2) = co2_mg_m3     'calculated mass density
@@ -543,6 +679,7 @@ Public co2(7)
   Units co2_mm_m3 = mmol/m^3
   Units co2_mg_m3 = mg/m^3
 	Units co2_ppm = ppm           'same as micromol/mol
+	
 Public h2o(7)
   Alias h2o(1) = h2o_mm_m3		  'aligned h2o vapor conc
   Alias h2o(2) = h2o_g_m3       'calculated vapor density/abs. humdity
@@ -558,6 +695,7 @@ Public h2o(7)
   Units e_kPa = kPa
   Units e_sat_kPa = kPa
   Units h2o_r_g_kg = g/kg
+  
 Public heat(6)
   Alias heat(1) = LE_wpl      'latent heat flux with WPL corrections
   Alias heat(2) = LE_irga     'latent heat flux sans WPL terms
@@ -566,6 +704,7 @@ Public heat(6)
   Alias heat(5) = Hs          'sensible heat flux using sonic temp
   Alias heat(6) = Hc          'sensible heat flux from Hs and LE_wpl  
   Units heat = W/m^2
+  
 Public micromet(6)
   Alias micromet(1) = tau_Pa       'momentum flux
   Alias micromet(2) = u_star_m_s   'friction velocity, u*
@@ -579,6 +718,7 @@ Public micromet(6)
   Units zeta = unitless
   Units x70_m = m
   Units itt = unitless
+  
 Public MFC(3)
   Alias MFC(1) = flow_up_lpm    'aligned flow through up MFC 
   Alias MFC(2) = flow_dn_lpm    'aligned flow through dn MFC
@@ -586,6 +726,7 @@ Public MFC(3)
   Units flow_up_lpm = L/min
   Units flow_dn_lpm = L/min
   Units flow_zero_lpm = L/min
+  
 Public valve(3) As Boolean
   Alias valve(1) = valve_up     'aligned up valve open? yes/no
   Alias valve(2) = valve_dn     'aligned dn valve open? yes/no
@@ -698,43 +839,30 @@ DataTable (flux,TRUE,FLUX_TBL_SIZE)
   FieldNames ("panel_temp_Avg")
   Average (1,batt_volt_raw,FP2,FALSE)
   FieldNames ("batt_volt_Avg")
-  'count # of samples taken total
   Totalize (1,n,IEEE4,FALSE)
   FieldNames ("samp_tot")
-  'count # of samples taken with no CSAT flags
 	Totalize (1,n,IEEE4,disable_flag(1))
 	FieldNames ("csat_samp_Tot")
-  'count # of samples where either CSAT disable_flag is HI
 	Totalize (1,n,IEEE4,NOT (disable_flag(1) OR disable_flag(2)))
 	FieldNames ("csat_warn_Tot")
-  'count # of samples where both del_T_f & disable_flag(2) are true
 	Totalize (1,n,IEEE4,NOT (del_T_f) OR NOT( disable_flag(2)))
 	FieldNames ("del_T_f_Tot")
-  'count # of samples where both sig_lck_f & disable_flag(2) are true
 	Totalize (1,n,IEEE4,NOT (sig_lck_f) OR NOT (disable_flag(2)))
 	FieldNames ("sig_lck_f_Tot")
-	'count # of samples where both amp_h_f & disable_flag(2) are true
 	Totalize (1,n,IEEE4,NOT (amp_h_f) OR NOT (disable_flag(2)))
 	FieldNames ("amp_h_f_Tot")
-	'count # of samples where both amp_l_f & disable_flag(2) are true
 	Totalize (1,n,IEEE4,NOT (amp_l_f) OR NOT (disable_flag(2)))
 	FieldNames ("amp_l_f_Tot")
-	'count # of samples taken with no IRGA flags
 	Totalize (1,n,IEEE4,disable_flag(3))
 	FieldNames ("irga_samp_Tot")
-	'count # of samples where either IRGA disable_flag is HI
 	Totalize (1,n,IEEE4,NOT (disable_flag(3) OR disable_flag(4)))
 	FieldNames ("irga_warn_Tot")
-  'count # of samples where chopper_f & disable_flag(4) are true
   Totalize (1,n,IEEE4,NOT (chopper_f) OR NOT (disable_flag(4)))
   FieldNames ("chopper_f_Tot")
-  'count # of samples where detector_f & disable_flag(4) are true
   Totalize (1,n,IEEE4,NOT (detector_f) OR NOT (disable_flag(4)))
   FieldNames ("detector_f_Tot")
-  'count # of samples where pll_f & disable_flag(4) are true
   Totalize (1,n,IEEE4,NOT (pll_f) OR NOT (disable_flag(4)))
   FieldNames ("pll_f_Tot")
-  'count # of samples where sync_f & disable_flag(4) are true
   Totalize (1,n,IEEE4,NOT (sync_f) OR NOT (disable_flag(4)))
   FieldNames ("sync_f_Tot")
   'find average value of automatic gain control
@@ -767,26 +895,6 @@ DisplayMenu ("WSU REA System",-2)
 EndMenu
 
 
-
-'************************************ SUBPROCEDURES *******************************
-Sub init()
-  n = 1 					    '# of samples taken per scan
-  scans = 0            '# of scans performed
-	CT=1.0 	            'Inital Rotation Angles 
-	ST=0
-	CE=0
-	SE=0
-	Dband = 0.1 		    'initial deadband, m/s 
-	CAO_1_mv=0
-  CAO_2_mv=2000 		'set initial flow for makeup air MFCs: corresponds to 2.0LPM
-  
-	Move (Ux_raw,5,NaN,1) 	'initialize sensor readings to NaN
-	Move (co2_raw,4,NaN,1)
-	Move (T_raw,2,NaN,1) 
-  Move (press_raw,1,NaN,1)
-  Move (MFC_raw,3,NaN,1)
-EndSub  
-
 Sub resetREA()
 	tot_samp_hrs = DEF_SAMP_HRS 	'Specify default value for sampling duration
 	REA_flag_on = FALSE 		      'REA off on compile
@@ -813,17 +921,29 @@ EndSub
 '*********************************** REA PROGRAM ******************************
 BeginProg
 	SDMSpeed (SDM_SPEED)                    'Set SDM clock speed	
-	Call init()                             '**
+
+  n = 1 					    '# of samples taken per scan
+  scans = 0            '# of scans performed
+	CT=1.0 	            'Inital Rotation Angles 
+	ST=0
+	CE=0
+	SE=0
+	Dband = 0.1 		    'initial deadband, m/s 
+	CAO_1_mv=0
+  CAO_2_mv=2000 		'set initial flow for makeup air MFCs: corresponds to 2.0LPM
+  
+	Move (Ux_raw,5,NaN,1) 	'initialize sensor readings to NaN
+	Move (co2_raw,4,NaN,1)
+	Move (T_raw,2,NaN,1) 
+  Move (press_raw,1,NaN,1)
+  Move (MFC_raw,3,NaN,1)
+
 	Call resetREA()                         '**
 	
 	Scan (SCAN_INTERVAL,mSec,SCAN_BUFFER_SIZE,0) 'Begin scanning
 	  RealTime( rTime )                        'Fill array with current time
 	  
 	  If (NOT (ctrl_input = ctrl_state)) Then
-	    
-	  
-	  
-    'tStamp = Status.TimeStamp(1,1)        'ask status table for timestamp
 		
 		
 		'Check to see if a run finished last scan and if so, reset rea variables
@@ -849,45 +969,37 @@ BeginProg
 		CSAT3 (Ux_raw,1,CSAT3_SDM,91,CSAT3_OPT) 				      'code 91: WS/temp 
 		W_valve_raw = Uz_raw*CT-Ux_raw*ST*CE-Uy_raw*ST*SE     'rotate vert. WS 
 		
-		If (W_valve_raw >= Dband AND control_flag = NewRun) Then
-			WriteIO (&B00110000,&B00010000) 'set up valve sample/down valve recirc
+    '? add preceding if: If control_flag != NewRun Then do same as for w=deadband
+    'If NOT (control_flag = NewRun) Then
+    '  do else statment, turn off valves
+    'make the following line an elseif
+		If (W_valve_raw >= Dband) Then
+			WriteIO (UPDN_MASK,UP_NOT_DN) 'set up valve sample/down valve recirc
 			PortOn_5=1
 			PortOn_6=0
-		ElseIf (W_valve_raw <= -Dband AND control_flag = NewRun) Then
-			WriteIO (&B00110000,&B00100000) 'set up valve recirc/down valve sample
+		ElseIf (W_valve_raw <= -Dband) Then
+			WriteIO (UPDN_MASK,DN_NOT_UP) 'set up valve recirc/down valve sample
 			PortOn_5=0
 			PortOn_6=1
 		Else
-			WriteIO (&B00110000,&B00000000) 'set both valves recirc
+			WriteIO (UPDN_MASK,OFF_MASK) 'set both valves recirc
 			PortOn_5=0
 			PortOn_6=0
 		EndIf
-		ExciteCAO (CAO1,CAO_1_mv,True,False)	'set denuder MFCs
-		ExciteCAO (CAO2,CAO_2_mv,True,False) 	'set zero air MFC	
+		'XXX: possibly set FastUpdate option true 
+		ExciteCAO (MFC_UPDN_CAO,CAO_1_mv,True,False)	'set denuder MFCs
+		ExciteCAO (MFC_ZERO_CAO,CAO_2_mv,True,False) 	'set zero air MFC	
 
  		CS7500 (co2_raw,1,LI7500_SDM,6)   'code 6: CO2/H2O molar density, press est, diag bit
- 		
- 		' PTB101B outputs range 600-1060hPa over 0-2.5V
-		' mult = (1060 - 600)/2500 = 0.184 mb/mv = 0.0184 kPa/mv    offset = 600 mb = 60 kPa
+ 	
 		VoltDiff (press_raw,1,mv5000,6,True,200,250,0.0184,60)
 
-    ' HMP45AC outputs range -40 to 60 degC over 0-1V
-    ' mult = (60 - -40)/1000 = 0.1 degC/mv      offset = -40 degC
 		VoltDiff (T_raw,1,mV1000,19,TRUE,200,250,0.1,-40) 	
 		
-		' HMP45AC outputs range 0-100% over 0-1V
-		' mult = (100 - 0)/1000 = 0.1 %/mv          offset = 0%
 		VoltDiff (rh_raw,1,mv1000,20,True,200,250,0.1,0)
-		
-		Battery (batt_volt_raw) 						          'Measure battery voltage
-		PanelTemp (panel_temp_raw,250) 				        'CR5000 panel temperature
 
-		'Measure flowrate through REA MFCs
-		' mult = (10-0)/5000 = 0.002 (L/min)/mv       offset = 0 L/min
 		VoltDiff (flow_up_raw,2,mV5000,11,True,200,250,0.002,0)
 		
-		'Measure flowrate through zero MFC
-		' mult = (5-0)/5000 = 0.001 (L/min)mv         offset = 0 L/min
 		VoltSe (flow_zero_raw,1,mV5000,25,True,200,250,0.001,0)
 
 		'Lag CSAT3, IRGA and analog measurements
@@ -1058,9 +1170,9 @@ BeginProg
 				WS_sclr_m_s  = ws_sclr_mean
 				WS_sclr_sdev = ws_sclr_stdev
 				WS_rslt_m_s  = ws_rslt_mean
-				WD_unit_deg  = wd_unit_mean + CSAT3_AZIMUTH
+				WD_unit_deg  = wd_unit_mean + set_son_azimuth
 				WD_unit_sdev = wd_unit_stdev
-				WD_rslt_deg  = wd_rslt_mean + CSAT3_AZIMUTH
+				WD_rslt_deg  = wd_rslt_mean + set_son_azimuth
 				WD_rslt_sdev = wd_rslt_stdev
 				
 				'adjust wind directions within 0-360
