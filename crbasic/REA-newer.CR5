@@ -114,6 +114,9 @@ Const Save = 1002
 Const CSAT3_ = 1003
 Const LI7500_ = 1004
 Const EC100_ = 1005
+Const SingleRun = 1006
+Const Recurring = 1007
+Const Continuous = 1008
 
 
 '==========  PROGRAM OPERATION  ==========
@@ -175,9 +178,6 @@ Dim csat_raw(5) 'Campbellsci CSAT3
 Dim li7500_raw(4) 'Licor LI-7500
 Dim ec100_raw(12) 'Campbellsci EC100/EC150/CSAT3A
 
-Alias csat_raw(3) = Uz_raw 
-Public Uz_rot 
-
 Public sonic(5) 
 Alias sonic(1) = Ux
 Alias sonic(2) = Uy
@@ -214,29 +214,68 @@ Alias flow(2) = flow_dn
 Alias flow(3) = flow_zero
 Units flow = sLpm
 
+Public flow_setpnt(2)
+Alias flow_setpnt(1) = setpnt_sample
+Alias flow_setpnt(2) = setpnt_zero
+Units flow_setpnt = sLpm
+
 Public cr5k(2)
 Alias cr5k(1) = LoggerTemp
 Alias cr5k(2) = LoggerVoltage
 Units LoggerTemp = degC
 Units LoggerVoltage = Volts
 
+'----- INTERMEDIATE PROCESSING ------
+Public Uz_rot
+Dim Uz_rot = m/s
 
-
-
+'----- STATE VARIABLES -----
 Public valves(3) As Boolean
 Alias valves(1) = valve_up_ON
 Alias valves(2) = valve_dn_ON
 Alias valves(3) = valve_zero_ON
 
-Public flow_setpnt(2)
-Alias flow_setpnt(1) = setpnt_sample
-Alias flow_setpnt(2) = setpnt_zero
+
 
 
 
 
 
 '==========  DATA TABLES  ==========
+DataTable(ts_fast,True,-1)
+  DataInterval(0,FAST_INTV,FAST_UNIT,10)
+  CardOut(1,-1)
+  Sample(1,Ux,IEEE4)
+  Sample(1,Uy,IEEE4)
+  Sample(1,Uz,IEEE4)
+  Sample(1,Ts,IEEE4)
+  Sample(1,sonic_diag,Long)
+  Sample(1,irga_CO2,IEEE4)
+  Sample(1,irga_H2O,IEEE4)
+  Sample(1,irga_press,IEEE4)
+  Sample(1,irga_diag,Long)
+  Sample(1,valve_up_ON,Boolean)
+  Sample(1,valve_dn_ON,Boolean)
+EndTable
+
+DataTable(ts_slow,True,-1)
+  DataInterval(0,SLOW_INTV,SLOW_UNIT,10)
+  CardOut(1,-1)
+  Sample(1,
+
+
+DataTable(info,1,100)
+  CardOut(1,100)
+  Sample(1,Status.CompileResults,String)
+    FieldNames("CompileResults")
+  Sample(1,Status.CardStatus,String)
+    FieldNames("CardStatus")
+  Sample(1,Status.RunSignature,UINT2) 'program information
+    FieldNames("RunSig")
+  Sample(1,Status.ProgSignature,UINT2)
+    FieldNames("ProgSig")
+EndTable
+
 DataTable(progsettings,True,1000)
   CardOut(1,1000)
   'irga/sonic data sources not tracked, should be evident from logbooks 
@@ -271,18 +310,26 @@ DisplayMenu("MainScreen",-1) 'or -2
   SubMenu("Program Setup")
     SubMenu("Schedule")
       'TODO
+      MenuItem("Type", cho_run_freq)
+        MenuPick(SingleRun, Recurring)
+      MenuItem("Duration, hr", cho_run_duration)
+      MenuItem("Recur. interval", cho_run_intv)
+      MenuItem("Recur. units", cho_run_intv_unit)
+      MenuItem("Begin at", cho_run_duration)
+        MenuPick(NextInterval,PresetTime)
+      MenuItem("Preset")
     EndSubMenu
     SubMenu("Flow rates")
       MenuItem("Sampling (sLpm)", cho_samp_flow)
       MenuItem("Zero air (sLpm)", cho_zero_flow)
     EndSubMenu
     SubMenu("Deadband")
-      MenuItem("DB mult (0-1)", cho_dband_mult)
-      MenuItem("Minimum DB", cho_dband_min)
-      MenuItem("Default DB", cho_dband_def)
+      MenuItem("Mult. (0-1)", cho_dband_mult)
+      MenuItem("Minimum, m/s", cho_dband_min)
+      MenuItem("Default, m/s", cho_dband_def)
     EndSubMenu
     SubMenu("Site specific")
-      MenuItem("Declination", cho_site_declin)
+      MenuItem("Mag. declination", cho_site_declin)
     EndSubMenu
     SubMenu("Sensors")
       SubMenu("Sonic anemometer")
@@ -352,10 +399,10 @@ BeginProg
         Move(sonic(1),5,ec100_raw(1),5)
       EndIf
       If (set_irga_src = EC100_) Then
-        irga_CO2 = ec100data(6)
-        irga_H2O = ec100data(7)
-        irga_diag = ec100data(8)
-        irga_press = ec100data(10)
+        irga_CO2 = ec100_raw(6)
+        irga_H2O = ec100_raw(7)
+        irga_diag = ec100_raw(8)
+        irga_press = ec100_raw(10)
       EndIf
     EndIf
     
