@@ -35,7 +35,7 @@ Const SCAN_INTERVAL = 50	'50 mSec = 20 Hz
 Const OFFSET = 20		
 Const DELAY_CSAT = 2		'Fixed inherent lag of CSAT3 data (2 scans)
 Const DELAY_IRGA = 2		'Set inherent lag of IRGA data (199ms for SDM/delaystep=2)
-Const SDM_PER = 30		  'Lower this value if SDM device comm is spotty
+Const SDM_SPD = 30		  'Lower this value if SDM device comm is spotty
 
 '*** HARD-WIRED CONSTANTS ***
 Const YES = -1		'Yes is defined as -1 (TRUE)
@@ -61,6 +61,23 @@ Const IRGA_REC_BCK = OFFSET-DELAY_IRGA				'Number of records back to align IRGA 
 
 
 '*** VARIABLES ***
+
+'escrow variables for EC100 data
+Dim ec100_raw(12)
+'alias 1 = Ux, m/s
+'alias 2 = Uy, m/s
+'alias 3 = Uz, m/s
+'alias 4 = Ts, *C
+'alias 5 = sonic diagnostic bitmap
+'alias 6 = CO2, mg/m^3
+'alias 7 = H2O, g/m^3
+'alias 8 = gas diagnostic bitmap
+'alias 9 = air temp, *C
+'alias 10 = air pressure, kPa
+'alias 11 = CO2 signal strength, 0-1
+'alias 12 = H2O signal strength, 0-1
+
+
 'Online lagged CSAT3 and IRGA data.
 Public aligned_data(16)
 Alias aligned_data(1) = Uz
@@ -102,7 +119,7 @@ Units diag_bits = samples
 
 'No delay meteorological variables.
 Public hmp(2)		'HMP45 temperature and relative humidity.
-Public e_hmp		'HMP45 vapor pressure.
+Public hmp_e		'HMP45 vapor pressure.
 Dim e_sat			'Saturated vapor pressure by Clausius-Clapeyron eqn
 Dim h2o_hmp_mean	'Mean HMP45 vapor density.
 Dim rho_a_mean		'Mean air density.
@@ -111,11 +128,11 @@ Public T_dew_mean	'Tdew from hmp
 Public RH_mean  	'RH from HMP
 Public old_RH_mean
 Public batt_volt	'cr5000 battery voltage.
-Alias hmp(1) = t_hmp
-Alias hmp(2) = rh_hmp
-Units t_hmp = C
-Units rh_hmp = percent
-Units e_hmp = kPa
+Alias hmp(1) = hmp_t
+Alias hmp(2) = hmp_rh
+Units hmp_t = C
+Units hmp_rh = percent
+Units hmp_e = kPa
 Units e_sat = mbar
 Units h2o_hmp_mean = g/m^3
 Units rho_a_mean = kg/m^3
@@ -145,7 +162,7 @@ Dim co2_wpl_LE		'Carbon dioxide flux (IRGA), Webb et al. term due to latent heat
 Dim co2_wpl_H		'Carbon dioxide flux (IRGA), Webb et al. term due to sensible heat flux.
 Dim h2o_wpl_LE		'Latent heat flux (IRGA), Webb et al. term due to latent heat flux.
 Dim h2o_wpl_H		'Latent heat flux (IRGA), Webb et al. term due to sensible heat flux.
-Dim cov_out(52)	'Covariance: wind/scalars, wind vector, t_hmp_mean, e_mean, co2_mean, press_mean, Ts_mean
+Dim cov_out(52)	'Covariance: wind/scalars, wind vector, hmp_t_mean, e_mean, co2_mean, press_mean, Ts_mean
 Units Fc_wpl = mg/(m^2 s)
 Units LE_wpl = W/m^2
 Units Hs = W/m^2
@@ -205,8 +222,8 @@ Alias cov_out(41) = wnd_spd
 Alias cov_out(42) = rslt_wnd_spd
 Alias cov_out(43) = wnd_dir_csat3
 Alias cov_out(44) = std_wnd_dir
-Alias cov_out(45) = t_hmp_mean
-Alias cov_out(46) = e_hmp_mean
+Alias cov_out(45) = hmp_t_mean
+Alias cov_out(46) = hmp_e_mean
 Alias cov_out(47) = co2_mean
 Alias cov_out(48) = press_mean
 Alias cov_out(49) = Ts_mean
@@ -218,7 +235,7 @@ Units wnd_spd = m/s
 Units rslt_wnd_spd = m/s
 Units wnd_dir_csat3 = degrees
 Units std_wnd_dir = degrees
-Units t_hmp_mean = C
+Units hmp_t_mean = C
 Units co2_mean = mg/m^3
 Units press_mean = kPa
 Units Ts_mean = C
@@ -358,7 +375,6 @@ Alias rTime(6) = rSecond
 Alias rTime(7) = ruSecond	
 Alias rTime(8) = WeekDay	
 Alias rTime(9) = Day_of_Year	
-Public dec_DOY		'decimal day of the year
 
 '*** FINAL OUTPUT DATA TABLES ***
 'Save processed data needed for flux determination
@@ -413,7 +429,7 @@ DataTable (flux,TRUE,-1)
 	Sample (1,h2o_wpl_LE,IEEE4)
 	Sample (1,h2o_wpl_H,IEEE4)
 	Sample (1,h2o_hmp_mean,IEEE4)
-	Sample (1,t_hmp_mean,IEEE4)
+	Sample (1,hmp_t_mean,IEEE4)
 	Sample (1,T_dew_mean,IEEE4)
 	Sample (1,RH_mean,IEEE4)
 
@@ -465,8 +481,8 @@ DataTable (ts_site,TRUE,-1)
 	Sample (1,co2,IEEE4)
 	Sample (1,h2o,IEEE4)
 	Sample (1,press,IEEE4)
-	Sample (1,t_hmp,IEEE4)
-	Sample (1,e_hmp,IEEE4)
+	Sample (1,hmp_t,IEEE4)
+	Sample (1,hmp_e,IEEE4)
 
 	Sample (1,Uz_valve_lag,IEEE4)
 	Sample (1,Dband,IEEE4)
@@ -509,8 +525,8 @@ DataTable (comp_cov,TRUE,1)
 	WindVector (1,wind_east,wind_north,IEEE4,(disable_flag_on(1) OR NOT (SAVE_FLUX_DATA)),0,1,2)
 	WindVector (1,Uy,Ux,IEEE4,(disable_flag_on(1) OR NOT (SAVE_FLUX_DATA)),0,1,2)
 
-	Average (1,t_hmp,IEEE4,FALSE)
-	Average (1,e_hmp,IEEE4,FALSE)
+	Average (1,hmp_t,IEEE4,FALSE)
+	Average (1,hmp_e,IEEE4,FALSE)
 	Average (1,co2,IEEE4,NOT (SAVE_FLUX_DATA))
 	Average (1,press,IEEE4,NOT (SAVE_FLUX_DATA))
 	Average (1,Ts,IEEE4,disable_flag_on(1) OR NOT (SAVE_FLUX_DATA))
@@ -605,7 +621,7 @@ BeginProg
 	SE=0
 
 	Dband = 0.1 		'Set Deadband on compile 
-	SDMSpeed (SDM_PER) 	'Set the SDM clock speed.
+	SDMSpeed (SDM_SPD) 	'Set the SDM clock speed.
 
 	Move (Ux_raw,5,NaN,1) 	'Set all CSAT3 variables to NaN.
 	Move (co2_raw,2,NaN,1) 	'Set all IRGA variables to NaN.
@@ -614,7 +630,6 @@ BeginProg
 
 		'get date and time
 		RealTime( rTime )
-		dec_DOY = Day_of_Year +(rHour+(rMinute+(rSecond+ruSecond/1000000)/60)/60)/24
 		
 		'Check to see if a run finished last scan and if so, reset rea variables
 		If fin_flag_on Then Call resetREA()
@@ -638,21 +653,20 @@ BeginProg
 		If countdown_timer > 0 Then countdown_timer = tot_samp_hrs*60 
 
 		PanelTemp (panel_temp_raw,250) 				'CR5000 panel temperature.
-		CSAT3 (Ux_raw,1,3,91,CSAT_OPT) 				'code 91: trigger CSAT3 wind/sonic temp data retrieval
 
-		VoltSE (co2_raw,1,mv5000,27,True,200,250,0.005,0)	
-		'For a range of CO2 0 to 25 mmol/m3 reported over 0 to 5 V:
-		'Multiplier is (25-0 mmol/m3 CO2)/(5000-0 mV)=0.005
-		'Offset is 0 
-		'co2_raw=25.*co2_raw/1000.
+    '''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+    ' push EC100 (new style sonic/irga combo) to CSAT3 and LI7500 variables
+    EC100(ec100_raw(1),EC100_ADDR,1)
+    Ux_raw = ec100_Ux
+    Uy_raw = ec100_Uy
+    Uz_raw = ec100_Uz
+    Ts_raw = ec100_Ts
+    diag_csat = ec100_Sdiag
+    co2_raw = ec100_co2       'not mmol/m^3, now mg/m^3 !!
+    h2o_raw = ec100_h2o       'not mmol/m^3, now g/m^3 !!
+    '''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
 		
-		VoltSE (h2o_raw,1,mv5000,28,True,200,250,0.1,0)	
-		'For a range of H2O 0 to 500 mmol/m3 reported over 0 to 5 V:
-		'Multiplier is (500-0 mmol/m3 H2O)/(5000-0 mV)=0.1
-		'Offset is 0
-		'h2o_raw=500.*h2o_raw/1000.
-		
-		VoltSE (press_raw,1,mv5000,1,True,200,250,0.0052,80)
+		VoltSe (press_raw,1,mv5000,PTB_SE,True,200,250,0.0052,80)
 
 		Uz_rot   = Uz_raw*CT-Ux_raw*ST*CE-Uy_raw*ST*SE		'REA: rotate vertical wind speed
 		Uz_valve = Uz_rot
@@ -675,13 +689,13 @@ BeginProg
 		ExciteCAO (CAO1,CAO_1_mv,True,False)	'denuder MFCs
 		ExciteCAO (CAO2,CAO_2_mv,True,False) 	'zero air MFC
 
-		VoltSe (t_hmp,1,mV1000,9,TRUE,200,250,0.1,-40) 	'Measure the HMP45 temp in C
-		VoltSE (rh_hmp,1,mv1000,10,True,200,250,0.1,0)	'Measure the HMP45 RH as %
+		VoltSe (hmp_t,1,mV1000,HMP_T_SE,TRUE,200,250,0.1,-40) 	'Measure the HMP45 temp in C
+		VoltSe (hmp_rh,1,mv1000,HMP_RH_SE,True,200,250,0.1,0)	'Measure the HMP45 RH as %
 		Battery (batt_volt) 						'Measure battery voltage.
 
 		'Find the HMP45C vapor pressure (kPa)
-		e_sat = 6.112*exp( (17.67*t_hmp)/(t_hmp+243.5) )
-		e_hmp = 0.001*e_sat*rh_hmp
+		VaporPressure(hmp_e,hmp_t,hmp_rh)
+		SatVP(e_sat,hmp_t)
 
 		'Measure the MFCs controlling REA recirculation rate, 0-10L/min fullscale
 		VoltDiff (flow_rea_up,2,mV5000,11,True,200,250,0.002,0)
@@ -715,22 +729,16 @@ BeginProg
 			wind_east  = -1*Uy
 			wind_north = Ux
 
-			'Save/compute the molar density of CO2
-			co2_mm_m3 = co2								'was measured in mmol/m3
-			'co2_mm_m3 = (2730*co2*press)/(22691.2*(273+t_hmp))	'from Op-2 manual, pg 6
-			co2_um_m = co2*(.022414*(273.15+t_hmp)/273.15*101.3/press)*1000 'bk calc of m3 to moles of air
 
-			'Save/compute the molar concentration of H2O.
-			h2o_mm_m3 = h2o								'was measured in mmol/m3
-			'h2o_mm_m3 = (273000000*h2o)/(22691.2*(t_hmp+273.15)) 	'from Op-2 manual, pg 9
-			'h2o_mm_m = h2o_mm_m3*R*(t_hmp+273.15)/press			'Jay's original code
-			h2o_mm_m = h2o_mm_m3*(.022414*(273.15+t_hmp)/273.15*101.3/press) 'bk calc of m3 to mol of air
+			co2_mm_m3 = co2	/ 44	'now measured in mg/m3 !!  44 mg/mmol
+			h2o_mm_m3 = h2o / 0.018 'now in g/m^3!! 18g/mol
 
-			'Convert IRGA data to mass density (co2: mg/m^3, h20: g/m^3)
-			' 44 [g/mol] - molecular weight of carbon dioxide
-			' 0.018 [g/mmol] - molecular weight of water vapor
-			co2 = co2_mm_m3*44 
-			h2o = h2o_mm_m3*0.018
+			co2_um_m = 10^6 * co2_mm_m3 / ( press/((R/1000)*(hmp_t+273.15)) -  h2o_mm_m3 )
+  		'co2_um_m = co2*(.022414*(273.15+hmp_t)/273.15*101.3/press)*1000 
+
+			'h2o_mm_m3 = (273000000*h2o)/(22691.2*(hmp_t+273.15)) 	'from Op-2 manual, pg 9
+			'h2o_mm_m = h2o_mm_m3*R*(hmp_t+273.15)/press			'Jay's original code
+			'h2o_mm_m = h2o_mm_m3*(.022414*(273.15+hmp_t)/273.15*101.3/press) 'bk calc of m3 to mol of air
 
 			'Define 61502 as NaN.
 			If ( diag_csat = NaN ) Then ( diag_csat = 61502 )
@@ -772,12 +780,12 @@ BeginProg
 				'CSAT3 wind direction will be between 0 to 180 degrees and 0 to -180 degrees.
 				If ( wnd_dir_csat3 > 180 ) Then ( wnd_dir_csat3 = wnd_dir_csat3-360 )
 
-				h2o_hmp_mean = e_hmp_mean/((t_hmp_mean+273.15)*RV)
-				rho_d_mean = (press_mean-e_hmp_mean)/((t_hmp_mean+273.15)*RD)
+				h2o_hmp_mean = hmp_e_mean/((hmp_t_mean+273.15)*RV)
+				rho_d_mean = (press_mean-hmp_e_mean)/((hmp_t_mean+273.15)*RD)
 				rho_a_mean = (rho_d_mean)/1000
-				T_dew_mean = 240.97*log(e_hmp_mean/0.611)/(17.502 - log(e_hmp_mean/0.611))
+				T_dew_mean = 240.97*LOG(hmp_e_mean/0.611)/(17.502 - LOG(hmp_e_mean/0.611))
 				old_RH_mean = RH_mean
-				RH_mean = e_hmp_mean/( 0.611*exp(17.502*t_hmp_mean/(240.97+t_hmp_mean)) )
+				RH_mean = hmp_e_mean/( 0.611*EXP(17.502*hmp_t_mean/(240.97+hmp_t_mean)) )
 
 				'Compute online fluxes.
 				Fc_irga = cov_Uz_co2
@@ -793,15 +801,15 @@ BeginProg
 
 				'LI-7500 Webb et al. term for water vapor Eq. (25).
 				h2o_wpl_LE = MU_WPL*sigma_wpl*LE_irga
-				h2o_wpl_H = ( 1+(MU_WPL*sigma_wpl) )*h2o_hmp_mean/(t_hmp_mean+273.15)*LV*cov_Uz_Ts
+				h2o_wpl_H = ( 1+(MU_WPL*sigma_wpl) )*h2o_hmp_mean/(hmp_t_mean+273.15)*LV*cov_Uz_Ts
 				LE_wpl = LE_irga + h2o_wpl_LE + h2o_wpl_H
 
 				'Compute a sensible heat flux from Hs and LE_wpl.
-				Hc = (Hs-(rho_a_mean*CP*0.51*RD*(t_hmp_mean+273.15)*(t_hmp_mean+273.15)*LE_wpl)/(press_mean*LV))*((t_hmp_mean+273.15)/(Ts_mean+273.15))
+				Hc = (Hs-(rho_a_mean*CP*0.51*RD*(hmp_t_mean+273.15)*(hmp_t_mean+273.15)*LE_wpl)/(press_mean*LV))*((hmp_t_mean+273.15)/(Ts_mean+273.15))
 
 				'LI-7500 Webb et al. term for carbon dioxide Eq. (24).
 				co2_wpl_LE = MU_WPL*co2_mean/rho_d_mean*cov_Uz_h2o
-				co2_wpl_H  = (1+(MU_WPL*sigma_wpl))*co2_mean/(t_hmp_mean+273.15)*Hc/(rho_a_mean*CP)
+				co2_wpl_H  = (1+(MU_WPL*sigma_wpl))*co2_mean/(hmp_t_mean+273.15)*Hc/(rho_a_mean*CP)
 				Fc_wpl = Fc_irga + co2_wpl_LE + co2_wpl_H
 
 				'REA: Compute rotation angles from flux data
@@ -811,7 +819,7 @@ BeginProg
 				ST = Uz_mean/SQR(Ux_mean^2+Uy_mean^2+Uz_mean^2)
 
 				'Footprint calculations, Hsieh et al, 2000
-				L = -u_star^3*(t_hmp_mean+273.15)/(0.4*9.8*cov_Uz_Ts) 	'Obukohov Length
+				L = -u_star^3*(hmp_t_mean+273.15)/(0.4*9.8*cov_Uz_Ts) 	'Obukohov Length
 				Zu = zm*( log(zm/zo)-1+zo/zm )
 				If ABS(zu/L)<0.04 then 	'neutral
 					Dh = 0.97
@@ -925,7 +933,7 @@ BeginProg
 				If tot_samp_hrs < 24 Then weather_OK = TRUE 		'in snapshot mode, override weather
 				
 				'control REA sampling: check for REA_flag, timer duration, and weather
-				IF ( REA_flag_on AND Elapse1 < countdown_timer AND weather_OK ) Then
+				If ( REA_flag_on AND Elapse1 < countdown_timer AND Weather_OK ) Then
 					Elapse1 = Timer(1,Min,0)	'start timer
 					WriteIO (&B1000,&B1000) 	'set port 4 high, pump on
 					PortOn_4=1
