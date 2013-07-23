@@ -498,7 +498,6 @@ DataTable (ts_site,TRUE,-1)
 	Sample (1,hmp_e,IEEE4)
 
 	Sample (1,Uz_valve_lag,IEEE4)
-	Sample (1,Dband,IEEE4)
 	Sample (1,flow_rea_up,IEEE4)
 	Sample (1,flow_rea_dn,IEEE4)
 	Sample (1,flow_zero,IEEE4)
@@ -688,7 +687,7 @@ BeginProg
 			WriteIO (&B110000,&B010000) 'set up valve sample/down valve recirc
 			PortOn_5=1
 			PortOn_6=0
-		Elseif (Uz_valve <= -Dband AND control_flag = Run) Then
+		ElseIf (Uz_valve <= -Dband AND control_flag = Run) Then
 			WriteIO (&B110000,&B100000) 'set up valve recirc/down valve sample
 			PortOn_5=0
 			PortOn_6=1
@@ -743,7 +742,6 @@ BeginProg
 			wind_east  = -1*Uy
 			wind_north = Ux
 
-
 			co2_mm_m3 = co2	/ 44	'now measured in mg/m3 !!  44 mg/mmol
 			h2o_mm_m3 = h2o / 0.018 'now in g/m^3!! 18g/mol
 
@@ -778,7 +776,7 @@ BeginProg
 			If ( diag_csat_work < &hf000 ) Then ( diag_csat = INT (diag_csat_work/&h1000) )
 
 			If save_flag Then CallTable ts_site 
-			If control_flag = Run Then CallTable ts_REA
+'			If control_flag = Run Then CallTable ts_REA
 
 			CallTable comp_cov
 
@@ -969,12 +967,7 @@ BeginProg
 				If ( Elapse1 >= countdown_timer OR control_flag = Reset ) Then
 					REA_flag_on = FALSE   			'turn off REA flag
 					fin_flag_on = TRUE 				'set completion flag
-					If NUM_DAY_CRD > 0 Then 			'If a card is used, add filemarks after finishing
-						FileMark(flux)
-						FileMark(ts_site)
-						FileMark(ts_REA)
-					EndIf
-				Endif
+				EndIf
 
 			EndIf
 
