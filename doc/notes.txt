@@ -1,0 +1,31 @@
+
+
+
+Maintenance requirements
+========================
+
+Recirculation pump
+------------------
+
+- At light loads (+15psi full vacuum) and constant operation the diaphragms 
+    should be inspected annually.
+
+
+
+Data output
+===========
+
+- Even though 'flux' data output frequency can be adjusted from default 30min,
+    it really shouldn't be.
+
+Time series data table
+----------------------
+
+- Values in the time-series table have been 'lagged' so as to align the time
+    of measurement despite differing instrument 'lags'
+
+
+
+
+
+
