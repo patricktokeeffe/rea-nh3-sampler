@@ -239,8 +239,13 @@ EndTable
 DataTable(ts_slow,True,-1)
   DataInterval(0,SLOW_INTV,SLOW_UNIT,10)
   CardOut(1,-1)
-  Sample(1,
-
+  Sample(1,hmp_T,IEEE4)
+  Sample(1,hmp_RH,IEEE4)
+  Sample(1,press,IEEE4)
+  Sample(1,flow_up,IEEE4)
+  Sample(1,flow_dn,IEEE4)
+  Sample(1,flow_zero,IEEE4)
+EndTable
 
 DataTable(info,1,100)
   CardOut(1,100)
