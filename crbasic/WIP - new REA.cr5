@@ -205,7 +205,7 @@ Units LoggerVoltage = Volts
 
 '----- INTERMEDIATE PROCESSING ------
 Public Uz_rot
-Dim Uz_rot = m/s
+Units Uz_rot = m/s
 
 '----- STATE VARIABLES -----
 Public valves(3) As Boolean
