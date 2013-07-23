@@ -77,13 +77,13 @@ Const LI7500_ADDR = 7
 
 'escrow variables for EC100 data
 Dim ec100_raw(12)
-'alias 1 = Ux, m/s
-'alias 2 = Uy, m/s
-'alias 3 = Uz, m/s
-'alias 4 = Ts, *C
-'alias 5 = sonic diagnostic bitmap
-'alias 6 = CO2, mg/m^3
-'alias 7 = H2O, g/m^3
+Alias ec100_raw(1)  = ec100_Ux      'm/s
+Alias ec100_raw(2)  = ec100_Uy      'm/s
+Alias ec100_raw(3)  = ec100_Uz      'm/s
+Alias ec100_raw(4)  = ec100_Ts      '*C
+Alias ec100_raw(5)  = ec100_Sdiag   'bitmap
+Alias ec100_raw(6)  = ec100_co2     'mg/m^3
+Alias ec100_raw(7)  = ec100_h2o     'g/m^3
 'alias 8 = gas diagnostic bitmap
 'alias 9 = air temp, *C
 'alias 10 = air pressure, kPa
