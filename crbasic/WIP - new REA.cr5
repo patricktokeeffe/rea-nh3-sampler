@@ -31,29 +31,21 @@ Const MFC_ZERO_SE = 5  'note: single-ended
 Const MFC_ZERO_CAO = 2
 
 '----- ANALOG SCALING -----
-'LO: value @ 0V; HI: value @ high voltage; VR = voltage range (from 0V), V
-Const HMP_T_LO = -40
-Const HMP_T_HI = 60 'degC
-Const HMP_T_VR = 1
-Const HMP_RH_LO = 0
-Const HMP_RH_HI = 100 '%
-Const HMP_RH_VR = 1
+Const HMP_T_MULT = (60 + 40) / 1000    '-40* - 60* / 0-1V
+Const HMP_T_OFF = -40
+Const HMP_RH_MULT = (100 - 0) / 1000   '0-100% / 0-1V
+Const HMP_RH_OFF = 0
 
-Const PTB_LO = 60     '600 hPa * 0.1 kPa/hPa
-Const PTB_HI = 106    '1060 hPa = 106 kPa
-Const PTB_VR = 2.5 
+Const PTB_MULT = (106 - 60) / 2500     '600 - 1060 hPa = 60 - 106 kPa / 0-2.5V
+Const PTB_OFF = 60
 
-Const MFC_UP_LO = 0
-Const MFC_UP_HI = 10 'sLpm
-Const MFC_UP_VR = 5
+Const MFC_UP_MULT = (10 - 0) / 5000    '0-10 sLpm / 0-5V
+Const MFC_UP_OFF = 0
+Const MFC_DN_MULT = MFC_UP_MULT        'same
+Const MFC_DN_OFF = MFC_UP_OFF
 
-Const MFC_DN_LO = MFC_UP_LO
-Const MFC_DN_HI = MFC_UP_HI
-Const MFC_DN_VR = MFC_UP_VR
-
-Const MFC_ZERO_LO = 0
-Const MFC_ZERO_HI = 5 'sLpm
-Const MFC_ZERO_VR = 5
+Const MFC_ZERO_MULT = (5 - 0) / 5000   '0-5 sLpm / 0-5V
+Const MFC_ZERO_OFF = 0
 
 '----- SDM DEVICES -----
 Const CSAT_ADDR = 3  'default CSAT3 SDM address: 3
@@ -72,20 +64,6 @@ Const ZERO_MASK = &b10000000 'C8
 Const UPDN_MASK = &b00110000 'C5 & C6
 Const ON_MASK   = &b11111111 'all ports on
 Const OFF_MASK  = &b00000000 'all ports off
-
-'----- FIXED ANALOG INPUT SCALING CALCS -----
-Const HMP_T_MULT = (HMP_T_HI - HMP_T_LO) / HMP_T_VR
-Const HMP_T_OFF = HMP_T_LO
-Const HMP_RH_MULT = (HMP_RH_HI -  HMP_RH_LO) / HMP_RH_VR
-Const HMP_RH_OFF = HMP_RH_LO
-Const PTB_MULT = (PTB_HI - PTB_LO) / PTB_VR
-Const PTB_OFF = PTB_LO
-Const MFC_UP_MULT = (MFC_UP_HI - MFC_UP_LO) / MFC_UP_VR
-Const MFC_UP_OFF = MFC_UP_LO
-Const MFC_DN_MULT = (MFC_DN_HI - MFC_DN_LO) / MFC_DN_VR
-Const MFC_DN_OFF = MFC_DN_LO
-Const MFC_ZERO_MULT = (MFC_ZERO_HI - MFC_ZERO_LO) / MFC_ZERO_VR
-Const MFC_ZERO_OFF = MFC_ZERO_LO
 
 
 '==========  IMPORTANT CONSTANTS  =========
