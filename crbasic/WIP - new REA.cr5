@@ -422,6 +422,41 @@ BeginProg
 
 
 
+    CallTable(ts_fast)
+
+
+    inbetween_1hz_scan = True
+    If (just_had_1hz_scan) Then
+      just_had_1hz_scan = False
+      inbetween_1hz_scan = False
+    EndIf
+  NextScan
+
+  SlowSequence
+  Scan(SLOW_INTV,SLOW_UNIT,0,0)
+    VoltDiff(press,1,mv5000,PTB_DF,True,0,INTEG,PTB_MULT,PTB_OFF)
+    
+    VoltDiff(hmp_T,1,mv1000,HMP_T_DF,True,0,INTEG,HMP_T_MULT,HMP_T_OFF)
+    VoltDiff(hmp_RH,1,mv1000,HMP_RH_DF,True,0,INTEG,HMP_RH_MULT,HMP_RH_OFF)
+    
+    VoltDiff(flow_up,1,mv5000,MFC_UP_DF,True,0,INTEG,MFC_UP_MULT,MFC_UP_OFF)
+    VoltDiff(flow_dn,1,mv5000,MFC_DN_DF,True,0,INTEG,MFC_DN_MULT,MFC_DN_OFF)
+    VoltSe(flow_zero,1,mv5000,MFC_ZERO_SE,True,0,INTEG,MFC_ZERO_MULT,MFC_ZERO_OFF)
+    
+    CallTable(ts_slow)
+
+    If (save_changes = Discard) Then
+      populate_choices()
+      save_changes = Cancel
+    ElseIf (save_changes = Save) Then
+      save_current_choices()
+      save_changes = Cancel
+      CallTable(progsettings)
+    EndIf
+    
+    just_had_1hz_scan = True
+  NextScan
+EndProg
 
 
 
