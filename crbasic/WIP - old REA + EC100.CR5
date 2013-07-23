@@ -59,6 +59,19 @@ Const CSAT_OPT = INT (1000/SCAN_INTERVAL)			'Compute CSAT3 Execution Parameter (
 Const CSAT_REC_BCK = OFFSET-DELAY_CSAT				'Number of records back to align CSAT3 data.
 Const IRGA_REC_BCK = OFFSET-DELAY_IRGA				'Number of records back to align IRGA data.
 
+'WIRING
+Const MFC_UP_DF = 1
+Const MFC_DN_DF = 2
+Const MFC_Z_SE = 5
+Const PTB_SE = 17
+Const HMP_T_DF = 11
+Const HMP_RH_DF = 12
+
+'SDM
+Const EC100_ADDR = 1
+Const CSAT3_ADDR = 3
+Const LI7500_ADDR = 7
+
 
 '*** VARIABLES ***
 
@@ -689,8 +702,8 @@ BeginProg
 		ExciteCAO (CAO1,CAO_1_mv,True,False)	'denuder MFCs
 		ExciteCAO (CAO2,CAO_2_mv,True,False) 	'zero air MFC
 
-		VoltSe (hmp_t,1,mV1000,HMP_T_SE,TRUE,200,250,0.1,-40) 	'Measure the HMP45 temp in C
-		VoltSe (hmp_rh,1,mv1000,HMP_RH_SE,True,200,250,0.1,0)	'Measure the HMP45 RH as %
+		VoltDiff (hmp_t,1,mV1000,HMP_T_DF,TRUE,200,250,0.1,-40) 	'Measure the HMP45 temp in C
+		VoltDiff (hmp_rh,1,mv1000,HMP_RH_DF,True,200,250,0.1,0)	'Measure the HMP45 RH as %
 		Battery (batt_volt) 						'Measure battery voltage.
 
 		'Find the HMP45C vapor pressure (kPa)
@@ -698,10 +711,11 @@ BeginProg
 		SatVP(e_sat,hmp_t)
 
 		'Measure the MFCs controlling REA recirculation rate, 0-10L/min fullscale
-		VoltDiff (flow_rea_up,2,mV5000,11,True,200,250,0.002,0)
+		VoltDiff (flow_rea_up,1,mV5000,MFC_UP_DF,True,200,250,0.002,0)
+		VoltDiff (flow_rea_dn,1,mV5000,11,MFC_DN_DF,200,250,0.002,0)
 
 		'Measure the MFC controlling zero air injection, 0-5 L/min fullscale
-		VoltSE (flow_zero,1,mV5000,25,True,200,250,0.001,0)
+		VoltSe (flow_zero,1,mV5000,MFC_Z_SE,True,200,250,0.001,0)
 
 		'Lag the CSAT3 and IRGA measurements.
 		CallTable dly_data
