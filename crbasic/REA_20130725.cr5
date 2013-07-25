@@ -774,21 +774,16 @@ Sub resetREA()
 	Elapse1 = 0 				'Upon initilization, set timer for sampled duration to zero
 	
 	'set port status indicators
-  WriteIO(&B11111111,&B00000010)
+  WriteIO(&B11111111,&B10000010)
   PortOn_1=0 'samp mfc
-  PortOn_2=1 'press
+  PortOn_2=1 'press, leave on
   PortOn_5=0 'up valve
   PortOn_6=0 'dn valve
   PortOn_7=0 'pump
-  PortOn_8=0
-  
-	'Activate MFC 3 on startup (zero air)
-	WriteIO (&B10000000,&B10000000) 	'set port 2->8 high
-	PortOn_8=1		'denote port 2->8 high with var
-	CAO_2_mv=2000 		'set initial flow for makeup air MFCs: corresponds to 2.0LPM
+  PortOn_8=1 'zero, leave ON
 	
-	'Initialize MFCs 1,2 on startup
-	CAO_1_mv=0
+  CAO_1_mv=0
+  CAO_2_mv=2000 		'set initial flow for makeup air MFCs: corresponds to 2.0LPM
 EndSub
 
 '*** BEGIN PROGRAM ***
@@ -1147,16 +1142,14 @@ BeginProg
 				'control REA sampling: check for REA_flag, timer duration, and weather
 				IF ( REA_flag_on AND Elapse1 < countdown_timer AND weather_OK ) Then
 					Elapse1 = Timer(1,Min,0)	'start timer
-					WriteIO(&B01000000,&B01000000) 'turn on C7, pump
-					PortOn_7 = 1
-					WriteIO(&B10000001,&B10000001) 'turn on C8,C1, MFCs + zero valve\
-					PortOn_1 = 1
-					PortOn_8 = 1
+					WriteIO(&B11000001,&B11000001) 'turn on C8,C7,C1: zero, pump, REA MFCs
+					PortOn_7=1
+					PortOn_1=1
+					PortOn_8=1
 					CAO_1_mv = 5000*chemc_flow/10.0/K_d_mean 	'set MFC volt out
 				Else
-					WriteIO (&B01000000,&B00000000) 	'set port 7 low, pump off
+					WriteIO (&B11000001,&B10000000) 	'leave zero on
 					PortOn_7=0
-					WriteIO (&B10000001,&B10000000) 	'set port 1 low/8 high, only zero air on
 					PortOn_1=0
 					PortOn_8=1
 					CAO_1_mv=0
