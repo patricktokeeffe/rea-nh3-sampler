@@ -1,8 +1,11 @@
-'CR5000 Series Datalogger
-'Program for Feedlot REA
-'Adapted from an original program by Jay Ham
-'By: Patrick O'Keeffe
-'last edited: 4/20/09	
+'''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+' CR5000 program for the denuder-based relaxed eddy accumulation system
+'
+' Adapted from "REA09-04-21 with SDM LI7500.CR5" and "REA09-04-21 with analog LI7500.CR5"
+' programs used during 2009 Colorado feedlot NH3 study
+'
+' This header last modified 2013-07-25 by pokeeffe@wsu.edu
+'''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
 
 
 '*** TOC ***
@@ -35,13 +38,16 @@
 Const SAVE_FLUX_DATA = TRUE	'Save computed fluxes to table? (TRUE/FALSE)
 Const SAVE_TS_DATA = TRUE	'Save real-time data to table? (TRUE/FALSE)
 
-Const OUTPUT_INTERVAL = 5	'Flux data output interval in minutes
-Const NUM_DAY_CPU = 1		'Number of days of data to store on the CPU
-Const NUM_DAY_CRD = 0		'Number of days of data to store on the card
+Const OUTPUT_INTERVAL = 30	'Flux data output interval in minutes
+
+ConstTable
+  Const NUM_DAY_CPU = 1		'Number of days of data to store on the CPU
+  Const NUM_DAY_CRD = 2		'Number of days of data to store on the card
 'When using PC card, search "CARD-FIX" to locate the lines of code in the data table definitions 
 'which direct the data logger to send data to the card
 
-Const CSAT3_AZIMUTH = 221	'Unique value. {-152 = sonic pointing 208 deg, 208-360'}
+  Const CSAT3_AZIMUTH = 0	'Unique value. {-152 = sonic pointing 208 deg, 208-360'}
+EndConstTable
 'Compass azimuth of the -x axis. For the figure below, CSAT3_AZIMUTH = 90.
 ' () -> Compass coordinate system
 ' {} -> Right handed coordinate system aligned to north
@@ -69,12 +75,12 @@ Const zm = 5.05 	'Measurement Height, m, above displacement ht
 Const zo =0.04		'roughness length, m
 
 'Define source area of feedlot for footprint calculations, Larned 
-Const x_east_max = 300		'sampling boundary, dist from tower (meters)
-Const x_south_max = 400		'sampling boundary, dist from tower (meters)
-Const x_west_max = 200		'sampling boundary, dist from tower (meters)
-Const x_north_max = 20		'sampling boundary, dist from tower (meters)
-Const wdir_min = 85			'min wind direction, wdir < min outside source area
-Const wdir_max = 265		'max wind direction, wdir > max outside source area
+Const x_east_max = 10000		'sampling boundary, dist from tower (meters)
+Const x_south_max = 10000		'sampling boundary, dist from tower (meters)
+Const x_west_max = 10000		'sampling boundary, dist from tower (meters)
+Const x_north_max = 10000		'sampling boundary, dist from tower (meters)
+Const wdir_min =0			'min wind direction, wdir < min outside source area
+Const wdir_max = 359		'max wind direction, wdir > max outside source area
 
 
 '*** NUMERICAL CONSTANTS ***
@@ -106,7 +112,7 @@ Const DEF_SAVE_FLAG = YES
 Const DEF_SAMP_HRS = 4
 Const DEF_DELAY_DAYS = 0
 Const DEF_DELAY_TOD = Now
-Const DEF_SAMP_FLOW = Vary
+Const DEF_SAMP_FLOW = 10
 
 'Determine scan buffer size, CSAT3 Execution Parameters and fixed lags for CSAT3 and IRGA.
 Const SCAN_BUFFER_SIZE = 300*INT (1000/SCAN_INTERVAL)		'Compute 5 minute scan buffer.
@@ -430,7 +436,7 @@ Dim disable_flag_on(4)		'Intermediate processing disable flags.
 'disable_flag_on(1)			'TRUE: CSAT3 diag warn flags on or CSAT3 has no data.
 'disable_flag_on(2)			'TRUE: LI-7500 diag warn flags on or LI-7500 failed to send data
 'disable_flag_on(3)			'TRUE: CSAT3 diag warn flags on. Used to filter the sum of diag warn flags.
-'diaable_flag_on(4)			'TRUE: LI-7500 diag warn flags on. Used to filter the sum of diag warn flags.
+'disable_flag_on(4)			'TRUE: LI-7500 diag warn flags on. Used to filter the sum of diag warn flags.
 Dim n					'Number of samples in the online covariances.
 Units n = samples
 
@@ -457,7 +463,7 @@ Alias wind_raw(4) = Ts_raw
 Alias wind_raw(5) = diag_csat_raw
 Units wind_raw = m/s
 Units Ts_raw = C
-Units diag_csat_raw = unitless
+Units diag_csat_raw = bitmap
 
 'No delay IRGA data.
 Dim irga_raw(4)
@@ -467,8 +473,8 @@ Alias irga_raw(3) = press_raw
 Alias irga_raw(4) = diag_irga_raw
 Units co2_raw = mmol/m^3
 Units h2o_raw = mmol/m^3
-Units irga_press = kPa
-Units diag_irga_raw = unitless
+Units press_raw = kPa
+Units diag_irga_raw = bitmap
 
 'No delay analog measurements.
 Dim panel_temp_raw
@@ -505,12 +511,8 @@ Public dec_DOY		'decimal day of the year
 'Save processed data needed for flux determination
 DataTable (flux,TRUE,FLUX_SIZE_CPU)
 	DataInterval (0,OUTPUT_INTERVAL,Min,10)
-	'CardOut (0,FLUX_SIZE_CRD) 
+	CardOut (0,FLUX_SIZE_CRD) 
 	' CARD-FIX Remove above comment tick if using PC card
-
-	Sample (1,rYear,FP2)
-	Sample (1,dec_DOY,IEEE4)
-	Sample (1,scan_count,IEEE4)
 
 	Sample (1,Fc_wpl,IEEE4)
 	Sample (1,LE_wpl,IEEE4)
@@ -641,36 +643,29 @@ EndTable
 'Save real-time data related to the site; called during every scan if save_flag is set
 DataTable (ts_site,TRUE,-1)
 	DataInterval (0,SCAN_INTERVAL,mSec,100)
-	'CardOut (0,-1) 
+	CardOut (0,-1) 
 	' CARD-FIX Remove above comment tick when using PC card
-
-	Sample (1,rYear,FP2)
-	Sample (1,dec_DOY,IEEE4)
-	Sample (1,scan_count,IEEE4)
 
 	'eddy cov variables
 	Sample (1,Ux,IEEE4)
 	Sample (1,Uy,IEEE4)
 	Sample (1,Uz,IEEE4)
 	Sample (1,Ts,IEEE4)
+	Sample (1,diag_csat,UINT2)
 	Sample (1,co2,IEEE4)
 	Sample (1,h2o,IEEE4)
 	Sample (1,press,IEEE4)
-	Sample (1,diag_csat,IEEE4)
+	Sample (1,diag_irga,UINT2)
 	Sample (1,t_hmp,IEEE4)
-	Sample (1,e_hmp,IEEE4)
+	Sample (1,rh_hmp,IEEE4)
 	Sample (1,PTB_press,IEEE4)
 EndTable
 
 'Save real-time data related to REA sampling; called only during a sampling run
 DataTable (ts_REA,TRUE,-1)
 	DataInterval (0,SCAN_INTERVAL,mSec,50)
-	'CardOut (0,-1)
+	CardOut (0,-1)
 	' CARD-FIX Remove above comment tick when using PC card
-	
-	Sample (1,rYear,FP2)
-	Sample (1,dec_DOY,IEEE4)
-	Sample (1,scan_count,IEEE4)
 	
 	'REA variables
 	Sample (1,Uz_valve_lag,IEEE4)
@@ -679,7 +674,9 @@ DataTable (ts_REA,TRUE,-1)
 	Sample (1,flow_rea_dn,IEEE4)
 	Sample (1,flow_zero,IEEE4)
 	Sample (1,PortOn_5_lag,IEEE4)
+	  FieldNames("PortOn_up_lag")
 	Sample (1,PortOn_6_lag,IEEE4)
+	  FieldNames("PortOn_dn_lag")
 EndTable
 
 '*** WORKING DATA TABLES ***
@@ -812,13 +809,12 @@ BeginProg
 	SDMSpeed (SDM_PER) 	'Set the SDM clock speed.
 
 	Move (Ux_raw,5,NaN,1) 	'Set all CSAT3 variables to NaN.
-	Move (co2_raw,3,NaN,1) 	'Set all IRGA variables to NaN.
+	Move (co2_raw,4,NaN,1) 	'Set all IRGA variables to NaN.
 	
 	Scan (SCAN_INTERVAL,mSec,SCAN_BUFFER_SIZE,0)
 
 		'get date and time
 		RealTime( rTime )
-		dec_DOY = Day_of_Year +(rHour+(rMinute+(rSecond+ruSecond/1000000)/60)/60)/24
 		
 		'Check to see if a run finished last scan and if so, reset rea variables
 		If fin_flag_on Then Call resetREA()
@@ -872,8 +868,8 @@ BeginProg
 		Battery (batt_volt) 						'Measure battery voltage.
 
 		'Find the HMP45C vapor pressure (kPa)
-		e_sat = 6.112*exp( (17.67*t_hmp)/(t_hmp+243.5) )
-		e_hmp = 0.001*e_sat*rh_hmp
+    VaporPressure(e_hmp, t_hmp, rh_hmp)
+    SatVP(e_sat, t_hmp)
 
 		'Measure the MFCs controlling REA recirculation rate, 0-10L/min fullscale
 		VoltDiff (flow_rea_up,1,mV5000,1,True,0,250,0.002,0)
@@ -991,9 +987,7 @@ BeginProg
 				GetRecord (cov_out(1),comp_cov,1)
 
 				'Compass wind direction will be between 0 and 360 degrees.
-				wnd_dir_compass = wnd_dir_compass+CSAT3_AZIMUTH
-				If ( wnd_dir_compass < 0 ) Then ( wnd_dir_compass = wnd_dir_compass+360 )
-				wnd_dir_compass = (wnd_dir_compass) MOD 360
+				wnd_dir_compass = (360+wnd_dir_compass+CSAT3_AZIMUTH) MOD 360
 
 				'CSAT3 wind direction will be between 0 to 180 degrees and 0 to -180 degrees.
 				If ( wnd_dir_csat3 > 180 ) Then ( wnd_dir_csat3 = wnd_dir_csat3-360 )
@@ -1001,9 +995,9 @@ BeginProg
 				h2o_hmp_mean = e_hmp_mean/((t_hmp_mean+273.15)*RV)
 				rho_d_mean = (press_mean-e_hmp_mean)/((t_hmp_mean+273.15)*RD)
 				rho_a_mean = (rho_d_mean)/1000
-				T_dew_mean = 240.97*log(e_hmp_mean/0.611)/(17.502 - log(e_hmp_mean/0.611))
+				T_dew_mean = 240.97*LOG(e_hmp_mean/0.611)/(17.502 - LOG(e_hmp_mean/0.611))
 				old_RH_mean = RH_mean
-				RH_mean = e_hmp_mean/( 0.611*exp(17.502*t_hmp_mean/(240.97+t_hmp_mean)) )
+				RH_mean = e_hmp_mean/( 0.611*EXP(17.502*t_hmp_mean/(240.97+t_hmp_mean)) )
 
 				'Compute online fluxes.
 				Fc_irga = cov_Uz_co2
@@ -1173,12 +1167,7 @@ BeginProg
 				If ( Elapse1 >= countdown_timer OR control_flag = Reset ) Then
 					REA_flag_on = FALSE   			'turn off REA flag
 					fin_flag_on = TRUE 				'set completion flag
-					If NUM_DAY_CRD > 0 Then 			'If a card is used, add filemarks after finishing
-						FileMark(flux)
-						FileMark(ts_site)
-						FileMark(ts_REA)
-					EndIf
-				Endif
+				EndIf
 
 			EndIf
 
