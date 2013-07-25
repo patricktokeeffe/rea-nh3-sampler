@@ -118,6 +118,9 @@ Const IRGA_REC_BCK = OFFSET-DELAY_IRGA				'Number of records back to align IRGA 
 Const FLUX_SIZE_CPU = (NUM_DAY_CPU*1440)/OUTPUT_INTERVAL	'Size of flux DataTable on CPU [days].
 Const FLUX_SIZE_CRD = (NUM_DAY_CRD*1440)/OUTPUT_INTERVAL	'Size of flux DataTable on card [days].
 
+Const PTB_DF = 17
+Const PTB_MULT = (106 - 60) / 2500   '600-1060 hPa = 60-106 kPa / 2.5V
+Const PTB_OFF = 60 
 
 '*** UNIT DEFINITIONS ***
 'Units	Units
@@ -200,7 +203,7 @@ Alias aligned_data(12) = panel_temp
 Alias aligned_data(13) = Uz_valve_lag
 Alias aligned_data(14) = PortOn_5_lag
 Alias aligned_data(15) = PortOn_6_lag
-Alias aligned_data(16) = PTA_press
+Alias aligned_data(16) = PTB_press
 Units Uz = m/s
 Units Ux = m/s
 Units Uy = m/s
@@ -211,7 +214,7 @@ Units diag_csat = unitless
 Units press = kPa
 Units diag_irga = unitless
 Units panel_temp = C
-Units PTA_press = kPa
+Units PTB_press = kPa
 
 Public co2_um_m
 Public h2o_mm_m
@@ -415,10 +418,10 @@ Units CAO_2_mv = mv
 Units chemc_flow = L/min
 Units makeup_flow = L/min
 
-Public PortOn_1 	'MFC 1 and 2 Off/On
-Public PortOn_2	'MFC 3 Off/On
-Public PortOn_3	'pressure transmitter off/on
-Public PortOn_4	'turns air pump off/on
+Public PortOn_1 'MFC 1 and 2 Off/On
+Public PortOn_8 'zero MFC valve
+Public PortOn_2	'pressure transmitter off/on
+Public PortOn_7	'turns air pump off/on
 Public PortOn_5	'REA valve up eddy
 Public PortOn_6	'REA valve dn eddy
 
@@ -470,8 +473,8 @@ Units diag_irga_raw = unitless
 'No delay analog measurements.
 Dim panel_temp_raw
 Units panel_temp_raw = C
-Dim PTA_raw
-Units PTA_raw = kPa
+Dim PTB_raw
+Units PTB_raw = kPa
 
 'Working variables
 Dim co2_mm_m3			'Carbon dioxide concentration [mmol/m^3], used to compute umol/mol conc.
@@ -624,10 +627,15 @@ DataTable (flux,TRUE,FLUX_SIZE_CPU)
 	Sample (1,REA_flag_on,FP2)
 	Sample (1,fin_flag_on,FP2)
 	Sample (1,PortOn_1, FP2)
-	Sample (1,PortOn_2, FP2)
-	Sample (1,PortOn_4, FP2)
+	  FieldNames("PortOn_REA_MFC")
+	Sample (1,PortOn_8, FP2)
+	  FieldNames("PortOn_Z_VLV")
+	Sample (1,PortOn_7, FP2)
+	  FieldNames("PortOn_pump")
 	Totalize (1,PortOn_5,IEEE4,False)
+	  FieldNames("PortOn_up_Tot")
 	Totalize (1,PortOn_6,IEEE4,False)
+	  FieldNames("PortOn_dn_Tot")
 EndTable
 
 'Save real-time data related to the site; called during every scan if save_flag is set
@@ -651,7 +659,7 @@ DataTable (ts_site,TRUE,-1)
 	Sample (1,diag_csat,IEEE4)
 	Sample (1,t_hmp,IEEE4)
 	Sample (1,e_hmp,IEEE4)
-	Sample (1,PTA_press,IEEE4)
+	Sample (1,PTB_press,IEEE4)
 EndTable
 
 'Save real-time data related to REA sampling; called only during a sampling run
@@ -692,7 +700,7 @@ DataTable (dly_data,TRUE,OFFSET)
 	Sample (1,Uz_valve,IEEE4) 		'13
 	Sample (1,PortOn_5,IEEE4)		'14
 	Sample (1,PortOn_6,IEEE4)		'15
-	Sample (1,PTA_raw,IEEE4)			'16
+	Sample (1,PTB_raw,IEEE4)			'16
 EndTable
 
 
@@ -769,17 +777,17 @@ Sub resetREA()
 	Elapse1 = 0 				'Upon initilization, set timer for sampled duration to zero
 	
 	'set port status indicators
-	WriteIO (&B111111,&B000100) 
-	PortOn_1=0 			'MFC 1/2 off
-	PortOn_2=0 			'MFC 3 off
-	PortOn_3=1			'pressure transmitter on (2sec warm up)
-	PortOn_4=0 			'air pump off
-	PortOn_5=0 			'REA valve up set to recirc
-	PortOn_6=0 			'REA valve dn set to recirc
-
+  WriteIO(&B11111111,&B00000010)
+  PortOn_1=0 'samp mfc
+  PortOn_2=1 'press
+  PortOn_5=0 'up valve
+  PortOn_6=0 'dn valve
+  PortOn_7=0 'pump
+  PortOn_8=0
+  
 	'Activate MFC 3 on startup (zero air)
-	WriteIO (&B10,&B10) 	'set port 2 high
-	PortOn_2=1		'denote port 2 high with var
+	WriteIO (&B10000000,&B10000000) 	'set port 2->8 high
+	PortOn_8=1		'denote port 2->8 high with var
 	CAO_2_mv=2000 		'set initial flow for makeup air MFCs: corresponds to 2.0LPM
 	
 	'Initialize MFCs 1,2 on startup
@@ -836,7 +844,7 @@ BeginProg
 		PanelTemp (panel_temp_raw,250) 				'CR5000 panel temperature.
 		CSAT3 (Ux_raw,1,3,91,CSAT_OPT) 				'code 91: trigger CSAT3 wind/sonic temp data retrieval
 		CS7500 (co2_raw,1,7,6)						'code to communicate with LI-7500 via SDM ports
-		VoltSE (PTA_press,1,mv5000,1,True,200,250,0.0052,80)
+		VoltDiff(PTB_raw,1,mv5000,PTB_DF,True,0,250,PTB_MULT,PTB_OFF)
 
 		Uz_rot   = Uz_raw*CT-Ux_raw*ST*CE-Uy_raw*ST*SE		'REA: rotate vertical wind speed
 		Uz_valve = Uz_rot
@@ -859,8 +867,8 @@ BeginProg
 		ExciteCAO (CAO1,CAO_1_mv,True,False)	'denuder MFCs
 		ExciteCAO (CAO2,CAO_2_mv,True,False) 	'zero air MFC
 
-		VoltSe (t_hmp,1,mV1000,9,TRUE,200,250,0.1,-40) 	'Measure the HMP45 temp in C
-		VoltSE (rh_hmp,1,mv1000,10,True,200,250,0.1,0)	'Measure the HMP45 RH as %
+		VoltDiff(t_hmp,1,mV1000,11,TRUE,0,250,0.1,-40) 	'Measure the HMP45 temp in C
+		VoltDiff(rh_hmp,1,mv1000,12,True,0,250,0.1,0)	'Measure the HMP45 RH as %
 		Battery (batt_volt) 						'Measure battery voltage.
 
 		'Find the HMP45C vapor pressure (kPa)
@@ -868,10 +876,11 @@ BeginProg
 		e_hmp = 0.001*e_sat*rh_hmp
 
 		'Measure the MFCs controlling REA recirculation rate, 0-10L/min fullscale
-		VoltDiff (flow_rea_up,2,mV5000,11,True,200,250,0.002,0)
+		VoltDiff (flow_rea_up,1,mV5000,1,True,0,250,0.002,0)
+		VoltDiff (flow_rea_dn,1,mV5000,2,True,0,250,0.002,0)
 
 		'Measure the MFC controlling zero air injection, 0-5 L/min fullscale
-		VoltSE (flow_zero,1,mV5000,25,True,200,250,0.001,0)
+		VoltSe (flow_zero,1,mV5000,5,True,0,250,0.001,0)
 
 		'Lag the CSAT3 and IRGA measurements.
 		CallTable dly_data
@@ -882,7 +891,7 @@ BeginProg
 			Move (panel_temp,1,dly_data_out(12),1)		'panel_temp
 			Move (PortOn_5_lag,2,dly_data_out(14),2) 	'porton_5,porton_6
 			Move (press,1,dly_data_out(10),1)			'press from LI-7500
-			Move (PTA_press,1,dly_data_out(16),1)		'external press sensor
+			Move (PTB_press,1,dly_data_out(16),1)		'external press sensor
 			
 			'Load in CSAT3 data that has been lagged by CSAT_REC_BCK scans.
 			GetRecord (dly_data_out(1),dly_data,CSAT_REC_BCK)
@@ -1144,18 +1153,18 @@ BeginProg
 				'control REA sampling: check for REA_flag, timer duration, and weather
 				IF ( REA_flag_on AND Elapse1 < countdown_timer AND weather_OK ) Then
 					Elapse1 = Timer(1,Min,0)	'start timer
-					WriteIO (&B1000,&B1000) 	'set port 4 high, pump on
-					PortOn_4=1
-					WriteIO (&B11,&B11) 		'set port 1 high and port 2 high, all MFCs open
-					PortOn_1=1
-					PortOn_2=1
+					WriteIO(&B01000000,&B01000000) 'turn on C7, pump
+					PortOn_7 = 1
+					WriteIO(&B10000001,&B10000001) 'turn on C8,C1, MFCs + zero valve\
+					PortOn_1 = 1
+					PortOn_8 = 1
 					CAO_1_mv = 5000*chemc_flow/10.0/K_d_mean 	'set MFC volt out
 				Else
-					WriteIO (&B1000,&B0000) 			'set port 4 low, pump off
-					PortOn_4=0
-					WriteIO (&B11,&B10) 				'set port 1 low/2 high, only zero air on
+					WriteIO (&B01000000,&B00000000) 	'set port 7 low, pump off
+					PortOn_7=0
+					WriteIO (&B10000001,&B10000000) 	'set port 1 low/8 high, only zero air on
 					PortOn_1=0
-					PortOn_2=1
+					PortOn_8=1
 					CAO_1_mv=0
 					Elapse1 = Timer(1,Min,1)			'stop timer
 				EndIf
