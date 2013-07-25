@@ -226,6 +226,9 @@ Public co2_um_m
 Public h2o_mm_m
 Units co2_um_m = umol/mol
 Units h2o_mm_m = mmol/mol
+Public Ts_american 
+Units Ts_american = F
+
 
 Public diag_bits(8)				'Warning flags.
 Alias diag_bits(1) = del_T_f		'Delta temperature warning flag.
@@ -261,6 +264,9 @@ Units h2o_hmp_mean = g/m^3
 Units rho_a_mean = kg/m^3
 Units batt_volt = V
 Units T_dew_mean = C
+
+Public hmp_t_american
+Units hmp_t_american = F
 
 'MFC-specific variables  
 Public MFC(3)
@@ -836,6 +842,8 @@ BeginProg
 		CSAT3 (Ux_raw,1,3,91,CSAT_OPT) 				'code 91: trigger CSAT3 wind/sonic temp data retrieval
 		CS7500 (co2_raw,1,7,6)						'code to communicate with LI-7500 via SDM ports
 		VoltDiff(PTB_raw,1,mv5000,PTB_DF,True,0,250,PTB_MULT,PTB_OFF)
+		
+    Ts_american = Ts*1.8 + 32
 
 		Uz_rot   = Uz_raw*CT-Ux_raw*ST*CE-Uy_raw*ST*SE		'REA: rotate vertical wind speed
 		Uz_valve = Uz_rot
@@ -864,6 +872,8 @@ BeginProg
 		VoltDiff(rh_hmp,1,mv1000,12,True,0,250,0.1,0)	'Measure the HMP45 RH as %
 		Battery (batt_volt) 						'Measure battery voltage.
 
+    hmp_t_american = t_hmp*1.8 + 32
+  
 		'Find the HMP45C vapor pressure (kPa)
     VaporPressure(e_hmp, t_hmp, rh_hmp)
     SatVP(e_sat, t_hmp)
