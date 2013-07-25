@@ -222,13 +222,11 @@ Units diag_irga = unitless
 Units panel_temp = C
 Units PTB_press = kPa
 
-Public co2_um_m
-Public h2o_mm_m
-Units co2_um_m = umol/mol
-Units h2o_mm_m = mmol/mol
 Public Ts_american 
 Units Ts_american = F
 
+Public co2_ppm_est
+Units co2_ppm_est = approx ppm
 
 Public diag_bits(8)				'Warning flags.
 Alias diag_bits(1) = del_T_f		'Delta temperature warning flag.
@@ -489,8 +487,6 @@ Dim PTB_raw
 Units PTB_raw = kPa
 
 'Working variables
-Dim co2_mm_m3			'Carbon dioxide concentration [mmol/m^3], used to compute umol/mol conc.
-Dim h2o_mm_m3			'Water vapor conc [mmol/m^3], to compute vapor pressure and mmol/mol conc.
 Dim sigma_wpl			'Webb et al. sigma = density of water vapor / density of dry air.
 Dim scan_count 		'Number scans executed.
 Dim wind_east			'East wind in compass coordinate system.
@@ -912,19 +908,8 @@ BeginProg
 			wind_east  = -1*Uy
 			wind_north = Ux
 
-			'Save/compute the molar density of CO2
-			'[pre LI-7500 code commented out]
-			'co2_um_m = co2									'measured as ppm = umol/mol
-			'co2_mm_m3 = (2730*co2*press)/(22691.2*(273+t_hmp))	'from Op-2 manual, pg 6
-			co2_mm_m3 = co2 
-			h2o_mm_m3 = h2o
-
-			'Save/compute the molar concentration of H2O.
-			'[pre LI-7500 code commented out]
-			'h2o_mm_m3 = (273000000*h2o)/(22691.2*(t_hmp+273.15)) 	'from Op-2 manual, pg 9
-			'h2o_mm_m = h2o_mm_m3*R*(t_hmp+273.15)/press			'Jay's original code
-			co2_um_m = co2_mm_m3*R*(t_hmp+273.15)/press*1000
-			h2o_mm_m = h2o_mm_m3*R*(t_hmp+273.15)/press
+      'CO2 mixing ratio approx.
+			co2_ppm_est = co2*R*(t_hmp+273.15)/press*1000
 
 			'Convert IRGA data to mass density (co2: mg/m^3, h20: g/m^3)
 			' 44 [g/mol] - molecular weight of carbon dioxide
