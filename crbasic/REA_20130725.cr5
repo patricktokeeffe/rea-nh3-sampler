@@ -840,11 +840,13 @@ BeginProg
 		Uz_rot   = Uz_raw*CT-Ux_raw*ST*CE-Uy_raw*ST*SE		'REA: rotate vertical wind speed
 		Uz_valve = Uz_rot
 
-		If (Uz_valve >= Dband AND control_flag = Run) Then
+    If (NOT REA_flag_on) Then
+      'do nothing, leave valves recirculating
+		ElseIf (Uz_valve >= Dband) Then
 			WriteIO (&B110000,&B010000) 'set up valve sample/down valve recirc
 			PortOn_5=1
 			PortOn_6=0
-		Elseif (Uz_valve <= -Dband AND control_flag = Run) Then
+		ElseIf (Uz_valve <= -Dband) Then
 			WriteIO (&B110000,&B100000) 'set up valve recirc/down valve sample
 			PortOn_5=0
 			PortOn_6=1
@@ -973,7 +975,7 @@ BeginProg
 '*********************************************************************************************************
 
 			If save_flag Then CallTable ts_site 
-			If control_flag = Run Then CallTable ts_REA
+			If REA_flag_on Then CallTable ts_REA
 
 			CallTable comp_cov
 
