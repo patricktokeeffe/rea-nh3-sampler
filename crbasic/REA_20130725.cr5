@@ -1096,7 +1096,7 @@ BeginProg
 					itt = 100*ABS(itt_meas-itt_model)/itt_model
 				Else
 					itt=999
-				Endif
+				EndIf
 
 				'REA dynamic deadband calcuations
 				sig_w = SQR(cov_Uz_Uz)		'stdev of w
@@ -1115,7 +1115,7 @@ BeginProg
 				makeup_flow = sig_w	
 				If makeup_flow > 1.0 Then makeup_flow = 1.0
 				If makeup_flow < 0.4 Then makeup_flow = 0.4
-				CAO_2_mv = 5000*2*makeup_flow/5.0/K_d_mean
+				CAO_2_mv = makeup_flow*(5000/5.0) 'slpm * mv/slpm)
 
 				Elapse1 = Timer(1,Min,4) 			'read sample duration timer
 
@@ -1143,7 +1143,7 @@ BeginProg
 					PortOn_7=1
 					PortOn_1=1
 					PortOn_8=1
-					CAO_1_mv = 5000*chemc_flow/10.0/K_d_mean 	'set MFC volt out
+					CAO_1_mv = chemc_flow*(5000/10.0) 'slpm * mv/slpm) 	'set MFC volt out
 				Else
 					WriteIO (&B11000001,&B10000000) 	'leave zero on
 					PortOn_7=0
