@@ -4,7 +4,7 @@
 ' Adapted from "REA09-04-21 with SDM LI7500.CR5" and "REA09-04-21 with analog LI7500.CR5"
 ' programs used during 2009 Colorado feedlot NH3 study
 '
-' This header last modified 2013-07-25 by pokeeffe@wsu.edu
+' This header last modified 2013-10-07 by pokeeffe@wsu.edu
 '''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
 
 
@@ -124,7 +124,7 @@ Const IRGA_REC_BCK = OFFSET-DELAY_IRGA				'Number of records back to align IRGA 
 Const FLUX_SIZE_CPU = (NUM_DAY_CPU*1440)/OUTPUT_INTERVAL	'Size of flux DataTable on CPU [days].
 Const FLUX_SIZE_CRD = (NUM_DAY_CRD*1440)/OUTPUT_INTERVAL	'Size of flux DataTable on card [days].
 
-Const PTB_DF = 17
+Const PTB_DF = 10
 Const PTB_MULT = (106 - 60) / 2500   '600-1060 hPa = 60-106 kPa / 2.5V
 Const PTB_OFF = 60 
 
