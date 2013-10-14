@@ -124,6 +124,12 @@ Const IRGA_REC_BCK = OFFSET-DELAY_IRGA				'Number of records back to align IRGA 
 Const FLUX_SIZE_CPU = (NUM_DAY_CPU*1440)/OUTPUT_INTERVAL	'Size of flux DataTable on CPU [days].
 Const FLUX_SIZE_CRD = (NUM_DAY_CRD*1440)/OUTPUT_INTERVAL	'Size of flux DataTable on card [days].
 
+Const HMP_T_DF = 11
+Const HMP_T_MULT = (60 + 40)/1000 '-40 to 60 over 0-1V
+Const HMP_T_OFF = -40
+Const HMP_RH_DF = 12
+Const HMP_RH_MULT = (100)/1000 '0-100% over 0-1V
+Const HMP_RH_OFF = 0
 
 Const MFC_UP_DF = 1
 Const MFC_DN_DF = 2
@@ -878,8 +884,8 @@ BeginProg
 		ExciteCAO (MFC_UPDN_CAO,CAO_1_mv,True,False)	'denuder MFCs
 		ExciteCAO (MFC_ZERO_CAO,CAO_2_mv,True,False) 	'zero air MFC
 
-		VoltDiff(t_hmp,1,mV1000,11,TRUE,0,250,0.1,-40) 	'Measure the HMP45 temp in C
-		VoltDiff(rh_hmp,1,mv1000,12,True,0,250,0.1,0)	'Measure the HMP45 RH as %
+		VoltDiff(t_hmp,1,mV1000,HMP_T_DF,True,0,250,HMP_T_MULT,HMP_T_OFF)	'temp in C
+		VoltDiff(rh_hmp,1,mv1000,HMP_RH_DF,True,0,250,HMP_RH_MULT,HMP_RH_OFF) 'RH as %
 		Battery (batt_volt) 						'Measure battery voltage.
 
     hmp_t_american = t_hmp*1.8 + 32
