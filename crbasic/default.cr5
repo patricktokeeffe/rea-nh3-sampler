@@ -124,6 +124,17 @@ Const IRGA_REC_BCK = OFFSET-DELAY_IRGA				'Number of records back to align IRGA 
 Const FLUX_SIZE_CPU = (NUM_DAY_CPU*1440)/OUTPUT_INTERVAL	'Size of flux DataTable on CPU [days].
 Const FLUX_SIZE_CRD = (NUM_DAY_CRD*1440)/OUTPUT_INTERVAL	'Size of flux DataTable on card [days].
 
+
+Const MFC_UP_DF = 1
+Const MFC_DN_DF = 2
+Const MFC_ZERO_DF = 3
+Const MFC_UPDN_MULT = (10/5000)
+Const MFC_UPDN_OFF = 0
+Const MFC_ZERO_MULT = (5/5000)
+Const MFC_ZERO_OFF = 0
+Const MFC_UPDN_CAO = CAO1
+Const MFC_ZERO_CAO = CAO2
+
 Const PTB_DF = 10
 Const PTB_MULT = (106 - 60) / 2500   '600-1060 hPa = 60-106 kPa / 2.5V
 Const PTB_OFF = 60 
@@ -785,7 +796,7 @@ Sub resetREA()
   PortOn_8=1 'zero, leave ON
 	
   CAO_1_mv=0
-  CAO_2_mv=2000 		'set initial flow for makeup air MFCs: corresponds to 2.0LPM
+  CAO_2_mv=2/MFC_ZERO_MULT 	'set initial flow for makeup air MFCs: corresponds to 2.0LPM
 EndSub
 
 '*** BEGIN PROGRAM ***
@@ -861,8 +872,8 @@ BeginProg
 		EndIf
 
 		'set MFCs
-		ExciteCAO (CAO1,CAO_1_mv,True,False)	'denuder MFCs
-		ExciteCAO (CAO2,CAO_2_mv,True,False) 	'zero air MFC
+		ExciteCAO (MFC_UPDN_CAO,CAO_1_mv,True,False)	'denuder MFCs
+		ExciteCAO (MFC_ZERO_CAO,CAO_2_mv,True,False) 	'zero air MFC
 
 		VoltDiff(t_hmp,1,mV1000,11,TRUE,0,250,0.1,-40) 	'Measure the HMP45 temp in C
 		VoltDiff(rh_hmp,1,mv1000,12,True,0,250,0.1,0)	'Measure the HMP45 RH as %
@@ -875,11 +886,11 @@ BeginProg
     SatVP(e_sat, t_hmp)
 
 		'Measure the MFCs controlling REA recirculation rate, 0-10L/min fullscale
-		VoltDiff (flow_rea_up,1,mV5000,1,True,0,250,0.002,0)
-		VoltDiff (flow_rea_dn,1,mV5000,2,True,0,250,0.002,0)
+		VoltDiff (flow_rea_up,1,mV5000,MFC_UP_DF,True,0,250,MFC_UPDN_MULT,MFC_UPDN_OFF)
+		VoltDiff (flow_rea_dn,1,mV5000,MFC_DN_DF,True,0,250,MFC_UPDN_MULT,MFC_UPDN_OFF)
 
 		'Measure the MFC controlling zero air injection, 0-5 L/min fullscale
-		VoltSe (flow_zero,1,mV5000,5,True,0,250,0.001,0)
+		VoltSe (flow_zero,1,mV5000,MFC_ZERO_DF,True,0,250,MFC_ZERO_MULT,MFC_ZERO_OFF)
 
 		'Lag the CSAT3 and IRGA measurements.
 		CallTable dly_data
@@ -1106,16 +1117,16 @@ BeginProg
 				K_a_mean = rho_a_mean/( 101/((25+273.15)*RD) )
 
 				'set chemcomb sampling rate, recirulation rate
-				chemc_flow = sig_w*10 
-				If chemc_flow > 10 Then chemc_flow = 10
+				chemc_flow = MFC_UPDN_MULT * 5000 'slpm = slpm/mv * 5000mv
+				If sig_w < 1.0 Then chemc_flow = sig_w * chemc_flow 'don't scale above max if >=1
 				
-				If samp_flow = 10 Then chemc_flow = 10
+				If samp_flow = 10 Then chemc_flow = 10 'samp_flow is from user menu
 
 				'set flow on makup air / zero air
 				makeup_flow = sig_w	
 				If makeup_flow > 1.0 Then makeup_flow = 1.0
 				If makeup_flow < 0.4 Then makeup_flow = 0.4
-				CAO_2_mv = makeup_flow*(5000/5.0) 'slpm * mv/slpm)
+				CAO_2_mv = makeup_flow/MFC_ZERO_MULT 'slpm / (slpm/mv)
 
 				Elapse1 = Timer(1,Min,4) 			'read sample duration timer
 
@@ -1143,7 +1154,7 @@ BeginProg
 					PortOn_7=1
 					PortOn_1=1
 					PortOn_8=1
-					CAO_1_mv = chemc_flow*(5000/10.0) 'slpm * mv/slpm) 	'set MFC volt out
+					CAO_1_mv = chemc_flow/MFC_UPDN_MULT 'slpm / (slpm/mv) 	'set MFC volt out
 				Else
 					WriteIO (&B11000001,&B10000000) 	'leave zero on
 					PortOn_7=0
