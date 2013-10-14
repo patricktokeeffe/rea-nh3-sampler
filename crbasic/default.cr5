@@ -424,6 +424,7 @@ Public southing
 Public northing
 Public compass_diag
 
+Dim neg_dband   'remove redudant computations
 Public Dband		'deadband
 Public K_d_mean	'correction factors for MFCs dry air
 Public K_a_mean	'correction factors for MFCs moist air
@@ -861,10 +862,10 @@ BeginProg
 			WriteIO (&B110000,&B010000) 'set up valve sample/down valve recirc
 			PortOn_5=1
 			PortOn_6=0
-		ElseIf (Uz_valve <= -Dband) Then
 			WriteIO (&B110000,&B100000) 'set up valve recirc/down valve sample
 			PortOn_5=0
 			PortOn_6=1
+		ElseIf (Uz_valve <= neg_dband) Then
 		Else
 			WriteIO (&B110000,&B000000) 'set both valves recirc
 			PortOn_5=0
@@ -1112,6 +1113,7 @@ BeginProg
 				'REA dynamic deadband calcuations
 				sig_w = SQR(cov_Uz_Uz)		'stdev of w
 				Dband = 0.5*sig_w 		'dynamic deadband
+				neg_dband = -1*Dband
 
 				K_d_mean = rho_d_mean/( 101/((25+273.15)*RD) ) 	'MFC correction factors K
 				K_a_mean = rho_a_mean/( 101/((25+273.15)*RD) )
