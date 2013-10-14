@@ -282,9 +282,9 @@ Public MFC(3)
 Alias MFC(1) = flow_rea_up
 Alias MFC(2) = flow_rea_dn
 Alias MFC(3) = flow_zero
-Units flow_rea_up = L/min
-Units flow_rea_dn = L/min
-Units flow_zero = L/min
+Units flow_rea_up = sLpm
+Units flow_rea_dn = sLpm
+Units flow_zero = sLpm
 
 'Flux variables.
 Dim Fc_wpl		'Carbon dioxide flux (IRGA), with Webb et al. term.
