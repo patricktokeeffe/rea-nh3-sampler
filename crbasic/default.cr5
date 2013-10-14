@@ -135,6 +135,9 @@ Const MFC_ZERO_OFF = 0
 Const MFC_UPDN_CAO = CAO1
 Const MFC_ZERO_CAO = CAO2
 
+Const C_VLV_UP = 5 
+Const C_VLV_DN = 6 
+
 Const PTB_DF = 10
 Const PTB_MULT = (106 - 60) / 2500   '600-1060 hPa = 60-106 kPa / 2.5V
 Const PTB_OFF = 60 
@@ -859,18 +862,17 @@ BeginProg
     If (NOT REA_flag_on) Then
       'do nothing, leave valves recirculating
 		ElseIf (Uz_valve >= Dband) Then
-			WriteIO (&B110000,&B010000) 'set up valve sample/down valve recirc
-			PortOn_5=1
-			PortOn_6=0
-			WriteIO (&B110000,&B100000) 'set up valve recirc/down valve sample
-			PortOn_5=0
-			PortOn_6=1
+			PortOn_5=1 'UP open
+			PortOn_6=0 'DN recirc
 		ElseIf (Uz_valve <= neg_dband) Then
+			PortOn_5=0 'UP recirc
+			PortOn_6=1 'DN open
 		Else
-			WriteIO (&B110000,&B000000) 'set both valves recirc
-			PortOn_5=0
-			PortOn_6=0
+			PortOn_5=0 'UP recirc
+			PortOn_6=0 'DN recirc
 		EndIf
+		PortSet(C_VLV_UP,PortOn_5)
+		PortSet(C_VLV_DN,PortOn_6)
 
 		'set MFCs
 		ExciteCAO (MFC_UPDN_CAO,CAO_1_mv,True,False)	'denuder MFCs
