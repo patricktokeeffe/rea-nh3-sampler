@@ -1183,8 +1183,6 @@ BeginProg
 			EndIf
 
 			If save_flag Then CallTable flux
-
-			scan_count = scan_count+1
 		Else
 			scan_count = scan_count+1
 		EndIf
