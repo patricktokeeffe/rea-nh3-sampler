@@ -134,8 +134,8 @@ Const HMP_RH_MULT = (100)/1000 '0-100% over 0-1V
 Const HMP_RH_OFF = 0
 
 Const MFC_UP_DF = 1
-Const MFC_DN_DF = 2
-Const MFC_ZERO_DF = 3
+Const MFC_ZERO_DF = 2
+Const MFC_DN_DF = 3
 Const MFC_UPDN_MULT = (10/5000)
 Const MFC_UPDN_OFF = 0
 Const MFC_ZERO_MULT = (5/5000)
