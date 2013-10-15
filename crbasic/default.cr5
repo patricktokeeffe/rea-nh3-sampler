@@ -145,18 +145,22 @@ Const MFC_ZERO_CAO = CAO2
 
 Const C_UPDN_OFF = 1
 Const C_ZERO_OFF = 2
+Const C_UPDN_PURGE = 3
+Const C_ZERO_PURGE = 4
 Const C_VLV_UP = 5 
 Const C_VLV_DN = 6 
 Const C_PUMP_ON = 7
 Const C_MFC_PWR = 8
 
-Const MASK_UPDN_OFF = 2^(C_UPDN_OFF-1) '0000 0001
-Const MASK_ZERO_OFF = 2^(C_ZERO_OFF-1) '0000 0010
-Const MASK_UP_VLV = 2^(C_VLV_UP-1)     '0001 0000
-Const MASK_DN_VLV = 2^(C_VLV_DN-1)     '0010 0000
+Const MASK_UPDN_OFF = 2^(C_UPDN_OFF-1)     '0000 0001
+Const MASK_ZERO_OFF = 2^(C_ZERO_OFF-1)     '0000 0010
+Const MASK_UPDN_PURGE = 2^(C_UPDN_PURGE-1) '0000 0100
+Const MASK_ZERO_PURGE = 2^(C_ZERO_PURGE-1) '0000 1000
+Const MASK_UP_VLV = 2^(C_VLV_UP-1)         '0001 0000
+Const MASK_DN_VLV = 2^(C_VLV_DN-1)         '0010 0000
 Const MASK_UPDN_VLV = (MASK_UP_VLV OR MASK_DN_VLV) '0011 0000
-Const MASK_PUMP_ON = 2^(C_PUMP_ON-1)   '0100 0000
-Const MASK_MFC_PWR = 2^(C_MFC_PWR-1)   '1000 0000
+Const MASK_PUMP_ON = 2^(C_PUMP_ON-1)       '0100 0000
+Const MASK_MFC_PWR = 2^(C_MFC_PWR-1)       '1000 0000
 
 Const MASK_OFF = &B00000000
 Const MASK_FLOW = (MASK_MFC_PWR OR MASK_PUMP_ON OR MASK_ZERO_OFF OR MASK_UPDN_OFF)
@@ -473,8 +477,9 @@ Units makeup_flow = sLpm
 Public CtrlPort(8) As Boolean
 Alias CtrlPort(1) = updn_mfc_is_off 'up/dn MFC off signal
 Alias CtrlPort(2) = zero_mfc_is_off 'makeup air MFC off signal
-'C3 not used
-'C4 not used
+'C3, C4 MFC valve purge logic not built into program
+Alias CtrlPort(3) = updn_purging 'up/dn MFC valve purge signal
+Alias CtrlPort(4) = zero_purging 'makeup air MFC valve purge signal
 Alias CtrlPort(5) = vlv_up_is_on 'REA valve up eddy
 Alias CtrlPort(6) = vlv_dn_is_on	'REA valve dn eddy
 Alias CtrlPort(7) = pump_is_on	'turns air pump off/on
