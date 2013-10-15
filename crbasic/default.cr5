@@ -467,8 +467,8 @@ Units Dband = m/s
 'Units K_a_mean = ratio
 Units CAO_1_mv = mv
 Units CAO_2_mv = mv
-Units chemc_flow = L/min
-Units makeup_flow = L/min
+Units chemc_flow = sLpm
+Units makeup_flow = sLpm
 
 Public CtrlPort(8) As Boolean
 Alias CtrlPort(1) = updn_mfc_is_off 'up/dn MFC off signal
