@@ -47,6 +47,10 @@ ConstTable
 'which direct the data logger to send data to the card
 
   Const CSAT3_AZIMUTH = 0	'Unique value. {-152 = sonic pointing 208 deg, 208-360'}
+
+  Const DEF_ZERO_SLPM = 2  'default flow rate of zero air, sLpm
+  Const MIN_ZERO_SLPM = 0.4   'minimum permitted zero air flow, sLpm
+  Const MAX_ZERO_SLPM = DEF_ZERO_SLPM 'max permitted zero air flow, sLpm
 EndConstTable
 'Compass azimuth of the -x axis. For the figure below, CSAT3_AZIMUTH = 90.
 ' () -> Compass coordinate system
@@ -823,7 +827,9 @@ Sub resetREA()
 	mfc_pwr_is_on = (MASK_ALL AND MASK_RESET AND MASK_MFC_PWR) 'True
 	
   CAO_1_mv=0
-  CAO_2_mv=2/MFC_ZERO_MULT 	'set initial flow for makeup air MFCs: corresponds to 2.0LPM
+  'TODO determine whether the make-up air flow should be reset after every sampling run
+  '     or only at initial start-up [after not within resetREA()]
+  CAO_2_mv=DEF_ZERO_SLPM/MFC_ZERO_MULT 	'set initial flow for makeup air MFCs (2 sLpm)
 EndSub
 
 '*** BEGIN PROGRAM ***
@@ -1151,8 +1157,9 @@ BeginProg
 
 				'set flow on makup air / zero air
 				makeup_flow = sig_w	
-				If makeup_flow > 1.0 Then makeup_flow = 1.0
-				If makeup_flow < 0.4 Then makeup_flow = 0.4
+				If makeup_flow = NAN Then makeup_flow = DEF_ZERO_SLPM
+				If makeup_flow > MAX_ZERO_SLPM Then makeup_flow = MAX_ZERO_SLPM
+				If makeup_flow < MIN_ZERO_SLPM Then makeup_flow = MIN_ZERO_SLPM
 				CAO_2_mv = makeup_flow/MFC_ZERO_MULT 'slpm / (slpm/mv)
 
 				Elapse1 = Timer(1,Min,4) 			'read sample duration timer
