@@ -922,7 +922,7 @@ BeginProg
 		VoltDiff (flow_rea_dn,1,mV5000,MFC_DN_DF,True,0,250,MFC_UPDN_MULT,MFC_UPDN_OFF)
 
 		'Measure the MFC controlling zero air injection, 0-5 L/min fullscale
-		VoltSe (flow_zero,1,mV5000,MFC_ZERO_DF,True,0,250,MFC_ZERO_MULT,MFC_ZERO_OFF)
+		VoltDiff (flow_zero,1,mV5000,MFC_ZERO_DF,True,0,250,MFC_ZERO_MULT,MFC_ZERO_OFF)
 
 		'Lag the CSAT3 and IRGA measurements.
 		CallTable dly_data
