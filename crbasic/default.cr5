@@ -97,6 +97,7 @@ Const PI = 3.14159	'Mathematical constant pi
 
 '*** HARD-WIRED CONSTANTS ***
 Const SCAN_INTERVAL = 50	'Measurement rate: 50 mSec / 20 Hz
+Const INTEG = 250   'analog measurement integration time 
 Const OFFSET = 20		'An offset delay introduced to the CSAT3 and IRGA data
 Const DELAY_CSAT = 2		'Fixed inherent lag of CSAT3 data (2 scans)
 Const DELAY_IRGA = 5		'Estimated inherent lag of IRGA data 
@@ -883,7 +884,7 @@ BeginProg
 		PanelTemp (panel_temp_raw,250) 				'CR5000 panel temperature.
 		CSAT3 (Ux_raw,1,3,91,CSAT_OPT) 				'code 91: trigger CSAT3 wind/sonic temp data retrieval
 		CS7500 (co2_raw,1,7,6)						'code to communicate with LI-7500 via SDM ports
-		VoltDiff(PTB_raw,1,mv5000,PTB_DF,True,0,250,PTB_MULT,PTB_OFF)
+		VoltDiff(PTB_raw,1,mv5000,PTB_DF,True,0,INTEG,PTB_MULT,PTB_OFF)
 		
     Ts_american = Ts*1.8 + 32
 
@@ -912,8 +913,8 @@ BeginProg
 		ExciteCAO (MFC_UPDN_CAO,CAO_1_mv,True,False)	'denuder MFCs
 		ExciteCAO (MFC_ZERO_CAO,CAO_2_mv,True,False) 	'zero air MFC
 
-		VoltDiff(t_hmp,1,mV1000,HMP_T_DF,True,0,250,HMP_T_MULT,HMP_T_OFF)	'temp in C
-		VoltDiff(rh_hmp,1,mv1000,HMP_RH_DF,True,0,250,HMP_RH_MULT,HMP_RH_OFF) 'RH as %
+		VoltDiff(t_hmp,1,mV1000,HMP_T_DF,True,0,INTEG,HMP_T_MULT,HMP_T_OFF)	'temp in C
+		VoltDiff(rh_hmp,1,mv1000,HMP_RH_DF,True,0,INTEG,HMP_RH_MULT,HMP_RH_OFF) 'RH as %
 		Battery (batt_volt) 						'Measure battery voltage.
 
     hmp_t_american = t_hmp*1.8 + 32
@@ -923,11 +924,11 @@ BeginProg
     SatVP(e_sat, t_hmp)
 
 		'Measure the MFCs controlling REA recirculation rate, 0-10L/min fullscale
-		VoltDiff (flow_rea_up,1,mV5000,MFC_UP_DF,True,0,250,MFC_UPDN_MULT,MFC_UPDN_OFF)
-		VoltDiff (flow_rea_dn,1,mV5000,MFC_DN_DF,True,0,250,MFC_UPDN_MULT,MFC_UPDN_OFF)
+		VoltDiff (flow_rea_up,1,mV5000,MFC_UP_DF,True,0,INTEG,MFC_UPDN_MULT,MFC_UPDN_OFF)
+		VoltDiff (flow_rea_dn,1,mV5000,MFC_DN_DF,True,0,INTEG,MFC_UPDN_MULT,MFC_UPDN_OFF)
 
 		'Measure the MFC controlling zero air injection, 0-5 L/min fullscale
-		VoltDiff (flow_zero,1,mV5000,MFC_ZERO_DF,True,0,250,MFC_ZERO_MULT,MFC_ZERO_OFF)
+		VoltDiff (flow_zero,1,mV5000,MFC_ZERO_DF,True,0,INTEG,MFC_ZERO_MULT,MFC_ZERO_OFF)
 
 		'Lag the CSAT3 and IRGA measurements.
 		CallTable dly_data
