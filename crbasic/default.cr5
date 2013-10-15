@@ -890,15 +890,18 @@ BeginProg
 
     If (NOT REA_flag_on) Then
       'do nothing, leave valves recirculating
+    ElseIf (Uz_valve = NAN) Then
+      vlv_up_is_on = False
+      vlv_dn_is_on = False
 		ElseIf (Uz_valve >= Dband) Then
-			vlv_up_is_on = True 'UP open
+			vlv_up_is_on = True  'UP open
 			vlv_dn_is_on = False 'DN recirc
 		ElseIf (Uz_valve <= neg_dband) Then
-			vlv_up_is_on = True 'UP recirc
+			vlv_up_is_on = True  'UP recirc
 			vlv_dn_is_on = False 'DN open
 		Else
-			vlv_up_is_on = False 'UP recirc
-			vlv_dn_is_on = False 'DN recirc
+			vlv_up_is_on = False 'both recirc
+			vlv_dn_is_on = False 
 		EndIf
 		PortSet(C_VLV_UP,vlv_up_is_on)
 		PortSet(C_VLV_DN,vlv_dn_is_on)
