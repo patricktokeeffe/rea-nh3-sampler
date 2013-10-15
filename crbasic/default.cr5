@@ -141,8 +141,12 @@ Const MFC_ZERO_OFF = 0
 Const MFC_UPDN_CAO = CAO1
 Const MFC_ZERO_CAO = CAO2
 
+Const C_UPDN_OFF = 1
+Const C_ZERO_OFF = 2
 Const C_VLV_UP = 5 
 Const C_VLV_DN = 6 
+Const C_PUMP_ON = 7
+Const C_MFC_PWR = 8
 
 Const PTB_DF = 10
 Const PTB_MULT = (106 - 60) / 2500   '600-1060 hPa = 60-106 kPa / 2.5V
