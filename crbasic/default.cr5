@@ -675,10 +675,12 @@ DataTable (flux,TRUE,FLUX_SIZE_CPU)
 	Sample (1,REA_flag_on,FP2)
 	Sample (1,fin_flag_on,FP2)
 	
-	Totalize (1,vlv_up_is_on,IEEE4,False)
-	  FieldNames("PortOn_up_Tot")
-	Totalize (1,vlv_dn_is_on,IEEE4,False)
-	  FieldNames("PortOn_dn_Tot")
+  Totalize (1,1,UINT2,vlv_up_is_on OR vlv_dn_is_on)
+    FieldNames("valve_dband_Tot")
+	Totalize (1,vlv_up_is_on,UINT2,False)
+	  FieldNames("valve_up_ON_Tot")
+	Totalize (1,vlv_dn_is_on,UINT2,False)
+	  FieldNames("valve_dn_ON_Tot")
 EndTable
 
 'Save real-time data related to the site; called during every scan if save_flag is set
