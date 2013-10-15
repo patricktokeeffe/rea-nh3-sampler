@@ -43,8 +43,6 @@ Const OUTPUT_INTERVAL = 30	'Flux data output interval in minutes
 ConstTable
   Const NUM_DAY_CPU = 1		'Number of days of data to store on the CPU
   Const NUM_DAY_CRD = 2		'Number of days of data to store on the card
-'When using PC card, search "CARD-FIX" to locate the lines of code in the data table definitions 
-'which direct the data logger to send data to the card
 
   Const CSAT3_AZIMUTH = 0	'Unique value. {-152 = sonic pointing 208 deg, 208-360'}
 
@@ -561,7 +559,6 @@ Public dec_DOY		'decimal day of the year
 DataTable (flux,TRUE,FLUX_SIZE_CPU)
 	DataInterval (0,OUTPUT_INTERVAL,Min,10)
 	CardOut (0,FLUX_SIZE_CRD) 
-	' CARD-FIX Remove above comment tick if using PC card
 
 	Sample (1,Fc_wpl,IEEE4)
 	Sample (1,LE_wpl,IEEE4)
@@ -688,7 +685,6 @@ EndTable
 DataTable (ts_site,TRUE,-1)
 	DataInterval (0,SCAN_INTERVAL,mSec,100)
 	CardOut (0,-1) 
-	' CARD-FIX Remove above comment tick when using PC card
 
 	'eddy cov variables
 	Sample (1,Ux,IEEE4)
@@ -709,7 +705,6 @@ EndTable
 DataTable (ts_REA,TRUE,-1)
 	DataInterval (0,SCAN_INTERVAL,mSec,50)
 	CardOut (0,-1)
-	' CARD-FIX Remove above comment tick when using PC card
 	
 	'REA variables
 	Sample (1,Uz_valve_lag,IEEE4)
