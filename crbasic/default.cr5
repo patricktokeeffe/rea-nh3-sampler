@@ -458,15 +458,15 @@ Public compass_diag
 
 Dim neg_dband   'remove redudant computations
 Public Dband		'deadband
-Public K_d_mean	'correction factors for MFCs dry air
-Public K_a_mean	'correction factors for MFCs moist air
+'Public K_d_mean	'correction factors for MFCs dry air
+'Public K_a_mean	'correction factors for MFCs moist air
 Public CAO_1_mv	'output voltages for controlling chemcomb MFCs
 Public CAO_2_mv	'output voltages for controlling zero air MFC
 Public chemc_flow	'sample rate for chemcombs
 Public makeup_flow	'sample rate for makeup air / shield gas
 Units Dband = m/s
-Units K_d_mean = ratio
-Units K_a_mean = ratio
+'Units K_d_mean = ratio
+'Units K_a_mean = ratio
 Units CAO_1_mv = mv
 Units CAO_2_mv = mv
 Units chemc_flow = L/min
@@ -647,7 +647,7 @@ DataTable (flux,TRUE,FLUX_SIZE_CPU)
 	Sample (1,T_dew_mean,IEEE4)
 	Sample (1,RH_mean,IEEE4)
 
-	Average (1,K_d_mean,IEEE4,False)
+'	Average (1,K_d_mean,IEEE4,False)
 	Average (3,MFC(),IEEE4,FALSE)
 	StdDev (3,MFC(),IEEE4,False)
 
@@ -1149,8 +1149,8 @@ BeginProg
 				Dband = 0.5*sig_w 		'dynamic deadband
 				neg_dband = -1*Dband
 
-				K_d_mean = rho_d_mean/( 101/((25+273.15)*RD) ) 	'MFC correction factors K
-				K_a_mean = rho_a_mean/( 101/((25+273.15)*RD) )
+        'K_d_mean = rho_d_mean/( 101/((25+273.15)*RD) ) 	'MFC correction factors K
+				'K_a_mean = rho_a_mean/( 101/((25+273.15)*RD) )
 
 				'set chemcomb sampling rate, recirulation rate
 				chemc_flow = MFC_UPDN_MULT * 5000 'slpm = slpm/mv * 5000mv
