@@ -246,8 +246,8 @@ Alias aligned_data(10) = press
 Alias aligned_data(11) = diag_irga
 Alias aligned_data(12) = panel_temp
 Alias aligned_data(13) = Uz_valve_lag
-Alias aligned_data(14) = PortOn_5_lag
-Alias aligned_data(15) = PortOn_6_lag
+Alias aligned_data(14) = vlv_up_is_on_lag
+Alias aligned_data(15) = vlv_dn_is_on_lag
 Alias aligned_data(16) = PTB_press
 Units Uz = m/s
 Units Ux = m/s
@@ -468,12 +468,15 @@ Units CAO_2_mv = mv
 Units chemc_flow = L/min
 Units makeup_flow = L/min
 
-Public PortOn_1 'MFC 1 and 2 Off/On
-Public PortOn_8 'zero MFC valve
-Public PortOn_2	'pressure transmitter off/on
-Public PortOn_7	'turns air pump off/on
-Public PortOn_5	'REA valve up eddy
-Public PortOn_6	'REA valve dn eddy
+Public CtrlPort(8) As Boolean
+Alias CtrlPort(1) = updn_mfc_is_off 'up/dn MFC off signal
+Alias CtrlPort(2) = zero_mfc_is_off 'makeup air MFC off signal
+'C3 not used
+'C4 not used
+Alias CtrlPort(5) = vlv_up_is_on 'REA valve up eddy
+Alias CtrlPort(6) = vlv_dn_is_on	'REA valve dn eddy
+Alias CtrlPort(7) = pump_is_on	'turns air pump off/on
+Alias CtrlPort(8) = mfc_pwr_is_on 'zero MFC valve
 
 'Diagnostic variables.
 Dim disable_flag_on(4)		'Intermediate processing disable flags.
@@ -670,9 +673,10 @@ DataTable (flux,TRUE,FLUX_SIZE_CPU)
 
 	Sample (1,REA_flag_on,FP2)
 	Sample (1,fin_flag_on,FP2)
-	Totalize (1,PortOn_5,IEEE4,False)
+	
+	Totalize (1,vlv_up_is_on,IEEE4,False)
 	  FieldNames("PortOn_up_Tot")
-	Totalize (1,PortOn_6,IEEE4,False)
+	Totalize (1,vlv_dn_is_on,IEEE4,False)
 	  FieldNames("PortOn_dn_Tot")
 EndTable
 
@@ -709,9 +713,9 @@ DataTable (ts_REA,TRUE,-1)
 	Sample (1,flow_rea_up,IEEE4)
 	Sample (1,flow_rea_dn,IEEE4)
 	Sample (1,flow_zero,IEEE4)
-	Sample (1,PortOn_5_lag,IEEE4)
+	Sample (1,vlv_up_is_on_lag,Boolean)
 	  FieldNames("PortOn_up_lag")
-	Sample (1,PortOn_6_lag,IEEE4)
+	Sample (1,vlv_dn_is_on_lag,Boolean)
 	  FieldNames("PortOn_dn_lag")
 EndTable
 
@@ -731,8 +735,8 @@ DataTable (dly_data,TRUE,OFFSET)
 	Sample (1,diag_irga_raw,IEEE4)	'11
 	Sample (1,panel_temp_raw,IEEE4)	'12
 	Sample (1,Uz_valve,IEEE4) 		'13
-	Sample (1,PortOn_5,IEEE4)		'14
-	Sample (1,PortOn_6,IEEE4)		'15
+	Sample (1,vlv_up_is_on,Boolean)		'14
+	Sample (1,vlv_dn_is_on,Boolean)		'15
 	Sample (1,PTB_raw,IEEE4)			'16
 EndTable
 
@@ -881,17 +885,17 @@ BeginProg
     If (NOT REA_flag_on) Then
       'do nothing, leave valves recirculating
 		ElseIf (Uz_valve >= Dband) Then
-			PortOn_5=1 'UP open
-			PortOn_6=0 'DN recirc
+			vlv_up_is_on = True 'UP open
+			vlv_dn_is_on = False 'DN recirc
 		ElseIf (Uz_valve <= neg_dband) Then
-			PortOn_5=0 'UP recirc
-			PortOn_6=1 'DN open
+			vlv_up_is_on = True 'UP recirc
+			vlv_dn_is_on = False 'DN open
 		Else
-			PortOn_5=0 'UP recirc
-			PortOn_6=0 'DN recirc
+			vlv_up_is_on = False 'UP recirc
+			vlv_dn_is_on = False 'DN recirc
 		EndIf
-		PortSet(C_VLV_UP,PortOn_5)
-		PortSet(C_VLV_DN,PortOn_6)
+		PortSet(C_VLV_UP,vlv_up_is_on)
+		PortSet(C_VLV_DN,vlv_dn_is_on)
 
 		'set MFCs
 		ExciteCAO (MFC_UPDN_CAO,CAO_1_mv,True,False)	'denuder MFCs
@@ -921,7 +925,7 @@ BeginProg
 			'Load in the analog data that has been lagged by OFFSET scans.
 			GetRecord (dly_data_out(1),dly_data,OFFSET)
 			Move (panel_temp,1,dly_data_out(12),1)		'panel_temp
-			Move (PortOn_5_lag,2,dly_data_out(14),2) 	'porton_5,porton_6
+			Move (vlv_up_is_on_lag,2,dly_data_out(14),2) 	'vlv_up_is_on,vlv_dn_is_on
 			Move (press,1,dly_data_out(10),1)			'press from LI-7500
 			Move (PTB_press,1,dly_data_out(16),1)		'external press sensor
 			
