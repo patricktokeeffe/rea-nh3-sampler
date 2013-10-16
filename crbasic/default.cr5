@@ -1169,8 +1169,7 @@ BeginProg
 				If samp_flow = 10 Then chemc_flow = 10 'samp_flow is from user menu
 
 				'set flow on makup air / zero air
-				makeup_flow = sig_w	
-				If makeup_flow = NAN Then makeup_flow = DEF_ZERO_SLPM
+				makeup_flow = IIF(sig_w = NAN, DEF_ZERO_SLPM, sig_w)
 				If makeup_flow > MAX_ZERO_SLPM Then makeup_flow = MAX_ZERO_SLPM
 				If makeup_flow < MIN_ZERO_SLPM Then makeup_flow = MIN_ZERO_SLPM
 				CAO_2_mv = makeup_flow/MFC_ZERO_MULT 'slpm / (slpm/mv)
