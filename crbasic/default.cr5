@@ -563,7 +563,6 @@ Alias rTime(6) = rSecond
 Alias rTime(7) = ruSecond	
 Alias rTime(8) = WeekDay	
 Alias rTime(9) = Day_of_Year	
-Public dec_DOY		'decimal day of the year
 
 '*** FINAL OUTPUT DATA TABLES ***
 'Save processed data needed for flux determination
