@@ -49,6 +49,10 @@ ConstTable
   Const DEF_ZERO_SLPM = 2  'default flow rate of zero air, sLpm
   Const MIN_ZERO_SLPM = 0.4   'minimum permitted zero air flow, sLpm
   Const MAX_ZERO_SLPM = DEF_ZERO_SLPM 'max permitted zero air flow, sLpm
+  
+  Const DBAND_DEF = 0.1    'default deadband, m/s, used at start-up 
+  Const DBAND_MIN = 0.05   'minimum allowed deadband, m/s
+  Const DBAND_MAX = 0.50   'maximum allowed deadband, m/s
 EndConstTable
 'Compass azimuth of the -x axis. For the figure below, CSAT3_AZIMUTH = 90.
 ' () -> Compass coordinate system
@@ -849,7 +853,7 @@ BeginProg
 	CE=0
 	SE=0
 
-	Dband = 0.1 		'Set Deadband on compile 
+	Dband = DBAND_DEF
 	SDMSpeed (SDM_PER) 	'Set the SDM clock speed.
 
 	Move (Ux_raw,5,NaN,1) 	'Set all CSAT3 variables to NaN.
@@ -1150,7 +1154,9 @@ BeginProg
 
 				'REA dynamic deadband calcuations
 				sig_w = SQR(cov_Uz_Uz)		'stdev of w
-				Dband = 0.5*sig_w 		'dynamic deadband
+				Dband = IIF(sig_w = NAN, DBAND_DEF, 0.5*sig_w) 'dynamic deadband; default if sig_w is NAN
+				If (Dband < DBAND_MIN) Then Dband = DBAND_MIN
+				If (Dband > DBAND_MAX) Then Dband = DBAND_MAX
 				neg_dband = -1*Dband
 
         'K_d_mean = rho_d_mean/( 101/((25+273.15)*RD) ) 	'MFC correction factors K
