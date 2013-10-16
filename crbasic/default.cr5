@@ -279,7 +279,7 @@ Units Ts_american = F
 Public co2_ppm_est
 Units co2_ppm_est = approx ppm
 
-Public diag_bits(8)				'Warning flags.
+Dim diag_bits(8)				'Warning flags.
 Alias diag_bits(1) = del_T_f		'Delta temperature warning flag.
 Alias diag_bits(2) = sig_lck_f	'Poor signal lock warning flag.
 Alias diag_bits(3) = amp_h_f		'Amplitude high warning flag.
@@ -295,13 +295,13 @@ Units agc = unitless
 'No delay meteorological variables.
 Public hmp(2)		'HMP45 temperature and relative humidity.
 Public e_hmp		'HMP45 vapor pressure.
-Dim e_sat			'Saturated vapor pressure by Clausius-Clapeyron eqn
+Public e_sat			'Saturated vapor pressure by Clausius-Clapeyron eqn
 Dim h2o_hmp_mean	'Mean HMP45 vapor density.
 Dim rho_a_mean		'Mean air density.
 Dim rho_d_mean		'Density of dry air used in Webb et al. term [kg / m^3].
 Public T_dew_mean	'Tdew from hmp
 Public RH_mean  	'RH from HMP
-Public old_RH_mean
+Dim old_RH_mean
 Public batt_volt	'cr5000 battery voltage.
 Alias hmp(1) = t_hmp
 Alias hmp(2) = rh_hmp
@@ -422,15 +422,15 @@ Units Uy_mean = m/s
 Units Uz_mean = m/s
 
 'REA sampling and rotation related Variables
-Public CT	'rotation angles
-Public ST
-Public CE
-Public SE
+Dim CT	'rotation angles
+Dim ST
+Dim CE
+Dim SE
 Units CT=radians
 Units ST=radians
 Units CE=radians
 Units SE=radians
-Public Uz_rot		'rotated vertical wind
+Dim Uz_rot		'rotated vertical wind
 Public Uz_valve	'value of Uz used for real time valve control
 
 Public Elapse1 		'timer for controlling sampling duration
@@ -450,19 +450,19 @@ Public L		'Obukhov length, used for footprint
 Public x70	'distance to include 70%, F/So=0.70
 Public zeta	'z/L
 Public itt 	'integral turbulence text
-Public old_itt
+Dim old_itt
 Dim itt_model
 Dim itt_meas
 Dim Dh		'for Hsieh footprint model
 Dim Ph		'for Hsieh footprint model
 Dim zu		'for Hsieh footprint model
 
-Public alpha
-Public easting
-Public westing
-Public southing
-Public northing
-Public compass_diag
+Dim alpha
+Dim easting
+Dim westing
+Dim southing
+Dim northing
+Dim compass_diag
 
 Dim neg_dband   'remove redudant computations
 Public Dband		'deadband
@@ -501,18 +501,18 @@ Dim n					'Number of samples in the online covariances.
 Units n = samples
 
 'Program Control flags and variables
-Public save_flag			'Specifies whether real-time site data is stored or not
-Public REA_flag_on 			'Triggers start of sampling (pump/valves on)
-Public control_input 		'Value designated by user via program control menu
-Public control_flag 		'Compared against control_input to sense user changes
-Public samp_flow			'Permits overriding of sampling rate selection
-Public fin_flag_on 			'Triggers completion of sampling (pump/valves off)
-Public delay_days 			'Specifies number of days before sampling, user input
-Public delay_TOD 			'Specifies time of day to start sampling, user input
-Public tot_samp_hrs 		'Compared against counter to signal end of sampling, user input
-Public Weather_OK 
-Public footprt_OK 
-Public old_footprt_OK 
+Dim save_flag			'Specifies whether real-time site data is stored or not
+Dim REA_flag_on 			'Triggers start of sampling (pump/valves on)
+Dim control_input 		'Value designated by user via program control menu
+Dim control_flag 		'Compared against control_input to sense user changes
+Dim samp_flow			'Permits overriding of sampling rate selection
+Dim fin_flag_on 			'Triggers completion of sampling (pump/valves off)
+Dim delay_days 			'Specifies number of days before sampling, user input
+Dim delay_TOD 			'Specifies time of day to start sampling, user input
+Dim tot_samp_hrs 		'Compared against counter to signal end of sampling, user input
+Dim Weather_OK 
+Dim footprt_OK 
+Dim old_footprt_OK 
 
 'No delay CSAT3 data.
 Dim wind_raw(5)
@@ -553,7 +553,7 @@ Dim diag_csat_work 		'Working variable used to break out the CSAT3 diagnostic bi
 Dim diag_irga_work		'Working variable used to break out the LI-7500 diagnostic bits.
 
 'clock variables
-Public rTime(9)
+Dim rTime(9)
 Alias rTime(1) = rYear	
 Alias rTime(2) = rMonth	
 Alias rTime(3) = rDay	
