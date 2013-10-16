@@ -900,8 +900,8 @@ BeginProg
 			vlv_up_is_on = True  'UP open
 			vlv_dn_is_on = False 'DN recirc
 		ElseIf (Uz_valve <= neg_dband) Then
-			vlv_up_is_on = True  'UP recirc
-			vlv_dn_is_on = False 'DN open
+			vlv_up_is_on = False  'UP recirc
+			vlv_dn_is_on = True 'DN open
 		Else
 			vlv_up_is_on = False 'both recirc
 			vlv_dn_is_on = False 
