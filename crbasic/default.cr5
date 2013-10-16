@@ -860,6 +860,7 @@ BeginProg
 	SE=0
 
 	Dband = DBAND_DEF
+	neg_dband = -Dband 
 	SDMSpeed (SDM_PER) 	'Set the SDM clock speed.
 
 	Move (Ux_raw,5,NaN,1) 	'Set all CSAT3 variables to NaN.
@@ -1163,7 +1164,7 @@ BeginProg
 				Dband = IIF(sig_w = NAN, DBAND_DEF, 0.5*sig_w) 'dynamic deadband; default if sig_w is NAN
 				If (Dband < DBAND_MIN) Then Dband = DBAND_MIN
 				If (Dband > DBAND_MAX) Then Dband = DBAND_MAX
-				neg_dband = -1*Dband
+				neg_dband = -Dband
 
         'K_d_mean = rho_d_mean/( 101/((25+273.15)*RD) ) 	'MFC correction factors K
 				'K_a_mean = rho_a_mean/( 101/((25+273.15)*RD) )
