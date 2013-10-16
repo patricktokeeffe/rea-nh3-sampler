@@ -8,30 +8,6 @@
 '''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
 
 
-'*** TOC ***
-'Misc Notes
-'User-Defined Constants
-'Numerical Constants
-'Hard-Wired Constants
-'Default Menu Values
-'Unit Definitions
-'Component List
-'Wiring Details
-'Variables
-'Final Output Data Tables
-'Working Data Tables
-'Program control Menu
-'Begin Program
-
-
-'*** MISC NOTES ***
-'The sign convention for the fluxes is positive away from the surface and negative toward the surface.
-'
-'The cr5000 will introduce lags into the CSAT3, Op-2 [not working], and cr5000 Panel so that all 
-'measurements are aligned in time.  The lags are a function of the Scan Interval and are computed 
-'automatically by the program.
-
-
 '*** USER-DEFINED CONSTANTS ***
 'For each new site, several constants and calibration values should be entered:
 
@@ -55,27 +31,7 @@ ConstTable
   Const DBAND_MIN = 0.05   'minimum allowed deadband, m/s
   Const DBAND_MAX = 0.50   'maximum allowed deadband, m/s
 EndConstTable
-'Compass azimuth of the -x axis. For the figure below, CSAT3_AZIMUTH = 90.
-' () -> Compass coordinate system
-' {} -> Right handed coordinate system aligned to north
-'
-'                               (N) 0
-'                               {-y}
-'                                |
-'                                |
-'                                |
-'                                |
-'          270 (W) {+x} --------[ ]----X---> {-x} (E) 90
-'                              / |      \
-'                    CSAT3 Block |      CSAT3 Transducers
-'                                |
-'                                |
-'                                v
-'                               {+y}
-'                               (S) 180
-'
-' The program computes the compass wind direction, using the constant CSAT3_AZIMUTH, and a CSAT3 wind direction.  
-' Good CSAT3 wind directions are -90 to 0 and 0 to 90 degrees, e.g. wind is blowing into the CSAT3 sensor head.
+
 
 'Sendor height and surface roughness unique values
 Const zm = 5.05 	'Measurement Height, m, above displacement ht
@@ -178,68 +134,6 @@ Const MASK_RUNNING = (MASK_MFC_PWR OR MASK_PUMP_ON) 'neither MFC valve OFF
 Const PTB_DF = 10
 Const PTB_MULT = (106 - 60) / 2500   '600-1060 hPa = 60-106 kPa / 2.5V
 Const PTB_OFF = 60 
-
-'*** UNIT DEFINITIONS ***
-'Units	Units
-'C	Celsius
-'degrees	degrees (angle)
-'g	grams
-'J	Joules
-'kg	kilograms
-'kPa	kilopascals
-'m	meters
-'mg	milligrams
-'mmol	millimoles
-'mol	moles
-'s	seconds
-'umol	micromols
-'V	volts
-'W	Watts
-
-
-'*** COMPONENT LIST ***
-'CSAT3	three dimensional sonic anemometer
-'AFC 	alborg mass flow controllers (2 units), MFCs 0-10sLPM
-'AFC		Tylan mass flow controller (1), 0-5sLPM
-'HMP45AC	temp & humidity guage
-'PTA427A	pressure guage
-'IRGA	open path infrared gas analyzer (CO2 and H2O) [Op-2 disabled, used LI-6262 in Greeley]
-'
-'Full description of wiring connections is available in the Standard Operating Procedures manual
-
-
-'*** CR5000 INPUT KEY ***
-'****changes made to the program sent by Brian from Greeley on 4/16
-'
-'SDM-C1	CSAT3 SDM Data (green)
-'		LI-7500 SDM Data (gray) ****
-'SDM-C2	CSAT3 SDM Clock (white)
-' 		LI-7500 SDM Clock (blue) ****
-'SDM-C3	CSAT3 SDM Enable (brown)
-'		LI-7500 SDM Enable (grown) ****
-'G		LI-7500 SDM reference (black) & shield (white) ****
-'
-'C1 		TTL Valve OFF on MFCs 1 and 2, recircultating (end green)
-'C2 		G4PB4R relay for 2-way valve control (either wire)
-'C3 		Pressure transmitter (yellow)
-'C4 		G4PB4R relay for air pump control
-'C5 		G4PB4R relay for 3-way valve control UP (either wire)
-'C6 		G4PB4R relay for 3-way valve control DN (either wire)
-'
-'SE1		Pressure transmitter (orange)
-'SE9		HMP45 Temperature (yellow)
-'SE10	HMP45 Relative Humidity (blue)
-'SE25	Tylan MFC #3, zero: output (brown)
-'SE27	no longer used ****
-'SE28	no longer used ****
-'SE29	no longer used ****
-'
-'DE11 	Aalborg MFC #1, UP: [H] output (inner green) & [L] output grnd (outer orange)
-'DE12	Aalborg MFC #2, DN: [H] output (inner green) & [L] output grnd (outer orange)
-'
-'CAO1  	Aalborg MFCs: control setpoint (outer red)
-'CAO2	Tylan MFC: control setpoint (green)
-'SW12	Housing exhaust fan + 
 
 
 '*** VARIABLES ***
@@ -795,10 +689,6 @@ EndTable
 '			"0,1,2,3,4,5,6" (0 = default)
 'Start time:	24hr time of day to start sample
 '			"Now,8,10,12,14,16,18" (Now = default, meaning sampling is immediate)
-'Controls:	"PickCmd" Default value upon startup & after reset
-'			"Run"	Start program or activate day/start_time timers
-'			"Reset"	Stop running the program and reset variables
-
 
 '*** PROGRAM CONTROL MENU DEFINED ***
 DisplayMenu ("Program Control",TRUE)
