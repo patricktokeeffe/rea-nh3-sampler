@@ -1205,7 +1205,7 @@ BeginProg
 					Elapse1 = Timer(1,Min,0)	'start timer
 					WriteIO(MASK_FLOW,MASK_RUNNING)
 					updn_mfc_is_off = (MASK_FLOW AND MASK_RUNNING AND MASK_UPDN_OFF) 'False
-					zero_mfc_is_off = (MASK_FLOW AND MASK_RUNNING AND MASK_ZERO_OFF) 'False
+					'zero MFC valve OFF is always false
 					pump_is_on = (MASK_FLOW AND MASK_RUNNING AND MASK_PUMP_ON) 'True
 					'mfc_pwr_is_on = <always True>
 					CAO_1_mv = chemc_flow/MFC_UPDN_MULT 'slpm / (slpm/mv) 	'set MFC volt out
@@ -1213,7 +1213,7 @@ BeginProg
 					Elapse1 = Timer(1,Min,1)			'stop timer
 					WriteIO(MASK_FLOW,MASK_RESET)
 					updn_mfc_is_off = (MASK_FLOW AND MASK_RESET AND MASK_UPDN_OFF) 'True
-					zero_mfc_is_off = (MASK_FLOW AND MASK_RESET AND MASK_ZERO_OFF) 'False
+					'zero MFC valve OFF is always false
 					pump_is_on = (MASK_FLOW AND MASK_RESET AND MASK_PUMP_ON) 'False
 					'mfc_pwr_is_on = <always True>
 					CAO_1_mv=0
