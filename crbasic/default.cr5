@@ -706,7 +706,7 @@ DataTable (ts_site,TRUE,-1)
 	Sample (1,diag_irga,UINT2)
 	Sample (1,t_hmp,IEEE4)
 	Sample (1,rh_hmp,IEEE4)
-	Sample (1,PTB_press,IEEE4)
+	'Sample (1,PTB_press,IEEE4)
 EndTable
 
 'Save real-time data related to REA sampling; called only during a sampling run
@@ -744,7 +744,7 @@ DataTable (dly_data,TRUE,OFFSET)
 	Sample (1,Uz_valve,IEEE4) 		'13
 	Sample (1,vlv_up_is_on,Boolean)		'14
 	Sample (1,vlv_dn_is_on,Boolean)		'15
-	Sample (1,PTB_raw,IEEE4)			'16
+	'Sample (1,PTB_raw,IEEE4)			'16
 EndTable
 
 
@@ -884,7 +884,8 @@ BeginProg
 		PanelTemp (panel_temp_raw,250) 				'CR5000 panel temperature.
 		CSAT3 (Ux_raw,1,3,91,CSAT_OPT) 				'code 91: trigger CSAT3 wind/sonic temp data retrieval
 		CS7500 (co2_raw,1,7,6)						'code to communicate with LI-7500 via SDM ports
-		VoltDiff(PTB_raw,1,mv5000,PTB_DF,True,0,INTEG,PTB_MULT,PTB_OFF)
+		'VoltDiff(PTB_raw,1,mv5000,PTB_DF,True,0,INTEG,PTB_MULT,PTB_OFF)]
+		PTB_raw = NAN 'pressure sensor no longer responsive; removing 2013-10-15 
 		
     Ts_american = Ts*1.8 + 32
 
@@ -939,7 +940,7 @@ BeginProg
 			Move (panel_temp,1,dly_data_out(12),1)		'panel_temp
 			Move (vlv_up_is_on_lag,2,dly_data_out(14),2) 	'vlv_up_is_on,vlv_dn_is_on
 			Move (press,1,dly_data_out(10),1)			'press from LI-7500
-			Move (PTB_press,1,dly_data_out(16),1)		'external press sensor
+			'Move (PTB_press,1,dly_data_out(16),1)		'external press sensor
 			
 			'Load in CSAT3 data that has been lagged by CSAT_REC_BCK scans.
 			GetRecord (dly_data_out(1),dly_data,CSAT_REC_BCK)
