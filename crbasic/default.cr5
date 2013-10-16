@@ -802,16 +802,16 @@ EndTable
 
 '*** PROGRAM CONTROL MENU DEFINED ***
 DisplayMenu ("Program Control",TRUE)
-	MenuItem ("Save met?",save_flag)
-	MenuPick (Yes,No)
+'	MenuItem ("Save met?",save_flag)
+'	MenuPick (Yes,No)
 	MenuItem ("Sampling:",control_input)
 	MenuPick (Pick,Run,Reset)
-	MenuItem ("Flow L/min",samp_flow)
-	MenuPick (Vary,10)
+'	MenuItem ("Flow L/min",samp_flow)
+'	MenuPick (Vary,10)
 	MenuItem ("For X hrs:",tot_samp_hrs)
 	MenuPick (0.5,1,2,4,6,8)
-	MenuItem ("Delay Days?",delay_days)
-	MenuPick (0,1,2,3,4,5,6)
+'	MenuItem ("Delay Days?",delay_days)
+'	MenuPick (0,1,2,3,4,5,6)
 	MenuItem ("Start time:",delay_TOD)
 	MenuPick (Now,8,10,12,14,16,18)
 EndMenu
