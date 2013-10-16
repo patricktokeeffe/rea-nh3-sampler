@@ -4,7 +4,7 @@
 ' Adapted from "REA09-04-21 with SDM LI7500.CR5" and "REA09-04-21 with analog LI7500.CR5"
 ' programs used during 2009 Colorado feedlot NH3 study
 '
-' This header last modified 2013-10-07 by pokeeffe@wsu.edu
+' This header last modified 2013-10-15 by pokeeffe@wsu.edu
 '''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
 
 
@@ -38,6 +38,7 @@ Const zm = 5.05 	'Measurement Height, m, above displacement ht
 Const zo =0.04		'roughness length, m
 
 'Define source area of feedlot for footprint calculations, Larned 
+''' set very large to prevent them from interferering
 Const x_east_max = 10000		'sampling boundary, dist from tower (meters)
 Const x_south_max = 10000		'sampling boundary, dist from tower (meters)
 Const x_west_max = 10000		'sampling boundary, dist from tower (meters)
@@ -1088,7 +1089,7 @@ BeginProg
 
 				'when delay start timer is exceeded
 				ElapseDay = Day_of_Year-Startday
-				IF (ElapseDay>=delay_days AND (rHour=delay_TOD OR delay_TOD=Now) AND NOT REA_flag_on ) Then 	
+				If (ElapseDay>=delay_days AND (rHour=delay_TOD OR delay_TOD=Now) AND NOT REA_flag_on ) Then 	
 					REA_flag_on = TRUE
 					delay_days = 0
 					delay_TOD = Now
@@ -1104,7 +1105,7 @@ BeginProg
 				If tot_samp_hrs < 24 Then weather_OK = TRUE 		'in snapshot mode, override weather
 				
 				'control REA sampling: check for REA_flag, timer duration, and weather
-				IF ( REA_flag_on AND Elapse1 < countdown_timer AND weather_OK ) Then
+				If (REA_flag_on AND Elapse1 < countdown_timer AND Weather_OK) Then
 					Elapse1 = Timer(1,Min,0)	'start timer
 					WriteIO(MASK_FLOW,MASK_RUNNING)
 					updn_mfc_is_off = (MASK_FLOW AND MASK_RUNNING AND MASK_UPDN_OFF) 'False
