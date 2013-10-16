@@ -923,8 +923,21 @@ BeginProg
 			If save_flag Then CallTable ts_site 
 			If REA_flag_on Then CallTable ts_REA
 
-			CallTable comp_cov
+''' following block activates power to MFCs one minute before sample run begins
+''' since zero MFC runs all the time, this block is irrelevant thus far
+'      If TimeIntoInterval((OUTPUT_INTERVAL-1),OUTPUT_INTERVAL,Min) Then
+'        'at one minute prior to each output interval
+'        If (control_flag=Run AND NOT REA_flag_on AND (Day_of_Year-Startday)>=delay_days) Then
+'          'if set to Run but still waiting to start and today is start day
+'          If (delay_TOD = Now OR (rMinute > 30 AND rHour+1 >= delay_TOD)) Then
+'            'and run will start at next interval then turn on MFCs to warm-up
+'            WriteIO(MASK_MFC_PWR,MASK_MFC_PWR) 
+'          EndIf
+'        EndIf
+'      EndIf
+'''
 
+			CallTable comp_cov
 			If ( comp_cov.Output(1,1) ) Then
 
 				GetRecord (cov_out(1),comp_cov,1)
