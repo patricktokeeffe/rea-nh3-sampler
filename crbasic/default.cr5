@@ -43,6 +43,7 @@ Const OUTPUT_INTERVAL = 30	'Flux data output interval in minutes
 ConstTable
   Const NUM_DAY_CPU = 1		'Number of days of data to store on the CPU
   Const NUM_DAY_CRD = 2		'Number of days of data to store on the card
+  Const USE_CARD = True 'set false to avoid super irritating 'warning no card' dialogs
 
   Const CSAT3_AZIMUTH = 0	'Unique value. {-152 = sonic pointing 208 deg, 208-360'}
 
@@ -568,7 +569,9 @@ Public dec_DOY		'decimal day of the year
 'Save processed data needed for flux determination
 DataTable (flux,TRUE,FLUX_SIZE_CPU)
 	DataInterval (0,OUTPUT_INTERVAL,Min,10)
+#If USE_CARD 
 	CardOut (0,FLUX_SIZE_CRD) 
+#EndIf
 
 	Sample (1,Fc_wpl,IEEE4)
 	Sample (1,LE_wpl,IEEE4)
@@ -696,7 +699,9 @@ EndTable
 'Save real-time data related to the site; called during every scan if save_flag is set
 DataTable (ts_site,TRUE,-1)
 	DataInterval (0,SCAN_INTERVAL,mSec,100)
+#If USE_CARD
 	CardOut (0,-1) 
+#EndIf
 
 	'eddy cov variables
 	Sample (1,Ux,IEEE4)
@@ -716,7 +721,9 @@ EndTable
 'Save real-time data related to REA sampling; called only during a sampling run
 DataTable (ts_REA,TRUE,-1)
 	DataInterval (0,SCAN_INTERVAL,mSec,50)
+#If USE_CARD
 	CardOut (0,-1)
+#EndIf
 	
 	'REA variables
 	Sample (1,Uz_valve_lag,IEEE4)
