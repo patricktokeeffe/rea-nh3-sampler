@@ -113,8 +113,1124 @@ tabs-within-sections
 
 \begin_body
 
-\begin_layout Standard
+\begin_layout Title
+Denuder-based Trace Gas Sampler 
+\begin_inset Newline newline
+\end_inset
 
+Operator's Manual
+\end_layout
+
+\begin_layout SubTitle
+For application of the Relaxed Eddy Accumulation technique
+\end_layout
+
+\begin_layout Institution
+Laboratory for Atmospheric Research
+\begin_inset Newline newline
+\end_inset
+
+Department of Civil & Environmental Engineering
+\begin_inset Newline newline
+\end_inset
+
+Washington State University
+\end_layout
+
+\begin_layout Standard
+\begin_inset VSpace vfill
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\align center
+\begin_inset Tabular
+<lyxtabular version="3" rows="5" columns="4">
+<features tabularvalignment="middle">
+<column alignment="center" valignment="top" width="0">
+<column alignment="center" valignment="top" width="0">
+<column alignment="center" valignment="top" width="0">
+<column alignment="center" valignment="top" width="0">
+<row>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Revision
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Date
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Author(s)
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Notes
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+--
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+2014-02-13
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+P.
+ O'Keeffe
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Initial draft
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+</lyxtabular>
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Newpage clearpage
+\end_inset
+
+
+\begin_inset CommandInset toc
+LatexCommand tableofcontents
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset VSpace bigskip
+\end_inset
+
+
+\begin_inset CommandInset line
+LatexCommand rule
+offset "0.5ex"
+width "100col%"
+height "1pt"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset FloatList figure
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset FloatList table
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Newpage clearpage
+\end_inset
+
+
+\begin_inset CommandInset nomencl_print
+LatexCommand printnomenclature
+set_width "auto"
+
+\end_inset
+
+
+\begin_inset Newpage cleardoublepage
+\end_inset
+
+
+\end_layout
+
+\begin_layout Part
+Overview
+\end_layout
+
+\begin_layout Standard
+The denuder-based trace gas sampler or 
+\begin_inset Quotes eld
+\end_inset
+
+denuder-REA system
+\begin_inset Quotes erd
+\end_inset
+
+ helps researchers accomplish measurements of trace gas fluxes with traditional
+ wet-chemical analyses.
+ The predominant technique for measuring trace gas fluxes, eddy covariance
+ (EC), depends on cospatial, cotemporal, high-frequency (≥10Hz) measurements
+ of both vertical wind speed and gas concentration.
+ The denuder-REA system avoids such constraints by employing the relaxed
+ eddy accumulation (REA) technique instead.
+ Glass honeycomb denuders facilitate the measurement of reactive species
+ by allowing for adsorptive coatings targeting the gas species of interest.
+\end_layout
+
+\begin_layout Section
+System Components
+\end_layout
+
+\begin_layout Standard
+At its core, the denuder-REA system consists of:
+\end_layout
+
+\begin_layout Itemize
+Control enclosure
+\begin_inset Newline newline
+\end_inset
+
+This fiberglass enclosure contains the datalogger, power supply, flow controller
+s, and other intrinsic components.
+\end_layout
+
+\begin_layout Itemize
+Pump enclosure
+\begin_inset Newline newline
+\end_inset
+
+This aluminum enclsoure contains the dual-head sampling pump.
+\end_layout
+
+\begin_layout Itemize
+Denuders
+\begin_inset Newline newline
+\end_inset
+
+The (2) denuder assemblies are core components.
+\end_layout
+
+\begin_layout Itemize
+Denuder mounting plate & signal cable
+\begin_inset Newline newline
+\end_inset
+
+This aluminum plate is affixed to a horizontal boom (45mm square Bosch tube)
+ for holding the denuders.
+ A four-conductor cable connects the sampling valves on the denuder mounting
+ plate to the control enclosure.
+ 
+\end_layout
+
+\begin_layout Itemize
+Tubing
+\begin_inset Newline newline
+\end_inset
+
+The system includes all required plumbing as pre-cut, labeled lengths of
+ black tubing.
+\end_layout
+
+\begin_layout Itemize
+CompactFlash cards
+\begin_inset Newline newline
+\end_inset
+
+The datalogger records on CF cards up to 2GB in size.
+ Have several available for data collection.
+\end_layout
+
+\begin_layout Standard
+The following micrometeorological sensors are required to operate:
+\end_layout
+
+\begin_layout Itemize
+Ambient temperature/relative humidity probe (HMP45AC; Vaisala)
+\begin_inset Newline newline
+\end_inset
+
+The system requires this sensor to be present for valid flux computations.
+\end_layout
+
+\begin_layout Itemize
+AND EITHER:
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Sonic anemometer (CSAT3; Campbell Scientific)
+\begin_inset Newline newline
+\end_inset
+
+The CSAT3 owned by LAR was bought for the denuder-REA.
+\end_layout
+
+\begin_layout Itemize
+
+\emph on
+with
+\emph default
+ Open-path infrared CO
+\begin_inset script subscript
+
+\begin_layout Plain Layout
+2
+\end_layout
+
+\end_inset
+
+/H
+\begin_inset script subscript
+
+\begin_layout Plain Layout
+2
+\end_layout
+
+\end_inset
+
+O analyzer (LI-7500; LI-COR Biosciences
+\begin_inset Newline newline
+\end_inset
+
+The LI7500 was also bought for the denuder-REA.
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+OR:
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Sonic anemometer & open-path IRGA (EC100, EC150, CSAT3A; Campbell Scientific)
+\begin_inset Newline newline
+\end_inset
+
+It may not be possible to integrate this sensor fully
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+Additional supplies required for field deployment:
+\end_layout
+
+\begin_layout Itemize
+Tower with anchored base
+\begin_inset Newline newline
+\end_inset
+
+An aluminum tower (or tower section) is required to elevate instruments
+ to a suitable height.
+ It must be secured to a suitable base such as sturdy hardwood/plastic/fiberglas
+s pallet, chocked trailer or permanent concrete pad.
+ Use anchoring materials such as cinder blocks, sand bags or guy wires as
+ appropriate to secure the tower and base.
+\end_layout
+
+\begin_layout Itemize
+Mounting boom
+\begin_inset Newline newline
+\end_inset
+
+A horizontal boom is used to deploy the sensors away from the tower; 2-2.5
+ meters (6-8 ft) length is usually sufficient.
+ For compatibility with the denuder mounting plate, use Bosch-brand 45mm
+ square tube.
+ 
+\end_layout
+
+\begin_layout Itemize
+Assorted hardware, notably U-bolts
+\end_layout
+
+\begin_layout Section
+Consumables
+\end_layout
+
+\begin_layout Standard
+During normal operation, the denuder-REA consumes a modest amount of clean,
+ dry gas free of the constituent of interest.
+ A single 22L tank (Scott-Marrin 100A, 7
+\begin_inset Quotes erd
+\end_inset
+
+ dia, 50
+\begin_inset Quotes erd
+\end_inset
+
+ H) at 2000psi will last for several days of frequent measurements.
+ 
+\end_layout
+
+\begin_layout Section
+Specifications
+\end_layout
+
+\begin_layout Description
+Sample
+\begin_inset space \space{}
+\end_inset
+
+flow
+\begin_inset space \space{}
+\end_inset
+
+rate: up to 10 sLpm per denuder (pump limited)
+\end_layout
+
+\begin_layout Description
+Zero
+\begin_inset space \space{}
+\end_inset
+
+air
+\begin_inset space \space{}
+\end_inset
+
+requirements: up to 0.5 sLpm at 20-20 psi
+\end_layout
+
+\begin_layout Description
+Power
+\begin_inset space \space{}
+\end_inset
+
+requirements: 
+\begin_inset Tabular
+<lyxtabular version="3" rows="5" columns="3">
+<features tabularvalignment="middle">
+<column alignment="left" valignment="top" width="0">
+<column alignment="center" valignment="top" width="0">
+<column alignment="center" valignment="top" width="0">
+<row>
+<cell alignment="left" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Device
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Specifications
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Total power
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="left" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Datalogger enclosure
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="left" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Pump
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="left" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Sonic anemometer (CSAT3)
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="left" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Infrared gas analyzer (LI7500)
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+</lyxtabular>
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Description
+Dimensions
+\begin_inset space \space{}
+\end_inset
+
+(WxDxH): 
+\begin_inset Tabular
+<lyxtabular version="3" rows="2" columns="3">
+<features tabularvalignment="middle">
+<column alignment="left" valignment="top" width="0">
+<column alignment="center" valignment="top" width="0">
+<column alignment="center" valignment="top" width="0">
+<row>
+<cell alignment="left" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Datalogger enclosure
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="left" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Pump enclosure
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+</lyxtabular>
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Description
+Weight: ?
+\end_layout
+
+\begin_layout Description
+Software
+\begin_inset space \space{}
+\end_inset
+
+requirements: ? 
+\begin_inset Newpage clearpage
+\end_inset
+
+
+\end_layout
+
+\begin_layout Part
+Principle of Operation
+\end_layout
+
+\begin_layout Standard
+Theory
+\begin_inset Newpage clearpage
+\end_inset
+
+
+\end_layout
+
+\begin_layout Part
+Installation
+\end_layout
+
+\begin_layout Standard
+This section covers the physical setup and initial configuration of the
+ denuder-REA system.
+\end_layout
+
+\begin_layout Section
+Required Tools
+\end_layout
+
+\begin_layout Standard
+The following minimum set of tools is required:
+\begin_inset VSpace defskip
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Tabular
+<lyxtabular version="3" rows="9" columns="2">
+<features tabularvalignment="middle">
+<column alignment="center" valignment="top" width="0">
+<column alignment="left" valignment="top" width="0">
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+9/16" open-end/combo wrench
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+1/2" open-end/combo wrench
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+10" adjustable (crescent) wrench
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+small standard (-) screwdriver
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+small phillips (+) screwdriver
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+allen wrench, SAE 
+\color red
+[WHAT SIZE?]
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+wire strippers
+\end_layout
+
+\end_inset
+</cell>
+</row>
+</lyxtabular>
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+Deployment types
+\end_layout
+
+\begin_layout Subsection
+Standalone
+\end_layout
+
+\begin_layout Standard
+In the standalone deployment, the core denuder-REA components are integrated
+ directly with the micrometeorological sensors.
+ No 
+\end_layout
+
+\begin_layout Subsection
+Co-deploy with gradient sampler
+\end_layout
+
+\begin_layout Standard
+The denuder-REA can be deployed in conjunction with a WSU gradient sampler.
+ 
+\end_layout
+
+\begin_layout Standard
+\begin_inset Newpage clearpage
+\end_inset
+
+
+\end_layout
+
+\begin_layout Part
+Operation
+\end_layout
+
+\begin_layout Standard
+Starting up from power-off
+\end_layout
+
+\begin_layout Standard
+Program settings
+\end_layout
+
+\begin_layout Standard
+Performing sample runs
+\end_layout
+
+\begin_layout Standard
+Shutting down to power-off
+\end_layout
+
+\begin_layout Standard
+Retrieving data sets
+\end_layout
+
+\begin_layout Standard
+Maintenance
+\end_layout
+
+\begin_layout Standard
+\begin_inset Newpage clearpage
+\end_inset
+
+
+\end_layout
+
+\begin_layout Part
+Data products
+\end_layout
+
+\begin_layout Section
+Data files
+\end_layout
+
+\begin_layout Standard
+These data files are saved to the datalogger's internal memory and to CompactFla
+sh media.
+ If no CF media is available, not much data is retained.
+\end_layout
+
+\begin_layout Labeling
+\labelwidthstring 00.00.0000
+ts_data->tsdata This table records high-frequency micrometeorological data
+ whenever the system is powered on
+\end_layout
+
+\begin_layout Labeling
+\labelwidthstring 00.00.0000
+ts_rea->tsREA During sample runs, high-frequency data required for REA decision-
+making are recorded to this table.
+\end_layout
+
+\begin_layout Labeling
+\labelwidthstring 00.00.0000
+flux->stats30 Statistics computed for each output interval (def.
+ 30min) are saved to this table
 \end_layout
 
 \end_body
