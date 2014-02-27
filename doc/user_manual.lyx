@@ -99,7 +99,7 @@ tabs-within-sections
 \rightmargin 2.5cm
 \bottommargin 2.5cm
 \secnumdepth 3
-\tocdepth 3
+\tocdepth 2
 \paragraph_separation indent
 \paragraph_indentation default
 \quotes_language english
@@ -416,7 +416,7 @@ set_width "auto"
 
 \end_layout
 
-\begin_layout Part
+\begin_layout Section
 Overview
 \end_layout
 
@@ -440,7 +440,7 @@ denuder-REA system
  by allowing for adsorptive coatings targeting the gas species of interest.
 \end_layout
 
-\begin_layout Section
+\begin_layout Subsection
 System Components
 \end_layout
 
@@ -616,7 +616,7 @@ A horizontal boom is used to deploy the sensors away from the tower; 2-2.5
 Assorted hardware, notably U-bolts
 \end_layout
 
-\begin_layout Section
+\begin_layout Subsection
 Consumables
 \end_layout
 
@@ -635,7 +635,7 @@ During normal operation, the denuder-REA consumes a modest amount of clean,
  
 \end_layout
 
-\begin_layout Section
+\begin_layout Subsection
 Specifications
 \end_layout
 
@@ -920,7 +920,7 @@ requirements: ?
 
 \end_layout
 
-\begin_layout Part
+\begin_layout Section
 Principle of Operation
 \end_layout
 
@@ -932,7 +932,7 @@ Theory
 
 \end_layout
 
-\begin_layout Part
+\begin_layout Section
 Setup
 \end_layout
 
@@ -941,7 +941,7 @@ This section covers the physical setup and initial configuration of the
  denuder-REA system.
 \end_layout
 
-\begin_layout Section
+\begin_layout Subsection
 Deployment Mode
 \end_layout
 
@@ -979,7 +979,7 @@ The combination anemometer/IRGA (EC150) cannot be used for co-deployment
  proprietary) and serial (RS-232) protocols.
 \end_layout
 
-\begin_layout Section
+\begin_layout Subsection
 Sensor Configuration
 \end_layout
 
@@ -989,11 +989,11 @@ The following sections cover the initial configuration of devices & instruments
  Generally, it is not necessary to re-configure sensors after initial setup.
 \end_layout
 
-\begin_layout Subsection
+\begin_layout Subsubsection
 Sonic anemometer (CSAT3)
 \end_layout
 
-\begin_layout Subsubsection
+\begin_layout Paragraph
 Standalone 
 \end_layout
 
@@ -1219,7 +1219,7 @@ Off (
 
 \end_layout
 
-\begin_layout Subsubsection
+\begin_layout Paragraph
 Gradient co-deployment
 \end_layout
 
@@ -1524,7 +1524,7 @@ Stop
  and exit the program.
 \end_layout
 
-\begin_layout Subsection
+\begin_layout Subsubsection
 Infrared gas analyzer (LI7500)
 \end_layout
 
@@ -1544,7 +1544,7 @@ Gradient co-deployment
 If
 \end_layout
 
-\begin_layout Subsection
+\begin_layout Subsubsection
 Combined anemometer/IRGA (EC100/EC150/CSAT3A)
 \end_layout
 
@@ -1556,11 +1556,11 @@ Standalone
 foo
 \end_layout
 
-\begin_layout Section
+\begin_layout Subsection
 Installation
 \end_layout
 
-\begin_layout Subsection
+\begin_layout Subsubsection
 Required Tools
 \end_layout
 
@@ -1774,7 +1774,7 @@ wire strippers
 
 \end_layout
 
-\begin_layout Part
+\begin_layout Section
 Operation
 \end_layout
 
@@ -1809,11 +1809,11 @@ Maintenance
 
 \end_layout
 
-\begin_layout Part
+\begin_layout Section
 Data products
 \end_layout
 
-\begin_layout Section
+\begin_layout Subsection
 Data files
 \end_layout
 
