@@ -563,11 +563,13 @@ OR:
 
 \begin_deeper
 \begin_layout Itemize
-Sonic anemometer & open-path IRGA (EC100, EC150, CSAT3A; Campbell Scientific)
+Sonic anemometer & open-path IRGA (EC100/EC150/CSAT3A; Campbell Scientific)
 \begin_inset Newline newline
 \end_inset
 
-It may not be possible to integrate this sensor fully
+This combination sensor may be used in standalone operation but is not suitable
+ for co-deployment of the denuder-REA system with a gradient sampler system.
+ 
 \end_layout
 
 \end_deeper
@@ -921,7 +923,7 @@ Theory
 \end_layout
 
 \begin_layout Part
-Installation
+Setup
 \end_layout
 
 \begin_layout Standard
@@ -930,6 +932,625 @@ This section covers the physical setup and initial configuration of the
 \end_layout
 
 \begin_layout Section
+Deployment Mode
+\end_layout
+
+\begin_layout Paragraph
+Standalone deployment
+\end_layout
+
+\begin_layout Standard
+In a typical deployment, the denuder-REA system is setup in a self-contained
+ fashion.
+ It may be in the vincinity of additional sampling systems but there is
+ no direct collaboration with those systems.
+ That is, data collected by the denuder-REA is not available to other systems.
+\end_layout
+
+\begin_layout Paragraph
+Co-deploy with gradient sampler
+\end_layout
+
+\begin_layout Standard
+The denuder-REA can also be deployed in conjunction with a gradient sampler
+ system.
+ In this arrangement, the denuder-REA acts as the controlling datalogger
+ and the gradient sampler datalogger passively listens to data output by
+ the sonic anemometer and infrared gas analyzer.
+ 
+\end_layout
+
+\begin_layout Standard
+The combination anemometer/IRGA (EC150) cannot be used for co-deployment
+ because it does not provide a secondary data output to provide the gradient
+ sampler datalogger.
+ The Campbell Scientific CSAT3 and LI-COR Biosciences LI7500 must be used
+ instead because they both can simultaneously output data via SDM (Campbellsci
+ proprietary) and serial (RS-232) protocols.
+\end_layout
+
+\begin_layout Section
+Sensor Configuration
+\end_layout
+
+\begin_layout Standard
+The following sections cover the initial configuration of devices & instruments
+ associated with the denuder-REA system.
+ Generally, it is not necessary to re-configure sensors after initial setup.
+\end_layout
+
+\begin_layout Subsection
+Sonic anemometer (CSAT3)
+\end_layout
+
+\begin_layout Subsubsection
+Standalone 
+\end_layout
+
+\begin_layout Standard
+There is no need to modify the factory-default configuration of the CSAT3,
+ shown in 
+\begin_inset CommandInset ref
+LatexCommand formatted
+reference "tab:Factory-default-CSAT3"
+
+\end_inset
+
+, for standalone operation of the denuder-REA system.
+ The only setting which must be factory default for correct operation is
+ 
+\emph on
+SDM Address
+\emph default
+.
+ 
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float table
+placement H
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\begin_inset Caption
+
+\begin_layout Plain Layout
+\begin_inset CommandInset label
+LatexCommand label
+name "tab:Factory-default-CSAT3"
+
+\end_inset
+
+Factory default CSAT3 configuration 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "manual-csat3"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\align center
+\begin_inset Tabular
+<lyxtabular version="3" rows="7" columns="2">
+<features tabularvalignment="middle">
+<column alignment="left" valignment="top" width="0">
+<column alignment="left" valignment="top" width="0">
+<row>
+<cell alignment="left" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Analog Outputs
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Off
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="left" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Execution Parameter
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+10 Hz
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="left" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Trigger Source
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Internal Clock
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="left" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+SDM Address
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+3
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="left" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+RS-232 baud rate
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+9600 bps (
+\family typewriter
+RS=0
+\family default
+)
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="left" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Software RTS
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Off (
+\family typewriter
+RI=0
+\family default
+)
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="left" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Unprompted Output
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Off (
+\family typewriter
+&=0
+\family default
+)
+\end_layout
+
+\end_inset
+</cell>
+</row>
+</lyxtabular>
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsubsection
+Gradient co-deployment
+\end_layout
+
+\begin_layout Standard
+The sonic anemometer must be configured to output data unprompted via its
+ serial interface in order to integrate with the gradient sampler datalogger.
+ Settings modified from factory defaults are shown in 
+\begin_inset CommandInset ref
+LatexCommand formatted
+reference "tab:Gradient-co-deployment-CSAT3"
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+Refer to Appendix B of the 
+\emph on
+CSAT3 Three Dimensional Sonic Anemometer Instruction Manual
+\emph default
+ in conjunction with this section 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "manual-csat3"
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float table
+placement H
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\begin_inset Caption
+
+\begin_layout Plain Layout
+\begin_inset CommandInset label
+LatexCommand label
+name "tab:Gradient-co-deployment-CSAT3"
+
+\end_inset
+
+Gradient co-deployment CSAT3 configuration
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\align center
+\begin_inset Tabular
+<lyxtabular version="3" rows="4" columns="2">
+<features tabularvalignment="middle">
+<column alignment="left" valignment="top" width="0">
+<column alignment="left" valignment="top" width="0">
+<row>
+<cell alignment="left" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+RS-232 baud rate
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+?? 
+\emph on
+9600 may not be fast enough for 10hz
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="left" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Software RTS
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+On (
+\family typewriter
+RI=1
+\family default
+)
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="left" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Unprompted Output
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+On (
+\family typewriter
+&=1
+\family default
+)
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Serial output record sync code
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+On (
+\family typewriter
+RS=1
+\family default
+)
+\end_layout
+
+\end_inset
+</cell>
+</row>
+</lyxtabular>
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Paragraph
+Some notes:
+\end_layout
+
+\begin_layout Itemize
+Serial (RS-232) output is enabled when the CSAT3 detects the RTS (request
+ to send) line is being asserted.
+ Since the gradient datalogger cannot assert this signal
+\begin_inset Foot
+status open
+
+\begin_layout Plain Layout
+The CR1000 datalogger has transmit (Tx) and receive (Rx) signals only, no
+ handshaking lines (e.g.
+ RTS, CTS, ...)
+\end_layout
+
+\end_inset
+
+, a 'software RTS' flag is enabled in the CSAT3 software.
+\end_layout
+
+\begin_layout Itemize
+(?) The baud rate cannot be changed when the 'software RTS' signal is enabled
+ so it must be updated first.
+\end_layout
+
+\begin_layout Itemize
+Manually triggering unprompted output (by sending commands through a serial
+ terminal) was not successfully accomplished during lab tests.
+ Instead, a third-party program is used to enable unprompted output mode.
+ 
+\end_layout
+
+\begin_layout Paragraph
+To modify the baud rate:
+\end_layout
+
+\begin_layout Enumerate
+Once I've actually done it, some content will be here.
+\end_layout
+
+\begin_layout Paragraph
+To enable software RTS:
+\end_layout
+
+\begin_layout Enumerate
+I'm pretty sure this was set using a serial terminal & manual command codes,
+ then saved to non-volatile memory when we were gearing up for the Tainjin,
+ CN study (which was post-poned last second, then moved to Xian)
+\end_layout
+
+\begin_layout Paragraph
+To enable sync code output:
+\end_layout
+
+\begin_layout Enumerate
+Again, I'm pretty sure this setting was activated during the DAQ development
+ for Tainjin
+\end_layout
+
+\begin_layout Paragraph
+To start unprompted output mode:
+\end_layout
+
+\begin_layout Standard
+For these steps, a third-party program is required.
+ Download it from 
+\begin_inset Flex URL
+status collapsed
+
+\begin_layout Plain Layout
+
+http://campbellsci.com/19_2_68
+\end_layout
+
+\end_inset
+
+ or look under 
+\emph on
+Support > Downloads
+\emph default
+ on the sensor's home page 
+\begin_inset Flex URL
+status collapsed
+
+\begin_layout Plain Layout
+
+http://campbellsci.com/csat3
+\end_layout
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Enumerate
+Connect computer to sonic anemometer RS-232 interface.
+ Other interfaces (e.g.
+ SDM) should remain unconnected but power (+12Vdc) must be provided.
+ 
+\end_layout
+
+\begin_layout Enumerate
+Start CSAT32 (
+\family typewriter
+csat32.exe
+\family default
+) and select appropriate COM port and baud rate under 
+\emph on
+Settings > Communications
+\emph default
+.
+ 
+\end_layout
+
+\begin_layout Enumerate
+Activate 
+\emph on
+Settings > UP mode on exit.
+ 
+\end_layout
+
+\begin_layout Enumerate
+Press 
+\emph on
+Start
+\emph default
+ to begin data collection, then after a few moments, press 
+\emph on
+Stop
+\emph default
+ and exit the program.
+\end_layout
+
+\begin_layout Subsection
+Infrared gas analyzer (LI7500)
+\end_layout
+
+\begin_layout Paragraph
+Standalone
+\end_layout
+
+\begin_layout Standard
+It's not n
+\end_layout
+
+\begin_layout Paragraph
+Gradient co-deployment
+\end_layout
+
+\begin_layout Standard
+If
+\end_layout
+
+\begin_layout Subsection
+Combined anemometer/IRGA (EC100/EC150/CSAT3A)
+\end_layout
+
+\begin_layout Paragraph
+Standalone
+\end_layout
+
+\begin_layout Standard
+foo
+\end_layout
+
+\begin_layout Section
+Installation
+\end_layout
+
+\begin_layout Subsection
 Required Tools
 \end_layout
 
@@ -1136,29 +1757,6 @@ wire strippers
 
 \end_layout
 
-\begin_layout Section
-Deployment types
-\end_layout
-
-\begin_layout Subsection
-Standalone
-\end_layout
-
-\begin_layout Standard
-In the standalone deployment, the core denuder-REA components are integrated
- directly with the micrometeorological sensors.
- No 
-\end_layout
-
-\begin_layout Subsection
-Co-deploy with gradient sampler
-\end_layout
-
-\begin_layout Standard
-The denuder-REA can be deployed in conjunction with a WSU gradient sampler.
- 
-\end_layout
-
 \begin_layout Standard
 \begin_inset Newpage clearpage
 \end_inset
@@ -1231,6 +1829,40 @@ making are recorded to this table.
 \labelwidthstring 00.00.0000
 flux->stats30 Statistics computed for each output interval (def.
  30min) are saved to this table
+\end_layout
+
+\begin_layout Standard
+\begin_inset Newpage clearpage
+\end_inset
+
+
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "manual-csat3"
+
+\end_inset
+
+Campbell Scientific Inc.
+ 
+\emph on
+CSAT3 Three Dimensional Sonic Anemometer.
+
+\emph default
+ Rev 11/07.
+ Online: http://campbellsci.com/manuals
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "key-2"
+
+\end_inset
+
+
 \end_layout
 
 \end_body
