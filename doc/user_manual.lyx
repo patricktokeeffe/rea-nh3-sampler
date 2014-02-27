@@ -551,7 +551,15 @@ with
 
 \end_inset
 
-O analyzer (LI-7500; LI-COR Biosciences
+O analyzer 
+\begin_inset CommandInset nomenclature
+LatexCommand nomenclature
+symbol "IRGA"
+description "Infrared gas analyzer"
+
+\end_inset
+
+(LI-7500; LI-COR Biosciences)
 \begin_inset Newline newline
 \end_inset
 
