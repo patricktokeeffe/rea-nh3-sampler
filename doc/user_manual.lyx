@@ -65,14 +65,16 @@ tabs-within-sections
 \paperfontsize 12
 \spacing single
 \use_hyperref true
+\pdf_title "Denuder-based Trace Gas Sampler Operator's Manual"
+\pdf_author "Washington State University Laboratory for Atmospheric Research"
 \pdf_bookmarks true
-\pdf_bookmarksnumbered false
+\pdf_bookmarksnumbered true
 \pdf_bookmarksopen true
 \pdf_bookmarksopenlevel 1
 \pdf_breaklinks true
 \pdf_pdfborder true
 \pdf_colorlinks true
-\pdf_backref false
+\pdf_backref section
 \pdf_pdfusetitle true
 \pdf_quoted_options "linkcolor=black, citecolor=black, urlcolor=blue, filecolor=blue, pdfpagelayout=OneColumn, pdfnewwindow=true, pdfstartview=XYZ, plainpages=false"
 \papersize letterpaper
