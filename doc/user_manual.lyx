@@ -925,7 +925,183 @@ Principle of Operation
 \end_layout
 
 \begin_layout Standard
-Theory
+The sampling method employed by this system is known as relaxed eddy accumulatio
+n (REA).
+ This particular micrometeorological technique is conceptually related to
+ eddy covariance (EC), disjunct eddy covariance (DEC) and eddy accumulation
+ (EA).
+ 
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+TODO: find some good reference papers for each of these techniques.
+\end_layout
+
+\end_inset
+
+ All of these sampling methods are designed to evalute vertical fluxes of
+ trace atmospheric gases and the specific implementation of each method's
+ approach determines which situations it is best suited for.
+ The REA approach is well-suited for measurements of reactive compounds
+ where real-time analyzers are not available or practical.
+ 
+\end_layout
+
+\begin_layout Standard
+In the REA method, instantaneous measurements of vertical wind speed are
+ used in conjunction with high-speed solenoid valves to conditionally sample
+ ascending and descending air parcels into one of two chemical traps.
+ The denuder-REA employs glass annual honeycomb denuders as traps.
+ 
+\end_layout
+
+\begin_layout Subsection
+REA Flux
+\end_layout
+
+\begin_layout Standard
+The vertical flux 
+\begin_inset Formula $F$
+\end_inset
+
+ of some constituent 
+\emph on
+X 
+\emph default
+is determined according to 
+\begin_inset Formula $F\approx\beta\sigma_{w}\Delta\overline{C}$
+\end_inset
+
+ where 
+\begin_inset Formula $\Delta\overline{C}$
+\end_inset
+
+ is the difference in mean concentration of 
+\emph on
+X
+\emph default
+ between ascending and descending air parcels; 
+\begin_inset Formula $\sigma_{w}$
+\end_inset
+
+is the standard deviation of instantaneous vertical wind speed; and 
+\begin_inset Formula $\beta$
+\end_inset
+
+ is an empirical coefficient.
+ By convention, ascending air parcels are trapped in the 
+\begin_inset Quotes eld
+\end_inset
+
+up
+\begin_inset Quotes erd
+\end_inset
+
+ denuder
+\begin_inset Foot
+status open
+
+\begin_layout Plain Layout
+In reality, it is a set of denuders installed in an aluminum housing.
+\end_layout
+
+\end_inset
+
+ while descending parcels are trapped in the 
+\begin_inset Quotes eld
+\end_inset
+
+down
+\begin_inset Quotes erd
+\end_inset
+
+ denuder.
+\end_layout
+
+\begin_layout Standard
+The mean concentration of 
+\emph on
+X
+\emph default
+ depends on the total sampling duration 
+\begin_inset Formula $t$
+\end_inset
+
+; total mass 
+\begin_inset Formula $m$
+\end_inset
+
+ of 
+\emph on
+X
+\emph default
+ collected in each denuder; mean volumetric flow rate 
+\begin_inset Formula $f$
+\end_inset
+
+ through each denuder; and fraction of sampling duration 
+\begin_inset Formula $\alpha$
+\end_inset
+
+ in which each denuder is actively sampling.
+ 
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+original draft had reference to Baum and Ham, 2007 here
+\end_layout
+
+\end_inset
+
+ Expressing the flux in terms of these quantities where 
+\begin_inset Quotes eld
+\end_inset
+
++
+\begin_inset Quotes erd
+\end_inset
+
+ and 
+\begin_inset Quotes eld
+\end_inset
+
+-
+\begin_inset Quotes erd
+\end_inset
+
+ designate 
+\begin_inset Quotes eld
+\end_inset
+
+up
+\begin_inset Quotes erd
+\end_inset
+
+ and 
+\begin_inset Quotes eld
+\end_inset
+
+down
+\begin_inset Quotes erd
+\end_inset
+
+ respectively results in:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{equation}
+F\approx\frac{\beta\sigma_{w}}{t}\left(\frac{m^{+}}{f^{+}\alpha^{+}}-\frac{m^{-}}{f^{-}\alpha^{-}}\right)
+\end{equation}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
 \begin_inset Newpage clearpage
 \end_inset
 
