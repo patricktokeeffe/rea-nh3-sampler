@@ -100,8 +100,8 @@ tabs-within-sections
 \bottommargin 2.5cm
 \secnumdepth 3
 \tocdepth 2
-\paragraph_separation indent
-\paragraph_indentation default
+\paragraph_separation skip
+\defskip medskip
 \quotes_language english
 \papercolumns 1
 \papersides 2
@@ -445,95 +445,59 @@ System Components
 \end_layout
 
 \begin_layout Standard
-At its core, the denuder-REA system consists of:
+The denuder-REA system is modular and incorporates commercial off-the-shelf
+ (COTS) hardware.
+ Core components include:
 \end_layout
 
 \begin_layout Itemize
-Control enclosure
-\begin_inset Newline newline
-\end_inset
-
-This fiberglass enclosure contains the datalogger, power supply, flow controller
-s, and other intrinsic components.
+Fiberglass enclosure (datalogger, control components, flow controllers,
+ \SpecialChar \ldots{}
+)
 \end_layout
 
 \begin_layout Itemize
-Pump enclosure
-\begin_inset Newline newline
-\end_inset
-
-This aluminum enclsoure contains the dual-head sampling pump.
+Aluminum enclosure (dual-head pump)
 \end_layout
 
 \begin_layout Itemize
-Denuders
-\begin_inset Newline newline
-\end_inset
-
-The (2) denuder assemblies are core components.
+Denuders, housings and accessories
 \end_layout
 
 \begin_layout Itemize
-Denuder mounting plate & signal cable
-\begin_inset Newline newline
-\end_inset
-
-This aluminum plate is affixed to a horizontal boom (45mm square Bosch tube)
- for holding the denuders.
- A four-conductor cable connects the sampling valves on the denuder mounting
- plate to the control enclosure.
- 
+Denuder mounting plate with valve control cable
 \end_layout
 
 \begin_layout Itemize
-Tubing
-\begin_inset Newline newline
-\end_inset
-
-The system includes all required plumbing as pre-cut, labeled lengths of
- black tubing.
+Precut, labeled lengths of black plastic tubing
 \end_layout
 
 \begin_layout Itemize
-CompactFlash cards
-\begin_inset Newline newline
-\end_inset
-
-The datalogger records on CF cards up to 2GB in size.
- Have several available for data collection.
+Memory cards, up to 2GB capacity: PCMIA Type I/II or CompactFlash™ with
+ PCMIA carriage
 \end_layout
 
-\begin_layout Standard
-The following micrometeorological sensors are required to operate:
+\begin_layout Itemize
+In-line pressure sensor (PX209
 \end_layout
 
 \begin_layout Itemize
 Ambient temperature/relative humidity probe (HMP45AC; Vaisala)
-\begin_inset Newline newline
-\end_inset
-
-The system requires this sensor to be present for valid flux computations.
 \end_layout
 
 \begin_layout Itemize
-AND EITHER:
+EITHER:
 \end_layout
 
 \begin_deeper
 \begin_layout Itemize
-Sonic anemometer (CSAT3; Campbell Scientific)
-\begin_inset Newline newline
-\end_inset
-
-The CSAT3 owned by LAR was bought for the denuder-REA.
+Sonic anemometer (CSAT3; Campbell Scientific) 
+\emph on
+with
 \end_layout
 
 \begin_layout Itemize
-
-\emph on
-with
-\emph default
- Open-path infrared CO
+Open-path CO
 \begin_inset script subscript
 
 \begin_layout Plain Layout
@@ -560,10 +524,6 @@ description "Infrared gas analyzer"
 \end_inset
 
 (LI-7500; LI-COR Biosciences)
-\begin_inset Newline newline
-\end_inset
-
-The LI7500 was also bought for the denuder-REA.
 \end_layout
 
 \end_deeper
@@ -573,43 +533,42 @@ OR:
 
 \begin_deeper
 \begin_layout Itemize
-Sonic anemometer & open-path IRGA (EC100/EC150/CSAT3A; Campbell Scientific)
+Integrated sonic anemometer & open-path CO
+\begin_inset script subscript
+
+\begin_layout Plain Layout
+2
+\end_layout
+
+\end_inset
+
+/H
+\begin_inset script subscript
+
+\begin_layout Plain Layout
+2
+\end_layout
+
+\end_inset
+
+O analyzer 
 \begin_inset Newline newline
 \end_inset
 
-This combination sensor may be used in standalone operation but is not suitable
- for co-deployment of the denuder-REA system with a gradient sampler system.
- 
+(EC100/EC150/CSAT3A; Campbell Scientific)
 \end_layout
 
 \end_deeper
 \begin_layout Standard
-Additional supplies required for field deployment:
+Additional equipment required for field deployment includes:
 \end_layout
 
 \begin_layout Itemize
-Tower with anchored base
-\begin_inset Newline newline
-\end_inset
-
-An aluminum tower (or tower section) is required to elevate instruments
- to a suitable height.
- It must be secured to a suitable base such as sturdy hardwood/plastic/fiberglas
-s pallet, chocked trailer or permanent concrete pad.
- Use anchoring materials such as cinder blocks, sand bags or guy wires as
- appropriate to secure the tower and base.
+Tower with anchored base and possibly guy wires
 \end_layout
 
 \begin_layout Itemize
-Mounting boom
-\begin_inset Newline newline
-\end_inset
-
-A horizontal boom is used to deploy the sensors away from the tower; 2-2.5
- meters (6-8 ft) length is usually sufficient.
- For compatibility with the denuder mounting plate, use Bosch-brand 45mm
- square tube.
- 
+Mounting boom: 6-8 ft of Bosch-brand 45mm T-slotted square tube 
 \end_layout
 
 \begin_layout Itemize
@@ -618,6 +577,10 @@ Assorted hardware, notably U-bolts
 
 \begin_layout Subsection
 Consumables
+\end_layout
+
+\begin_layout Paragraph
+Zero air
 \end_layout
 
 \begin_layout Standard
@@ -633,6 +596,22 @@ During normal operation, the denuder-REA consumes a modest amount of clean,
 
  H) at 2000psi will last for several days of frequent measurements.
  
+\end_layout
+
+\begin_layout Paragraph
+Filters
+\end_layout
+
+\begin_layout Standard
+Teflon disk filters? Actually probably not
+\end_layout
+
+\begin_layout Paragraph
+Chemicals
+\end_layout
+
+\begin_layout Standard
+Stuffs needed for denuder treatment and analysis
 \end_layout
 
 \begin_layout Subsection
@@ -943,16 +922,18 @@ TODO: find some good reference papers for each of these techniques.
  All of these sampling methods are designed to evalute vertical fluxes of
  trace atmospheric gases and the specific implementation of each method's
  approach determines which situations it is best suited for.
- The REA approach is well-suited for measurements of reactive compounds
- where real-time analyzers are not available or practical.
+ The REA approach is ideal for measurements of potentially-reactive compounds
+ for which real-time analyzers are not available or practical.
  
 \end_layout
 
 \begin_layout Standard
 In the REA method, instantaneous measurements of vertical wind speed are
  used in conjunction with high-speed solenoid valves to conditionally sample
- ascending and descending air parcels into one of two chemical traps.
- The denuder-REA employs glass annual honeycomb denuders as traps.
+ ascending and descending air parcels into one of two reservoirs or chemical
+ traps.
+ The denuder-REA system employs two sets of honeycomb denuders as chemical
+ traps.
  
 \end_layout
 
@@ -1095,6 +1076,26 @@ down
 \begin{equation}
 F\approx\frac{\beta\sigma_{w}}{t}\left(\frac{m^{+}}{f^{+}\alpha^{+}}-\frac{m^{-}}{f^{-}\alpha^{-}}\right)
 \end{equation}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+Sample flow is governed by thermal mass flow controllers so it is necessary
+ to convert their mass flow rate of std.
+ L/min to a volumetric flow rate before applying this equation.
+ The mass flow rate is generally close enough for preliminary analysis.
+ This conversion adjusts for volumetric fluctuations caused by ambient temperatu
+re and barometric pressure deviations from standard conditions; it does
+ NOT have anything to do with MFC stream calibration or 'K' factor scaling.
+ 
+\end_layout
 
 \end_inset
 
@@ -1664,7 +1665,7 @@ http://campbellsci.com/csat3
 \begin_layout Enumerate
 Connect computer to sonic anemometer RS-232 interface.
  Other interfaces (e.g.
- SDM) should remain unconnected but power (+12Vdc) must be provided.
+ SDM) should remain inactive but power (+12Vdc, Gnd) must be provided.
  
 \end_layout
 
@@ -1673,18 +1674,26 @@ Start CSAT32 (
 \family typewriter
 csat32.exe
 \family default
-) and select appropriate COM port and baud rate under 
-\emph on
-Settings > Communications
-\emph default
-.
+) and disregard warning dialogs.
  
 \end_layout
 
 \begin_layout Enumerate
-Activate 
+Select appropriate COM port and baud rate under 
 \emph on
-Settings > UP mode on exit.
+Settings > Communications
+\emph default
+.
+ Wait for communications with the anemometer to be established.
+ 
+\end_layout
+
+\begin_layout Enumerate
+Select 
+\emph on
+Settings > UP mode on exit 
+\emph default
+to enable the unprompted output trigger.
  
 \end_layout
 
@@ -1702,6 +1711,23 @@ Stop
 
 \begin_layout Subsubsection
 Infrared gas analyzer (LI7500)
+\end_layout
+
+\begin_layout Standard
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+Be sure to set 
+\family typewriter
+DelayStep=2
+\family default
+ so the total delay is 199ms on SDM/RS232 outputs and # delays is ~2 scans
+\end_layout
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Paragraph
@@ -1736,16 +1762,14 @@ foo
 Installation
 \end_layout
 
-\begin_layout Subsubsection
-Required Tools
+\begin_layout Standard
+Procedures and guidance on the physical installation of equipment is provided
+ in the following sections.
+ 
 \end_layout
 
-\begin_layout Standard
-The following minimum set of tools is required:
-\begin_inset VSpace defskip
-\end_inset
-
-
+\begin_layout Subsubsection
+Required Tools
 \end_layout
 
 \begin_layout Standard
@@ -1943,6 +1967,265 @@ wire strippers
 
 \end_layout
 
+\begin_layout Subsubsection
+Order of operations
+\end_layout
+
+\begin_layout Standard
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+Turn this list in to a flow chart or even a NS diagram.
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Enumerate
+Setup tower on base, secure it
+\end_layout
+
+\begin_layout Enumerate
+Attach boom to tower
+\end_layout
+
+\begin_layout Enumerate
+Attach sonic anemometer sensor head to boom, not control box
+\end_layout
+
+\begin_layout Enumerate
+Attach irga to boom, not control box
+\end_layout
+
+\begin_layout Enumerate
+Route sensor cables to determine where control boxes can be placed
+\end_layout
+
+\begin_layout Enumerate
+Attach denuder mounting plate
+\end_layout
+
+\begin_layout Enumerate
+Route valve control cables
+\end_layout
+
+\begin_layout Enumerate
+Position control box & pump box
+\end_layout
+
+\begin_layout Enumerate
+Route plumbing
+\end_layout
+
+\begin_layout Subsubsection
+Sonic anemometer
+\end_layout
+
+\begin_layout Standard
+First mount the sensor head:
+\end_layout
+
+\begin_layout Enumerate
+Position the horizontal arm in the channel on top of the Bosch square tube
+ so the sensor head mounting bolt is accessible at the end of the boom.
+ Secure the horizontal arm using U-bolts.
+ 
+\end_layout
+
+\begin_layout Enumerate
+Mount the sensor head to the horizontal arm and finger-tighten the bolt
+ underneath the block.
+ 
+\end_layout
+
+\begin_layout Enumerate
+Rotate the sensor head so when the boom is mounted on the tower, the predominant
+ wind direction is into the sensors.
+ Adjust for terrain as well, if necessary: 
+\end_layout
+
+\begin_deeper
+\begin_layout Enumerate
+For flat level terrain, level the block using the bubble level located on
+ top of the block.
+ 
+\end_layout
+
+\begin_layout Enumerate
+For sloping terrain, adjust the block so the top block surface is parallel
+ to the terrain.
+ ?!?!?!?! 
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+XXX
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Enumerate
+Secure the lower bolt with a 9/16” wrench.
+\end_layout
+
+\begin_layout Standard
+Once the sensor head is mounted, the optimal position of the control box
+ can be determined.
+ The major constraint is the length of signal cable coming from the sensor
+ head:
+\end_layout
+
+\begin_layout Enumerate
+Mount the anemometer electronics box securely to the tower near the boom.
+ 
+\end_layout
+
+\begin_layout Enumerate
+Connect the cable from the anemometer sensors to the Transducer Head input.
+ 
+\end_layout
+
+\begin_layout Enumerate
+Connect the dual gray cables from the data logger field box to the +12V
+ SDM input of the electronics box.
+ 
+\end_layout
+
+\begin_layout Subsubsection
+Denuder mounting plate
+\end_layout
+
+\begin_layout Enumerate
+Secure the T-nuts on the back of the denuder mounting plate in a channel
+ on the anticipated wind-ward side of the Bosch tubing.
+ 
+\end_layout
+
+\begin_layout Enumerate
+Locate the denuder mounting plate relatively close to the sonic.
+ A distance of ≤1 ft is recommended.
+ 
+\end_layout
+
+\begin_layout Enumerate
+Secure the mounting plate by tightening the hex bolts holding the T-nuts.
+ 
+\end_layout
+
+\begin_layout Enumerate
+Connect valve control cable to control enclosure 
+\end_layout
+
+\begin_layout Subsubsection
+Boom mounting
+\end_layout
+
+\begin_layout Itemize
+Orient the boom so the sonic anemometer is facing into the predominant wind
+ direction.
+ 
+\end_layout
+
+\begin_layout Itemize
+Ensure the denuders are safely within reach to facilitate swapping cartridges.
+ 
+\end_layout
+
+\begin_layout Itemize
+Attach the boom securely to the tower using straps, clamps, U-bolts or another
+ robust method.
+ 
+\end_layout
+
+\begin_layout Subsubsection
+Temp/RH probe
+\end_layout
+
+\begin_layout Enumerate
+Remove the split nut on the bottom of the radiation shield.
+ 
+\end_layout
+
+\begin_layout Enumerate
+Remove the protective yellow cap on the sensor and insert fully into the
+ split nut.
+ 
+\end_layout
+
+\begin_layout Enumerate
+Screw the split nut into the shield and tighten.
+ 
+\end_layout
+
+\begin_layout Enumerate
+Affix the radiation shield mounting bracket to a tower leg using the supplied
+ U-bolt.
+ Position so the upper half of the radiation shield is roughly the same
+ elevation as the boom.
+ 
+\end_layout
+
+\begin_layout Enumerate
+Wire into logger according to wiring diagram
+\end_layout
+
+\begin_layout Subsubsection
+Sample tubing
+\end_layout
+
+\begin_layout Enumerate
+Make the following connections from the pump box:
+\end_layout
+
+\begin_deeper
+\begin_layout Enumerate
+DOWN-INLET to ‘down’ denuder 
+\end_layout
+
+\begin_layout Enumerate
+UP-INLET to ‘up’ denuder 
+\end_layout
+
+\begin_layout Enumerate
+DOWN-OUTLET to field box DOWN-INLET 
+\end_layout
+
+\begin_layout Enumerate
+UP-OUTLET to field box UP-INLET 
+\end_layout
+
+\end_deeper
+\begin_layout Enumerate
+Make these connections from the field box: 
+\end_layout
+
+\begin_deeper
+\begin_layout Enumerate
+DOWN-OUTLET to ‘down’ valve COM port 
+\end_layout
+
+\begin_layout Enumerate
+UP-OUTLET to ‘up’ valve COM port 
+\end_layout
+
+\begin_layout Enumerate
+PURGE GAS to zero air tank 
+\end_layout
+
+\end_deeper
+\begin_layout Enumerate
+Connect exhaust tubes to the NC ports of the ‘up’ and ‘down’ valves and
+ route away from the sampling inlets.
+ 
+\end_layout
+
 \begin_layout Standard
 \begin_inset Newpage clearpage
 \end_inset
@@ -1974,8 +2257,16 @@ Shutting down to power-off
 Retrieving data sets
 \end_layout
 
-\begin_layout Standard
+\begin_layout Subsection
 Maintenance
+\end_layout
+
+\begin_layout Subsubsection
+Dual head pump
+\end_layout
+
+\begin_layout Itemize
+Diaphragms should be inspected annually
 \end_layout
 
 \begin_layout Standard
@@ -2781,7 +3072,7 @@ Default,
 \begin_inset space \space{}
 \end_inset
 
-m/sUpon starting, the program will initialize the deadband to this value.
+m/s Upon starting, the program will initialize the deadband to this value.
  
 \end_layout
 
@@ -2828,6 +3119,7 @@ source Choose the appropriate wind sensor.
 
 \end_layout
 
+\begin_layout Section
 Data products
 \end_layout
 
@@ -2844,7 +3136,9 @@ sh media.
 \begin_layout Labeling
 \labelwidthstring 00.00.0000
 ts_data->tsdata This table records high-frequency micrometeorological data
- whenever the system is powered on
+ whenever the system is powered on.
+ No lags are applied to measurements stored in this table (though lags are
+ accounted for in online processing routines).
 \end_layout
 
 \begin_layout Labeling
@@ -2857,6 +3151,79 @@ making are recorded to this table.
 \labelwidthstring 00.00.0000
 flux->stats30 Statistics computed for each output interval (def.
  30min) are saved to this table
+\end_layout
+
+\begin_layout Section
+Data reduction
+\end_layout
+
+\begin_layout Subsection
+Denuder Assay
+\end_layout
+
+\begin_layout Itemize
+supplies/equipment list
+\end_layout
+
+\begin_layout Itemize
+choice of coating solutions
+\end_layout
+
+\begin_layout Itemize
+preparing the denuder
+\end_layout
+
+\begin_layout Itemize
+storage precautions for before/after use
+\end_layout
+
+\begin_layout Itemize
+extracting species from denuder
+\end_layout
+
+\begin_layout Itemize
+analysis procedure for extraction
+\end_layout
+
+\begin_layout Itemize
+long-term storage of samples
+\end_layout
+
+\begin_layout Subsection
+EC Flux
+\end_layout
+
+\begin_layout Standard
+This is required for in order to determine a beta coefficient.
+ Calculate:
+\end_layout
+
+\begin_layout Enumerate
+CO2 flux
+\end_layout
+
+\begin_layout Enumerate
+H2O flux / latent heat
+\end_layout
+
+\begin_layout Enumerate
+Temp / sensible heat
+\end_layout
+
+\begin_layout Subsection
+REA Flux
+\end_layout
+
+\begin_layout Standard
+What datums do we need from datalogger? 
+\end_layout
+
+\begin_layout Enumerate
+Mean flow through UP/DN lines
+\end_layout
+
+\begin_layout Enumerate
+Standard deviation of vertical wind
 \end_layout
 
 \begin_layout Standard
