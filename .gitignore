@@ -1,5 +1,8 @@
 
 #ignore thumbnails created by windows
 Thumbs.db
+
 *.lyx~
+*.lyx#
+
 .~lock.*
