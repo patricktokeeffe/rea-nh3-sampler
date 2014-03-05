@@ -40,6 +40,7 @@
 eqs-within-sections
 figs-within-sections
 tabs-within-sections
+logicalmkup
 \end_modules
 \maintain_unincluded_children false
 \language english
@@ -2343,30 +2344,16 @@ Programming
 \end_layout
 
 \begin_layout Standard
-This chapter addresses the datalogger program.
- Some notes:
+This chapter addresses the program operated by the datalogger.
+ In practice no programming is required to use the denuder-REA system but
+ users should still become familiar with the operational parameters described
+ in the following section.
+ 
 \end_layout
 
-\begin_layout Itemize
-The program is named 
-\begin_inset Quotes eld
-\end_inset
-
-default.cr5
-\begin_inset Quotes erd
-\end_inset
-
- so the datalogger automatically loads it and begins running
-\end_layout
-
-\begin_layout Itemize
-Output from the EC150 is scaled to match LI7500 units: e.g.
- mg/m^3 -> mmol/m^3
-\end_layout
-
-\begin_layout Itemize
-The timer contained within bits 0-5 of the CSAT3 diagnostic word is discarded
- to be compatible with the diagnostic output from EC100/CSAT3A 
+\begin_layout Standard
+Subsequent sections provide a detailed look at the decision-making structure
+ of the program and at the data products.
 \end_layout
 
 \begin_layout Subsection
@@ -2377,41 +2364,10 @@ Settings
 Various settings can be accessed via the datalogger's display panel and
  keypad.
  All settings related to denuder-REA operation are in the 
-\begin_inset Quotes eld
-\end_inset
-
-Program Setup
-\begin_inset Quotes erd
-\end_inset
-
+\family sans
+REA settings
+\family default
  submenu of the datalogger's main menu.
-\begin_inset Newline newline
-\end_inset
-
-
-\end_layout
-
-\begin_layout Standard
-\begin_inset Box Shadowbox
-position "t"
-hor_pos "c"
-has_inner_box 1
-inner_pos "t"
-use_parbox 0
-use_makebox 0
-width "100col%"
-special "none"
-height "1in"
-height_special "totalheight"
-status open
-
-\begin_layout Plain Layout
-There should be hard min flow rates implemented!
-\end_layout
-
-\end_inset
-
-
 \end_layout
 
 \begin_layout Standard
@@ -2439,8 +2395,10 @@ Default datalogger settings
 \end_layout
 
 \begin_layout Plain Layout
+\noindent
+\align center
 \begin_inset Tabular
-<lyxtabular version="3" rows="12" columns="4">
+<lyxtabular version="3" rows="25" columns="4">
 <features tabularvalignment="middle">
 <column alignment="left" valignment="top" width="0">
 <column alignment="left" valignment="top" width="0">
@@ -2502,7 +2460,7 @@ Flow rates
 \begin_layout Plain Layout
 
 \family typewriter
-Sampling (sLpm)
+Sampling, sLpm
 \end_layout
 
 \end_inset
@@ -2520,7 +2478,7 @@ Sampling (sLpm)
 \begin_inset Text
 
 \begin_layout Plain Layout
-\begin_inset Formula $0<X\leq10$
+\begin_inset Formula $2<X\leq10$
 \end_inset
 
 
@@ -2545,7 +2503,7 @@ Sampling (sLpm)
 \begin_layout Plain Layout
 
 \family typewriter
-Zero air (sLpm)
+Zero air, sLpm
 \end_layout
 
 \end_inset
@@ -2563,7 +2521,7 @@ Zero air (sLpm)
 \begin_inset Text
 
 \begin_layout Plain Layout
-\begin_inset Formula $0<X\leq5$
+\begin_inset Formula $0.4<X\leq5$
 \end_inset
 
 
@@ -2705,13 +2663,13 @@ Default, m/s
 </cell>
 </row>
 <row>
-<cell alignment="left" valignment="top" topline="true" leftline="true" usebox="none">
+<cell multirow="3" alignment="left" valignment="middle" topline="true" leftline="true" usebox="none">
 \begin_inset Text
 
 \begin_layout Plain Layout
 
 \family typewriter
-Site specific
+Site
 \end_layout
 
 \end_inset
@@ -2722,8 +2680,7 @@ Site specific
 \begin_layout Plain Layout
 
 \family typewriter
-Mag.
- declination
+Mag declin degEofTN
 \end_layout
 
 \end_inset
@@ -2741,7 +2698,7 @@ Mag.
 \begin_inset Text
 
 \begin_layout Plain Layout
-\begin_inset Formula $-20<X<20$
+\begin_inset Formula $-35<X<35$
 \end_inset
 
  E of TN
@@ -2751,29 +2708,11 @@ Mag.
 </cell>
 </row>
 <row>
-<cell alignment="left" valignment="top" topline="true" leftline="true" usebox="none">
+<cell multirow="4" alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
 \begin_inset Text
 
 \begin_layout Plain Layout
 
-\family typewriter
-Sensors
-\family default
-\SpecialChar \menuseparator
-
-\family typewriter
-Sonic anemometer
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="left" valignment="top" topline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-
-\family typewriter
-Data source
 \end_layout
 
 \end_inset
@@ -2784,7 +2723,16 @@ Data source
 \begin_layout Plain Layout
 
 \family typewriter
-CSAT3_
+Roughness length, m
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+0
 \end_layout
 
 \end_inset
@@ -2793,22 +2741,7 @@ CSAT3_
 \begin_inset Text
 
 \begin_layout Plain Layout
-
-\family typewriter
-CSAT3_
-\family default
-, 
-\family typewriter
-EC100 
-\begin_inset Note Note
-status open
-
-\begin_layout Plain Layout
-
-\family typewriter
-FIXME
-\end_layout
-
+\begin_inset Formula $0\leq X$
 \end_inset
 
 
@@ -2818,11 +2751,185 @@ FIXME
 </cell>
 </row>
 <row>
-<cell alignment="left" valignment="top" topline="true" leftline="true" usebox="none">
+<cell multirow="4" alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
 \begin_inset Text
 
 \begin_layout Plain Layout
 
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family typewriter
+Max fetch N, m
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+10000
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $0\leq X$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell multirow="4" alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family typewriter
+Max fetch E, m
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+10000
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $0\leq X$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell multirow="4" alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family typewriter
+Max fetch S, m
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+10000
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $0\leq X$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell multirow="4" alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family typewriter
+Max fetch W, m
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+10000
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $0\leq X$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell multirow="3" alignment="left" valignment="middle" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family typewriter
+Sensors
 \end_layout
 
 \end_inset
@@ -2842,8 +2949,6 @@ Azimuth, degEofN
 \begin_inset Text
 
 \begin_layout Plain Layout
-
-\family typewriter
 0
 \end_layout
 
@@ -2863,7 +2968,7 @@ Azimuth, degEofN
 </cell>
 </row>
 <row>
-<cell alignment="left" valignment="top" topline="true" leftline="true" usebox="none">
+<cell multirow="4" alignment="left" valignment="top" topline="true" leftline="true" usebox="none">
 \begin_inset Text
 
 \begin_layout Plain Layout
@@ -2887,8 +2992,6 @@ Height, m
 \begin_inset Text
 
 \begin_layout Plain Layout
-
-\family typewriter
 0
 \end_layout
 
@@ -2914,12 +3017,7 @@ Height, m
 \begin_layout Plain Layout
 
 \family typewriter
-Sensors
-\family default
-\SpecialChar \menuseparator
-
-\family typewriter
-co2/h2o IRGA
+Save changes
 \end_layout
 
 \end_inset
@@ -2930,7 +3028,7 @@ co2/h2o IRGA
 \begin_layout Plain Layout
 
 \family typewriter
-Data source
+Save now?
 \end_layout
 
 \end_inset
@@ -2941,7 +3039,7 @@ Data source
 \begin_layout Plain Layout
 
 \family typewriter
-LI7500_
+Cancel
 \end_layout
 
 \end_inset
@@ -2952,35 +3050,407 @@ LI7500_
 \begin_layout Plain Layout
 
 \family typewriter
-LI7500_
+Cancel
 \family default
 , 
 \family typewriter
-EC100_
+Discard
+\family default
+, 
+\family typewriter
+Save
 \end_layout
 
 \end_inset
 </cell>
 </row>
 <row>
-<cell alignment="left" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+<cell multirow="3" alignment="left" valignment="middle" topline="true" bottomline="true" leftline="true" usebox="none">
 \begin_inset Text
 
 \begin_layout Plain Layout
 
 \family typewriter
-Save changes
+Internals
 \end_layout
 
 \end_inset
 </cell>
-<cell alignment="left" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
 \begin_inset Text
 
 \begin_layout Plain Layout
 
 \family typewriter
-Save now?
+sonic/IRGA
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family typewriter
+CSAT3_LI7500
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family typewriter
+CSAT3_LI7500
+\family default
+, 
+\family typewriter
+CSAT3A_EC150
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell multirow="4" alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family typewriter
+SDM speed
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+30
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+-
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell multirow="4" alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family typewriter
+SDM addr: CSAT3
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+3
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+0-14
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell multirow="4" alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family typewriter
+SDM addr: LI7500
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+7
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+0-14
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell multirow="4" alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family typewriter
+SDM addr: EC100
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+1
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+0-14
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell multirow="4" alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family typewriter
+Min samp flow sLpm
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+2
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+-
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell multirow="4" alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family typewriter
+Min zero flow sLpm
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+0.4
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+-
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell multirow="4" alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family typewriter
+Min declin allowed
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+-35
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+-
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell multirow="4" alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family typewriter
+Max declin allowed
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+35
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+-
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell multirow="4" alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family typewriter
+Recompile now?
 \end_layout
 
 \end_inset
@@ -3006,11 +3476,7 @@ Cancel
 \family default
 , 
 \family typewriter
-Discard
-\family default
-, 
-\family typewriter
-Save
+Yes
 \end_layout
 
 \end_inset
@@ -3037,7 +3503,7 @@ reference "tab:Default-datalogger-settings"
 \end_inset
 
  are described below.
- No changes are retained until the user selects 
+ Changes are not effective until the user selects 
 \family typewriter
 Save changes
 \family default
@@ -3052,7 +3518,11 @@ Save now?
 Save
 \family default
 .
- 
+ Items under the 
+\family sans
+Internals
+\family default
+ submenu are segregated because modifying them requires recompilation.
 \end_layout
 
 \begin_layout Standard
@@ -3072,12 +3542,12 @@ status open
 \begin_layout Plain Layout
 
 \emph on
-Any choices outside the accepted range will be silently range-truncated
- or reset
+Options set outside their accepted range will be silently range-truncated
+ if possible or reset
 \emph default
  
 \emph on
-to their default value!
+to default values!
 \end_layout
 
 \end_inset
@@ -3091,96 +3561,167 @@ Flow
 \end_inset
 
 rates\SpecialChar \menuseparator
-Sampling
+
+\end_layout
+
+\begin_deeper
+\begin_layout Description
+Sampling,
 \begin_inset space \space{}
 \end_inset
 
-(sLpm) Specify (mass) flow rate through denuders
+sLpm Sampling flow rate through denuders
+\begin_inset Foot
+status collapsed
+
+\begin_layout Plain Layout
+ChemComb 3500 denuders are designed for 10 L/min
+\end_layout
+
+\end_inset
+
+.
+ Adjust downward, if necessary, until stable flow rate is achieved.
+ 
 \end_layout
 
 \begin_layout Description
-Flow
-\begin_inset space \space{}
-\end_inset
-
-rates\SpecialChar \menuseparator
 Zero
 \begin_inset space \space{}
 \end_inset
 
-air
+air,
 \begin_inset space ~
 \end_inset
 
-(sLpm) Specify (mass) flow rate of zero air injected into denuder loops.
- Note zero air is injected into both channels from the same source; e.g.
- the 
+sLpm Flow rate of zero air injected into denuder loops.
+ Zero air is injected into both channels from the same source; e.g.
+ the approximate
 \emph on
-approximate
+ 
 \emph default
- flow rate of zero air injected in each loop is half of this value.
+flow rate of zero air injected in each loop is half of this value.
+ 
+\begin_inset VSpace defskip
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset Box Boxed
+position "t"
+hor_pos "c"
+has_inner_box 1
+inner_pos "t"
+use_parbox 0
+use_makebox 0
+width "80col%"
+special "none"
+height "1in"
+height_special "totalheight"
+status open
+
+\begin_layout Plain Layout
+Ensure correct tank pressure (20-25 psi) for proper flow rate control.
 \end_layout
 
+\end_inset
+
+
+\end_layout
+
+\end_deeper
 \begin_layout Description
 Deadband\SpecialChar \menuseparator
+
+\end_layout
+
+\begin_deeper
+\begin_layout Description
 Mult.
 \begin_inset space \space{}
 \end_inset
 
-(0-1) The deadband
+[0-1) The deadband
 \begin_inset CommandInset nomenclature
 LatexCommand nomenclature
-symbol "deadband"
-description "When the vertical wind speed falls within this range, centered around 0 m/s, neither sampling valve is activated"
+symbol "$DB$"
+description "sampling deadband: when the vertical wind speed is within this range neither sampling valve is activated"
 
 \end_inset
 
  is determined by scaling the standard deviation of vertical wind speed
  from the previous output interval by this multiplier: 
-\begin_inset Formula $DB=\sigma_{w}*mult$
+\begin_inset Formula 
+\[
+DB=\sigma_{w}*mult
+\]
+
+\end_inset
+
+If set to zero, will be reset to default value shown in 
+\begin_inset CommandInset ref
+LatexCommand formatted
+reference "tab:Default-datalogger-settings"
+
 \end_inset
 
 .
- If set to zero, will be reset to default value shown in table.
 \end_layout
 
 \begin_layout Description
-Deadband\SpecialChar \menuseparator
 Minimum,
 \begin_inset space \space{}
 \end_inset
 
-m/s This value is the lower bound of permissible deadband values.
- It takes precedence over the specified default value; this means if both
- minimum and default values are modified and the new default deadband value
- is less than the minimum, then the new default deadband value will be increased
- to be equal to the new minimum value.
+m/s Lower bound of permissible dynamic deadband values.
+ This setting takes precedence over default deadband setting: if both minimum
+ and default values are modified and the new default is less than new minimum,
+ then the new minimum will be stored for both values.
 \end_layout
 
 \begin_layout Description
-Deadband\SpecialChar \menuseparator
 Default,
 \begin_inset space \space{}
 \end_inset
 
 m/s Upon starting, the program will initialize the deadband to this value.
- 
 \end_layout
 
+\end_deeper
 \begin_layout Description
-Site
+Site\SpecialChar \menuseparator
+
+\end_layout
+
+\begin_deeper
+\begin_layout Description
+Mag
 \begin_inset space \space{}
 \end_inset
 
-specific\SpecialChar \menuseparator
-Mag.
+declin
 \begin_inset space \space{}
 \end_inset
 
-declination Specify a declination value to enable online compensation.
+degEofTN Specify a declination value to enable online compensation.
  This setting ONLY makes sense if the sonic azimuth is specified relative
  to magnetic north.
- By convention, easterly declinations are positive and westerly declinations
+ Set to 
+\begin_inset Formula $0$
+\end_inset
+
+ if azimuth is specified relative to true north.
+\begin_inset VSpace defskip
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+By convention, easterly declinations are positive and westerly declinations
  negative such that 
 \begin_inset Formula $TrueBearing=MagBearing+MagDeclination$
 \end_inset
@@ -3189,20 +3730,303 @@ declination Specify a declination value to enable online compensation.
 \end_layout
 
 \begin_layout Description
-Sensors\SpecialChar \menuseparator
-Sonic
+Roughness
 \begin_inset space \space{}
 \end_inset
 
-anemometer\SpecialChar \menuseparator
-Data
+length,
 \begin_inset space \space{}
 \end_inset
 
-source Choose the appropriate wind sensor.
- 
+m Site-specific surface roughness --> should be in mm?
 \end_layout
 
+\begin_layout Description
+Max
+\begin_inset space \space{}
+\end_inset
+
+fetch
+\begin_inset space \space{}
+\end_inset
+
+N/E/S/W,
+\begin_inset space \space{}
+\end_inset
+
+m Indicates maximum permitted fetch along corresponding cardinal direction
+ (N/E/S/W) during sampling run.
+ If the computed fetch exceeds ....
+ ???
+\end_layout
+
+\end_deeper
+\begin_layout Description
+Sensors\SpecialChar \menuseparator
+
+\end_layout
+
+\begin_deeper
+\begin_layout Description
+Azimuth,
+\begin_inset space \space{}
+\end_inset
+
+degEofN Direction of sonic anemometer; if specified relative to magnetic
+ north, set appropriate magnetic declination under 
+\family sans
+Site
+\begin_inset space \space{}
+\end_inset
+
+specific\SpecialChar \menuseparator
+Mag
+\begin_inset space \space{}
+\end_inset
+
+declin
+\begin_inset space \space{}
+\end_inset
+
+degEofTN.
+\end_layout
+
+\begin_layout Description
+Height,
+\begin_inset space \space{}
+\end_inset
+
+m Midpoint height of sonic anemometer; should be approximate height of denuder
+ sampling inlets.
+\end_layout
+
+\end_deeper
+\begin_layout Description
+Save
+\begin_inset space \space{}
+\end_inset
+
+changes\SpecialChar \menuseparator
+
+\end_layout
+
+\begin_deeper
+\begin_layout Description
+Save
+\begin_inset space \space{}
+\end_inset
+
+now? To make changes effective, change from 
+\begin_inset Flex Code
+status collapsed
+
+\begin_layout Plain Layout
+Cancel
+\end_layout
+
+\end_inset
+
+ to 
+\begin_inset Flex Code
+status collapsed
+
+\begin_layout Plain Layout
+Save
+\end_layout
+
+\end_inset
+
+.
+ Modifications can be discarded by changing to 
+\begin_inset Flex Code
+status collapsed
+
+\begin_layout Plain Layout
+Discard
+\end_layout
+
+\end_inset
+
+.
+ Menu option is reset to 
+\family typewriter
+Cancel
+\family default
+ after action is completed.
+\end_layout
+
+\end_deeper
+\begin_layout Description
+Internals\SpecialChar \menuseparator
+
+\end_layout
+
+\begin_deeper
+\begin_layout Description
+\begin_inset Box Shadowbox
+position "t"
+hor_pos "c"
+has_inner_box 1
+inner_pos "t"
+use_parbox 0
+use_makebox 0
+width "90col%"
+special "none"
+height "1in"
+height_special "totalheight"
+status collapsed
+
+\begin_layout Plain Layout
+Modifying options in the Internals menu results in program recompilation!
+ Be sure to save any changes to other settings before modifying internals!
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Description
+sonic/IRGA Select appropriate sensor pair: 
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+\begin_inset Flex Code
+status collapsed
+
+\begin_layout Plain Layout
+CSAT3_LI7500
+\end_layout
+
+\end_inset
+
+ for Campbell Scientific sonic anemometer (CSAT3) and LI-COR open-path IRGA
+ (LI7500)
+\end_layout
+
+\begin_layout Itemize
+\begin_inset Flex Code
+status collapsed
+
+\begin_layout Plain Layout
+CSAT3A_EC150
+\end_layout
+
+\end_inset
+
+ for Campbell Scientific integrated sonic anemometer (CSAT3A) and open-path
+ IRGA (EC150)
+\end_layout
+
+\end_deeper
+\begin_layout Description
+SDM
+\begin_inset space \space{}
+\end_inset
+
+speed Adjust clock speed of proprietary data line (SDM); should never be
+ necessary
+\end_layout
+
+\begin_layout Description
+SDM
+\begin_inset space \space{}
+\end_inset
+
+addr:
+\begin_inset space \space{}
+\end_inset
+
+CSAT3/LI7500/EC100 Set non-default address on proprietary data line (SDM)
+\end_layout
+
+\begin_layout Description
+Min
+\begin_inset space \space{}
+\end_inset
+
+samp
+\begin_inset space \space{}
+\end_inset
+
+flow
+\begin_inset space \space{}
+\end_inset
+
+sLpm Minimum sampling flow rate allowed
+\end_layout
+
+\begin_layout Description
+Min
+\begin_inset space \space{}
+\end_inset
+
+zero
+\begin_inset space \space{}
+\end_inset
+
+flow
+\begin_inset space \space{}
+\end_inset
+
+sLpm Minimum zero air flow rate allowed
+\end_layout
+
+\begin_layout Description
+Min
+\begin_inset space \space{}
+\end_inset
+
+declin
+\begin_inset space \space{}
+\end_inset
+
+allowed Minimum magnetic declination allowed
+\end_layout
+
+\begin_layout Description
+Max
+\begin_inset space \space{}
+\end_inset
+
+declin
+\begin_inset space \space{}
+\end_inset
+
+allowed Maximum magnetic declination allowed
+\end_layout
+
+\begin_layout Description
+Recompile
+\begin_inset space \space{}
+\end_inset
+
+now? To make changes effective, change from 
+\begin_inset Flex Code
+status collapsed
+
+\begin_layout Plain Layout
+Cancel
+\end_layout
+
+\end_inset
+
+ to 
+\begin_inset Flex Code
+status collapsed
+
+\begin_layout Plain Layout
+Yes
+\end_layout
+
+\end_inset
+
+.
+ Program will begin recompiling immediately.
+\end_layout
+
+\end_deeper
 \begin_layout Standard
 \begin_inset Newpage clearpage
 \end_inset

@@ -23,10 +23,10 @@ ConstTable
   Const EC100_ADDR = 1   'default EC100/EC150/CSAT3A address: 1
   
   'self-imposed value limits on some settings options
-  Const DECLIN_MAX = 20
-  Const DECLIN_MIN = -20
-  Const UPDNFLOW_MIN = 4 'flow maxes specified under analog scaling
-  Const ZEROFLOW_MIN = 0.5
+  Const UPDNFLOW_MIN = 2 'max settings are specified under analog scaling
+  Const ZEROFLOW_MIN = 0.4
+  Const DECLIN_MIN = -35
+  Const DECLIN_MAX = 35
 EndConstTable
 
 '----- WIRING -----
@@ -80,13 +80,7 @@ Const RperD = PI/180          'radians per degree
 Const DperR = 180/PI          'degrees per radian
 
 '----- CUSTOM MENU DEFINITIONS -----
-Const Disable = False
-Const Enable = True
-Const Cancel = 1000
-Const Discard = 1001
-Const Save = 1002
-Const SingleRun = 1005
-Const Recurring = 1006
+
 
 '----- PORT CONTROL MASKS -----
 Const MASK_UPDN_OFF = 2^(C_UPDN_OFF-1)   '0000 0001
@@ -109,19 +103,19 @@ Const MASK_RUNNING = (MASK_MFC_PWR OR MASK_PUMP_ON) 'neither MFC valve OFF
 
 '----- DEFAULT SETTINGS -----
 Const DEF_DATA_SRCS = CSAT3_LI7500
-Const DEF_SON_AZIMUTH = 0    'degEofN
-Const DEF_SON_HEIGHT = 0     'm
-Const DEF_SITE_DECLIN = 0    'degEofTN
-Const DEF_SITE_RUFNESS = 0   'm
-Const DEF_MAX_FETCH_N = 1000 'm
-Const DEF_MAX_FETCH_E = 1000 'm
-Const DEF_MAX_FETCH_S = 1000 'm
-Const DEF_MAX_FETCH_W = 1000 'm
-Const DEF_UPDN_FLOW = 10     'sLpm
-Const DEF_ZERO_FLOW = 2      'sLpm
-Const DEF_DBAND_MULT = 0.5   '0 < X <= 1
-Const DEF_DBAND_MIN = 0.05   'm/s
-Const DEF_DBAND_DEF = 0.1    'm/s
+Const DEF_SON_AZIMUTH = 0     'degEofN
+Const DEF_SON_HEIGHT = 0      'm
+Const DEF_SITE_DECLIN = 0     'degEofTN
+Const DEF_SITE_RUFNESS = 0    'm
+Const DEF_MAX_FETCH_N = 10000 'm
+Const DEF_MAX_FETCH_E = 10000 'm
+Const DEF_MAX_FETCH_S = 10000 'm
+Const DEF_MAX_FETCH_W = 10000 'm
+Const DEF_UPDN_FLOW = 10      'sLpm
+Const DEF_ZERO_FLOW = 2       'sLpm
+Const DEF_DBAND_MULT = 0.5    '0 < X <= 1
+Const DEF_DBAND_MIN = 0.05    'm/s
+Const DEF_DBAND_DEF = 0.1     'm/s
 
 
 '===============================  PROGRAM OPERATION  ======================================
@@ -468,11 +462,18 @@ DataTable(progsettings,True,1000)
     Units deadband_default = m/s
 EndTable
 
-'===============================  DEVICE CONFIGURATION  ======================================
-
-'==========  CUSTOM MENU  ==========
+'===============================  CUSTOM MENU  ======================================
+Const Disable = False
+Const Enable = True
+Const Cancel = False
+Const Discard = 1001
+Const Save = 1002
+Const Yes = True
+Const SingleRun = 1005
+Const Recurring = 1006
+Dim recompile As Boolean
 DisplayMenu("MainScreen",-1) 'or -2
-  SubMenu("Program Setup")
+  SubMenu("REA Settings")
 '    SubMenu("Schedule Run")
 '      MenuItem("Type", cho_run_freq)
 '        MenuPick(SingleRun, Recurring)
@@ -484,25 +485,23 @@ DisplayMenu("MainScreen",-1) 'or -2
 '      MenuItem("Preset")
 '    EndSubMenu
     SubMenu("Flow rates")
-      MenuItem("Sampling (sLpm)", cho_updn_flow)
-      MenuItem("Zero air (sLpm)", cho_zero_flow)
+      MenuItem("Sampling, sLpm", cho_updn_flow)
+      MenuItem("Zero air, sLpm", cho_zero_flow)
     EndSubMenu
     SubMenu("Deadband")
-      MenuItem("Mult. (0-1)", cho_dband_mult)
+      MenuItem("Mult. [0-1)", cho_dband_mult)
       MenuItem("Minimum, m/s", cho_dband_min)
       MenuItem("Default, m/s", cho_dband_def)
     EndSubMenu
-    SubMenu("Site specific")
-      MenuItem("Mag. declin., degEofN", cho_site_declin)
-      MenuItem("Surface roughness, m", cho_site_rufness)
+    SubMenu("Site")
+      MenuItem("Mag declin degEofTN", cho_site_declin)
+      MenuItem("Roughness length, m", cho_site_rufness)
       MenuItem("Max fetch N, m", cho_max_fetch_N)
       MenuItem("Max fetch E, m", cho_max_fetch_E)
       MenuItem("Max fetch S, m", cho_max_fetch_S)
       MenuItem("Max fetch W, m", cho_max_fetch_W)
     EndSubMenu
     SubMenu("Sensors")
-      MenuItem("Data sources", cho_data_srcs)
-        MenuPick(CSAT3_LI7500, CSAT3A_EC150)
       MenuItem("Azimuth, degEofN", cho_son_azimuth)
       MenuItem("Height, m", cho_son_height)
     EndSubMenu
@@ -512,6 +511,23 @@ DisplayMenu("MainScreen",-1) 'or -2
       'TODO:
       'MenuItem("Reset to defaults?")
       'MenuPick(Cancel,Yes)
+    EndSubMenu
+    SubMenu("Internals")
+      MenuItem("sonic/IRGA", DATA_SRCS)
+        MenuPick(DATA_SRCS, CSAT3_LI7500, CSAT3A_EC150)
+      MenuItem("SDM speed", SDM_SPEED)
+      MenuItem("SDM addr: CSAT3", CSAT_ADDR)
+        MenuPick(CSAT_ADDR,0,1,2,3,4,5,6,7,8,9,10,11,12,13,14)
+      MenuItem("SDM addr: LI7500", LI7500_ADDR)
+        MenuPick(LI7500_ADDR,0,1,2,3,4,5,6,7,8,9,10,11,12,13,14)
+      MenuItem("SDM addr: EC100", EC100_ADDR)
+        MenuPick(EC100_ADDR,0,1,2,3,4,5,6,7,8,9,10,11,12,13,14)
+      MenuItem("Min samp flow sLpm", UPDNFLOW_MIN)
+      MenuItem("Min zero flow sLpm", ZEROFLOW_MIN)
+      MenuItem("Min declin allowed", DECLIN_MIN)
+      MenuItem("Max declin allowed", DECLIN_MAX)
+      MenuRecompile("Recompile now?", recompile)
+        MenuPick(Cancel,Yes)
     EndSubMenu
   EndSubMenu
 EndMenu
@@ -649,23 +665,22 @@ EndSub
 
 
 '===============================  MAIN PROGRAM  ======================================
-
 BeginProg
   Call setup()
   Call reset_rea()
   Scan(FAST_INTV,mSec,FAST_BUFF,0)
-'    If (set_data_srcs=CSAT3A_EC150) Then
-'      EC100(ec100_raw(1),EC100_ADDR,1)
-'      Move(sonic(1),5,ec100_raw(1),5)
-'      irga_CO2 = ec100_raw(6)
-'      irga_H2O = ec100_raw(7)
-'      irga_diag = ec100_raw(8)
-'      irga_press = ec100_raw(10)
-'      irga_signal = ec100_raw(
-'    Else
+    #If (DATA_SRCS=CSAT3A_EC150) Then
+      EC100(ec100_raw(1),EC100_ADDR,1)
+      Move(sonic(1),5,ec100_raw(1),5)
+      irga_CO2 = ec100_raw(6)
+      irga_H2O = ec100_raw(7)
+      irga_diag = ec100_raw(8)
+      irga_press = ec100_raw(10)
+      'irga_signal = ec100_raw(
+    #Else
       CS7500(irga_CO2,1,LI7500_ADDR,LI7500_CMD)
       CSAT3(sonic_Ux,1,CSAT_ADDR,CSAT3_CMD,CSAT3_OPT)
-'    EndIf
+    #EndIf
     
     If (True) Then 'XXX in REA mode
       Uz_rot = sonic_Uz*CT - sonic_Ux*ST*CE - sonic_Uy*ST*SE 'online double rotation
