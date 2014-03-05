@@ -6,10 +6,8 @@
 \begin_preamble
 \usepackage{ifpdf} % part of the hyperref bundle
 \ifpdf % if pdflatex is used
-
- % set fonts for nicer pdf view
- \IfFileExists{lmodern.sty}{\usepackage{lmodern}}{}
-
+  % set fonts for nicer pdf view
+  \IfFileExists{lmodern.sty}{\usepackage{lmodern}}{}
 \fi % end if pdflatex is used
 
 % the pages of the TOC is numbered roman
@@ -33,6 +31,8 @@
 % 5 subparagraph: 10em 5em
 % \renewcommand*\l@<type>{\@dottedtocline{<level>}{<indent>}{<numwidth>}
 \renewcommand*\l@subsection{\@dottedtocline{2}{3.8em}{3.2em}}
+
+\renewcommand{\nomname}{List of Symbols}
 \end_preamble
 \options intoc
 \use_default_options true
@@ -578,15 +578,7 @@ Open-path CO
 
 \end_inset
 
-O analyzer 
-\begin_inset CommandInset nomenclature
-LatexCommand nomenclature
-symbol "IRGA"
-description "Infrared gas analyzer"
-
-\end_inset
-
-(LI-7500; LI-COR Biosciences)
+O analyzer (LI-7500; LI-COR Biosciences)
 \end_layout
 
 \end_deeper
@@ -1009,6 +1001,14 @@ The vertical flux
 \begin_inset Formula $F$
 \end_inset
 
+
+\begin_inset CommandInset nomenclature
+LatexCommand nomenclature
+symbol "$F$"
+description "vertical flux of some constituent"
+
+\end_inset
+
  of some constituent 
 \emph on
 X 
@@ -1029,8 +1029,24 @@ X
 \begin_inset Formula $\sigma_{w}$
 \end_inset
 
-is the standard deviation of instantaneous vertical wind speed; and 
+
+\begin_inset CommandInset nomenclature
+LatexCommand nomenclature
+symbol "$\\sigma_{w}$"
+description "standard deviation of vertical wind speed"
+
+\end_inset
+
+ is the standard deviation of instantaneous vertical wind speed; and 
 \begin_inset Formula $\beta$
+\end_inset
+
+
+\begin_inset CommandInset nomenclature
+LatexCommand nomenclature
+symbol "$\\beta$"
+description "REA relaxation coefficient"
+
 \end_inset
 
  is an empirical coefficient.
@@ -1132,6 +1148,38 @@ down
 \end_inset
 
  respectively results in:
+\begin_inset CommandInset nomenclature
+LatexCommand nomenclature
+symbol "$t$"
+description "time duration"
+
+\end_inset
+
+
+\begin_inset CommandInset nomenclature
+LatexCommand nomenclature
+symbol "$f$"
+description "flow rate"
+
+\end_inset
+
+
+\begin_inset CommandInset nomenclature
+LatexCommand nomenclature
+symbol "$m$"
+description "mass of some constituent"
+
+\end_inset
+
+
+\begin_inset CommandInset nomenclature
+LatexCommand nomenclature
+symbol "$\\alpha$"
+description "valve activation ratio"
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Standard
