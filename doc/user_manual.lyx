@@ -2591,7 +2591,7 @@ Deadband
 
 \family typewriter
 Mult.
- (0-1)
+ [0-1)
 \end_layout
 
 \end_inset
@@ -2652,7 +2652,7 @@ Minimum, m/s
 \begin_inset Text
 
 \begin_layout Plain Layout
-\begin_inset Formula $0<X\leq default\: DB$
+\begin_inset Formula $0<X$
 \end_inset
 
 
@@ -3053,12 +3053,36 @@ Save
 \family default
 .
  
+\end_layout
+
+\begin_layout Standard
+\begin_inset Box Shadowbox
+position "t"
+hor_pos "c"
+has_inner_box 1
+inner_pos "t"
+use_parbox 0
+use_makebox 0
+width "100col%"
+special "none"
+height "1in"
+height_special "totalheight"
+status open
+
+\begin_layout Plain Layout
+
 \emph on
-Any choices outside the accepted range will be silently reset
+Any choices outside the accepted range will be silently range-truncated
+ or reset
 \emph default
  
 \emph on
 to their default value!
+\end_layout
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Description
@@ -3116,7 +3140,8 @@ description "When the vertical wind speed falls within this range, centered arou
 \begin_inset Formula $DB=\sigma_{w}*mult$
 \end_inset
 
-
+.
+ If set to zero, will be reset to default value shown in table.
 \end_layout
 
 \begin_layout Description
@@ -3126,6 +3151,10 @@ Minimum,
 \end_inset
 
 m/s This value is the lower bound of permissible deadband values.
+ It takes precedence over the specified default value; this means if both
+ minimum and default values are modified and the new default deadband value
+ is less than the minimum, then the new default deadband value will be increased
+ to be equal to the new minimum value.
 \end_layout
 
 \begin_layout Description
