@@ -358,6 +358,68 @@ Initial draft
 \end_inset
 
 
+\end_layout
+
+\begin_layout Standard
+\begin_inset Box Boxed
+position "t"
+hor_pos "c"
+has_inner_box 1
+inner_pos "t"
+use_parbox 0
+use_makebox 0
+width "100col%"
+special "none"
+height "1in"
+height_special "totalheight"
+status open
+
+\begin_layout Plain Layout
+This system was jointly developed by the Department of Civil & Environmental
+ Engineering and the Department of Animal Sciences at Washington State Universit
+y, Pullman, WA.
+ 
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset VSpace bigskip
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+Funding provided by grants X, Y, Z.
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset VSpace bigskip
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+Developers include Patrick O'Keeffe, Christopher Gambino, Jennifer Michal,
+ Gene Allwine, Dr.
+ Shelley Pressley, Dr.
+ Kristen Johnson and Dr.
+ Brian Lamb.
+ Further acknowledgements go to Dr.
+ Kristen Baum and Dr.
+ Jay Ham.
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Newpage clearpage
+\end_inset
+
+
 \begin_inset CommandInset toc
 LatexCommand tableofcontents
 
