@@ -294,7 +294,7 @@ Public covary(6)
   'covary(5) <-- lag_CO2
   'covary(6) <-- lag_H2O
 
-Public cov_out(22)
+Public cov_out(25)
 Alias cov_out(1)  = Ux_Avg
 Alias cov_out(2)  = Uy_Avg
 Alias cov_out(3)  = Uz_Avg
@@ -315,8 +315,11 @@ Alias cov_out(16) = WD_unit_Std
 Alias cov_out(18) = WS_rslt_Avg
 Alias cov_out(19) = WD_rslt_Avg
 Alias cov_out(20) = WD_rslt_Std
-Alias cov_out(21) = hmp_T_Avg
-Alias cov_out(22) = hmp_e_Avg
+Alias cov_out(21) = vlv_up_on_Tot
+Alias cov_out(22) = vlv_dn_on_Tot
+Alias cov_out(23) = vlv_possible
+Alias cov_out(24) = hmp_T_Avg
+Alias cov_out(25) = hmp_e_Avg
 Units Ux_Avg = m/s
 Units Uy_Avg = m/s
 Units Uz_Avg = m/s
@@ -331,6 +334,9 @@ Units WD_unit_Std = deg
 Units WS_rslt_Avg = m/s
 Units WD_rslt_Avg = degEofN
 Units WD_rslt_Std = deg
+Units vlv_up_on_Tot = scans
+Units vlv_dn_on_Tot = scans
+Units vlv_possible = scans
 Units hmp_T_Avg = degC
 Units hmp_e_Avg = kPa
 
@@ -384,7 +390,10 @@ DataTable(work_cov,TRUE,1)
   WindVector(1,lag_Ux,-1*lag_Uy,IEEE4,disable_sonic,0,1,2)
     'Opt2: mean horiz WS, rslt mean WS, rslt mean WD, WS-weighted WD sdev using CSI eqn
     FieldNames("dup, WS_rslt_Avg, WD_rslt_Avg, WD_rslt_Std")
-  
+  Totalize(1,vlv_up_is_on,UINT4,vlv_up_is_on=NAN)
+  Totalize(1,vlv_dn_is_on,UINT4,vlv_dn_is_on=NAN)
+  Totalize(1,1,UINT4,False)
+
   Average(1,hmp_T,IEEE4,(inbetween_1hz_scan OR hmp_T=NAN))
   Average(1,hmp_e,IEEE4,(inbetween_1hz_scan OR hmp_e=NAN))
 EndTable
@@ -419,7 +428,18 @@ DataTable(ts_slow,True,-1)
   Sample(1,flow_zero,IEEE4)
 EndTable
 
-' stats file here
+DataTable(flux,True,-1)
+  DataInterval(0,STAT_INTV,Min,10)
+  CardOut(1,-1)
+  
+  'sample sigma W
+  'sample beta
+  'sample average flow up & down
+  Sample(1,vlv_up_on_Tot/vlv_possible,FP2)
+    FieldNames("frac_up_on")
+  Sample(1,vlv_dn_on_Tot/vlv_possible,FP2)
+    FieldNames("frac_dn_on")
+EndTable
 
 DataTable(info,1,100)
   CardOut(1,100)
