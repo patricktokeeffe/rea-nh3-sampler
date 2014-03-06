@@ -130,8 +130,7 @@ Const STAT_INTV = 30   'frequency of output statistics, minutes
 Const CSAT3_CMD = 91  'trigger + get wind & temp data
 Const CSAT3_OPT = INT(1000/FAST_INTV) 'calc Hz from interval
 Const LI7500_CMD = 6  'get co2, h2o, press & diagnostic
-Const EC100_CMD = 1  'get Ux/Uy/Uz, Ts, sonic diag, CO2, H2O, 
-'** The LI7500 reports co2/h2o in _MOLAR_ density while EC100 reports in _MASS_ density **
+Const EC100_CMD = 1  'get Ux/Uy/Uz, Ts, sonic diag, CO2, H2O, etc
 
 '----- SDM device delays -----
 Const CSAT3_DELAY = 2   'fixed @ 2 measurements
@@ -148,36 +147,36 @@ Const WRITEFILE = 0
 Const READFILE = 1
 
 Dim choices(NUM_SETTINGS)
-Alias choices(1)  = cho_data_srcs
-Alias choices(2)  = cho_son_azimuth
-Alias choices(3)  = cho_son_height
-Alias choices(4)  = cho_site_declin
-Alias choices(5)  = cho_site_rufness
-Alias choices(6)  = cho_max_fetch_N
-Alias choices(7)  = cho_max_fetch_E
-Alias choices(8)  = cho_max_fetch_S
-Alias choices(9)  = cho_max_fetch_W
-Alias choices(10) = cho_updn_flow
-Alias choices(11) = cho_zero_flow
-Alias choices(12) = cho_dband_mult
-Alias choices(13) = cho_dband_min
-Alias choices(14) = cho_dband_def
+Alias choices(1)  = cho_flow_updn
+Alias choices(2)  = cho_flow_zero
+Alias choices(3)  = cho_dband_mult
+Alias choices(4)  = cho_dband_min
+Alias choices(5)  = cho_dband_def
+Alias choices(6)  = cho_site_declin
+Alias choices(7)  = cho_site_rufness
+Alias choices(8)  = cho_site_fetch_N
+Alias choices(9)  = cho_site_fetch_E
+Alias choices(10) = cho_site_fetch_S
+Alias choices(11) = cho_site_fetch_W
+Alias choices(12) = cho_son_azimuth
+Alias choices(13) = cho_son_height
+
 
 Dim settings(NUM_SETTINGS)
-Alias settings(1)  = set_data_srcs
-Alias settings(2)  = set_son_azimuth
-Alias settings(3)  = set_son_height
-Alias settings(4)  = set_site_declin
-Alias settings(5)  = set_site_rufness
-Alias settings(6)  = set_max_fetch_N
-Alias settings(7)  = set_max_fetch_E
-Alias settings(8)  = set_max_fetch_S
-Alias settings(9)  = set_max_fetch_W
-Alias settings(10) = set_updn_flow
-Alias settings(11) = set_zero_flow
-Alias settings(12) = set_dband_mult
-Alias settings(13) = set_dband_min
-Alias settings(14) = set_dband_def
+Alias settings(1)  = set_flow_updn
+Alias settings(2)  = set_flow_zero
+Alias settings(3)  = set_dband_mult
+Alias settings(4)  = set_dband_min
+Alias settings(5)  = set_dband_def
+Alias settings(6)  = set_site_declin
+Alias settings(7)  = set_site_rufness
+Alias settings(8)  = set_site_fetch_N
+Alias settings(9)  = set_site_fetch_E
+Alias settings(10) = set_site_fetch_S
+Alias settings(11) = set_site_fetch_W
+Alias settings(12) = set_son_azimuth
+Alias settings(13) = set_son_height
+
 
 Dim just_had_1hz_scan As Boolean 'data table exclusion flags
 Dim inbetween_1hz_scan As Boolean
@@ -187,6 +186,7 @@ Dim inbetween_1hz_scan As Boolean
 
 '----- SENSORS -----
 Dim ec100_raw(12) 'Campbellsci EC100/EC150/CSAT3A
+'EC150 reports in mass density, not molar density!
 
 Public sonic(5)
 Alias sonic(1) = sonic_Ux
@@ -505,8 +505,8 @@ DisplayMenu("MainScreen",-1) 'or -2
 '      MenuItem("Preset")
 '    EndSubMenu
     SubMenu("Flow rates")
-      MenuItem("Sampling, sLpm", cho_updn_flow)
-      MenuItem("Zero air, sLpm", cho_zero_flow)
+      MenuItem("Sampling, sLpm", cho_flow_updn)
+      MenuItem("Zero air, sLpm", cho_flow_zero)
     EndSubMenu
     SubMenu("Deadband")
       MenuItem("Mult. [0-1)", cho_dband_mult)
@@ -516,10 +516,10 @@ DisplayMenu("MainScreen",-1) 'or -2
     SubMenu("Site")
       MenuItem("Mag declin degEofTN", cho_site_declin)
       MenuItem("Roughness length, m", cho_site_rufness)
-      MenuItem("Max fetch N, m", cho_max_fetch_N)
-      MenuItem("Max fetch E, m", cho_max_fetch_E)
-      MenuItem("Max fetch S, m", cho_max_fetch_S)
-      MenuItem("Max fetch W, m", cho_max_fetch_W)
+      MenuItem("Max fetch N, m", cho_site_fetch_N)
+      MenuItem("Max fetch E, m", cho_site_fetch_E)
+      MenuItem("Max fetch S, m", cho_site_fetch_S)
+      MenuItem("Max fetch W, m", cho_site_fetch_W)
     EndSubMenu
     SubMenu("Sensors")
       MenuItem("Azimuth, degEofN", cho_son_azimuth)
@@ -597,21 +597,20 @@ EndFunction
 
 
 '===============================  SUBROUTINES  ======================================
-Sub set_default_choices()  'assume:
-  cho_data_srcs = DEF_DATA_SRCS
-  cho_son_azimuth = DEF_SON_AZIMUTH
-  cho_son_height = DEF_SON_HEIGHT
-  cho_site_declin = DEF_SITE_DECLIN
-  cho_site_rufness = DEF_SITE_RUFNESS
-  cho_max_fetch_N = DEF_MAX_FETCH_N
-  cho_max_fetch_E = DEF_MAX_FETCH_E
-  cho_max_fetch_S = DEF_MAX_FETCH_S
-  cho_max_fetch_W = DEF_MAX_FETCH_W
-  cho_updn_flow = DEF_UPDN_FLOW
-  cho_zero_flow = DEF_ZERO_FLOW
+Sub set_default_choices()
+  cho_flow_updn = DEF_UPDN_FLOW
+  cho_flow_zero = DEF_ZERO_FLOW
   cho_dband_mult = DEF_DBAND_MULT
   cho_dband_min = DEF_DBAND_MIN
   cho_dband_def = DEF_DBAND_DEF
+  cho_site_declin = DEF_SITE_DECLIN
+  cho_site_rufness = DEF_SITE_RUFNESS
+  cho_site_fetch_N = DEF_MAX_FETCH_N
+  cho_site_fetch_E = DEF_MAX_FETCH_E
+  cho_site_fetch_S = DEF_MAX_FETCH_S
+  cho_site_fetch_W = DEF_MAX_FETCH_W
+  cho_son_azimuth = DEF_SON_AZIMUTH
+  cho_son_height = DEF_SON_HEIGHT
 EndSub
 
 Sub populate_choices()
@@ -628,14 +627,14 @@ Sub save_current_choices()
   If (cho_site_declin < DECLIN_MIN) Then (cho_site_declin = DECLIN_MIN)
   If (cho_site_declin > DECLIN_MAX) Then (cho_site_declin = DECLIN_MAX)
   If (cho_site_rufness < 0) Then (cho_site_rufness = 0)
-  If (cho_max_fetch_N < 0) Then (cho_max_fetch_N = 0)
-  If (cho_max_fetch_E < 0) Then (cho_max_fetch_E = 0)
-  If (cho_max_fetch_S < 0) Then (cho_max_fetch_S = 0)
-  If (cho_max_fetch_W < 0) Then (cho_max_fetch_W = 0)
-  If (cho_updn_flow < UPDNFLOW_MIN) Then (cho_updn_flow = UPDNFLOW_MIN)
-  If (cho_updn_flow > UPDNFLOW_MAX) Then (cho_updn_flow = UPDNFLOW_MAX)
-  If (cho_zero_flow < ZEROFLOW_MIN) Then (cho_zero_flow = ZEROFLOW_MIN)
-  If (cho_zero_flow > ZEROFLOW_MAX) Then (cho_zero_flow = ZEROFLOW_MAX)
+  If (cho_site_fetch_N < 0) Then (cho_site_fetch_N = 0)
+  If (cho_site_fetch_E < 0) Then (cho_site_fetch_E = 0)
+  If (cho_site_fetch_S < 0) Then (cho_site_fetch_S = 0)
+  If (cho_site_fetch_W < 0) Then (cho_site_fetch_W = 0)
+  If (cho_flow_updn < UPDNFLOW_MIN) Then (cho_flow_updn = UPDNFLOW_MIN)
+  If (cho_flow_updn > UPDNFLOW_MAX) Then (cho_flow_updn = UPDNFLOW_MAX)
+  If (cho_flow_zero < ZEROFLOW_MIN) Then (cho_flow_zero = ZEROFLOW_MIN)
+  If (cho_flow_zero > ZEROFLOW_MAX) Then (cho_flow_zero = ZEROFLOW_MAX)
   'note: order matters when validating dband settings!
   If (cho_dband_min < 0) Then (cho_dband_min = 0)
   If (cho_dband_def < cho_dband_min) Then (cho_dband_def = cho_dband_min)
@@ -645,8 +644,8 @@ Sub save_current_choices()
   'Populate dependent variables
   'irga_signal = IIF(cho_data_srcs=CSAT3_LI7500, NAN, irga_signal) 'XXX
     'LI7500 stores AGC ("signal") within diagnostic but EC150 does not
-  setpnt_sample = cho_updn_flow/MFC_UPDN_MULT
-  setpnt_zero = cho_zero_flow/MFC_ZERO_MULT
+  setpnt_sample = cho_flow_updn/MFC_UPDN_MULT
+  setpnt_zero = cho_flow_zero/MFC_ZERO_MULT
 
   Move(settings(1),NUM_SETTINGS,choices(1),NUM_SETTINGS)
   Calfile(settings,NUM_SETTINGS,SETTINGS_FILE,WRITEFILE)
@@ -692,8 +691,9 @@ BeginProg
     #If (DATA_SRCS=CSAT3A_EC150) Then
       EC100(ec100_raw(1),EC100_ADDR,1)
       Move(sonic(1),5,ec100_raw(1),5)
-      irga_CO2 = ec100_raw(6)
-      irga_H2O = ec100_raw(7)
+      'CRITICAL: convert mass density to molar density units
+      irga_CO2 = ec100_raw(6)/MW_co2 
+      irga_H2O = ec100_raw(7)*1000/MW_h2o
       irga_diag = ec100_raw(8)
       irga_press = ec100_raw(10)
       'irga_signal = ec100_raw(
@@ -727,24 +727,49 @@ BeginProg
       GetRecord(lagged(1),work_lag,LAG_SCANS)
       Move(aligned(10),2,lagged(10),2) 'inst. valve state
       
-      If (set_data_srcs=CSAT3A_EC150) Then
+      #If (DATA_SRCS=CSAT3A_EC150) Then
         GetRecord(lagged(1),work_lag,LAG_SCANS-EC100_DELAY)
         Move(aligned(1),9,lagged(1),9)
-      Else
+        If (lag_sonic_diag <> NAN) Then
+          'CSAT3A: bits 0-5 are diag flags, true when hi
+          disable_sonic = lag_sonic_diag AND &h3F '= 0011 1111
+        Else
+          Move(lag_Ux,5,NAN,1)
+          disable_sonic = True
+        EndIf
+        If ((lag_irga_diag <> NAN) AND (lag_irga_diag <> -1)) Then
+          'EC150: bit 0 is HI when any diag flag is true
+          'treat all bits high (-1) like NAN
+          disable_irga = disable_sonic OR (lag_irga_diag AND &h1)
+        Else
+          lag_CO2 = NAN
+          lag_H2O = NAN
+          lag_press = NAN
+          disable_irga = True
+      #Else
         GetRecord(lagged(1),work_lag,LAG_SCANS-CSAT3_DELAY)
         Move(aligned(1),5,lagged(1),5)
-        lag_sonic_diag = IIF(lag_sonic_diag=NAN, &h0F, lag_sonic_diag/&h1000)
-        'Only retain 4 MSB (b12-b15) and if NAN, set all bits high
+        If (lag_sonic_diag <> NAN) Then
+          'CSAT3: bits 12-15 are diag flags
+          disable_sonic = lag_sonic_diag AND &hF000
+        Else
+          Move(lag_Ux,5,NAN,1)
+          disable_sonic = True
+        EndIf
         
         GetRecord(lagged(1),work_lag,LAG_SCANS-LI7500_DELAY)
         Move(aligned(6),4,lagged(6),4)
-        lag_irga_diag = IIF(lag_irga_diag=NAN, &hF0, lag_irga_diag XOR &hF0)
-        'Flip diag bit states to proper boolean and if NAN, set all bits high
-        lag_irga_diag /= &h10 'Only retain 4 MSB (b4-7)
-        'TODO determine how to keep AGC value!
-      EndIf
-      disable_sonic = (lag_sonic_diag > 0)
-      disable_irga = (lag_irga_diag > 0)
+        If (lag_irga_diag <> NAN) Then
+          'LI7500: bits 4-7 are diag flags, high is false
+          'AGC% encoded in bits 0-3
+          disable_irga = (lag_irga_diag XOR &hF0) AND &hF0
+        Else
+          lag_CO2 = NAN
+          lag_H2O = NAN
+          lag_press = NAN
+          disable_irga = True
+        EndIf
+      #EndIf
 
       'TODO 
       'estimate mixing ratios - not ideal to do at 10 Hz; should use stats values
