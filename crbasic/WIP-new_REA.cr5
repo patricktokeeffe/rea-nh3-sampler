@@ -1,4 +1,4 @@
-''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
 ' Denuder-based Relaxed Eddy Accumulation (REA) Flux Measurement System
 '
 ' Laboratory for Atmospheric Research
@@ -9,9 +9,9 @@
 '           pokeeffe@wsu.edu
 '           (509) 335-7246
 '
-''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
 
-'===============================  DEVICE CONFIGURATION  ======================================
+'=====================  DEVICE CONFIGURATION  ================================
 Const CSAT3_LI7500 = 1003 'aliases for menu
 Const CSAT3A_EC150 = 1004
 ConstTable
@@ -42,7 +42,7 @@ Const MFC_ZERO_CAO = 2
 
 Const C_UPDN_OFF = 1 'C1: valve off for UP/DN MFCs
 Const C_ZERO_OFF = 2 'C2: valve off for zero MFC
-Const C_UPDN_PRG = 3 'C3: valve purge for UP/DN MFCs <-- purge not implemented XXX
+Const C_UPDN_PRG = 3 'C3: valve purge for UP/DN MFCs <- not implemented XXX
 Const C_ZERO_PRG = 4 'C4: valve purge for zero MFC
 Const C_VLV_UP = 5   'C5: 3-way valve at UP denuder inlet
 Const C_VLV_DN = 6   'C6: 3-way valve at DN denuder inlet
@@ -64,23 +64,22 @@ Const MFC_ZERO_MULT = ZEROFLOW_MAX / 5000 '0-5 sLpm / 0-5V
 Const MFC_ZERO_OFF = 0
 
 
-'===============================  IMPORTANT CONSTANTS  ======================================
+'==========================  IMPORTANT CONSTANTS  ============================
 '----- PHYSICAL -----
-Const Cpd = 1005.7 	          'specific heat capacity of dry air, J/(kg K)
-Const Cw = 1820               'specific heat capacity of water, J/(kg K)
+Const Cpd = 1004.67           'specific heat capacity of dry air, J/(kg K)
+'Const Cw = 1820               'specific heat capacity of water, J/(kg K)
 Const MW_h2o = 18.01528       'molecular weight of water, g/mol
 Const MW_co2 = 44.010         'molecular weight of carbon dioxide, g/mol
 Const MW_air = 28.98          'molecular weight of dry air, g/mol
 Const MU_WPL = MW_air/MW_h2o  'Ratio of MW of dry air to that of water vapor
 Const R = 8.3143*10^-3        'Universal gas constant, (kPa m^3)/(K mol)
-Const Rd = R/MW_air		        'Gas constant for dry air, (kPa m^3)/(K g)
-Const Rv = R/MW_h2o		        'Gas constant for water vapor, (kPa m^3)/(K g)
-Const PI = 3.14159	          'Mathematical constant pi
-Const RperD = PI/180          'radians per degree
-Const DperR = 180/PI          'degrees per radian
-
-'----- CUSTOM MENU DEFINITIONS -----
-
+Const Rd = R/MW_air           'Gas constant for dry air, (kPa m^3)/(K g)
+'Const Rv = R/MW_h2o           'Gas constant for water vapor, (kPa m^3)/(K g)
+Const K_ = 0.41               'Von Karman constant, dimless
+Const G_ = 9.81               'Gravity, m/s^2
+Const PI = 3.14159            'Mathematical constant pi
+'Const RperD = PI/180          'radians per degree
+'Const DperR = 180/PI          'degrees per radian
 
 '----- PORT CONTROL MASKS -----
 Const MASK_UPDN_OFF = 2^(C_UPDN_OFF-1)   '0000 0001
@@ -97,8 +96,9 @@ Const MASK_OFF = &B00000000
 Const MASK_FLOW = (MASK_MFC_PWR OR MASK_PUMP_ON OR MASK_ZERO_OFF OR MASK_UPDN_OFF)
 Const MASK_ALL = (MASK_FLOW OR MASK_UPDN_VLV)
 'TODO verify reset mask, add standby mask
-Const MASK_RESET = (MASK_MFC_PWR OR MASK_UPDN_OFF) 'standby: MFCs power ON, pump OFF, 
-                   'up valve OFF, dn valve OFF, zero mfc NOT valve OFF, up/dn mfc valve OFF
+Const MASK_RESET = (MASK_MFC_PWR OR MASK_UPDN_OFF) 
+    'XXX standby: MFCs power ON, pump OFF, 
+    'up valve OFF, dn valve OFF, zero mfc NOT valve OFF, up/dn mfc valve OFF
 Const MASK_RUNNING = (MASK_MFC_PWR OR MASK_PUMP_ON) 'neither MFC valve OFF 
 
 '----- DEFAULT SETTINGS -----
@@ -118,7 +118,7 @@ Const DEF_DBAND_MIN = 0.05    'm/s
 Const DEF_DBAND_DEF = 0.1     'm/s
 
 
-'===============================  PROGRAM OPERATION  ======================================
+'==========================  PROGRAM OPERATION  ==============================
 
 Const INTEG = 250      'analog integration time
 Const FAST_INTV = 100  'length of main scan, msec = 10 Hz
@@ -133,10 +133,10 @@ Const LI7500_CMD = 6  'get co2, h2o, press & diagnostic
 Const EC100_CMD = 1  'get Ux/Uy/Uz, Ts, sonic diag, CO2, H2O, etc
 
 '----- SDM device delays -----
-Const CSAT3_DELAY = 2   'fixed @ 2 measurements
-Const LI7500_DELAY = 2 'SDM/RS232: BaseDelay=186ms with DelayStep=2 -> Delay=199ms
+Const CSAT3_DELAY = 2  'fixed @ 2 measurements
+Const LI7500_DELAY = 2 'SDM/RS232: BaseDelay=186ms & DelayStep=2 -> Delay=199ms
 Const EC100_DELAY = 0  'TODO
-Const LAG_SCANS = 5     'large enough to accomodate all delays
+Const LAG_SCANS = 5    'large enough to accomodate all delays
 
 '----- SETTINGS FILE -----
 Dim filehandle As Long
@@ -161,7 +161,6 @@ Alias choices(11) = cho_site_fetch_W
 Alias choices(12) = cho_son_azimuth
 Alias choices(13) = cho_son_height
 
-
 Dim settings(NUM_SETTINGS)
 Alias settings(1)  = set_flow_updn
 Alias settings(2)  = set_flow_zero
@@ -176,13 +175,26 @@ Alias settings(10) = set_site_fetch_S
 Alias settings(11) = set_site_fetch_W
 Alias settings(12) = set_son_azimuth
 Alias settings(13) = set_son_height
+Units set_flow_updn = sLpm
+Units set_flow_zero = sLpm
+Units set_dband_mult = ratio
+Units set_dband_min = m/s
+Units set_dband_def = m/s
+Units set_site_declin = degEofTN
+Units set_site_rufness = cm
+Units set_site_fetch_N = m
+Units set_site_fetch_E = m
+Units set_site_fetch_S = m
+Units set_site_fetch_W = m
+Units set_son_azimuth = degEofN
+Units set_son_height = m
 
 
 Dim just_had_1hz_scan As Boolean 'data table exclusion flags
 Dim inbetween_1hz_scan As Boolean
 
 
-'===============================  VARIABLES  ==============================================
+'===============================  VARIABLES  =================================
 
 '----- SENSORS -----
 Dim ec100_raw(12) 'Campbellsci EC100/EC150/CSAT3A
@@ -203,7 +215,7 @@ Alias irga(1) = irga_CO2
 Alias irga(2) = irga_H2O
 Alias irga(3) = irga_press
 Alias irga(4) = irga_diag
-Alias irga(5) = irga_signal 'TODO figure out if/how to retain AGC or CO2/H2O signal strength
+Alias irga(5) = irga_signal 'TODO retain AGC or CO2/H2O signal strength?
 Units irga = mmol/m^3
 Units irga_press = kPa
 Units irga_diag = bitmap
@@ -247,8 +259,8 @@ Alias ctrlport(2) = zero_mfc_is_off 'makeup air MFC off signal
 Alias ctrlport(3) = updn_purging 'up/dn MFC valve purge signal
 Alias ctrlport(4) = zero_purging 'makeup air MFC valve purge signal
 Alias ctrlport(5) = vlv_up_is_on 'REA valve up eddy
-Alias ctrlport(6) = vlv_dn_is_on	'REA valve dn eddy
-Alias ctrlport(7) = pump_is_on	'turns air pump off/on
+Alias ctrlport(6) = vlv_dn_is_on    'REA valve dn eddy
+Alias ctrlport(7) = pump_is_on    'turns air pump off/on
 Alias ctrlport(8) = mfc_pwr_is_on 'zero MFC valve
 
 '----- PROCESSING ------
@@ -260,9 +272,9 @@ Public disable_irga As Boolean
 
 Dim lagged(11) 'update lagged record retrieval if array dimensions change
 Public aligned(11)
-Alias aligned(1)  = lag_Uz 'match covary(6) order
-Alias aligned(2)  = lag_Ux
-Alias aligned(3)  = lag_Uy
+Alias aligned(1)  = lag_Ux
+Alias aligned(2)  = lag_Uy
+Alias aligned(3)  = lag_Uz
 Alias aligned(4)  = lag_Ts
 Alias aligned(5)  = lag_sonic_diag
 Alias aligned(6)  = lag_CO2
@@ -284,42 +296,51 @@ Units lag_irga_diag = bitmap
 'Units lag_irga_signal = ratio
 'no units for valve booleans
 
-Public denom 'for calculating mixing ratios - TODO Dim 
+'Public denom 'for calculating mixing ratios - TODO Dim 
 
-Public covary(6)
-  'covary(1) <-- lag_Uz
-  'covary(2) <-- lag_Ux
-  'covary(3) <-- lag_Uz
-  'covary(4) <-- lag_Ts
-  'covary(5) <-- lag_CO2
-  'covary(6) <-- lag_H2O
-
-Public cov_out(25)
+Public cov_sonic(1,4)'= [ [Ts,  Ux, Uy, Uz] ]
+Public cov_irga(2,4) '= [ [CO2, Ux, Uy, Uz], 
+                     '    [H2O, Ux, Uy, Uz],
+                     '    [Tc,  Ux, Uy, Uz] ]  <-- Tc not implemented!
+Public cov_out(37)
 Alias cov_out(1)  = Ux_Avg
 Alias cov_out(2)  = Uy_Avg
 Alias cov_out(3)  = Uz_Avg
 Alias cov_out(4)  = Ts_Avg
-Alias cov_out(5)  = CO2_Avg
-Alias cov_out(6)  = H2O_Avg
-Alias cov_out(7)  = press_Avg
-Alias cov_out(8)  = cov_Uz_Uz
-Alias cov_out(9)  = cov_Uz_Ux
-Alias cov_out(10) = cov_Uz_Uy
-Alias cov_out(11) = cov_Uz_Ts
-Alias cov_out(12) = cov_Uz_CO2
-Alias cov_out(13) = cov_Uz_H2O
-Alias cov_out(14) = WS_sclr_Avg
-Alias cov_out(15) = WD_unit_Avg
-Alias cov_out(16) = WD_unit_Std
-'Alias cov_out(17) = duplicate
-Alias cov_out(18) = WS_rslt_Avg
-Alias cov_out(19) = WD_rslt_Avg
-Alias cov_out(20) = WD_rslt_Std
-Alias cov_out(21) = vlv_up_on_Tot
-Alias cov_out(22) = vlv_dn_on_Tot
-Alias cov_out(23) = vlv_possible
-Alias cov_out(24) = hmp_T_Avg
-Alias cov_out(25) = hmp_e_Avg
+Alias cov_out(5)  = Ts_Std
+Alias cov_out(6)  = cov_Ts_Ux
+Alias cov_out(7)  = cov_Ts_Uy
+Alias cov_out(8)  = cov_Ts_Uz
+Alias cov_out(9)  = cov_Ux_Ux
+Alias cov_out(10) = cov_Ux_Uy
+Alias cov_out(11) = cov_Ux_Uz
+Alias cov_out(12) = cov_Uy_Uy
+Alias cov_out(13) = cov_Uy_Uz
+Alias cov_out(14) = Uz_Std
+Alias cov_out(15) = WS_sclr_Avg
+Alias cov_out(16) = WD_unit_Avg
+Alias cov_out(17) = WD_unit_Std
+'Alias cov_out(18) = duplicate
+Alias cov_out(19) = WS_rslt_Avg
+Alias cov_out(20) = WD_rslt_Avg
+Alias cov_out(21) = WD_rslt_Std
+Alias cov_out(22) = CO2_Avg
+Alias cov_out(23) = H2O_Avg
+Alias cov_out(24) = press_Avg
+Alias cov_out(25) = CO2_Std
+Alias cov_out(26) = cov_CO2_Ux
+Alias cov_out(27) = cov_CO2_Uy
+Alias cov_out(28) = cov_CO2_Uz
+Alias cov_out(29) = H2O_Std
+Alias cov_out(30) = cov_H2O_Ux
+Alias cov_out(31) = cov_H2O_Uy
+Alias cov_out(32) = cov_H2O_Uz
+'XXX implement Tc covariances?
+Alias cov_out(33) = vlv_up_on_Tot
+Alias cov_out(34) = vlv_dn_on_Tot
+Alias cov_out(35) = vlv_possible
+Alias cov_out(36) = hmp_T_Avg
+Alias cov_out(37) = hmp_e_Avg
 Units Ux_Avg = m/s
 Units Uy_Avg = m/s
 Units Uz_Avg = m/s
@@ -327,7 +348,11 @@ Units Ts_Avg = degC
 Units CO2_Avg = mmol/m^3
 Units H2O_Avg = mmol/m^3
 Units press_Avg = kPa
-'ignore cov units
+Units Ts_Std = degC
+Units Uz_Std = m/s
+Units CO2_Std = mmol/m^3
+Units H2O_Std = mmol/m^3
+'ignore other cov units
 Units WS_sclr_Avg = m/s
 Units WD_unit_Avg = degEofN
 Units WD_unit_Std = deg
@@ -340,11 +365,6 @@ Units vlv_possible = scans
 Units hmp_T_Avg = degC
 Units hmp_e_Avg = kPa
 
-Public hmp_e_sat_Avg 'derived from stats
-Public hmp_RH_Avg
-Units hmp_e_sat_Avg = kPa
-Units hmp_RH_Avg = %
-
 Dim sqrt_UV 'double-rotation calcs
 Dim sqrt_UVW
 Public rot_angles(4) 
@@ -354,14 +374,41 @@ Alias rot_angles(3) = CE
 Alias rot_angles(4) = SE
 Units rot_angles = radian
 
-Public rotated(3) 'rotated output
-Alias rotated(1) = U_Avg
-Alias rotated(2) = V_Avg
-Alias rotated(3) = W_Avg
-Units rotated = m/s
+'Public rotated(3) 'rotated output
+'Alias rotated(1) = U_Avg
+'Alias rotated(2) = V_Avg
+'Alias rotated(3) = W_Avg
+'Units rotated = m/s
+
+Public hmp_e_sat_Avg 'derived from stats
+Public hmp_RH_Avg
+Units hmp_e_sat_Avg = kPa
+Units hmp_RH_Avg = %
+
+Public L      'Obukhov length
+Public u_star 'friction velocity
+Public tau    'horizontal momentum flux
+Public rho_d  'dry air density
+Public rho_a  'ambient (moist) air density
+Public Lv     'latent heat of vaporization of water
+Units L = m
+Units u_star = m/s
+Units tau = (m/s)^2
+Units rho_d = g/m^3
+Units rho_a = kg/m^3
+Units Lv = J/g
+
+Public Fco2 'carbon dioxide flux
+Public LE   'latent heat flux
+Public Hs   'sensible heat flux
+Dim WPL_LE  'Webb Pearson Leuning (?) correction 1
+Dim WPL_Hs  'WPL correction 2
+Units Fco2 = g/(m^2 s)
+Units LE = W/m^2
+Units Hs = W/m^2
 
 
-'===============================  DATA TABLES  ======================================
+'===============================  DATA TABLES  ===============================
 
 '----- WORKING TABLES -----
 DataTable(work_lag,TRUE,LAG_SCANS)
@@ -376,20 +423,24 @@ EndTable
 
 DataTable(work_cov,TRUE,1)
   DataInterval(0,STAT_INTV,Min,5)
-  Average(1,lag_Uz,IEEE4,disable_sonic)
   Average(1,lag_Ux,IEEE4,disable_sonic)
   Average(1,lag_Uy,IEEE4,disable_sonic)
+  Average(1,lag_Uz,IEEE4,disable_sonic)
   Average(1,lag_Ts,IEEE4,disable_sonic)
+  Covariance(4,cov_sonic(1,1),IEEE4,disable_sonic,10)
+  WindVector(1,-1*lag_Uy,lag_Ux,IEEE4,disable_sonic,0,1,1) 
+  'Opt1: mean horiz WS, unit vctr mean WD, and std WD using Yamartino eqn
+  WindVector(1,-1*lag_Uy,lag_Ux,IEEE4,disable_sonic,0,1,2)
+  'Opt2: mean horiz WS, rslt mean WS, rslt mean WD, WS-weighted WD sdev CSI eqn
+  'TODO sonic_uptime
+
   Average(1,lag_CO2,IEEE4,disable_irga)
   Average(1,lag_H2O,IEEE4,disable_irga)
   Average(1,lag_press,IEEE4,disable_irga)
-  Covariance(6,covary(1),IEEE4,disable_sonic OR disable_irga,6)
-  WindVector(1,lag_Ux,-1*lag_Uy,IEEE4,disable_sonic,0,1,1) 
-    'Opt1: mean horiz WS, unit vctr mean WD, and std WD using Yamartino eqn
-    FieldNames("WS_sclr_Avg, WD_unit_Avg, WD_unit_Std")
-  WindVector(1,lag_Ux,-1*lag_Uy,IEEE4,disable_sonic,0,1,2)
-    'Opt2: mean horiz WS, rslt mean WS, rslt mean WD, WS-weighted WD sdev using CSI eqn
-    FieldNames("dup, WS_rslt_Avg, WD_rslt_Avg, WD_rslt_Std")
+  Covariance(4,cov_irga(1,1),IEEE4,disable_irga,4)
+  Covariance(4,cov_irga(1,2),IEEE4,disable_irga,4)
+  'Covariance(4,cov_irga(1,3),IEEE4,disable_irga,4)
+  
   Totalize(1,vlv_up_is_on,UINT4,vlv_up_is_on=NAN)
   Totalize(1,vlv_dn_is_on,UINT4,vlv_dn_is_on=NAN)
   Totalize(1,1,UINT4,False)
@@ -401,7 +452,7 @@ EndTable
 '----- FINAL OUTPUTS -----
 DataTable(ts_fast,True,-1)
   DataInterval(0,FAST_INTV,mSec,10)
-  CardOut(1,-1)
+  CardOut(1,-1) 'XXX make fixed size in days
   Sample(1,sonic_Ux,IEEE4)
   Sample(1,sonic_Uy,IEEE4)
   Sample(1,sonic_Uz,IEEE4)
@@ -420,7 +471,7 @@ EndTable
 
 DataTable(ts_slow,True,-1)
   DataInterval(0,SLOW_INTV,Sec,10)
-  CardOut(1,-1)
+  CardOut(1,-1) 'XXX make fixed size in days
   Sample(1,hmp_T,IEEE4)
   Sample(1,hmp_RH,IEEE4)
   Sample(1,flow_up,IEEE4)
@@ -428,11 +479,11 @@ DataTable(ts_slow,True,-1)
   Sample(1,flow_zero,IEEE4)
 EndTable
 
-DataTable(flux,True,-1)
+DataTable(rea,True,-1) 'XXX rea on trigger?
   DataInterval(0,STAT_INTV,Min,10)
-  CardOut(1,-1)
+  CardOut(1,-1) 'XXX make fixed size in days
   
-  'sample sigma W
+  Sample(1,Uz_Std,FP2)
   'sample beta
   'sample average flow up & down
   Sample(1,vlv_up_on_Tot/vlv_possible,FP2)
@@ -441,8 +492,43 @@ DataTable(flux,True,-1)
     FieldNames("frac_dn_on")
 EndTable
 
+DataTable(met,True,-1)
+  DataInterval(0,STAT_INTV,Min,10)
+  CardOut(1,-1) 'XXX make fixed size in days
+  Sample(1,1,FP2)
+  'XXX
+EndTable
+
 DataTable(info,1,100)
   CardOut(1,100)
+  Sample(1,set_flow_updn,FP2)
+    FieldNames("sample_flow")
+  Sample(1,set_flow_zero,FP2)
+    FieldNames("zero_flow")
+  Sample(1,set_dband_mult,FP2)
+    FieldNames("deadband_mult")
+  Sample(1,set_dband_min,FP2)
+    FieldNames("deadband_min")
+  Sample(1,set_dband_def,FP2)
+    FieldNames("deadband_default")
+  Sample(1,set_site_declin,FP2)
+    FieldNames("site_mag_declin")
+  Sample(1,set_site_rufness,FP2)
+    FieldNames("site_roughness")
+  Sample(1,set_site_fetch_N,IEEE4)
+    FieldNames("site_fetch_N")
+  Sample(1,set_site_fetch_E,IEEE4)
+    FieldNames("site_fetch_E")
+  Sample(1,set_site_fetch_S,IEEE4)
+    FieldNames("site_fetch_S")
+  Sample(1,set_site_fetch_W,IEEE4)
+    FieldNames("site_fetch_W")
+  Sample(1,set_son_azimuth,FP2)
+    FieldNames("sonic_azimuth")
+  Sample(1,set_son_height,FP2)
+    FieldNames("sonic_height")
+  Sample(1,DATA_SRCS,FP2)
+    FieldNames("data_sources")
   Sample(1,Status.CompileResults,String)
     FieldNames("CompileResults")
   Sample(1,Status.CardStatus,String)
@@ -454,35 +540,8 @@ DataTable(info,1,100)
 '    FieldNames("ProgSig")
 EndTable
 
-DataTable(progsettings,True,1000)
-  CardOut(1,1000)
-  'TODO track data source?
-  Sample(1,set_son_azimuth,FP2)
-    FieldNames("sonic_azimuth")
-    Units sonic_azimuth = degEofN
-  Sample(1,set_son_height,FP2)
-    FieldNames("sonic_height")
-    Units sonic_height = meter
-  Sample(1,set_site_declin,FP2)
-    FieldNames("site_magdeclin")
-    Units site_magdeclin = degEofTN
-  Sample(1,set_site_rufness,FP2)
-    FieldNames("site_roughness")
-    Units site_roughness = meter
-  'changes to flow setpoints should be obvious from data files
-  'XXX may record them to distinguish operator changes from issues?
-  Sample(1,set_dband_mult,FP2)
-    FieldNames("deadband_mult")
-    Units deadband_mult = ratio
-  Sample(1,set_dband_min,FP2)
-    FieldNames("deadband_min")
-    Units deadband_min = m/s
-  Sample(1,set_dband_def,FP2)
-    FieldNames("deadband_default")
-    Units deadband_default = m/s
-EndTable
 
-'===============================  CUSTOM MENU  ======================================
+'==============================  CUSTOM MENU  ================================
 Const Disable = False
 Const Enable = True
 Const Cancel = False
@@ -552,21 +611,21 @@ DisplayMenu("MainScreen",-1) 'or -2
   EndSubMenu
 EndMenu
 
-'===============================  FUNCTIONS  ========================================
+'===============================  FUNCTIONS  =================================
 
 'estimate latent heat of vaporization by formula 8 from:
 ' A new formula for latent heat of vaporization as a function of temperature.
 ' By B. Henderson-Sellers, Dept. of Mathematics, University of Salford
 ' Quart. J. R. Met. Soc. (1984), 110, pp 1186-1190
-' Lv = 1.91846*10^6{T/(T-33.91)}^2    where  Lv = lat. heat of vapor, J/kg
-'                                            T  = temperature, Kelvin
+' Lv = 1.91846E6*(T/(T-33.91))^2    where  Lv = lat. heat of vapor, J/kg
+'                                          T  = temperature, Kelvin
 Function LatentHeatVapH2O(temp)
   Return 1918.46*( (temp+273.15)/(temp+239.24) )^2 'J/g
 EndFunction
 
 'footprint calc, Hsieh et al, 2000
-Dim Dh, Ph, Zu, Zm, Zo
 Function FootprintEstimate(L_)
+  Dim Dh, Ph, Zu, Zm, Zo
   Zm = set_son_height 'm
   Zo = set_site_rufness 'm
   Zu = Zm * (LOG(Zm/Zo) - 1 + (Zo/Zm))
@@ -589,14 +648,15 @@ Function TurbulenceTest(zeta)
     If (zeta < -2 OR zeta >= 1) Then
       Return 999 'XXX better sentinel? NAN?
     Else
-      itt_model = 1.25 * IIF(zeta < 0, (1 + 3*ABS(zeta))^(1/3.), (1 + 0.2*zeta))
+      'XXX verify can multiply an IIF
+      itt_model = 1.25*IIF(zeta < 0, (1 + 3*ABS(zeta))^(1/3.), (1 + 0.2*zeta))
       'XXX fix reference to Uz_std
       Return 100'*ABS((W_Std/u_star) - itt_model)/itt_model
     EndIf
 EndFunction
 
 
-'===============================  SUBROUTINES  ======================================
+'===============================  SUBROUTINES  ===============================
 Sub set_default_choices()
   cho_flow_updn = DEF_UPDN_FLOW
   cho_flow_zero = DEF_ZERO_FLOW
@@ -683,7 +743,7 @@ Sub reset_rea()
 EndSub
 
 
-'===============================  MAIN PROGRAM  ======================================
+'===============================  MAIN PROGRAM  ==============================
 BeginProg
   Call setup()
   Call reset_rea()
@@ -696,18 +756,14 @@ BeginProg
       irga_H2O = ec100_raw(7)*1000/MW_h2o
       irga_diag = ec100_raw(8)
       irga_press = ec100_raw(10)
-      'irga_signal = ec100_raw(
     #Else
       CS7500(irga_CO2,1,LI7500_ADDR,LI7500_CMD)
       CSAT3(sonic_Ux,1,CSAT_ADDR,CSAT3_CMD,CSAT3_OPT)
     #EndIf
     
+    Uz_rot = sonic_Uz*CT - sonic_Ux*ST*CE - sonic_Uy*ST*SE
     If (True) Then 'XXX in REA mode
-      Uz_rot = sonic_Uz*CT - sonic_Ux*ST*CE - sonic_Uy*ST*SE 'online double rotation
-      If (Uz_rot = NAN) Then
-        vlv_up_is_on = False
-        vlv_dn_is_on = False
-      ElseIf (Uz_rot >= deadband) Then
+      If (Uz_rot >= deadband) Then
         vlv_up_is_on = True
         vlv_dn_is_on = False
       ElseIf (Uz_rot <= neg_deadband) Then
@@ -718,15 +774,14 @@ BeginProg
         vlv_dn_is_on = False
       EndIf
     EndIf
-    PortSet(C_VLV_UP,vlv_up_is_on) 'not WriteIO so scheduled as measurement task
-    PortSet(C_VLV_DN,vlv_dn_is_on) '  instead of (buffered) processing task
+    'use PortSet not WriteIO to ensure happens immediately
+    'instead of later as processing task
+    PortSet(C_VLV_UP,vlv_up_is_on)
+    PortSet(C_VLV_DN,vlv_dn_is_on)
 
     CallTable(ts_fast)
     CallTable(work_lag)
     If (work_lag.Output(1,LAG_SCANS)) Then
-      GetRecord(lagged(1),work_lag,LAG_SCANS)
-      Move(aligned(10),2,lagged(10),2) 'inst. valve state
-      
       #If (DATA_SRCS=CSAT3A_EC150) Then
         GetRecord(lagged(1),work_lag,LAG_SCANS-EC100_DELAY)
         Move(aligned(1),9,lagged(1),9)
@@ -771,85 +826,117 @@ BeginProg
         EndIf
       #EndIf
 
-      'TODO 
-      'estimate mixing ratios - not ideal to do at 10 Hz; should use stats values
-      'denom = 
+      GetRecord(lagged(1),work_lag,LAG_SCANS)
+      Move(aligned(10),2,lagged(10),2) 'inst. valve state
       
-      Move(covary(1),4,lag_Uz,4) 'load covariance array
-      Move(covary(5),2,lag_CO2,2)
+      cov_sonic(1,1) = lag_Ts
+      Move(cov_sonic(1,2),3,lag_Ux,3)
+      cov_irga(1,1) = lag_CO2
+      cov_irga(2,1) = lag_H2O
+      'cov_irga(3,1) = lag_Tc
+      Move(cov_irga(1,2),3,lag_Ux,3)
+      Move(cov_irga(2,2),3,lag_Ux,3)
+      'Move(cov_irga(3,2),3,lag_Ux,3)
 
       CallTable(work_cov)
       If (work_cov.Output(1,1)) Then
         GetRecord(cov_out(1),work_cov,1)
-			  'Wind coordinate rotation: met->natural as described in: 
-			  '  Chapter 3, Appendix A from Handbook of Micrometeorology, ed. Lee, Massman and Law
-			  'Also in:
-			  '  Finnigan J.J., Clement R., Malhi Y., Leuning R., Cleugh H.A. A re-evaluation of 
-			  '  long-term flux measurement techniques, Part I: Averaging and Coordinate Rotation. 
-			  '  Boundary-Layer Meteorology 107: 1-48, 2003. 
-			  'Given original met components: Ux, Uy, Uz
-			  'Then by forcing mean lateral & vertical winds towards zero, the rotated "streamwise" 
-			  'vectors are given by:
-			  '    U2 = Ux*CT*CE + Uy*CT*SE + Uz*ST
-			  '    V2 = Uy*CE - Ux*SE
-			  '    W2 = Uz*CT - Ux*ST*CE - Uy*ST*SE
-			  '  where
-			  '    CE = |U1|/sqrt( |U1|^2 + |V1|^2 )
-			  '    SE = |V1|/sqrt( |U1|^2 + |V1|^2 )
-			  '    CT = sqrt( |U1|^2 + |V1|^2 )/sqrt( |U1|^2 + |V1|^2 + |W1|^2 )
-			  '    ST = |W1|/sqrt( |U1|^2 + |V1|^2 + |W1|^2 )
-			  'These two rotations align base vector e1 (x-axis) to mean HZ WD and a third rotation 
-			  'is needed to fix e2,e3. This is done by forcing Cov(Uy,Uw) to zero but since it often 
-    	  'results in physically unrealistic orientations, this step is also often ignored.
-			  '    U3 = U2
-			  '    V3 = V2*CB + W2*SB
-			  '    W3 = W2*CB - V2*SB
-			  '  where
-			  '    CB = cos( 0.5*atan(2*Cov(V2,W2) / (Cov(V2,V2) - Cov(W2,W2))) )
-			  '    SB = sin( 0.5*atan*2*Cov(V2,W2) / (Cov(V2,V2) - Cov(W2,W2))) )
-			  '
-			  'In this program, only first two rotations are performed. Rotated values are used in 
-			  'flux calcs but be aware this procecure acts as a high-pass filter removing contributions
-			  'from eddies of period greater than averaging time (30min)!
+        
+        'TODO sonic_uptime
+        'TODO irga_uptime
+        
+        'Wind coordinate rotation: met->natural as described in: 
+        '  Chapter 3, Appendix A from Handbook of Micrometeorology, ed. Lee, 
+        '    Massman and Law
+        '
+        'Also in:
+        '  Finnigan J.J., Clement R., Malhi Y., Leuning R., Cleugh H.A. A 
+        '  re-evaluation of long-term flux measurement techniques, Part I: 
+        '  Averaging and Coordinate Rotation. Boundary-Layer Meteorology 
+        '  107: 1-48, 2003.
+        '
+        'Given original met components: Ux, Uy, Uz
+        '
+        'By forcing mean lateral & vertical winds towards zero, the rotated
+        ' "streamwise" vectors are given by:
+        '    U2 = Ux*CT*CE + Uy*CT*SE + Uz*ST
+        '    V2 = Uy*CE - Ux*SE
+        '    W2 = Uz*CT - Ux*ST*CE - Uy*ST*SE
+        '  where
+        '    CE = |U1|/sqrt( |U1|^2 + |V1|^2 )
+        '    SE = |V1|/sqrt( |U1|^2 + |V1|^2 )
+        '    CT = sqrt( |U1|^2 + |V1|^2 )/sqrt( |U1|^2 + |V1|^2 + |W1|^2 )
+        '    ST = |W1|/sqrt( |U1|^2 + |V1|^2 + |W1|^2 )
+        '
+        'These two rotations align base vector e1 (x-axis) to mean HZ WD and a 
+        'third rotation is needed to fix e2,e3. This is done by forcing 
+        'Cov(Uy,Uw) to zero but since it often results in physically 
+        'unrealistic orientations, this step is also often ignored.
+        '    U3 = U2
+        '    V3 = V2*CB + W2*SB
+        '    W3 = W2*CB - V2*SB
+        '  where
+        '    CB = cos( 0.5*atan(2*Cov(V2,W2) / (Cov(V2,V2) - Cov(W2,W2))) )
+        '    SB = sin( 0.5*atan*2*Cov(V2,W2) / (Cov(V2,V2) - Cov(W2,W2))) )
+        '
+        'In this program, only first two rotations are performed. Rotated 
+        'values are used in flux calcs but be aware this procecure acts as a 
+        'high-pass filter removing contributions from eddies of period greater 
+        'than averaging time (30min)!
         sqrt_UV = SQR(Ux_Avg^2 + Uy_Avg)
         sqrt_UVW = SQR(Ux_Avg^2 + Uy_Avg^2 + Uz_Avg^2)
         CE = Ux_Avg/sqrt_UV
         SE = Uy_Avg/sqrt_UV
         CT = sqrt_UV/sqrt_UVW
         ST = Uz_Avg/sqrt_UVW
-        U_Avg = Ux_Avg*CT*CE + Uy_Avg*CT*SE + Uz_Avg*ST
-        V_Avg = Uy_Avg*CE - Ux_Avg*SE
-        W_Avg = Uz_Avg*CT - Ux_Avg*ST*CE - Uy_Avg*ST*SE
+'XXX
+'        U_Avg = Ux_Avg*CT*CE + Uy_Avg*CT*SE + Uz_Avg*ST
+'        V_Avg = Uy_Avg*CE - Ux_Avg*SE
+'        W_Avg = Uz_Avg*CT - Ux_Avg*ST*CE - Uy_Avg*ST*SE
         
         'adjust WD to relect sonic azimuth
-        WD_unit_Avg = (360 + WD_unit_Avg + set_son_azimuth + set_site_declin) MOD 360
-        WD_rslt_Avg = (360 + WD_rslt_Avg + set_son_azimuth + set_site_declin) MOD 360
+        WD_unit_Avg = (360+WD_unit_Avg+set_son_azimuth+set_site_declin) MOD 360
+        WD_rslt_Avg = (360+WD_rslt_Avg+set_son_azimuth+set_site_declin) MOD 360
 
-        'XXX estimate latent heat
-        'Lv = LatentHeatVapH2O(mean_temp) <-- does this require HMP integration?
+        Uz_Std = SQR(Uz_Std) 'variances -> stdevs
+        Ts_Std = SQR(Ts_Std)
+        CO2_Std = SQR(CO2_Std)
+        H2O_Std = SQR(H2O_Std)
         
-        'XXX calculate mean RH using avg T & avg e
         SatVP(hmp_e_sat_Avg,hmp_T_Avg)
         hmp_RH_Avg = 100*hmp_e_Avg/hmp_e_sat_Avg
+
+        Lv = LatentHeatVapH2O(hmp_T_Avg)
+        '? specific heat capacity of moist air: Cpm
+        rho_d = (press_Avg - hmp_e_Avg)/(Rd*(hmp_T_Avg+273.15))
+        rho_a = NAN 'XXX FIXME
         
-        'calculate -->
-        'density of dry & moist air: rho_d, rho_a
-        'specific heat capacity of moist air: Cpm
-        'friction velocity: u_star
-        'uncorrected fluxes (e.g. cov)
+        tau = SQR(cov_Ux_Uz^2 + cov_Uy_Uz^2)
+        u_star = SQR(tau)
+        tau *= rho_a
+        L = -u_star^3 *(hmp_T_Avg+273.15)/(K_*G_*cov_Ts_Uz)
+
+        Fco2 = cov_CO2_Uz
+        LE = cov_H2O_Uz * Lv
+        Hs = cov_Ts_Uz * rho_a * Cpd
+
         'WPL terms for water vapor flux
         'corrected sensible heat flux
         'WPL terms for carbon dioxide flux
-        'Obukhov length
+        
         'stability parameter
         'footprint
         'is within fetch
-        'new deadband size deadband
         'integral turbulence test
         '(bonus: stationarity)
+        
+        'new deadband size deadband
+
         'correction factors for std. L -> L
         'new sampling flow rate
         'new zero air flow rate
+        
+        'calculate valve
         
         'control REA sampling state
         'check timer, etc
@@ -878,6 +965,8 @@ BeginProg
     VaporPressure(hmp_e, hmp_T, hmp_RH)
 
     CallTable(ts_slow)
+    CallTable(rea)
+    CallTable(met)
 
     'XXX does deactivating "Boost" affect operation?
     ExciteCAO(MFC_UPDN_CAO,setpnt_sample,False,False)
@@ -889,7 +978,7 @@ BeginProg
     ElseIf (save_changes = Save) Then
       save_current_choices()
       save_changes = Cancel
-      CallTable(progsettings)
+      CallTable(info)
     EndIf
     
     just_had_1hz_scan = True
