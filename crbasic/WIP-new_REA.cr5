@@ -12,10 +12,10 @@
 ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
 
 '=====================  DEVICE CONFIGURATION  ================================
-Const CSAT3_LI7500 = 1003 'aliases for menu
-Const CSAT3A_EC150 = 1004
+Const SDM_CSAT3_LI7500 = 1003 'aliases for menu
+Const SDM_CSAT3A_EC150 = 1004
 ConstTable
-  Const DATA_SRCS = CSAT3_LI7500
+  Const DATA_SRCS = SDM_CSAT3_LI7500
   'things which MUST be constants and therefore cannot be in "settings file"
   Const SDM_SPEED = 30   'default: 30 usec; accepts 8 usec - 3 msec
   Const CSAT_ADDR = 3    'default CSAT3 SDM address: 3
@@ -101,22 +101,6 @@ Const MASK_RESET = (MASK_MFC_PWR OR MASK_UPDN_OFF)
     'up valve OFF, dn valve OFF, zero mfc NOT valve OFF, up/dn mfc valve OFF
 Const MASK_RUNNING = (MASK_MFC_PWR OR MASK_PUMP_ON) 'neither MFC valve OFF 
 
-'----- DEFAULT SETTINGS -----
-Const DEF_DATA_SRCS = CSAT3_LI7500
-Const DEF_SON_AZIMUTH = 0     'degEofN
-Const DEF_SON_HEIGHT = 0      'm
-Const DEF_SITE_DECLIN = 0     'degEofTN
-Const DEF_SITE_RUFNESS = 0    'm
-Const DEF_MAX_FETCH_N = 10000 'm
-Const DEF_MAX_FETCH_E = 10000 'm
-Const DEF_MAX_FETCH_S = 10000 'm
-Const DEF_MAX_FETCH_W = 10000 'm
-Const DEF_UPDN_FLOW = 10      'sLpm
-Const DEF_ZERO_FLOW = 2       'sLpm
-Const DEF_DBAND_MULT = 0.5    '0 < X <= 1
-Const DEF_DBAND_MIN = 0.05    'm/s
-Const DEF_DBAND_DEF = 0.1     'm/s
-
 
 '==========================  PROGRAM OPERATION  ==============================
 
@@ -137,58 +121,6 @@ Const CSAT3_DELAY = 2  'fixed @ 2 measurements
 Const LI7500_DELAY = 2 'SDM/RS232: BaseDelay=186ms & DelayStep=2 -> Delay=199ms
 Const EC100_DELAY = 0  'TODO
 Const LAG_SCANS = 5    'large enough to accomodate all delays
-
-'----- SETTINGS FILE -----
-Dim filehandle As Long
-Dim save_changes
-Const SETTINGS_FILE = "CPU:rea_settings.dat"
-Const NUM_SETTINGS = {14}
-Const WRITEFILE = 0
-Const READFILE = 1
-
-Dim choices(NUM_SETTINGS)
-Alias choices(1)  = cho_flow_updn
-Alias choices(2)  = cho_flow_zero
-Alias choices(3)  = cho_dband_mult
-Alias choices(4)  = cho_dband_min
-Alias choices(5)  = cho_dband_def
-Alias choices(6)  = cho_site_declin
-Alias choices(7)  = cho_site_rufness
-Alias choices(8)  = cho_site_fetch_N
-Alias choices(9)  = cho_site_fetch_E
-Alias choices(10) = cho_site_fetch_S
-Alias choices(11) = cho_site_fetch_W
-Alias choices(12) = cho_son_azimuth
-Alias choices(13) = cho_son_height
-
-Dim settings(NUM_SETTINGS)
-Alias settings(1)  = set_flow_updn
-Alias settings(2)  = set_flow_zero
-Alias settings(3)  = set_dband_mult
-Alias settings(4)  = set_dband_min
-Alias settings(5)  = set_dband_def
-Alias settings(6)  = set_site_declin
-Alias settings(7)  = set_site_rufness
-Alias settings(8)  = set_site_fetch_N
-Alias settings(9)  = set_site_fetch_E
-Alias settings(10) = set_site_fetch_S
-Alias settings(11) = set_site_fetch_W
-Alias settings(12) = set_son_azimuth
-Alias settings(13) = set_son_height
-Units set_flow_updn = sLpm
-Units set_flow_zero = sLpm
-Units set_dband_mult = ratio
-Units set_dband_min = m/s
-Units set_dband_def = m/s
-Units set_site_declin = degEofTN
-Units set_site_rufness = cm
-Units set_site_fetch_N = m
-Units set_site_fetch_E = m
-Units set_site_fetch_S = m
-Units set_site_fetch_W = m
-Units set_son_azimuth = degEofN
-Units set_son_height = m
-
 
 Dim just_had_1hz_scan As Boolean 'data table exclusion flags
 Dim inbetween_1hz_scan As Boolean
@@ -243,9 +175,10 @@ Units LoggerTemp = degC
 Units LoggerVoltage = Volts
 
 '----- STATE VARIABLES -----
-Public flow_setpnt(2) 'TODO Dim
-Alias flow_setpnt(1) = setpnt_sample
+Public flow_setpnt(3) 'TODO Dim
+Alias flow_setpnt(1) = setpnt_wait
 Alias flow_setpnt(2) = setpnt_zero
+Alias flow_setpnt(3) = setpnt_samp
 Units flow_setpnt = mV
 
 Public deadband 
@@ -408,6 +341,91 @@ Units LE = W/m^2
 Units Hs = W/m^2
 
 
+'============================ SETTINGS RETENTION =============================
+Dim filehandle As Long
+Const SETTINGS_FILE = "CPU:rea_settings.dat"
+Const NUM_SETTINGS = {17}
+Const WRITEFILE = 0
+Const READFILE = 1
+
+'----- DEFAULT SETTINGS -----
+Const DEF_FLOWSP_WAIT = 2.0 'sLpm
+Const DEF_FLOWSP_ZERO = 0.5 'sLpm
+Const DEF_FLOWSP_AUTO = True
+Const DEF_FLOWSP_UPDN = 10 'sLpm
+Const DEF_DBAND_MULT = 0.5 '0 < X <= 1
+Const DEF_DBAND_MIN = 0.05 'm/s
+Const DEF_DBAND_DEF = 0.1 'm/s
+Const DEF_SONIC_AZIMUTH = -1 'degEofN, -1=disabled
+Const DEF_SONIC_HEIGHT = 0 'm, 0=disabled
+#If (DATA_SRCS=SDM_CSAT3_LI7500) Then
+  Const DEF_IRGA_VERT_SEP = -99 'cm
+  Const DEF_IRGA_HORZ_SEP = -99 'cm
+#ElseIf (DATA_SRCS=SDM_CSAT3A_EC150) Then
+  Const DEF_IRGA_VERT_SEP = 0 'TODO insert predefined values
+  Const DEF_IRGA_HORZ_SEP = 0 'based on closest bracket setting
+#EndIf
+Const DEF_SITE_DECLIN = 0 'degEofTN, 0=disabled
+Const DEF_SITE_FETCH_N = 0 'm, 0=disabled
+Const DEF_SITE_FETCH_E = 0 'm, 0=disabled
+Const DEF_SITE_FETCH_S = 0 'm, 0=disabled
+Const DEF_SITE_FETCH_W = 0 'm, 0=disabled
+Const DEF_SITE_RUFNESS = 0 'm, 0=disabled
+
+Dim choice(NUM_SETTINGS)
+Alias choice(1)  = ch_flowSP_wait
+Alias choice(2)  = ch_flowSP_zero
+Alias choice(3)  = ch_flowSP_auto
+Alias choice(4)  = ch_flowSP_updn
+Alias choice(5)  = ch_dband_mult
+Alias choice(6)  = ch_dband_min
+Alias choice(7)  = ch_dband_def
+Alias choice(8)  = ch_sonic_azimuth
+Alias choice(9)  = ch_sonic_height
+Alias choice(10) = ch_irga_vert_sep
+Alias choice(11) = ch_irga_horz_sep
+Alias choice(12) = ch_site_declin
+Alias choice(13) = ch_site_fetch_N
+Alias choice(14) = ch_site_fetch_E
+Alias choice(15) = ch_site_fetch_S
+Alias choice(16) = ch_site_fetch_W
+Alias choice(17) = ch_site_rufness
+
+Dim settings(NUM_SETTINGS)
+Alias settings(1)  = flowSP_wait
+Alias settings(2)  = flowSP_zero
+Alias settings(3)  = flowSP_auto
+Alias settings(4)  = flowSP_updn
+Alias settings(5)  = dband_mult
+Alias settings(6)  = dband_min
+Alias settings(7)  = dband_def
+Alias settings(8)  = sonic_azimuth
+Alias settings(9)  = sonic_height
+Alias settings(10) = irga_vert_sep
+Alias settings(11) = irga_horz_sep
+Alias settings(12) = site_declin
+Alias settings(13) = site_fetch_N
+Alias settings(14) = site_fetch_E
+Alias settings(15) = site_fetch_S
+Alias settings(16) = site_fetch_W
+Alias settings(17) = site_rufness
+Units flowSP_wait = sLpm
+Units flowSP_zero = sLpm
+Units flowSP_auto = Boolean
+Units dband_mult = ratio
+Units dband_min = m/s
+Units dband_def = m/s
+Units sonic_azimuth = degEofN
+Units sonic_height = m
+Units irga_vert_sep = cm
+Units irga_horz_sep = cm
+Units site_declin = degEofTN
+Units site_fetch_N = m
+Units site_fetch_E = m
+Units site_fetch_S = m
+Units site_fetch_W = m
+Units site_rufness = cm
+
 '===============================  DATA TABLES  ===============================
 
 '----- WORKING TABLES -----
@@ -501,34 +519,37 @@ EndTable
 
 DataTable(info,1,100)
   CardOut(1,100)
-  Sample(1,set_flow_updn,FP2)
-    FieldNames("sample_flow")
-  Sample(1,set_flow_zero,FP2)
-    FieldNames("zero_flow")
-  Sample(1,set_dband_mult,FP2)
+  Sample(1,flowSP_wait,FP2)
+    FieldNames("flow_zero_waiting")
+  Sample(1,flowSP_zero,FP2)
+    FieldNames("flow_zero_running")
+'  Sample(1,(IIF(flowSP_auto, "automatic", "manual")),String)
+'  Sample(1,flowSP_updn,FP2)
+    FieldNames("flow_sample")
+  Sample(1,dband_mult,FP2)
     FieldNames("deadband_mult")
-  Sample(1,set_dband_min,FP2)
+  Sample(1,dband_min,FP2)
     FieldNames("deadband_min")
-  Sample(1,set_dband_def,FP2)
+  Sample(1,dband_def,FP2)
     FieldNames("deadband_default")
-  Sample(1,set_site_declin,FP2)
-    FieldNames("site_mag_declin")
-  Sample(1,set_site_rufness,FP2)
-    FieldNames("site_roughness")
-  Sample(1,set_site_fetch_N,IEEE4)
-    FieldNames("site_fetch_N")
-  Sample(1,set_site_fetch_E,IEEE4)
-    FieldNames("site_fetch_E")
-  Sample(1,set_site_fetch_S,IEEE4)
-    FieldNames("site_fetch_S")
-  Sample(1,set_site_fetch_W,IEEE4)
-    FieldNames("site_fetch_W")
-  Sample(1,set_son_azimuth,FP2)
+  Sample(1,sonic_azimuth,FP2)
     FieldNames("sonic_azimuth")
-  Sample(1,set_son_height,FP2)
+  Sample(1,sonic_height,FP2)
     FieldNames("sonic_height")
+  Sample(1,site_declin,FP2)
+    FieldNames("site_mag_declin")
+  Sample(1,site_rufness,FP2)
+    FieldNames("site_roughness")
+  Sample(1,site_fetch_N,IEEE4)
+    FieldNames("site_fetch_N")
+  Sample(1,site_fetch_E,IEEE4)
+    FieldNames("site_fetch_E")
+  Sample(1,site_fetch_S,IEEE4)
+    FieldNames("site_fetch_S")
+  Sample(1,site_fetch_W,IEEE4)
+    FieldNames("site_fetch_W")
   Sample(1,DATA_SRCS,FP2)
-    FieldNames("data_sources")
+    FieldNames("sonic_irga_source")
   Sample(1,Status.CompileResults,String)
     FieldNames("CompileResults")
   Sample(1,Status.CardStatus,String)
@@ -542,17 +563,29 @@ EndTable
 
 
 '==============================  CUSTOM MENU  ================================
-Const Disable = False
-Const Enable = True
-Const Cancel = False
-Const Discard = 1001
-Const Save = 1002
 Const Yes = True
-Const SingleRun = 1005
-Const Recurring = 1006
+Const Enable = True
+Const Automatic = True
+Const Cancel = False
+Const Disable = False
+Const Manual = False
+Const A = 10
+Const B = 11
+Const C = 12
+Const D = 13
+Const E = 14
+'Const SingleRun = 1005
+'Const Recurring = 1006
+Dim save_changes As Boolean
+Dim discard_changes As Boolean
+Dim set_defaults As Boolean
 Dim recompile As Boolean
-DisplayMenu("MainScreen",-1) 'or -2
-  SubMenu("REA Settings")
+
+DisplayMenu("REA DAQ",-1)
+  'SubMenu("View REA data")
+    'TODO
+  'EndSubMenu
+  
 '    SubMenu("Schedule Run")
 '      MenuItem("Type", cho_run_freq)
 '        MenuPick(SingleRun, Recurring)
@@ -563,53 +596,61 @@ DisplayMenu("MainScreen",-1) 'or -2
 '        MenuPick(NextInterval,TimeOfDay)
 '      MenuItem("Preset")
 '    EndSubMenu
+
+  SubMenu("Settings")
     SubMenu("Flow rates")
-      MenuItem("Sampling, sLpm", cho_flow_updn)
-      MenuItem("Zero air, sLpm", cho_flow_zero)
+      MenuItem("Zero, waiting", ch_flowSP_wait)
+      MenuItem("Zero, running", ch_flowSP_zero)
+      MenuItem("Sample SP", ch_flowSP_auto)
+        MenuPick(Automatic, Manual)
+      MenuItem("Manual rate", ch_flowSP_updn)
     EndSubMenu
     SubMenu("Deadband")
-      MenuItem("Mult. [0-1)", cho_dband_mult)
-      MenuItem("Minimum, m/s", cho_dband_min)
-      MenuItem("Default, m/s", cho_dband_def)
+      MenuItem("Mult. [0-1)", ch_dband_mult)
+      MenuItem("Minimum, m/s", ch_dband_min)
+      MenuItem("Default, m/s", ch_dband_def)
     EndSubMenu
-    SubMenu("Site")
-      MenuItem("Mag declin degEofTN", cho_site_declin)
-      MenuItem("Roughness length, m", cho_site_rufness)
-      MenuItem("Max fetch N, m", cho_site_fetch_N)
-      MenuItem("Max fetch E, m", cho_site_fetch_E)
-      MenuItem("Max fetch S, m", cho_site_fetch_S)
-      MenuItem("Max fetch W, m", cho_site_fetch_W)
+    SubMenu("Site & sensors")
+      MenuItem("Sonic azimuth", ch_sonic_azimuth)
+      MenuItem("Sonic height", ch_sonic_height)
+      MenuItem("IRGA vert. sep.", ch_irga_vert_sep)
+      MenuItem("IRGA horz. sep.", ch_irga_horz_sep)
+      MenuItem("Mag. declin.", ch_site_declin)
+      MenuItem("Max fetch N", ch_site_fetch_N)
+      MenuItem("Max fetch E", ch_site_fetch_E)
+      MenuItem("Max fetch S", ch_site_fetch_S)
+      MenuItem("Max fetch W", ch_site_fetch_W)
+      MenuItem("Roughness length", ch_site_rufness)
     EndSubMenu
-    SubMenu("Sensors")
-      MenuItem("Azimuth, degEofN", cho_son_azimuth)
-      MenuItem("Height, m", cho_son_height)
-    EndSubMenu
-    SubMenu("Save changes")
+    SubMenu("Apply/cancel")
       MenuItem("Save now?", save_changes)
-        MenuPick(Cancel, Discard, Save)
-      'TODO:
-      'MenuItem("Reset to defaults?")
-      'MenuPick(Cancel,Yes)
-    EndSubMenu
-    SubMenu("Internals")
-      MenuItem("sonic/IRGA", DATA_SRCS)
-        MenuPick(DATA_SRCS, CSAT3_LI7500, CSAT3A_EC150)
-      MenuItem("SDM speed", SDM_SPEED)
-      MenuItem("SDM addr: CSAT3", CSAT_ADDR)
-        MenuPick(CSAT_ADDR,0,1,2,3,4,5,6,7,8,9,10,11,12,13,14)
-      MenuItem("SDM addr: LI7500", LI7500_ADDR)
-        MenuPick(LI7500_ADDR,0,1,2,3,4,5,6,7,8,9,10,11,12,13,14)
-      MenuItem("SDM addr: EC100", EC100_ADDR)
-        MenuPick(EC100_ADDR,0,1,2,3,4,5,6,7,8,9,10,11,12,13,14)
-      MenuItem("Min samp flow sLpm", UPDNFLOW_MIN)
-      MenuItem("Min zero flow sLpm", ZEROFLOW_MIN)
-      MenuItem("Min declin allowed", DECLIN_MIN)
-      MenuItem("Max declin allowed", DECLIN_MAX)
-      MenuRecompile("Recompile now?", recompile)
-        MenuPick(Cancel,Yes)
+        MenuPick(Cancel, Yes)
+      MenuItem("Discard?", discard_changes)
+        MenuPick(Cancel, Yes)
+      MenuItem("Set default?", set_defaults)
+        MenuPick(Cancel, Yes)
     EndSubMenu
   EndSubMenu
+
+  SubMenu("Initial setup")
+    MenuItem("sonic/IRGA", DATA_SRCS)
+      MenuPick(DATA_SRCS, SDM_CSAT3_LI7500, SDM_CSAT3A_EC150)
+    'SDM speed must be set through const table, menupick would be too onerous
+    MenuItem("SDM addr: CSAT3", CSAT_ADDR)
+      MenuPick(CSAT_ADDR,0,1,2,3,4,5,6,7,8,9,A,B,C,D,E)
+    MenuItem("SDM addr: LI7500", LI7500_ADDR)
+      MenuPick(LI7500_ADDR,0,1,2,3,4,5,6,7,8,9,10,11,12,13,14)
+    MenuItem("SDM addr: EC100", EC100_ADDR)
+      MenuPick(EC100_ADDR,0,1,2,3,4,5,6,7,8,9,10,11,12,13,14)
+    MenuItem("Min samp flow sLpm", UPDNFLOW_MIN)
+    MenuItem("Min zero flow sLpm", ZEROFLOW_MIN)
+    MenuItem("Min declin allowed", DECLIN_MIN)
+    MenuItem("Max declin allowed", DECLIN_MAX)
+    MenuRecompile("Recompile now?", recompile)
+      MenuPick(Cancel,Yes)
+  EndSubMenu
 EndMenu
+
 
 '===============================  FUNCTIONS  =================================
 
@@ -626,8 +667,8 @@ EndFunction
 'footprint calc, Hsieh et al, 2000
 Function FootprintEstimate(L_)
   Dim Dh, Ph, Zu, Zm, Zo
-  Zm = set_son_height 'm
-  Zo = set_site_rufness 'm
+  Zm = sonic_height 'm
+  Zo = site_rufness 'm
   Zu = Zm * (LOG(Zm/Zo) - 1 + (Zo/Zm))
   If (ABS(Zu/L_) < 0.04) Then 'neutral
     Dh = 0.97
@@ -658,60 +699,70 @@ EndFunction
 
 '===============================  SUBROUTINES  ===============================
 Sub set_default_choices()
-  cho_flow_updn = DEF_UPDN_FLOW
-  cho_flow_zero = DEF_ZERO_FLOW
-  cho_dband_mult = DEF_DBAND_MULT
-  cho_dband_min = DEF_DBAND_MIN
-  cho_dband_def = DEF_DBAND_DEF
-  cho_site_declin = DEF_SITE_DECLIN
-  cho_site_rufness = DEF_SITE_RUFNESS
-  cho_site_fetch_N = DEF_MAX_FETCH_N
-  cho_site_fetch_E = DEF_MAX_FETCH_E
-  cho_site_fetch_S = DEF_MAX_FETCH_S
-  cho_site_fetch_W = DEF_MAX_FETCH_W
-  cho_son_azimuth = DEF_SON_AZIMUTH
-  cho_son_height = DEF_SON_HEIGHT
+  ch_flowSP_wait = DEF_FLOWSP_WAIT
+  ch_flowSP_zero = DEF_FLOWSP_ZERO
+  ch_flowSP_auto = DEF_FLOWSP_AUTO
+  ch_flowSP_updn = DEF_FLOWSP_UPDN
+  ch_dband_mult = DEF_DBAND_MULT
+  ch_dband_min = DEF_DBAND_MIN
+  ch_dband_def = DEF_DBAND_DEF
+  ch_sonic_azimuth = DEF_SONIC_AZIMUTH
+  ch_sonic_height = DEF_SONIC_HEIGHT
+  ch_irga_vert_sep = DEF_IRGA_VERT_SEP
+  ch_irga_horz_sep = DEF_IRGA_HORZ_SEP
+  ch_site_declin = DEF_SITE_DECLIN
+  ch_site_fetch_N = DEF_SITE_FETCH_N
+  ch_site_fetch_E = DEF_SITE_FETCH_E
+  ch_site_fetch_S = DEF_SITE_FETCH_S
+  ch_site_fetch_W = DEF_SITE_FETCH_W
+  ch_site_rufness = DEF_SITE_RUFNESS
 EndSub
 
 Sub populate_choices()
-  Move(choices(1),NUM_SETTINGS,settings(1),NUM_SETTINGS)
+  Move(choice(1),NUM_SETTINGS,settings(1),NUM_SETTINGS)
 EndSub
 
 Sub save_current_choices()
   'Input validation
-  While (cho_son_azimuth < 0)
-    cho_son_azimuth += 360
-  Wend
-  cho_son_azimuth = cho_son_azimuth MOD 360
-  If (cho_son_height < 0) Then (cho_son_height = 0)
-  If (cho_site_declin < DECLIN_MIN) Then (cho_site_declin = DECLIN_MIN)
-  If (cho_site_declin > DECLIN_MAX) Then (cho_site_declin = DECLIN_MAX)
-  If (cho_site_rufness < 0) Then (cho_site_rufness = 0)
-  If (cho_site_fetch_N < 0) Then (cho_site_fetch_N = 0)
-  If (cho_site_fetch_E < 0) Then (cho_site_fetch_E = 0)
-  If (cho_site_fetch_S < 0) Then (cho_site_fetch_S = 0)
-  If (cho_site_fetch_W < 0) Then (cho_site_fetch_W = 0)
-  If (cho_flow_updn < UPDNFLOW_MIN) Then (cho_flow_updn = UPDNFLOW_MIN)
-  If (cho_flow_updn > UPDNFLOW_MAX) Then (cho_flow_updn = UPDNFLOW_MAX)
-  If (cho_flow_zero < ZEROFLOW_MIN) Then (cho_flow_zero = ZEROFLOW_MIN)
-  If (cho_flow_zero > ZEROFLOW_MAX) Then (cho_flow_zero = ZEROFLOW_MAX)
-  'note: order matters when validating dband settings!
-  If (cho_dband_min < 0) Then (cho_dband_min = 0)
-  If (cho_dband_def < cho_dband_min) Then (cho_dband_def = cho_dband_min)
-  If (cho_dband_mult > 1) Then (cho_dband_mult = 1)
-  If (cho_dband_mult <= 0) Then (cho_dband_mult = DEF_DBAND_MULT)
+  If (ch_flowSP_wait < ZEROFLOW_MIN) Then (ch_flowSP_wait = ZEROFLOW_MIN)
+  If (ch_flowSP_wait > ZEROFLOW_MAX) Then (ch_flowSP_wait = ZEROFLOW_MAX)
+  If (ch_flowSP_zero < ZEROFLOW_MIN) Then (ch_flowSP_zero = ZEROFLOW_MIN)
+  If (ch_flowSP_zero > ZEROFLOW_MAX) Then (ch_flowSP_zero = ZEROFLOW_MAX)
+  If (ch_flowSP_updn < UPDNFLOW_MIN) Then (ch_flowSP_updn = UPDNFLOW_MIN)
+  If (ch_flowSP_updn > UPDNFLOW_MAX) Then (ch_flowSP_updn = UPDNFLOW_MAX)
+
+  'HINT treat azimuth differently since 0 is valid option
+  sonic_azimuth = IIF(sonic_azimuth < 0, -1, FIX(sonic_azimuth) MOD 360)  
+
+  If (ch_sonic_height < 0) Then (ch_sonic_height = 0)
+  If (ch_site_declin < DECLIN_MIN) Then (ch_site_declin = DECLIN_MIN)
+  If (ch_site_declin > DECLIN_MAX) Then (ch_site_declin = DECLIN_MAX)
+  If (ch_site_fetch_N < 0) Then (ch_site_fetch_N = 0)
+  If (ch_site_fetch_E < 0) Then (ch_site_fetch_E = 0)
+  If (ch_site_fetch_S < 0) Then (ch_site_fetch_S = 0)
+  If (ch_site_fetch_W < 0) Then (ch_site_fetch_W = 0)
+  If (ch_site_rufness < 0) Then (ch_site_rufness = 0)
+
+  'HINT order matters when validating dband settings!
+  If (ch_dband_min < 0) Then (ch_dband_min = 0)
+  If (ch_dband_def < ch_dband_min) Then (ch_dband_def = ch_dband_min)
+  If (ch_dband_mult > 1) Then (ch_dband_mult = 1)
+  If (ch_dband_mult <= 0) Then (ch_dband_mult = DEF_DBAND_MULT)
 
   'Populate dependent variables
-  'irga_signal = IIF(cho_data_srcs=CSAT3_LI7500, NAN, irga_signal) 'XXX
-    'LI7500 stores AGC ("signal") within diagnostic but EC150 does not
-  setpnt_sample = cho_flow_updn/MFC_UPDN_MULT
-  setpnt_zero = cho_flow_zero/MFC_ZERO_MULT
+  setpnt_wait = ch_flowSP_wait/MFC_ZERO_MULT
+  setpnt_zero = ch_flowSP_zero/MFC_ZERO_MULT
+  setpnt_samp = ch_flowSP_updn/MFC_UPDN_MULT
+  If (deadband = NAN) Then 'catch @ start-up but not when settings change
+    deadband = dband_def
+    neg_deadband = -1*deadband
+  EndIf
 
-  Move(settings(1),NUM_SETTINGS,choices(1),NUM_SETTINGS)
+  Move(settings(1),NUM_SETTINGS,choice(1),NUM_SETTINGS)
   Calfile(settings,NUM_SETTINGS,SETTINGS_FILE,WRITEFILE)
 EndSub
 
-Sub setup()
+Sub load_settings()
   filehandle = FileOpen(SETTINGS_FILE,"rb",0)
   FileClose(filehandle)
   If (filehandle=0) Then  'file not found
@@ -721,26 +772,26 @@ Sub setup()
     populate_choices()
   EndIf
   save_current_choices()
+EndSub
+
+Sub reset_settings()
+  FileManage(SETTINGS_FILE,8) 'delete file
+  load_settings()
+EndSub
+
+Sub setup()
+  rot_angles(1) = 1.0 'XXX add runtime stuff file!
+  deadband = NAN
   
-  Move(sonic(1),5,NAN,1)
-  Move(irga(1),4,NAN,1)
-  Move(hmp45c(1),2,NAN,1)
-  Move(flow(1),3,NAN,1)
-  
-  rot_angles(1) = 1.0
-  Move(rot_angles(2),3,0,1)
-  
-  deadband = set_dband_def
-  neg_deadband = -1*deadband
-  
+  load_settings()
   SDMSpeed(SDM_SPEED)
   CallTable(info)
 EndSub
 
-Sub reset_rea()
-  WriteIO(MASK_ALL,MASK_RESET) 'XXX
-  'set both valves off
-EndSub
+'Sub reset_rea()
+'  WriteIO(MASK_ALL,MASK_RESET) 'XXX
+'  'set both valves off
+'EndSub
 
 
 '===============================  MAIN PROGRAM  ==============================
@@ -748,7 +799,7 @@ BeginProg
   Call setup()
   Call reset_rea()
   Scan(FAST_INTV,mSec,FAST_BUFF,0)
-    #If (DATA_SRCS=CSAT3A_EC150) Then
+    #If (DATA_SRCS=SDM_CSAT3A_EC150) Then
       EC100(ec100_raw(1),EC100_ADDR,1)
       Move(sonic(1),5,ec100_raw(1),5)
       'CRITICAL: convert mass density to molar density units
@@ -782,7 +833,7 @@ BeginProg
     CallTable(ts_fast)
     CallTable(work_lag)
     If (work_lag.Output(1,LAG_SCANS)) Then
-      #If (DATA_SRCS=CSAT3A_EC150) Then
+      #If (DATA_SRCS=SDM_CSAT3A_EC150) Then
         GetRecord(lagged(1),work_lag,LAG_SCANS-EC100_DELAY)
         Move(aligned(1),9,lagged(1),9)
         If (lag_sonic_diag <> NAN) Then
@@ -895,8 +946,8 @@ BeginProg
 '        W_Avg = Uz_Avg*CT - Ux_Avg*ST*CE - Uy_Avg*ST*SE
         
         'adjust WD to relect sonic azimuth
-        WD_unit_Avg = (360+WD_unit_Avg+set_son_azimuth+set_site_declin) MOD 360
-        WD_rslt_Avg = (360+WD_rslt_Avg+set_son_azimuth+set_site_declin) MOD 360
+        WD_unit_Avg = (360+WD_unit_Avg+sonic_azimuth+site_declin) MOD 360
+        WD_rslt_Avg = (360+WD_rslt_Avg+sonic_azimuth+site_declin) MOD 360
 
         Uz_Std = SQR(Uz_Std) 'variances -> stdevs
         Ts_Std = SQR(Ts_Std)
@@ -944,6 +995,20 @@ BeginProg
       EndIf
 
     EndIf
+    
+    If (save_changes) Then
+      save_current_choices()
+      save_changes = Cancel
+      CallTable(info)
+    ElseIf (discard_changes) Then
+      populate_choices()
+      discard_changes = Cancel
+      'nothing to save!
+    ElseIf (set_defaults) Then
+      reset_settings()
+      set_defaults = Cancel
+      CallTable(info)
+    EndIf
 
     inbetween_1hz_scan = True
     If (just_had_1hz_scan) Then
@@ -969,17 +1034,8 @@ BeginProg
     CallTable(met)
 
     'XXX does deactivating "Boost" affect operation?
-    ExciteCAO(MFC_UPDN_CAO,setpnt_sample,False,False)
+    ExciteCAO(MFC_UPDN_CAO,setpnt_samp,False,False)
     ExciteCAO(MFC_ZERO_CAO,setpnt_zero,False,False)
-
-    If (save_changes = Discard) Then
-      populate_choices()
-      save_changes = Cancel
-    ElseIf (save_changes = Save) Then
-      save_current_choices()
-      save_changes = Cancel
-      CallTable(info)
-    EndIf
     
     just_had_1hz_scan = True
   NextScan
