@@ -23,10 +23,12 @@ ConstTable
   Const EC100_ADDR = 1   'default EC100/EC150/CSAT3A address: 1
   
   'self-imposed value limits on some settings options
-  Const UPDNFLOW_MIN = 2 'max settings are specified under analog scaling
-  Const ZEROFLOW_MIN = 0.4
-  Const DECLIN_MIN = -35
-  Const DECLIN_MAX = 35
+  Const RUNTIME_MIN = 0.5 'hrs
+  Const RUNTIME_MAX = 24 'hrs
+  Const UPDNFLOW_MIN = 2 'sLpm, max specified under analog scaling
+  Const ZEROFLOW_MIN = 0.4 'sLpm, max specified under analog scaling
+  Const DECLIN_MIN = -35 'deg E of TN
+  Const DECLIN_MAX = 35 'deg E of TN
 EndConstTable
 
 '----- WIRING -----
@@ -344,7 +346,9 @@ Units Hs = W/m^2
 '============================ SETTINGS RETENTION =============================
 Dim filehandle As Long
 Const SETTINGS_FILE = "CPU:rea_settings.dat"
+Const SCHEDULE_FILE = "CPU:rea_schedule.dat"
 Const NUM_SETTINGS = {17}
+Const NUM_SCHEDULE = {4}
 Const WRITEFILE = 0
 Const READFILE = 1
 
@@ -425,6 +429,29 @@ Units site_fetch_E = m
 Units site_fetch_S = m
 Units site_fetch_W = m
 Units site_rufness = cm
+
+'----- DEFAULT SCHEDULE -----
+Const DEF_RUN_DURATION = 1.0 'hr
+Const DEF_RUN_BEGINTOD = False
+Const DEF_RUN_DELAY = 0 'hr
+Const DEF_RUN_TOD = 12 'hour of day
+
+Dim sch_choice(NUM_SCHEDULE)
+Alias sch_choice(1) = ch_run_duration
+Alias sch_choice(2) = ch_run_begintod
+Alias sch_choice(3) = ch_run_delay
+Alias sch_choice(4) = ch_run_tod
+
+Dim sch_settings(NUM_SCHEDULE)
+Alias sch_settings(1) = run_duration
+Alias sch_settings(2) = run_begintod
+Alias sch_settings(3) = run_delay
+Alias sch_settings(4) = run_tod
+Units run_duration = hours
+Units run_begintod = Boolean
+Units run_delay = hours
+Units run_tod = hr of day
+
 
 '===============================  DATA TABLES  ===============================
 
@@ -566,36 +593,46 @@ EndTable
 Const Yes = True
 Const Enable = True
 Const Automatic = True
+Const AtTimeOfDay = True
 Const Cancel = False
 Const Disable = False
 Const Manual = False
+Const AfterTimeDelay = False
 Const A = 10
 Const B = 11
 Const C = 12
 Const D = 13
 Const E = 14
-'Const SingleRun = 1005
-'Const Recurring = 1006
-Dim save_changes As Boolean
-Dim discard_changes As Boolean
+Dim save_schedule As Boolean
+Dim discard_schedule As Boolean
+Dim save_settings As Boolean
+Dim discard_settings As Boolean
 Dim set_defaults As Boolean
 Dim recompile As Boolean
 
 DisplayMenu("REA DAQ",-1)
-  'SubMenu("View REA data")
-    'TODO
-  'EndSubMenu
-  
-'    SubMenu("Schedule Run")
-'      MenuItem("Type", cho_run_freq)
-'        MenuPick(SingleRun, Recurring)
-'      MenuItem("Duration, hr", cho_run_duration)
-'      MenuItem("Recur. interval", cho_run_intv)
-'      MenuItem("Recur. units", cho_run_intv_unit)
-'      MenuItem("Begin at", cho_run_duration)
-'        MenuPick(NextInterval,TimeOfDay)
-'      MenuItem("Preset")
-'    EndSubMenu
+'  SubMenu("View REA data")
+'    DisplayValue("Status", somevar) 'MetOnly / Armed / Running / Spent
+'  EndSubMenu
+
+  SubMenu("Run control")
+    SubMenu("Schedule")
+      MenuItem("Duration", ch_run_duration)
+      MenuItem("Begin time", ch_run_begintod)
+        MenuPick(AfterTimeDelay, AtTimeOfDay)
+      MenuItem("Time delay", ch_run_delay)
+        MenuPick(0, 0.5, 1, 1.5, 2, 2.5, 3, 3.5, 4, 5, 6, 7, 8, 9, 10, 11, 12)
+      MenuItem("Time of day", ch_run_tod)
+      MenuItem("Apply?", save_schedule)
+        MenuPick(Cancel, Yes)
+    EndSubMenu
+    MenuItem("Shield flow", shield_enabled)
+      MenuPick(Enable, Disable)
+    MenuItem("Queue run", run_queued)
+      MenuPick(Cancel, Yes)
+    MenuItem("Abort run", run_aborted)
+      MenuPick(Cancel, Yes)
+  EndSubMenu
 
   SubMenu("Settings")
     SubMenu("Flow rates")
@@ -623,9 +660,9 @@ DisplayMenu("REA DAQ",-1)
       MenuItem("Roughness length", ch_site_rufness)
     EndSubMenu
     SubMenu("Apply/cancel")
-      MenuItem("Save now?", save_changes)
+      MenuItem("Save now?", save_settings)
         MenuPick(Cancel, Yes)
-      MenuItem("Discard?", discard_changes)
+      MenuItem("Discard?", discard_settings)
         MenuPick(Cancel, Yes)
       MenuItem("Set default?", set_defaults)
         MenuPick(Cancel, Yes)
@@ -653,6 +690,27 @@ EndMenu
 
 
 '===============================  FUNCTIONS  =================================
+
+'convert long format time to floating-point military time representation,
+'rounded to nearest half-hour; treats nonsense values (xx60 to xx99) as 59 and
+'returns negative values unaltered; does NOT modulo by 24 (e.g. returns a time,
+'not time-of-day)
+'  ex: 18   -> 18    18.2 -> 18   18.25 -> 18.5   18.74 -> 18.5   18.75 -> 19
+'      1800 -> 18    1805 -> 18    1815 -> 18.5    1830 -> 18.5    1844 -> 18.5
+'      1845 -> 19    1860 -> 19    1899 -> 19     -1899 -> -1899    -18 -> -18
+'      35   -> 35    35.3 -> 35.5  3500 -> 35      3510 -> 35      3599 -> 36
+'
+'FIXME this function should actually round to STAT_INTV but that's a step up
+'  from complex to complicated.
+Function LongTimeToFP(longtime)
+  If (longtime <= 0) Then Return (longtime)
+  If (longtime > 100) Then
+    Dim tmp
+    tmp = longtime MOD 100
+    longtime = (longtime INTDV 100) + IIF(tmp >= 59, 0.9833, tmp/60.0)
+  EndIf
+  Return (Round(longtime*2, 0)/2)
+EndFunction
 
 'estimate latent heat of vaporization by formula 8 from:
 ' A new formula for latent heat of vaporization as a function of temperature.
@@ -779,11 +837,54 @@ Sub reset_settings()
   load_settings()
 EndSub
 
+'--------------------
+Sub set_default_sch_settings()
+  ch_run_duration = DEF_RUN_DURATION
+  ch_run_begintod = DEF_RUN_BEGINTOD
+  ch_run_delay = DEF_RUN_DELAY
+  ch_run_tod = DEF_RUN_TOD
+EndSub
+
+Sub populate_sch_choices()
+  Move(sch_choice(1),NUM_SCHEDULE,sch_settings(1),NUM_SCHEDULE)
+EndSub
+
+Sub save_current_sch_choices()
+  'Input validation
+  ch_run_duration = LongTimeToFP(ch_run_duration)
+  If (ch_run_duration < RUNTIME_MIN) Then ch_run_duration = RUNTIME_MIN
+  If (ch_run_duration > RUNTIME_MAX) Then ch_run_duration = RUNTIME_MAX
+  ch_run_tod = LongTimeToFP(ch_run_tod)
+  ch_run_tod = IIF(ch_run_tod < 0, 0, ch_run_tod MOD 24)
+  
+  'Populate dependent variables
+  'TODO
+
+  Move(sch_settings(1),NUM_SCHEDULE,sch_choice(1),NUM_SCHEDULE)
+  Calfile(sch_settings,NUM_SCHEDULE,SCHEDULE_FILE,WRITEFILE)
+EndSub
+
+Sub load_sch_settings()
+  filehandle = FileOpen(SCHEDULE_FILE,"rb",0)
+  FileClose(filehandle)
+  If (filehandle=0) Then 'file not found
+    set_default_sch_settings()
+  Else
+    Calfile(sch_settings,NUM_SCHEDULE,SCHEDULE_FILE,READFILE)
+    populate_sch_choices()
+  EndIf
+  save_current_sch_choices()
+EndSub
+
+'No analogous `reset_sch_settings()` needed.
+
+'--------------------
 Sub setup()
   rot_angles(1) = 1.0 'XXX add runtime stuff file!
   deadband = NAN
   
   load_settings()
+  load_sch_settings()
   SDMSpeed(SDM_SPEED)
   CallTable(info)
 EndSub
@@ -996,13 +1097,19 @@ BeginProg
 
     EndIf
     
-    If (save_changes) Then
+    If (save_schedule) Then
+      save_current_sch_choices()
+      save_schedule = Cancel
+    ElseIf (discard_schedule) Then
+      populate_sch_choices()
+      discard_schedule = Cancel
+    ElseIf (save_settings) Then
       save_current_choices()
-      save_changes = Cancel
+      save_settings = Cancel
       CallTable(info)
-    ElseIf (discard_changes) Then
+    ElseIf (discard_settings) Then
       populate_choices()
-      discard_changes = Cancel
+      discard_settings = Cancel
       'nothing to save!
     ElseIf (set_defaults) Then
       reset_settings()
