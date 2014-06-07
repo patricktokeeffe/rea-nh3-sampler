@@ -176,28 +176,6 @@ Alias cr5k(2) = LoggerVoltage
 Units LoggerTemp = degC
 Units LoggerVoltage = Volts
 
-'----- STATE VARIABLES -----
-Public flow_setpnt(3) 'TODO Dim
-Alias flow_setpnt(1) = setpnt_wait
-Alias flow_setpnt(2) = setpnt_zero
-Alias flow_setpnt(3) = setpnt_samp
-Units flow_setpnt = mV
-
-Public deadband 
-Dim neg_deadband
-Units deadband = m/s
-
-Public ctrlport(8) As Boolean
-Alias ctrlport(1) = updn_mfc_is_off 'up/dn MFC off signal
-Alias ctrlport(2) = zero_mfc_is_off 'makeup air MFC off signal
-'C3, C4 MFC valve purge logic not built into program
-Alias ctrlport(3) = updn_purging 'up/dn MFC valve purge signal
-Alias ctrlport(4) = zero_purging 'makeup air MFC valve purge signal
-Alias ctrlport(5) = vlv_up_is_on 'REA valve up eddy
-Alias ctrlport(6) = vlv_dn_is_on    'REA valve dn eddy
-Alias ctrlport(7) = pump_is_on    'turns air pump off/on
-Alias ctrlport(8) = mfc_pwr_is_on 'zero MFC valve
-
 '----- PROCESSING ------
 Public Uz_rot 'for real-time coord rotation
 Units Uz_rot = m/s
@@ -342,6 +320,53 @@ Units Fco2 = g/(m^2 s)
 Units LE = W/m^2
 Units Hs = W/m^2
 
+'----- OPERATING VARIABLES -----
+Public run_control(3) As Boolean 'menus
+Alias run_control(1) = shield_ON
+Alias run_control(2) = run_queued
+Alias run_control(3) = run_aborted
+
+Public is_running As Boolean
+
+Public rtime(9)
+Alias rtime(4) = hrofday
+Alias rtime(5) = minofhr
+
+Const RUN_TIMER = 1
+Const START = 0
+Const STOP_RESET = 3
+Const QUERY = 4
+
+Public run_sched(3) As Long
+Alias run_sched(1) = start_run
+Alias run_sched(2) = run_dur
+Alias run_sched(3) = elapsed_time
+Units run_sched = min
+
+Public flow_SPvals(3)
+Alias flow_SPvals(1) = shld_SPval
+Alias flow_SPvals(2) = zero_SPval
+'Alias flow_SPvals(3) = samp_SPval '<< necessary?
+
+Public flow_setpnt(2) 'TODO Dim
+Alias flow_setpnt(1) = setpnt_zero
+Alias flow_setpnt(2) = setpnt_updn
+
+Public deadband 
+Dim neg_deadband
+Units deadband = m/s
+
+Public ctrlport(8) As Boolean
+Alias ctrlport(1) = updn_mfc_is_off 'up/dn MFC off signal
+Alias ctrlport(2) = zero_mfc_is_off 'makeup air MFC off signal
+'C3, C4 MFC valve purge logic not built into program
+Alias ctrlport(3) = updn_purging 'up/dn MFC valve purge signal
+Alias ctrlport(4) = zero_purging 'makeup air MFC valve purge signal
+Alias ctrlport(5) = vlv_up_is_on 'REA valve up eddy
+Alias ctrlport(6) = vlv_dn_is_on    'REA valve dn eddy
+Alias ctrlport(7) = pump_is_on    'turns air pump off/on
+Alias ctrlport(8) = mfc_pwr_is_on 'zero MFC valve
+
 
 '============================ SETTINGS RETENTION =============================
 Dim filehandle As Long
@@ -377,7 +402,7 @@ Const DEF_SITE_FETCH_W = 0 'm, 0=disabled
 Const DEF_SITE_RUFNESS = 0 'm, 0=disabled
 
 Dim choice(NUM_SETTINGS)
-Alias choice(1)  = ch_flowSP_wait
+Alias choice(1)  = ch_flowSP_shld
 Alias choice(2)  = ch_flowSP_zero
 Alias choice(3)  = ch_flowSP_auto
 Alias choice(4)  = ch_flowSP_updn
@@ -443,14 +468,10 @@ Alias sch_choice(3) = ch_run_delay
 Alias sch_choice(4) = ch_run_tod
 
 Dim sch_settings(NUM_SCHEDULE)
-Alias sch_settings(1) = run_duration
-Alias sch_settings(2) = run_begintod
-Alias sch_settings(3) = run_delay
-Alias sch_settings(4) = run_tod
-Units run_duration = hours
-Units run_begintod = Boolean
-Units run_delay = hours
-Units run_tod = hr of day
+Alias sch_settings(1) = run_duration 'hr
+Alias sch_settings(2) = run_begintod 'boolean
+Alias sch_settings(3) = run_delay 'hr
+Alias sch_settings(4) = run_tod 'hr of day
 
 
 '===============================  DATA TABLES  ===============================
@@ -626,7 +647,7 @@ DisplayMenu("REA DAQ",-1)
       MenuItem("Apply?", save_schedule)
         MenuPick(Cancel, Yes)
     EndSubMenu
-    MenuItem("Shield flow", shield_enabled)
+    MenuItem("Shield flow", shield_ON)
       MenuPick(Enable, Disable)
     MenuItem("Queue run", run_queued)
       MenuPick(Cancel, Yes)
@@ -636,7 +657,7 @@ DisplayMenu("REA DAQ",-1)
 
   SubMenu("Settings")
     SubMenu("Flow rates")
-      MenuItem("Zero, waiting", ch_flowSP_wait)
+      MenuItem("Zero, waiting", ch_flowSP_shld)
       MenuItem("Zero, running", ch_flowSP_zero)
       MenuItem("Sample SP", ch_flowSP_auto)
         MenuPick(Automatic, Manual)
@@ -757,7 +778,7 @@ EndFunction
 
 '===============================  SUBROUTINES  ===============================
 Sub set_default_choices()
-  ch_flowSP_wait = DEF_FLOWSP_WAIT
+  ch_flowSP_shld = DEF_FLOWSP_WAIT
   ch_flowSP_zero = DEF_FLOWSP_ZERO
   ch_flowSP_auto = DEF_FLOWSP_AUTO
   ch_flowSP_updn = DEF_FLOWSP_UPDN
@@ -782,8 +803,8 @@ EndSub
 
 Sub save_current_choices()
   'Input validation
-  If (ch_flowSP_wait < ZEROFLOW_MIN) Then (ch_flowSP_wait = ZEROFLOW_MIN)
-  If (ch_flowSP_wait > ZEROFLOW_MAX) Then (ch_flowSP_wait = ZEROFLOW_MAX)
+  If (ch_flowSP_shld < ZEROFLOW_MIN) Then (ch_flowSP_shld = ZEROFLOW_MIN)
+  If (ch_flowSP_shld > ZEROFLOW_MAX) Then (ch_flowSP_shld = ZEROFLOW_MAX)
   If (ch_flowSP_zero < ZEROFLOW_MIN) Then (ch_flowSP_zero = ZEROFLOW_MIN)
   If (ch_flowSP_zero > ZEROFLOW_MAX) Then (ch_flowSP_zero = ZEROFLOW_MAX)
   If (ch_flowSP_updn < UPDNFLOW_MIN) Then (ch_flowSP_updn = UPDNFLOW_MIN)
@@ -808,9 +829,10 @@ Sub save_current_choices()
   If (ch_dband_mult <= 0) Then (ch_dband_mult = DEF_DBAND_MULT)
 
   'Populate dependent variables
-  setpnt_wait = ch_flowSP_wait/MFC_ZERO_MULT
-  setpnt_zero = ch_flowSP_zero/MFC_ZERO_MULT
-  setpnt_samp = ch_flowSP_updn/MFC_UPDN_MULT
+  shld_SPval = ch_flowSP_shld/MFC_ZERO_MULT
+  zero_SPval = ch_flowSP_zero/MFC_ZERO_MULT
+  setpnt_updn = ch_flowSP_updn/MFC_UPDN_MULT 'TODO conditionally set this
+    'to the manually defined value or automatically determined value?
   If (deadband = NAN) Then 'catch @ start-up but not when settings change
     deadband = dband_def
     neg_deadband = -1*deadband
@@ -858,7 +880,13 @@ Sub save_current_sch_choices()
   ch_run_tod = IIF(ch_run_tod < 0, 0, ch_run_tod MOD 24)
   
   'Populate dependent variables
-  'TODO
+  If (ch_run_begintod) Then
+    start_run = ch_run_tod * 60
+  Else
+    RealTime(rtime)
+    start_run = ((hrofday+IIF(minofhr >= 30, 1, 0.5)+ch_run_delay) MOD 24)*60
+  EndIf
+  run_dur = ch_run_duration * 60
 
   Move(sch_settings(1),NUM_SCHEDULE,sch_choice(1),NUM_SCHEDULE)
   Calfile(sch_settings,NUM_SCHEDULE,SCHEDULE_FILE,WRITEFILE)
@@ -879,6 +907,31 @@ EndSub
 'No analogous `reset_sch_settings()` needed.
 
 '--------------------
+Sub end_run()
+  is_running = False
+  run_queued = Cancel
+  run_aborted = Cancel
+  elapsed_time = Timer(RUN_TIMER,min,STOP_RESET)
+EndSub
+
+Sub shields_up()
+  'TODO turn on MFCs!
+  setpnt_zero = IIF(is_running, zero_SPval, shld_SPval)
+  'TODO setpnt_samp = IIF(is_running, <sample rate>, zero)
+  'TODO maybe also set up/dn MFC valve close state depending on is_running
+  'PortSet(  )
+  'PortSet(  )
+EndSub
+
+Sub shields_down()
+  setpnt_updn = 0
+  setpnt_zero = 0
+  'TODO turn off MFCs! 
+  'PortSet(  )
+  'PortSet(  )
+EndSub
+
+'--------------------
 Sub setup()
   rot_angles(1) = 1.0 'XXX add runtime stuff file!
   deadband = NAN
@@ -889,17 +942,45 @@ Sub setup()
   CallTable(info)
 EndSub
 
-'Sub reset_rea()
-'  WriteIO(MASK_ALL,MASK_RESET) 'XXX
-'  'set both valves off
-'EndSub
-
 
 '===============================  MAIN PROGRAM  ==============================
 BeginProg
   Call setup()
-  Call reset_rea()
+
   Scan(FAST_INTV,mSec,FAST_BUFF,0)
+    'impose logical order on run controls
+    If (run_aborted) Then 'priority given to abort signal; no-op outside runs
+      end_run()
+    ElseIf (is_running) Then
+      shield_ON = Enable 'disallow turning off shield flow during sampling run
+      run_queued = Enable 'or attempting to abort by "un-queueing"
+    ElseIf (run_queued AND NOT shield_ON) Then
+      run_queued = Cancel 'force activating shield flow b4 scheduling run
+    EndIf
+
+    If (shield_ON) Then
+      shields_up()
+    Else
+      shields_down()
+    EndIf
+    ExciteCAO(MFC_UPDN_CAO,setpnt_updn,False,True) 'XXX do MFCs need boost opt?
+    ExciteCAO(MFC_ZERO_CAO,setpnt_zero,False,True)
+
+    If (run_queued AND TimeIntoInterval(start_run, 1, Day)) Then
+      is_running = True
+      elapsed_time = Timer(RUN_TIMER,min,START) 'XXX TODO check what happens
+        'to this timer if run wraps around past it's start time the next day!
+    ElseIf (is_running) Then
+      elapsed_time = Timer(RUN_TIMER,min,QUERY)
+      If (elapsed_time >= run_dur) Then end_run()
+    EndIf
+
+
+
+
+
+
+
     #If (DATA_SRCS=SDM_CSAT3A_EC150) Then
       EC100(ec100_raw(1),EC100_ADDR,1)
       Move(sonic(1),5,ec100_raw(1),5)
@@ -1139,10 +1220,6 @@ BeginProg
     CallTable(ts_slow)
     CallTable(rea)
     CallTable(met)
-
-    'XXX does deactivating "Boost" affect operation?
-    ExciteCAO(MFC_UPDN_CAO,setpnt_samp,False,False)
-    ExciteCAO(MFC_ZERO_CAO,setpnt_zero,False,False)
     
     just_had_1hz_scan = True
   NextScan
