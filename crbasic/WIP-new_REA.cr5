@@ -751,7 +751,7 @@ EndFunction
 Function FootprintEstimate(L_)
   Dim Dh, Ph, Zu, Zm, Zo
   Zm = sonic_height 'm
-  Zo = site_rufness 'm
+  Zo = site_rufness/1000 'cm -> m
   Zu = Zm * (LOG(Zm/Zo) - 1 + (Zo/Zm))
   If (ABS(Zu/L_) < 0.04) Then 'neutral
     Dh = 0.97
