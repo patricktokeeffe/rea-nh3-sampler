@@ -326,6 +326,8 @@ Alias run_control(1) = shield_ON
 Alias run_control(2) = run_queued
 Alias run_control(3) = run_aborted
 
+'for implicitly updating run start time after queuing a run when using delayed start schedule
+Public run_already_queued As Boolean
 Public is_running As Boolean
 
 Public rtime(9)
@@ -781,6 +783,39 @@ EndFunction
 
 
 '===============================  SUBROUTINES  ===============================
+Sub update_delayed_start_time()
+  RealTime(rtime)
+  start_run = ((hrofday+ch_run_delay) MOD 24)*60 + IIF(minofhr >= 30, 60, 30)
+EndSub
+
+Sub end_run()
+  is_running = False
+  run_aborted = Cancel
+  run_queued = Cancel
+  run_already_queued = False
+  elapsed_time = Timer(RUN_TIMER,min,STOP_RESET)
+EndSub
+
+Sub shields_up()
+  'TODO turn on MFCs!
+  setpnt_zero = IIF(is_running, zero_SPval, shld_SPval)
+  'TODO setpnt_samp = IIF(is_running, <sample rate>, zero)
+  'TODO maybe also set up/dn MFC valve close state depending on is_running
+  'PortSet(  )
+  'PortSet(  )
+  'TODO save current state to file "rea_runstate"
+EndSub
+
+Sub shields_down()
+  setpnt_updn = 0
+  setpnt_zero = 0
+  'TODO turn off MFCs! 
+  'PortSet(  )
+  'PortSet(  )
+  'TODO save current state to file "rea_runstate"
+EndSub
+
+'--------------------
 Sub set_default_choices()
   ch_flowSP_shld = DEF_FLOWSP_WAIT
   ch_flowSP_zero = DEF_FLOWSP_ZERO
@@ -887,8 +922,7 @@ Sub save_current_sch_choices()
   If (ch_run_begintod) Then
     start_run = ch_run_tod * 60
   Else
-    RealTime(rtime)
-    start_run = ((hrofday+IIF(minofhr >= 30, 1, 0.5)+ch_run_delay) MOD 24)*60
+    update_delayed_start_time()
   EndIf
   run_dur = ch_run_duration * 60
 
@@ -909,31 +943,6 @@ Sub load_sch_settings()
 EndSub
 
 'No analogous `reset_sch_settings()` needed.
-
-'--------------------
-Sub end_run()
-  is_running = False
-  run_queued = Cancel
-  run_aborted = Cancel
-  elapsed_time = Timer(RUN_TIMER,min,STOP_RESET)
-EndSub
-
-Sub shields_up()
-  'TODO turn on MFCs!
-  setpnt_zero = IIF(is_running, zero_SPval, shld_SPval)
-  'TODO setpnt_samp = IIF(is_running, <sample rate>, zero)
-  'TODO maybe also set up/dn MFC valve close state depending on is_running
-  'PortSet(  )
-  'PortSet(  )
-EndSub
-
-Sub shields_down()
-  setpnt_updn = 0
-  setpnt_zero = 0
-  'TODO turn off MFCs! 
-  'PortSet(  )
-  'PortSet(  )
-EndSub
 
 '--------------------
 Sub setup()
@@ -958,8 +967,16 @@ BeginProg
     ElseIf (is_running) Then
       shield_ON = Enable 'disallow turning off shield flow during sampling run
       run_queued = Enable 'or attempting to abort by "un-queueing"
-    ElseIf (run_queued AND NOT shield_ON) Then
-      run_queued = Cancel 'force activating shield flow b4 scheduling run
+    ElseIf (run_queued) Then
+      If (NOT shield_ON) Then
+        run_queued = Cancel 'force activating shield flow before scheduling run
+        run_already_queued = False
+      ElseIf (NOT run_begintod AND NOT run_already_queued) Then
+        update_delayed_start_time()
+        run_already_queued = True
+      EndIf
+    Else 'used as a lazy catch => ElseIf(NOT run_queued)
+      run_already_queued = False
     EndIf
 
     If (shield_ON) Then
