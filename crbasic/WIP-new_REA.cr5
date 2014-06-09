@@ -729,7 +729,7 @@ EndMenu
 '  from complex to complicated.
 Function LongTimeToFP(longtime) As Float
   If (longtime <= 0) Then Return (longtime)
-  If (longtime > 100) Then
+  If (longtime >= 100) Then
     Dim tmp
     tmp = longtime MOD 100
     longtime = (longtime INTDV 100) + IIF(tmp >= 59, 0.9833, tmp/60.0)
