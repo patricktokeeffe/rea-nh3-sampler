@@ -987,7 +987,7 @@ BeginProg
     ExciteCAO(MFC_UPDN_CAO,setpnt_updn,False,True) 'XXX do MFCs need boost opt?
     ExciteCAO(MFC_ZERO_CAO,setpnt_zero,False,True)
 
-    If (run_queued AND TimeIntoInterval(start_run, 1, Day)) Then
+    If (run_queued AND TimeIntoInterval(start_run, 1440, Min)) Then
       is_running = True
       elapsed_time = Timer(RUN_TIMER,min,START) 'XXX TODO check what happens
         'to this timer if run wraps around past it's start time the next day!
