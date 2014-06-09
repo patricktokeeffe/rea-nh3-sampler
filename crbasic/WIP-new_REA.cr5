@@ -458,8 +458,8 @@ Units site_rufness = cm
 '----- DEFAULT SCHEDULE -----
 Const DEF_RUN_DURATION = 1.0 'hr
 Const DEF_RUN_BEGINTOD = False
-Const DEF_RUN_DELAY = 0 'hr
-Const DEF_RUN_TOD = 12 'hour of day
+Const DEF_RUN_DELAY = 0.0 'hr
+Const DEF_RUN_TOD = 12.0 'hour of day
 
 Public sch_choice(NUM_SCHEDULE)
 Alias sch_choice(1) = ch_run_duration
@@ -723,7 +723,7 @@ EndMenu
 '
 'FIXME this function should actually round to STAT_INTV but that's a step up
 '  from complex to complicated.
-Function LongTimeToFP(longtime)
+Function LongTimeToFP(longtime) As Float
   If (longtime <= 0) Then Return (longtime)
   If (longtime > 100) Then
     Dim tmp
