@@ -401,7 +401,7 @@ Const DEF_SITE_FETCH_S = 0 'm, 0=disabled
 Const DEF_SITE_FETCH_W = 0 'm, 0=disabled
 Const DEF_SITE_RUFNESS = 0 'm, 0=disabled
 
-Dim choice(NUM_SETTINGS)
+Public choice(NUM_SETTINGS)
 Alias choice(1)  = ch_flowSP_shld
 Alias choice(2)  = ch_flowSP_zero
 Alias choice(3)  = ch_flowSP_auto
@@ -420,7 +420,7 @@ Alias choice(15) = ch_site_fetch_S
 Alias choice(16) = ch_site_fetch_W
 Alias choice(17) = ch_site_rufness
 
-Dim settings(NUM_SETTINGS)
+Public settings(NUM_SETTINGS)
 Alias settings(1)  = flowSP_wait
 Alias settings(2)  = flowSP_zero
 Alias settings(3)  = flowSP_auto
@@ -461,13 +461,13 @@ Const DEF_RUN_BEGINTOD = False
 Const DEF_RUN_DELAY = 0 'hr
 Const DEF_RUN_TOD = 12 'hour of day
 
-Dim sch_choice(NUM_SCHEDULE)
+Public sch_choice(NUM_SCHEDULE)
 Alias sch_choice(1) = ch_run_duration
 Alias sch_choice(2) = ch_run_begintod
 Alias sch_choice(3) = ch_run_delay
 Alias sch_choice(4) = ch_run_tod
 
-Dim sch_settings(NUM_SCHEDULE)
+Public sch_settings(NUM_SCHEDULE)
 Alias sch_settings(1) = run_duration 'hr
 Alias sch_settings(2) = run_begintod 'boolean
 Alias sch_settings(3) = run_delay 'hr
