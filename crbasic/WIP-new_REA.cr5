@@ -614,11 +614,11 @@ EndTable
 Const Yes = True
 Const Enable = True
 Const Automatic = True
-Const AtTimeOfDay = True
+Const At_TOD = True
 Const Cancel = False
 Const Disable = False
 Const Manual = False
-Const AfterTimeDelay = False
+Const Delayed = False
 Const A = 10
 Const B = 11
 Const C = 12
@@ -632,6 +632,7 @@ Dim set_defaults As Boolean
 Dim recompile As Boolean
 
 DisplayMenu("REA DAQ",-1)
+  DisplayValue("is running", is_running)
 '  SubMenu("View REA data")
 '    DisplayValue("Status", somevar) 'MetOnly / Armed / Running / Spent
 '  EndSubMenu
@@ -640,12 +641,14 @@ DisplayMenu("REA DAQ",-1)
     SubMenu("Schedule")
       MenuItem("Duration", ch_run_duration)
       MenuItem("Begin time", ch_run_begintod)
-        MenuPick(AfterTimeDelay, AtTimeOfDay)
+        MenuPick(Delayed, At_TOD)
       MenuItem("Time delay", ch_run_delay)
         MenuPick(0, 0.5, 1, 1.5, 2, 2.5, 3, 3.5, 4, 5, 6, 7, 8, 9, 10, 11, 12)
       MenuItem("Time of day", ch_run_tod)
       MenuItem("Apply?", save_schedule)
         MenuPick(Cancel, Yes)
+      'TODO add 'discard_schedule' for discarding changes
+      'TODO add 'reset_schedule' for resetting to defaults
     EndSubMenu
     MenuItem("Shield flow", shield_ON)
       MenuPick(Enable, Disable)
@@ -653,6 +656,7 @@ DisplayMenu("REA DAQ",-1)
       MenuPick(Cancel, Yes)
     MenuItem("Abort run", run_aborted)
       MenuPick(Cancel, Yes)
+'    MenuItem("CurrentState",  'TODO
   EndSubMenu
 
   SubMenu("Settings")
