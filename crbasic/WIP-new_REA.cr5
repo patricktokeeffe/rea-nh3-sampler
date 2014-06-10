@@ -798,7 +798,11 @@ EndSub
 
 Sub shields_up()
   'TODO turn on MFCs!
-  setpnt_zero = IIF(is_running, zero_SPval, shld_SPval)
+  If (is_running) Then
+    setpnt_zero = zero_SPval
+  Else
+    setpnt_zero = shld_SPval
+  EndIf
   'TODO setpnt_samp = IIF(is_running, <sample rate>, zero)
   'TODO maybe also set up/dn MFC valve close state depending on is_running
   'PortSet(  )
