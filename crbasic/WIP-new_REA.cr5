@@ -328,6 +328,7 @@ Alias run_control(3) = run_aborted
 
 'for implicitly updating run start time after queuing a run when using delayed start schedule
 Public run_already_queued As Boolean
+Public shld_already_ON As Boolean
 Public is_running As Boolean
 
 Public rtime(9)
@@ -372,17 +373,17 @@ Alias ctrlport(8) = mfc_pwr_is_on 'zero MFC valve
 
 '============================ SETTINGS RETENTION =============================
 Dim filehandle As Long
-Const SETTINGS_FILE = "CPU:rea_settings.dat"
-Const SCHEDULE_FILE = "CPU:rea_schedule.dat"
-Const NUM_SETTINGS = {17}
-Const NUM_SCHEDULE = {4}
 Const WRITEFILE = 0
 Const READFILE = 1
 
 '----- DEFAULT SETTINGS -----
+Const SETTINGS_FILE = "CPU:rea_settings.dat"
+Const NUM_SETTINGS = {18}
+
+Const DEF_FLOW_AUTO_SHLD = True '=LastState
 Const DEF_FLOWSP_WAIT = 2.0 'sLpm
 Const DEF_FLOWSP_ZERO = 0.5 'sLpm
-Const DEF_FLOWSP_AUTO = True
+Const DEF_FLOWSP_AUTO = True '=Automatic
 Const DEF_FLOWSP_UPDN = 10 'sLpm
 Const DEF_DBAND_MULT = 0.5 '0 < X <= 1
 Const DEF_DBAND_MIN = 0.05 'm/s
@@ -404,45 +405,49 @@ Const DEF_SITE_FETCH_W = 0 'm, 0=disabled
 Const DEF_SITE_RUFNESS = 0 'm, 0=disabled
 
 Public choice(NUM_SETTINGS)
-Alias choice(1)  = ch_flowSP_shld
-Alias choice(2)  = ch_flowSP_zero
-Alias choice(3)  = ch_flowSP_auto
-Alias choice(4)  = ch_flowSP_updn
-Alias choice(5)  = ch_dband_mult
-Alias choice(6)  = ch_dband_min
-Alias choice(7)  = ch_dband_def
-Alias choice(8)  = ch_sonic_azimuth
-Alias choice(9)  = ch_sonic_height
-Alias choice(10) = ch_irga_vert_sep
-Alias choice(11) = ch_irga_horz_sep
-Alias choice(12) = ch_site_declin
-Alias choice(13) = ch_site_fetch_N
-Alias choice(14) = ch_site_fetch_E
-Alias choice(15) = ch_site_fetch_S
-Alias choice(16) = ch_site_fetch_W
-Alias choice(17) = ch_site_rufness
+Alias choice(1)  = ch_flow_auto_shld
+Alias choice(2)  = ch_flowSP_shld
+Alias choice(3)  = ch_flowSP_zero
+Alias choice(4)  = ch_flowSP_auto
+Alias choice(5)  = ch_flowSP_updn
+Alias choice(6)  = ch_dband_mult
+Alias choice(7)  = ch_dband_min
+Alias choice(8)  = ch_dband_def
+Alias choice(9)  = ch_sonic_azimuth
+Alias choice(10) = ch_sonic_height
+Alias choice(11) = ch_irga_vert_sep
+Alias choice(12) = ch_irga_horz_sep
+Alias choice(13) = ch_site_declin
+Alias choice(14) = ch_site_fetch_N
+Alias choice(15) = ch_site_fetch_E
+Alias choice(16) = ch_site_fetch_S
+Alias choice(17) = ch_site_fetch_W
+Alias choice(18) = ch_site_rufness
 
 Public settings(NUM_SETTINGS)
-Alias settings(1)  = flowSP_wait
-Alias settings(2)  = flowSP_zero
-Alias settings(3)  = flowSP_auto
-Alias settings(4)  = flowSP_updn
-Alias settings(5)  = dband_mult
-Alias settings(6)  = dband_min
-Alias settings(7)  = dband_def
-Alias settings(8)  = sonic_azimuth
-Alias settings(9)  = sonic_height
-Alias settings(10) = irga_vert_sep
-Alias settings(11) = irga_horz_sep
-Alias settings(12) = site_declin
-Alias settings(13) = site_fetch_N
-Alias settings(14) = site_fetch_E
-Alias settings(15) = site_fetch_S
-Alias settings(16) = site_fetch_W
-Alias settings(17) = site_rufness
+Alias settings(1)  = flow_auto_shld
+Alias settings(2)  = flowSP_wait
+Alias settings(3)  = flowSP_zero
+Alias settings(4)  = flowSP_auto
+Alias settings(5)  = flowSP_updn
+Alias settings(6)  = dband_mult
+Alias settings(7)  = dband_min
+Alias settings(8)  = dband_def
+Alias settings(9)  = sonic_azimuth
+Alias settings(10)  = sonic_height
+Alias settings(11) = irga_vert_sep
+Alias settings(12) = irga_horz_sep
+Alias settings(13) = site_declin
+Alias settings(14) = site_fetch_N
+Alias settings(15) = site_fetch_E
+Alias settings(16) = site_fetch_S
+Alias settings(17) = site_fetch_W
+Alias settings(18) = site_rufness
+'HINT define units despite non-Public b/c many are saved to `info` table
+'Units flow_auto_shld = boolean
 Units flowSP_wait = sLpm
 Units flowSP_zero = sLpm
-Units flowSP_auto = Boolean
+'Units flowSP_auto = boolean
 Units dband_mult = ratio
 Units dband_min = m/s
 Units dband_def = m/s
@@ -458,6 +463,9 @@ Units site_fetch_W = m
 Units site_rufness = cm
 
 '----- DEFAULT SCHEDULE -----
+Const SCHEDULE_FILE = "CPU:rea_schedule.dat"
+Const NUM_SCHEDULE = {4}
+
 Const DEF_RUN_DURATION = 1.0 'hr
 Const DEF_RUN_BEGINTOD = False
 Const DEF_RUN_DELAY = 0.0 'hr
@@ -474,6 +482,10 @@ Alias sch_settings(1) = run_duration 'hr
 Alias sch_settings(2) = run_begintod 'boolean
 Alias sch_settings(3) = run_delay 'hr
 Alias sch_settings(4) = run_tod 'hr of day
+
+'----- LAST STATE RETENTION -----
+Const SHLDSTATE_FILE = "CPU:rea_shield_state.dat"
+Public lastrun_shield_ON 'Boolean (but must be float to save in calfile)
 
 
 '===============================  DATA TABLES  ===============================
@@ -617,10 +629,12 @@ Const Yes = True
 Const Enable = True
 Const Automatic = True
 Const At_TOD = True
+Const LastState = True
 Const Cancel = False
 Const Disable = False
 Const Manual = False
 Const Delayed = False
+Const AlwaysOff = False
 Const A = 10
 Const B = 11
 Const C = 12
@@ -663,9 +677,11 @@ DisplayMenu("REA DAQ",-1)
 
   SubMenu("Settings")
     SubMenu("Flow rates")
-      MenuItem("Zero, waiting", ch_flowSP_shld)
-      MenuItem("Zero, running", ch_flowSP_zero)
-      MenuItem("Sample SP", ch_flowSP_auto)
+      MenuItem("Shield startup", ch_flow_auto_shld)
+        MenuPick(LastState,AlwaysOff)
+      MenuItem("Standby shield rate", ch_flowSP_shld)
+      MenuItem("Running shield rate", ch_flowSP_zero)
+      MenuItem("Sample SP mode", ch_flowSP_auto)
         MenuPick(Automatic, Manual)
       MenuItem("Manual rate", ch_flowSP_updn)
     EndSubMenu
@@ -796,31 +812,9 @@ Sub end_run()
   elapsed_time = Timer(RUN_TIMER,min,STOP_RESET)
 EndSub
 
-Sub shields_up()
-  'TODO turn on MFCs!
-  If (is_running) Then
-    setpnt_zero = zero_SPval
-  Else
-    setpnt_zero = shld_SPval
-  EndIf
-  'TODO setpnt_samp = IIF(is_running, <sample rate>, zero)
-  'TODO maybe also set up/dn MFC valve close state depending on is_running
-  'PortSet(  )
-  'PortSet(  )
-  'TODO save current state to file "rea_runstate"
-EndSub
-
-Sub shields_down()
-  setpnt_updn = 0
-  setpnt_zero = 0
-  'TODO turn off MFCs! 
-  'PortSet(  )
-  'PortSet(  )
-  'TODO save current state to file "rea_runstate"
-EndSub
-
 '--------------------
 Sub set_default_choices()
+  ch_flow_auto_shld = DEF_FLOW_AUTO_SHLD
   ch_flowSP_shld = DEF_FLOWSP_WAIT
   ch_flowSP_zero = DEF_FLOWSP_ZERO
   ch_flowSP_auto = DEF_FLOWSP_AUTO
@@ -949,12 +943,64 @@ EndSub
 'No analogous `reset_sch_settings()` needed.
 
 '--------------------
+Sub save_shield_state()
+  Calfile(lastrun_shield_ON,1,SHLDSTATE_FILE,WRITEFILE)
+EndSub
+
+Sub load_shield_state()
+  filehandle = FileOpen(SHLDSTATE_FILE,"rb",0)
+  FileClose(filehandle)
+  If (filehandle=0) Then 'file not found
+    lastrun_shield_ON = False
+  Else
+    Calfile(lastrun_shield_ON,1,SHLDSTATE_FILE,READFILE)
+  EndIf
+  save_shield_state()
+EndSub
+
+Sub update_shield_state()
+  If (shield_ON) Then
+    If (NOT shld_already_ON) Then
+      save_shield_state()
+      shld_already_ON = True
+      'turn on MFCs: update state flag for PortSet()
+    EndIf
+    'XXX FIXME next line could be causing type coercion errors
+    ' (1) original
+    'setpnt_zero = IIF(is_running, zero_SPval, shld_SPval)
+    ' (2) satisfactory workaround to IIF() behavior
+    If (is_running) Then
+      setpnt_zero = zero_SPval
+    Else
+      setpnt_zero = shld_SPval
+    EndIf
+    ' (3) another way? --> nope also doesn't work
+    'setpnt_zero = IIF(is_running, zero_SPval*1, shld_SPval*1) 
+    'TODO setpnt_samp = IIF(is_running, <sample rate>, zero)
+    'TODO maybe also set up/dn MFC valve close state depending on is_running
+  Else
+    setpnt_updn = 0
+    setpnt_zero = 0
+    If (shld_already_ON) Then
+      save_shield_state()
+      shld_already_ON = False
+      'turn off MFCs: update state flag for PortSet
+    EndIf
+  EndIf
+EndSub
+
+'---------------------
 Sub setup()
   rot_angles(1) = 1.0 'XXX add runtime stuff file!
   deadband = NAN
   
   load_settings()
   load_sch_settings()
+  load_shield_state()
+  If (flow_auto_shld AND lastrun_shield_ON) Then
+    shield_ON = True
+  EndIf
+
   SDMSpeed(SDM_SPEED)
   CallTable(info)
 EndSub
@@ -983,11 +1029,8 @@ BeginProg
       run_already_queued = False
     EndIf
 
-    If (shield_ON) Then
-      shields_up()
-    Else
-      shields_down()
-    EndIf
+    update_shield_state()
+'    PortSet() 'MFCs on/off
     ExciteCAO(MFC_UPDN_CAO,setpnt_updn,False,True) 'XXX do MFCs need boost opt?
     ExciteCAO(MFC_ZERO_CAO,setpnt_zero,False,True)
 
