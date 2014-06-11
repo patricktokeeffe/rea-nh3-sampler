@@ -673,11 +673,11 @@ Const Disable = False
 Const Manual = False
 Const Delayed = False
 Const AlwaysOff = False
-Const A = 10
-Const B = 11
-Const C = 12
-Const D = 13
-Const E = 14
+Const A_ = 10
+Const B_ = 11
+Const C_ = 12
+Const D_ = 13
+Const E_ = 14
 Dim save_schedule As Boolean
 Dim discard_schedule As Boolean
 Dim reset_schedule As Boolean
@@ -760,7 +760,7 @@ DisplayMenu("REA DAQ",-1)
       MenuPick(DATA_SRCS, SDM_CSAT3_LI7500, SDM_CSAT3A_EC150)
     'SDM speed must be set through const table, menupick would be too onerous
     MenuItem("SDM addr: CSAT3", CSAT_ADDR)
-      MenuPick(CSAT_ADDR,0,1,2,3,4,5,6,7,8,9,A,B,C,D,E)
+      MenuPick(CSAT_ADDR,0,1,2,3,4,5,6,7,8,9,A_,B_,C_,D_,E_)
     MenuItem("SDM addr: LI7500", LI7500_ADDR)
       MenuPick(LI7500_ADDR,0,1,2,3,4,5,6,7,8,9,10,11,12,13,14)
     MenuItem("SDM addr: EC100", EC100_ADDR)
