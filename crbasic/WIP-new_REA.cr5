@@ -44,13 +44,13 @@ Const MFC_ZERO_SE = 5  'note: single-ended
 Const MFC_ZERO_CAO = 2
 
 Const C_UPDN_OFF = 1 'C1: valve off for UP/DN MFCs
-Const C_ZERO_OFF = 2 'C2: valve off for zero MFC
-Const C_UPDN_PRG = 3 'C3: valve purge for UP/DN MFCs <- not implemented XXX
-Const C_ZERO_PRG = 4 'C4: valve purge for zero MFC
-Const C_VLV_UP = 5   'C5: 3-way valve at UP denuder inlet
-Const C_VLV_DN = 6   'C6: 3-way valve at DN denuder inlet
-Const C_PMP_ON = 7   'C7: relay to pump power
-Const C_MFC_ON = 8   'C8: power to MFCs 
+'Const C_ZERO_OFF = 2 'C2: valve off for zero MFC
+'Const C_UPDN_PRG = 3 'C3: valve purge for UP/DN MFCs <- not implemented XXX
+'Const C_ZERO_PRG = 4 'C4: valve purge for zero MFC
+Const C_VLV_UP = 5   'C5: relay: 3-way valve at UP denuder inlet
+Const C_VLV_DN = 6   'C6: relay: 3-way valve at DN denuder inlet
+Const C_PMP_ON = 7   'C7: relay: pump power
+Const C_MFC_ON = 8   'C8: relay: MFC power
 
 '----- ANALOG SCALING -----
 Const HMP_T_MULT = (60 + 40) / 1000    '-40* - 60* / 0-1V
@@ -1005,7 +1005,6 @@ Sub update_shield_state()
     If (NOT shld_already_ON) Then
       save_shield_state()
       shld_already_ON = True
-      'turn on MFCs: update state flag for PortSet()
     EndIf
     'XXX FIXME next line could be causing type coercion errors
     ' (1) original
@@ -1019,14 +1018,12 @@ Sub update_shield_state()
     ' (3) another way? --> nope also doesn't work
     'setpnt_zero = IIF(is_running, zero_SPval*1, shld_SPval*1) 
     'TODO setpnt_samp = IIF(is_running, <sample rate>, zero)
-    'TODO maybe also set up/dn MFC valve close state depending on is_running
   Else
     setpnt_updn = 0
     setpnt_zero = 0
     If (shld_already_ON) Then
       save_shield_state()
       shld_already_ON = False
-      'turn off MFCs: update state flag for PortSet
     EndIf
   EndIf
 EndSub
@@ -1075,11 +1072,6 @@ BeginProg
       run_already_queued = False
     EndIf
 
-    update_shield_state()
-'    PortSet() 'MFCs on/off
-    ExciteCAO(MFC_UPDN_CAO,setpnt_updn,False,True) 'XXX do MFCs need boost opt?
-    ExciteCAO(MFC_ZERO_CAO,setpnt_zero,False,True)
-
     If (run_queued AND TimeIntoInterval(start_run, 1440, Min)) Then
       is_running = True
       elapsed_time = Timer(RUN_TIMER,min,START) 'XXX TODO check what happens
@@ -1089,6 +1081,11 @@ BeginProg
       If (elapsed_time >= run_dur) Then end_run()
     EndIf
 
+    update_shield_state()
+    PortSet(C_MFC_ON, shield_ON)
+    PortSet(C_UPDN_OFF, NOT is_running)
+    ExciteCAO(MFC_UPDN_CAO,setpnt_updn,False,True) 'XXX do MFCs need boost opt?
+    ExciteCAO(MFC_ZERO_CAO,setpnt_zero,False,True)
 
 
     #If (DATA_SRCS=SDM_CSAT3A_EC150) Then
