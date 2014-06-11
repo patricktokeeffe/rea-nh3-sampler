@@ -77,6 +77,8 @@ Const MW_air = 28.98          'molecular weight of dry air, g/mol
 Const MU_WPL = MW_air/MW_h2o  'Ratio of MW of dry air to that of water vapor
 Const R = 8.3143*10^-3        'Universal gas constant, (kPa m^3)/(K mol)
 Const Rd = R/MW_air           'Gas constant for dry air, (kPa m^3)/(K g)
+Const R_ = 8.3144621e-6 'universal gas constant    (kPa m^3)/(K mmol)
+Const R_AIR = 287.058 'specific gas constant: dry air    J/(kg K)
 'Const Rv = R/MW_h2o           'Gas constant for water vapor, (kPa m^3)/(K g)
 Const K_ = 0.41               'Von Karman constant, dimless
 Const G_ = 9.81               'Gravity, m/s^2
@@ -796,6 +798,22 @@ Function LongTimeToFP(longtime) As Float
     longtime = (longtime INTDV 100) + IIF(tmp >= 59, 0.9833, tmp/60.0)
   EndIf
   Return (Round(longtime*2, 0)/2)
+EndFunction
+
+'[Tmpr] = C, [Press] = kPa (abs.)
+Function density_of_air(tmpr, press) As Float 'kg/m^3
+  '(Pa/kPa)(kPa)(kg*K / J)(1/K)(J / Pa*m^3)
+  Return (1000*press / (R_AIR*(tmpr+273.15)))
+EndFunction
+
+'Derived by inverting equations in Appendix D of EC150 manual
+'[Gas] = mmol/m^3, [H2O] = mmol/m^3, [Tmpr] = C, [Press] = kPa (abs.)
+Function dry_mixing_ratio(Gas, H2O, tmpr, press) As Float 'ppm (umol/mol)
+  Dim rhoair 'mmol/m^3 (don't use density_of_air(..) b/c units are so far off)
+  'mmol/m^3 = (kPa)(K mmol/kPa m^3)(1/K)
+  rhoair = press/(R_ * (tmpr + 273.15))
+  'ppm = (umol/mol)(mmol/m^3) / (mmol/^3 - mmol/m^3)
+  Return Round(10^6 * Gas / (rhoair - H2O), 0)
 EndFunction
 
 'estimate latent heat of vaporization by formula 8 from:
