@@ -378,6 +378,10 @@ Public flow_setpnt(2) 'TODO Dim
 Alias flow_setpnt(1) = setpnt_zero
 Alias flow_setpnt(2) = setpnt_updn
 
+Public mean_up_flow
+Public mean_dn_flow
+Public decreasing_flow As Boolean 'XXX TST
+
 Public deadband 
 Dim neg_deadband
 Units deadband = m/s
@@ -1005,19 +1009,16 @@ Sub update_shield_state()
     If (NOT shld_already_ON) Then
       save_shield_state()
       shld_already_ON = True
+      'HINT initialize sample flow SP here but update SP within autothrottle()
+      'XXX is this IIF() vulnerable to wild values issue?
+      setpnt_updn = IIF(flowSP_auto, (UPDNFLOW_MAX/MFC_UPDN_MULT), flowSP_updn)
     EndIf
-    'XXX FIXME next line could be causing type coercion errors
-    ' (1) original
-    'setpnt_zero = IIF(is_running, zero_SPval, shld_SPval)
-    ' (2) satisfactory workaround to IIF() behavior
+    'HACK an IIF is preferable except it returns wild values
     If (is_running) Then
       setpnt_zero = zero_SPval
     Else
       setpnt_zero = shld_SPval
     EndIf
-    ' (3) another way? --> nope also doesn't work
-    'setpnt_zero = IIF(is_running, zero_SPval*1, shld_SPval*1) 
-    'TODO setpnt_samp = IIF(is_running, <sample rate>, zero)
   Else
     setpnt_updn = 0
     setpnt_zero = 0
@@ -1025,6 +1026,14 @@ Sub update_shield_state()
       save_shield_state()
       shld_already_ON = False
     EndIf
+  EndIf
+EndSub
+
+Sub autothrottle()
+  AvgRun(mean_up_flow,1,flow_up,10)
+  AvgRun(mean_dn_flow,1,flow_dn,10)
+  If (ABS(mean_up_flow - mean_dn_flow) > 0.1) Then
+    decreasing_flow = True
   EndIf
 EndSub
 
@@ -1299,6 +1308,7 @@ BeginProg
     VoltDiff(flow_up,1,mv5000,MFC_UP_DF,True,0,INTEG,MFC_UPDN_MULT,MFC_UPDN_OFF)
     VoltDiff(flow_dn,1,mv5000,MFC_DN_DF,True,0,INTEG,MFC_UPDN_MULT,MFC_UPDN_OFF)
     VoltSe(flow_zero,1,mv5000,MFC_ZERO_SE,True,0,INTEG,MFC_ZERO_MULT,MFC_ZERO_OFF)
+    autothrottle()
 
     VaporPressure(hmp_e, hmp_T, hmp_RH)
 
