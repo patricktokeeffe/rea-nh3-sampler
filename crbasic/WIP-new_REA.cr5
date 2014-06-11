@@ -15,7 +15,8 @@
 Const SDM_CSAT3_LI7500 = 1003 'aliases for menu
 Const SDM_CSAT3A_EC150 = 1004
 ConstTable
-  Const DATA_SRCS = SDM_CSAT3_LI7500
+  'Const DATA_SRCS = SDM_CSAT3_LI7500
+  Const DATA_SRCS = SDM_CSAT3A_EC150
   'things which MUST be constants and therefore cannot be in "settings file"
   Const SDM_SPEED = 30   'default: 30 usec; accepts 8 usec - 3 msec
   Const CSAT_ADDR = 3    'default CSAT3 SDM address: 3
@@ -131,9 +132,6 @@ Dim inbetween_1hz_scan As Boolean
 '===============================  VARIABLES  =================================
 
 '----- SENSORS -----
-Dim ec100_raw(12) 'Campbellsci EC100/EC150/CSAT3A
-'EC150 reports in mass density, not molar density!
-
 Public sonic(5)
 Alias sonic(1) = sonic_Ux
 Alias sonic(2) = sonic_Uy
@@ -144,16 +142,26 @@ Units sonic = m/s
 Units sonic_Ts = degC
 Units sonic_diag = bitmap
 
-Public irga(5)
+Public irga(4)
 Alias irga(1) = irga_CO2
 Alias irga(2) = irga_H2O
 Alias irga(3) = irga_press
 Alias irga(4) = irga_diag
-Alias irga(5) = irga_signal 'TODO retain AGC or CO2/H2O signal strength?
 Units irga = mmol/m^3
 Units irga_press = kPa
 Units irga_diag = bitmap
-Units irga_signal = ratio 'XXX
+
+#If (DATA_SRCS=SDM_CSAT3A_EC150) Then
+  Dim ec100_raw(12) 'Campbellsci EC100/EC150/CSAT3A
+
+  Public extra_irga(3)
+  Alias extra_irga(1) = irga_tmpr
+  Alias extra_irga(2) = irga_CO2_signal
+  Alias extra_irga(3) = irga_H2O_signal
+  Units irga_tmpr = degC
+  Units irga_CO2_signal = ratio
+  Units irga_H2O_signal = ratio
+#EndIf
 
 Public hmp45c(2)
 Alias hmp45c(1) = hmp_T
@@ -183,8 +191,9 @@ Units Uz_rot = m/s
 Public disable_sonic As Boolean 'diagnostic flag handling
 Public disable_irga As Boolean
 
-Dim lagged(11) 'update lagged record retrieval if array dimensions change
-Public aligned(11)
+Dim dummy(3) = {0, 0, 0}
+Dim lagged(14) 'HINT length of `work_lag` table output
+Public aligned(14)
 Alias aligned(1)  = lag_Ux
 Alias aligned(2)  = lag_Uy
 Alias aligned(3)  = lag_Uz
@@ -192,11 +201,13 @@ Alias aligned(4)  = lag_Ts
 Alias aligned(5)  = lag_sonic_diag
 Alias aligned(6)  = lag_CO2
 Alias aligned(7)  = lag_H2O
-Alias aligned(8)  = lag_press
+Alias aligned(8)  = lag_irga_press
 Alias aligned(9)  = lag_irga_diag
-'Alias aligned(10) = lag_irga_signal
-Alias aligned(10) = lag_vlv_up_on
-Alias aligned(11) = lag_vlv_dn_on
+Alias aligned(10) = lag_irga_tmpr
+Alias aligned(11) = lag_CO2_signal
+Alias aligned(12) = lag_H2O_signal
+Alias aligned(13) = lag_vlv_up_on
+Alias aligned(14) = lag_vlv_dn_on
 Units lag_Ux = m/s
 Units lag_Uy = m/s
 Units lag_Uz = m/s
@@ -204,10 +215,11 @@ Units lag_Ts = degC
 Units lag_sonic_diag = bitmap
 Units lag_CO2 = mmol/m^3
 Units lag_H2O = mmol/m^3
-Units lag_press = kPa
+Units lag_irga_press = kPa
 Units lag_irga_diag = bitmap
-'Units lag_irga_signal = ratio
-'no units for valve booleans
+Units lag_irga_tmpr = degC
+Units lag_CO2_signal = ratio
+Units lag_H2O_signal = ratio
 
 'Public denom 'for calculating mixing ratios - TODO Dim 
 
@@ -215,63 +227,74 @@ Public cov_sonic(1,4)'= [ [Ts,  Ux, Uy, Uz] ]
 Public cov_irga(2,4) '= [ [CO2, Ux, Uy, Uz], 
                      '    [H2O, Ux, Uy, Uz],
                      '    [Tc,  Ux, Uy, Uz] ]  <-- Tc not implemented!
-Public cov_out(37)
-Alias cov_out(1)  = Ux_Avg
+Public cov_out(40)
+Alias cov_out(1)  = Ux_Avg 'Average() x4
 Alias cov_out(2)  = Uy_Avg
 Alias cov_out(3)  = Uz_Avg
 Alias cov_out(4)  = Ts_Avg
-Alias cov_out(5)  = Ts_Std
+Alias cov_out(5)  = Ts_Std 'Covariance(cov_sonic(1,1) .. limit:10)
 Alias cov_out(6)  = cov_Ts_Ux
 Alias cov_out(7)  = cov_Ts_Uy
 Alias cov_out(8)  = cov_Ts_Uz
-Alias cov_out(9)  = cov_Ux_Ux
+Alias cov_out(9)  = Ux_Std
 Alias cov_out(10) = cov_Ux_Uy
 Alias cov_out(11) = cov_Ux_Uz
-Alias cov_out(12) = cov_Uy_Uy
+Alias cov_out(12) = Uy_Std
 Alias cov_out(13) = cov_Uy_Uz
 Alias cov_out(14) = Uz_Std
-Alias cov_out(15) = WS_sclr_Avg
+Alias cov_out(15) = WS_sclr_Avg 'WindVector(..option 0)
 Alias cov_out(16) = WD_unit_Avg
-Alias cov_out(17) = WD_unit_Std
-'Alias cov_out(18) = duplicate
+Alias cov_out(17) = WD_Yamartino_Std
+'Alias cov_out(18) = WS_slcr_Avg (dup) 'WindVector(..option 2)
 Alias cov_out(19) = WS_rslt_Avg
 Alias cov_out(20) = WD_rslt_Avg
-Alias cov_out(21) = WD_rslt_Std
-Alias cov_out(22) = CO2_Avg
+Alias cov_out(21) = WD_CSI_Std
+Alias cov_out(22) = CO2_Avg 'Average() x3
 Alias cov_out(23) = H2O_Avg
-Alias cov_out(24) = press_Avg
-Alias cov_out(25) = CO2_Std
-Alias cov_out(26) = cov_CO2_Ux
-Alias cov_out(27) = cov_CO2_Uy
-Alias cov_out(28) = cov_CO2_Uz
-Alias cov_out(29) = H2O_Std
-Alias cov_out(30) = cov_H2O_Ux
-Alias cov_out(31) = cov_H2O_Uy
-Alias cov_out(32) = cov_H2O_Uz
-'XXX implement Tc covariances?
-Alias cov_out(33) = vlv_up_on_Tot
-Alias cov_out(34) = vlv_dn_on_Tot
-Alias cov_out(35) = vlv_possible
-Alias cov_out(36) = hmp_T_Avg
-Alias cov_out(37) = hmp_e_Avg
+Alias cov_out(24) = irga_press_Avg
+Alias cov_out(25) = irga_tmpr_Avg 'Average/Sample() x3
+Alias cov_out(26) = irga_CO2_signal_Avg
+Alias cov_out(27) = irga_H2O_signal_Avg
+Alias cov_out(28) = CO2_Std 'Covariance(cov_irga(1,1) .. limit:4)
+Alias cov_out(29) = cov_CO2_Ux
+Alias cov_out(30) = cov_CO2_Uy
+Alias cov_out(31) = cov_CO2_Uz
+Alias cov_out(32) = H2O_Std 'Covariance(cov_irga(2,1) .. limit:4)
+Alias cov_out(33) = cov_H2O_Ux
+Alias cov_out(34) = cov_H2O_Uy
+Alias cov_out(35) = cov_H2O_Uz
+'  Alias cov_out() = Tc_Std 'Covariance(cov_irga(3,1) .. limit:4)
+'  Alias cov_out() = cov_Tc_Ux
+'  Alias cov_out() = cov_Tc_Uy
+'  Alias cov_out() = cov_Tc_Uz
+Alias cov_out(36) = vlv_up_on_Tot 'Totalize() x3
+Alias cov_out(37) = vlv_dn_on_Tot
+Alias cov_out(38) = vlv_possible
+Alias cov_out(39) = hmp_T_Avg 'Average() x2
+Alias cov_out(40) = hmp_e_Avg
 Units Ux_Avg = m/s
 Units Uy_Avg = m/s
 Units Uz_Avg = m/s
 Units Ts_Avg = degC
+'ignore other cov units
+Units Uz_Std = m/s
+Units WS_sclr_Avg = m/s
+Units WD_unit_Avg = degEofN
+Units WD_Yamartino_Std = deg
+Units WS_rslt_Avg = m/s
+Units WD_rslt_Avg = degEofN
+Units WD_CSI_Std = deg
 Units CO2_Avg = mmol/m^3
 Units H2O_Avg = mmol/m^3
-Units press_Avg = kPa
+Units irga_press_Avg = kPa
+Units irga_tmpr_Avg = degC
+Units irga_CO2_signal_Avg = ratio
+Units irga_H2O_signal_Avg = ratio
 Units Ts_Std = degC
 Units Uz_Std = m/s
 Units CO2_Std = mmol/m^3
 Units H2O_Std = mmol/m^3
 'ignore other cov units
-Units WS_sclr_Avg = m/s
-Units WD_unit_Avg = degEofN
-Units WD_unit_Std = deg
-Units WS_rslt_Avg = m/s
-Units WD_rslt_Avg = degEofN
-Units WD_rslt_Std = deg
 Units vlv_up_on_Tot = scans
 Units vlv_dn_on_Tot = scans
 Units vlv_possible = scans
@@ -492,11 +515,13 @@ Public lastrun_shield_ON 'Boolean (but must be float to save in calfile)
 
 '----- WORKING TABLES -----
 DataTable(work_lag,TRUE,LAG_SCANS)
-  Sample(4,sonic(1),IEEE4)
-  Sample(1,sonic_diag,UINT2)
-  Sample(3,irga(1),IEEE4)
-  Sample(1,irga_diag,UINT2)
-'  Sample(1,irga_signal,UINT2)
+  Sample(5,sonic(1),IEEE4)
+  Sample(4,irga(1),IEEE4)
+  #If (DATA_SRCS=SDM_CSAT3A_EC150) Then
+    Sample(3,extra_irga(1),IEEE4)
+  #Else
+    Sample(3,dummy(1),FP2)
+  #EndIf
   Sample(1,vlv_up_is_on,Boolean)
   Sample(1,vlv_dn_is_on,Boolean)
 EndTable
@@ -508,15 +533,22 @@ DataTable(work_cov,TRUE,1)
   Average(1,lag_Uz,IEEE4,disable_sonic)
   Average(1,lag_Ts,IEEE4,disable_sonic)
   Covariance(4,cov_sonic(1,1),IEEE4,disable_sonic,10)
-  WindVector(1,-1*lag_Uy,lag_Ux,IEEE4,disable_sonic,0,1,1) 
-  'Opt1: mean horiz WS, unit vctr mean WD, and std WD using Yamartino eqn
+  WindVector(1,-1*lag_Uy,lag_Ux,IEEE4,disable_sonic,0,1,0)
+  'Opt0: mean horiz WS, unit vctr mean WD, and std WD using Yamartino eqn
   WindVector(1,-1*lag_Uy,lag_Ux,IEEE4,disable_sonic,0,1,2)
   'Opt2: mean horiz WS, rslt mean WS, rslt mean WD, WS-weighted WD sdev CSI eqn
   'TODO sonic_uptime
 
   Average(1,lag_CO2,IEEE4,disable_irga)
   Average(1,lag_H2O,IEEE4,disable_irga)
-  Average(1,lag_press,IEEE4,disable_irga)
+  Average(1,lag_irga_press,IEEE4,disable_irga)
+  #If (DATA_SRCS=SDM_CSAT3A_EC150) Then
+    Average(1,lag_irga_tmpr,IEEE4,disable_irga)
+    Average(1,lag_CO2_signal,IEEE4,disable_irga)
+    Average(1,lag_H2O_signal,IEEE4,disable_irga)
+  #Else
+    Sample(3,dummy(1),FP2)
+  #EndIf
   Covariance(4,cov_irga(1,1),IEEE4,disable_irga,4)
   Covariance(4,cov_irga(1,2),IEEE4,disable_irga,4)
   'Covariance(4,cov_irga(1,3),IEEE4,disable_irga,4)
@@ -537,14 +569,16 @@ DataTable(ts_fast,True,-1)
   Sample(1,sonic_Uy,IEEE4)
   Sample(1,sonic_Uz,IEEE4)
   Sample(1,sonic_Ts,IEEE4)
-  Sample(1,sonic_diag,UINT2)
+  Sample(1,sonic_diag,IEEE4)
   Sample(1,irga_CO2,IEEE4)
   Sample(1,irga_H2O,IEEE4)
-'  Sample(1,irga_temp,IEEE4)
   Sample(1,irga_press,IEEE4)
-  Sample(1,irga_diag,UINT2)
-'  Sample(1,irga_co2_sig,FP2)
-'  Sample(1,irga_h2o_sig,FP2)
+  Sample(1,irga_diag,IEEE4)
+  #If (DATA_SRCS=SDM_CSAT3A_EC150) Then
+    Sample(1,irga_tmpr,IEEE4)
+    Sample(1,irga_CO2_signal,IEEE4)
+    Sample(1,irga_H2O_signal,IEEE4)
+  #EndIf
   Sample(1,vlv_up_is_on,Boolean)
   Sample(1,vlv_dn_is_on,Boolean)
 EndTable
@@ -1017,6 +1051,8 @@ EndSub
 '===============================  MAIN PROGRAM  ==============================
 BeginProg
   Call setup()
+  Move(sonic(1),5,NAN,1)
+  Move(irga(1),4,NAN,1)
 
   Scan(FAST_INTV,mSec,FAST_BUFF,0)
     'impose logical order on run controls
@@ -1055,19 +1091,17 @@ BeginProg
 
 
 
-
-
-
-
     #If (DATA_SRCS=SDM_CSAT3A_EC150) Then
       EC100(ec100_raw(1),EC100_ADDR,1)
       Move(sonic(1),5,ec100_raw(1),5)
-      'CRITICAL: convert mass density to molar density units
-      irga_CO2 = ec100_raw(6)/MW_co2 
-      irga_H2O = ec100_raw(7)*1000/MW_h2o
+      irga_CO2 = ec100_raw(6)/MW_co2 'mg/m^3 --> mmol/m^3
+      irga_H2O = ec100_raw(7)*1000/MW_h2o 'g/m^3 --> mmol/m^3
       irga_diag = ec100_raw(8)
+      irga_tmpr = ec100_raw(9)
       irga_press = ec100_raw(10)
-    #Else
+      irga_CO2_signal = ec100_raw(11)
+      irga_H2O_signal = ec100_raw(12)
+    #ElseIf (DATA_SRCS=SDM_CSAT3_LI7500) Then
       CS7500(irga_CO2,1,LI7500_ADDR,LI7500_CMD)
       CSAT3(sonic_Ux,1,CSAT_ADDR,CSAT3_CMD,CSAT3_OPT)
     #EndIf
@@ -1095,50 +1129,25 @@ BeginProg
     If (work_lag.Output(1,LAG_SCANS)) Then
       #If (DATA_SRCS=SDM_CSAT3A_EC150) Then
         GetRecord(lagged(1),work_lag,LAG_SCANS-EC100_DELAY)
-        Move(aligned(1),9,lagged(1),9)
-        If (lag_sonic_diag <> NAN) Then
-          'CSAT3A: bits 0-5 are diag flags, true when hi
-          disable_sonic = lag_sonic_diag AND &h3F '= 0011 1111
-        Else
-          Move(lag_Ux,5,NAN,1)
-          disable_sonic = True
-        EndIf
-        If ((lag_irga_diag <> NAN) AND (lag_irga_diag <> -1)) Then
-          'EC150: bit 0 is HI when any diag flag is true
-          'treat all bits high (-1) like NAN
-          disable_irga = disable_sonic OR (lag_irga_diag AND &h1)
-        Else
-          lag_CO2 = NAN
-          lag_H2O = NAN
-          lag_press = NAN
-          disable_irga = True
-      #Else
+        Move(aligned(1),14,lagged(1),14)
+        disable_sonic = lag_sonic_diag > 0
+        'XXX possibly check for Ux=-99999; see 2014 PROPHET FIS DAQ v1.0.5
+        '  and v1.1 changelog for details on why
+        disable_irga = lag_irga_diag > 0
+      #ElseIf (DATA_SRCS=SDM_CSAT3_LI7500) Then
         GetRecord(lagged(1),work_lag,LAG_SCANS-CSAT3_DELAY)
         Move(aligned(1),5,lagged(1),5)
-        If (lag_sonic_diag <> NAN) Then
-          'CSAT3: bits 12-15 are diag flags
-          disable_sonic = lag_sonic_diag AND &hF000
-        Else
-          Move(lag_Ux,5,NAN,1)
-          disable_sonic = True
-        EndIf
+        disable_sonic = lag_sonic_diag AND &hF000 'bits 12-15 are flags
         
         GetRecord(lagged(1),work_lag,LAG_SCANS-LI7500_DELAY)
         Move(aligned(6),4,lagged(6),4)
-        If (lag_irga_diag <> NAN) Then
-          'LI7500: bits 4-7 are diag flags, high is false
-          'AGC% encoded in bits 0-3
-          disable_irga = (lag_irga_diag XOR &hF0) AND &hF0
-        Else
-          lag_CO2 = NAN
-          lag_H2O = NAN
-          lag_press = NAN
-          disable_irga = True
-        EndIf
+        Move(aligned(10),3,NAN,1)
+        'bits 4-7 are "OK" flags & AGC% encoded in bits 0-3
+        disable_irga = (lag_irga_diag XOR &hF0) AND &hF0
       #EndIf
 
       GetRecord(lagged(1),work_lag,LAG_SCANS)
-      Move(aligned(10),2,lagged(10),2) 'inst. valve state
+      Move(aligned(13),2,lagged(13),2) 'inst. valve state
       
       cov_sonic(1,1) = lag_Ts
       Move(cov_sonic(1,2),3,lag_Ux,3)
@@ -1219,7 +1228,7 @@ BeginProg
 
         Lv = LatentHeatVapH2O(hmp_T_Avg)
         '? specific heat capacity of moist air: Cpm
-        rho_d = (press_Avg - hmp_e_Avg)/(Rd*(hmp_T_Avg+273.15))
+        rho_d = (irga_press_Avg - hmp_e_Avg)/(Rd*(hmp_T_Avg+273.15))
         rho_a = NAN 'XXX FIXME
         
         tau = SQR(cov_Ux_Uz^2 + cov_Uy_Uz^2)
