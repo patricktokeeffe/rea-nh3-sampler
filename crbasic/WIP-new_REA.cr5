@@ -1024,10 +1024,10 @@ BeginProg
       end_run()
     ElseIf (is_running) Then
       shield_ON = Enable 'disallow turning off shield flow during sampling run
-      run_queued = Enable 'or attempting to abort by "un-queueing"
+      run_queued = Cancel 'or attempting queue run while one still in-progress
     ElseIf (run_queued) Then
       If (NOT shield_ON) Then
-        run_queued = Cancel 'force activating shield flow before scheduling run
+        run_queued = Cancel 'force enabling shield flow before can queue run
         run_already_queued = False
       ElseIf (NOT run_begintod AND NOT run_already_queued) Then
         update_delayed_start_time()
