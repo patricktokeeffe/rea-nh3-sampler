@@ -1032,6 +1032,8 @@ BeginProg
       ElseIf (NOT run_begintod AND NOT run_already_queued) Then
         update_delayed_start_time()
         run_already_queued = True
+      Else
+        shield_ON = Enable 'prevent disabling shield once run is queued
       EndIf
     Else 'used as a lazy catch => ElseIf(NOT run_queued)
       run_already_queued = False
