@@ -1104,22 +1104,21 @@ BeginProg
     #EndIf
     
     Uz_rot = sonic_Uz*CT - sonic_Ux*ST*CE - sonic_Uy*ST*SE
-    If (True) Then 'XXX in REA mode
-      If (Uz_rot >= deadband) Then
-        vlv_up_is_on = True
-        vlv_dn_is_on = False
-      ElseIf (Uz_rot <= neg_deadband) Then
-        vlv_up_is_on = False
-        vlv_dn_is_on = True
-      Else 'deadband
-        vlv_up_is_on = False
-        vlv_dn_is_on = False
-      EndIf
+    If (NOT is_running) Then
+      vlv_up_is_on = False
+      vlv_dn_is_on = False
+    ElseIf (Uz_rot >= deadband) Then
+      vlv_up_is_on = True
+      vlv_dn_is_on = False
+    ElseIf (Uz_rot <= neg_deadband) Then
+      vlv_up_is_on = False
+      vlv_dn_is_on = True
+    Else 'deadband
+      vlv_up_is_on = False
+      vlv_dn_is_on = False
     EndIf
-    'use PortSet not WriteIO to ensure happens immediately
-    'instead of later as processing task
-    PortSet(C_VLV_UP,vlv_up_is_on)
-    PortSet(C_VLV_DN,vlv_dn_is_on)
+    PortSet(C_VLV_UP,vlv_up_is_on) 'HINT PortSet occurs as measurement task
+    PortSet(C_VLV_DN,vlv_dn_is_on) '  but WriteIO is processing task (delayed)
 
     CallTable(ts_fast)
     CallTable(work_lag)
