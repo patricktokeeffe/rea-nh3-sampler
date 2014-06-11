@@ -642,9 +642,10 @@ Const D = 13
 Const E = 14
 Dim save_schedule As Boolean
 Dim discard_schedule As Boolean
+Dim reset_schedule As Boolean
 Dim save_settings As Boolean
 Dim discard_settings As Boolean
-Dim set_defaults As Boolean
+Dim reset_settings As Boolean
 Dim recompile As Boolean
 
 DisplayMenu("REA DAQ",-1)
@@ -661,10 +662,14 @@ DisplayMenu("REA DAQ",-1)
       MenuItem("Time delay", ch_run_delay)
         MenuPick(0, 0.5, 1, 1.5, 2, 2.5, 3, 3.5, 4, 5, 6, 7, 8, 9, 10, 11, 12)
       MenuItem("Time of day", ch_run_tod)
-      MenuItem("Apply?", save_schedule)
-        MenuPick(Cancel, Yes)
-      'TODO add 'discard_schedule' for discarding changes
-      'TODO add 'reset_schedule' for resetting to defaults
+      SubMenu("Apply/cancel")
+        MenuItem("Save now?", save_schedule)
+          MenuPick(Cancel, Yes)
+        MenuItem("Discard?", discard_schedule)
+          MenuPick(Cancel, Yes)
+        MenuItem("Set default?", reset_schedule)
+          MenuPick(Cancel, Yes)
+      EndSubMenu
     EndSubMenu
     MenuItem("Shield flow", shield_ON)
       MenuPick(Enable, Disable)
@@ -707,7 +712,7 @@ DisplayMenu("REA DAQ",-1)
         MenuPick(Cancel, Yes)
       MenuItem("Discard?", discard_settings)
         MenuPick(Cancel, Yes)
-      MenuItem("Set default?", set_defaults)
+      MenuItem("Set default?", reset_settings)
         MenuPick(Cancel, Yes)
     EndSubMenu
   EndSubMenu
@@ -891,7 +896,7 @@ Sub load_settings()
   save_current_choices()
 EndSub
 
-Sub reset_settings()
+Sub setdefault_settings()
   FileManage(SETTINGS_FILE,8) 'delete file
   load_settings()
 EndSub
@@ -940,7 +945,10 @@ Sub load_sch_settings()
   save_current_sch_choices()
 EndSub
 
-'No analogous `reset_sch_settings()` needed.
+Sub setdefault_sch_settings()
+  FileManage(SCHEDULE_FILE,8) 'delete file
+  load_sch_settings()
+EndSub
 
 '--------------------
 Sub save_shield_state()
@@ -1252,6 +1260,9 @@ BeginProg
     ElseIf (discard_schedule) Then
       populate_sch_choices()
       discard_schedule = Cancel
+    ElseIf (reset_schedule) Then
+      setdefault_sch_settings()
+      reset_schedule = Cancel
     ElseIf (save_settings) Then
       save_current_choices()
       save_settings = Cancel
@@ -1259,10 +1270,9 @@ BeginProg
     ElseIf (discard_settings) Then
       populate_choices()
       discard_settings = Cancel
-      'nothing to save!
-    ElseIf (set_defaults) Then
-      reset_settings()
-      set_defaults = Cancel
+    ElseIf (reset_settings) Then
+      setdefault_settings()
+      reset_settings = Cancel
       CallTable(info)
     EndIf
 
