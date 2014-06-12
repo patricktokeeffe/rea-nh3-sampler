@@ -1028,8 +1028,11 @@ Sub update_shield_state()
       shld_already_ON = True
       save_shield_state()
       'HINT initialize sample flow SP here but update SP within autothrottle()
-      'XXX is this IIF() vulnerable to wild values issue?
-      setpnt_updn = IIF(flowSP_auto, (UPDNFLOW_MAX/MFC_UPDN_MULT), flowSP_updn)
+      If (flowSP_auto) Then
+        setpnt_updn = UPDNFLOW_MAX/MFC_UPDN_MULT
+      Else
+        setpnt_updn = flowSP_updn
+      EndIf
     EndIf
     'HACK an IIF is preferable except it returns wild values
     If (is_running) Then
