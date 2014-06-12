@@ -69,22 +69,17 @@ Const MFC_ZERO_OFF = 0
 
 '==========================  IMPORTANT CONSTANTS  ============================
 '----- PHYSICAL -----
-Const Cpd = 1004.67           'specific heat capacity of dry air, J/(kg K)
-'Const Cw = 1820               'specific heat capacity of water, J/(kg K)
-Const MW_h2o = 18.01528       'molecular weight of water, g/mol
-Const MW_co2 = 44.010         'molecular weight of carbon dioxide, g/mol
-Const MW_air = 28.98          'molecular weight of dry air, g/mol
-Const MU_WPL = MW_air/MW_h2o  'Ratio of MW of dry air to that of water vapor
-Const R = 8.3143*10^-3        'Universal gas constant, (kPa m^3)/(K mol)
-Const Rd = R/MW_air           'Gas constant for dry air, (kPa m^3)/(K g)
+Const Cpd = 1004.67 'specific heat capacity: dry air    J/(kg K)
+'Const Cw = 1820 'specific heat capacity: water    J/(kg K)
+Const MW_h2o = 18.01528 'molar weight of water    g/mol
+Const MW_co2 = 44.010 'molar weight of CO2    g/mol
+Const MW_air = 28.98 'molar weight of dry air    g/mol
 Const R_ = 8.3144621e-6 'universal gas constant    (kPa m^3)/(K mmol)
-Const R_AIR = 287.058 'specific gas constant: dry air    J/(kg K)
-'Const Rv = R/MW_h2o           'Gas constant for water vapor, (kPa m^3)/(K g)
-Const K_ = 0.41               'Von Karman constant, dimless
-Const G_ = 9.81               'Gravity, m/s^2
-Const PI = 3.14159            'Mathematical constant pi
-'Const RperD = PI/180          'radians per degree
-'Const DperR = 180/PI          'degrees per radian
+Const Rd = 287.058 'specific gas constant: dry air    J/(kg K)
+Const Rv = 461.495 'specific gas constant: water vapor    J/(kg K)
+Const K_ = 0.41 'Von Karman constant    dimless
+Const G_ = 9.81 'Gravity    m/s^2
+Const PI = 3.14159
 
 
 '==========================  PROGRAM OPERATION  ==============================
