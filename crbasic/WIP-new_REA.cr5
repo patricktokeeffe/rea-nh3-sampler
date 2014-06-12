@@ -303,14 +303,14 @@ Units hmp_RH_Avg = %
 
 Public L      'Obukhov length
 Public u_star 'friction velocity
-Public tau    'horizontal momentum flux
-Public rho_d  'dry air density
+Public tau    'surface stress
+'Public rho_d  'dry air density
 Public rho_a  'ambient (moist) air density
 Public Lv     'latent heat of vaporization of water
 Units L = m
 Units u_star = m/s
-Units tau = (m/s)^2
-Units rho_d = g/m^3
+Units tau = Pa
+'Units rho_d = g/m^3
 Units rho_a = kg/m^3
 Units Lv = J/g
 
@@ -778,10 +778,10 @@ Function military_to_FP(timestr) As Float
   Return (Round(timestr*2, 0)/2)
 EndFunction
 
-'[Tmpr] = C, [Press] = kPa (abs.)
-Function density_of_air(tmpr, press) As Float 'kg/m^3
-  '(Pa/kPa)(kPa)(kg*K / J)(1/K)(J / Pa*m^3)
-  Return (1000*press / (R_AIR*(tmpr+273.15)))
+'[tmpr] = C, [press] = kPa (barometric), [H2Opress] = kPa (water vapor)
+Function density_of_air(tmpr, press, H2Opress) As Float 'kg/m^3
+  '(Pa/kPa)[ (kPa)(kg*K/J)(1/K)(J / Pa*m^3) + (kPa)(kg*K/J)(1/K)(J / Pa*m^3) ]
+  Return (1000*(press/(Rd*(tmpr+273.15)) + H2Opress/(Rv*(tmpr+273.15))))
 EndFunction
 
 'Derived by inverting equations in Appendix D of EC150 manual
@@ -1230,13 +1230,16 @@ BeginProg
         hmp_RH_Avg = 100*hmp_e_Avg/hmp_e_sat_Avg
 
         Lv = LatentHeatVapH2O(hmp_T_Avg)
+        #If (DATA_SRCS=SDM_CSAT3A_EC150) Then
+          rho_a = density_of_air(irga_tmpr_Avg, irga_press_Avg, hmp_e_Avg)
+        #Else
+          rho_a = density_of_air(hmp_T_Avg, irga_press_Avg) 'kg/m^3
+        #EndIf
         '? specific heat capacity of moist air: Cpm
-        rho_d = (irga_press_Avg - hmp_e_Avg)/(Rd*(hmp_T_Avg+273.15))
-        rho_a = NAN 'XXX FIXME
         
-        tau = SQR(cov_Ux_Uz^2 + cov_Uy_Uz^2)
+        tau = SQR(cov_Ux_Uz*cov_Ux_Uz + cov_Uy_Uz*cov_Uy_Uz) '(m/s)^2
         u_star = SQR(tau)
-        tau *= rho_a
+        tau *= rho_a '(m^2/s^2)(kg/m^3) = (Pa m^3)/m^3 = Pa
         L = -u_star^3 *(hmp_T_Avg+273.15)/(K_*G_*cov_Ts_Uz)
 
         Fco2 = cov_CO2_Uz
