@@ -1225,7 +1225,10 @@ BeginProg
         Ts_Std = SQR(Ts_Std)
         CO2_Std = SQR(CO2_Std)
         H2O_Std = SQR(H2O_Std)
-        
+
+        deadband = dband_mult * Uz_Std
+        neg_deadband = -1*deadband        
+
         SatVP(hmp_e_sat_Avg,hmp_T_Avg)
         hmp_RH_Avg = 100*hmp_e_Avg/hmp_e_sat_Avg
 
@@ -1259,8 +1262,6 @@ BeginProg
         'is within fetch
         'integral turbulence test
         '(bonus: stationarity)
-        
-        'new deadband size deadband
 
         'correction factors for std. L -> L
         'new sampling flow rate
