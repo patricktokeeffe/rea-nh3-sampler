@@ -1049,6 +1049,9 @@ Sub autothrottle()
   AvgRun(mean_dn_flow,1,flow_dn,10)
   If (ABS(mean_up_flow - mean_dn_flow) > 0.1) Then
     decreasing_flow = True
+    setpnt_updn -= (0.1/MFC_UPDN_MULT) 'decrease 0.1 sLpm
+'  Else
+'    decreasing_flow = False
   EndIf
 EndSub
 
