@@ -86,26 +86,6 @@ Const PI = 3.14159            'Mathematical constant pi
 'Const RperD = PI/180          'radians per degree
 'Const DperR = 180/PI          'degrees per radian
 
-'----- PORT CONTROL MASKS -----
-Const MASK_UPDN_OFF = 2^(C_UPDN_OFF-1)   '0000 0001
-Const MASK_ZERO_OFF = 2^(C_ZERO_OFF-1)   '0000 0010
-Const MASK_UPDN_PURGE = 2^(C_UPDN_PRG-1) '0000 0100
-Const MASK_ZERO_PURGE = 2^(C_ZERO_PRG-1) '0000 1000
-Const MASK_UP_VLV = 2^(C_VLV_UP-1)       '0001 0000
-Const MASK_DN_VLV = 2^(C_VLV_DN-1)       '0010 0000
-Const MASK_UPDN_VLV = (MASK_UP_VLV OR MASK_DN_VLV) '0011 0000
-Const MASK_PUMP_ON = 2^(C_PMP_ON-1)      '0100 0000
-Const MASK_MFC_PWR = 2^(C_MFC_ON-1)      '1000 0000
-
-Const MASK_OFF = &B00000000
-Const MASK_FLOW = (MASK_MFC_PWR OR MASK_PUMP_ON OR MASK_ZERO_OFF OR MASK_UPDN_OFF)
-Const MASK_ALL = (MASK_FLOW OR MASK_UPDN_VLV)
-'TODO verify reset mask, add standby mask
-Const MASK_RESET = (MASK_MFC_PWR OR MASK_UPDN_OFF) 
-    'XXX standby: MFCs power ON, pump OFF, 
-    'up valve OFF, dn valve OFF, zero mfc NOT valve OFF, up/dn mfc valve OFF
-Const MASK_RUNNING = (MASK_MFC_PWR OR MASK_PUMP_ON) 'neither MFC valve OFF 
-
 
 '==========================  PROGRAM OPERATION  ==============================
 
