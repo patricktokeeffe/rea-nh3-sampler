@@ -119,6 +119,9 @@ Units sonic = m/s
 Units sonic_Ts = degC
 Units sonic_diag = bitmap
 
+Public fast_co2_est
+Units fast_co2_est = ppm
+
 Public irga(4)
 Alias irga(1) = irga_CO2
 Alias irga(2) = irga_H2O
@@ -1100,9 +1103,11 @@ BeginProg
       irga_press = ec100_raw(10)
       irga_CO2_signal = ec100_raw(11)
       irga_H2O_signal = ec100_raw(12)
+      fast_co2_est = dry_mixing_ratio(irga_CO2,irga_H2O,irga_tmpr,irga_press)
     #ElseIf (DATA_SRCS=SDM_CSAT3_LI7500) Then
       CS7500(irga_CO2,1,LI7500_ADDR,LI7500_CMD)
       CSAT3(sonic_Ux,1,CSAT_ADDR,CSAT3_CMD,CSAT3_OPT)
+      fast_co2_est = dry_mixing_ratio(irga_CO2,irga_H2O,hmp_T,irga_press)
     #EndIf
     
     Uz_rot = sonic_Uz*CT - sonic_Ux*ST*CE - sonic_Uy*ST*SE
