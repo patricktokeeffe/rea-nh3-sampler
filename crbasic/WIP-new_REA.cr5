@@ -49,7 +49,7 @@ Const C_UPDN_OFF = 1 'C1: valve off for UP/DN MFCs
 'Const C_ZERO_PRG = 4 'C4: valve purge for zero MFC
 Const C_VLV_UP = 5   'C5: relay: 3-way valve at UP denuder inlet
 Const C_VLV_DN = 6   'C6: relay: 3-way valve at DN denuder inlet
-Const C_PMP_ON = 7   'C7: relay: pump power
+Const C_PUMP_ON = 7  'C7: relay: pump power
 Const C_MFC_ON = 8   'C8: relay: MFC power
 
 '----- ANALOG SCALING -----
@@ -1093,6 +1093,7 @@ BeginProg
       elapsed_time = Timer(RUN_TIMER,min,QUERY)
       If (elapsed_time >= run_dur) Then end_run()
     EndIf
+    PortSet(C_PUMP_ON, is_running)
 
     update_shield_state()
     PortSet(C_MFC_ON, shield_ON)
