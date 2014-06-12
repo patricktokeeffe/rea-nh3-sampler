@@ -377,15 +377,17 @@ Dim inbetween_1hz_scan As Boolean
 Dim filehandle As Long
 Const WRITEFILE = 0
 Const READFILE = 1
+Const Automatic = True 'for menus
+Const LastState = True
 
 '----- DEFAULT SETTINGS -----
 Const SETTINGS_FILE = "CPU:rea_settings.dat"
 Const NUM_SETTINGS = {18}
 
-Const DEF_FLOW_AUTO_SHLD = True '=LastState
+Const DEF_FLOW_AUTO_SHLD = LastState
 Const DEF_FLOWSP_WAIT = 2.0 'sLpm
 Const DEF_FLOWSP_ZERO = 0.5 'sLpm
-Const DEF_FLOWSP_AUTO = True '=Automatic
+Const DEF_FLOWSP_AUTO = Automatic
 Const DEF_FLOWSP_UPDN = 10 'sLpm
 Const DEF_DBAND_MULT = 0.5 '0 < X <= 1
 Const DEF_DBAND_MIN = 0.05 'm/s
@@ -468,10 +470,10 @@ Units site_rufness = cm
 Const SCHEDULE_FILE = "CPU:rea_schedule.dat"
 Const NUM_SCHEDULE = {4}
 
-Const DEF_RUN_DURATION = 1.0 'hr
+Const DEF_RUN_DURATION = 1 'hr
 Const DEF_RUN_BEGINTOD = False
-Const DEF_RUN_DELAY = 0.0 'hr
-Const DEF_RUN_TOD = 12.0 'hour of day
+Const DEF_RUN_DELAY = 0 'hr
+Const DEF_RUN_TOD = 0 'hour of day
 
 Public sch_choice(NUM_SCHEDULE)
 Alias sch_choice(1) = ch_run_duration
@@ -640,9 +642,7 @@ EndTable
 '==============================  CUSTOM MENU  ================================
 Const Yes = True
 Const Enable = True
-Const Automatic = True
 Const At_TOD = True
-Const LastState = True
 Const Cancel = False
 Const Disable = False
 Const Manual = False
