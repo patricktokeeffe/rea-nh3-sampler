@@ -102,13 +102,14 @@ Const LI7500_DELAY = 2 'SDM/RS232: BaseDelay=186ms & DelayStep=2 -> Delay=199ms
 Const EC100_DELAY = 0  'TODO
 Const LAG_SCANS = 5    'large enough to accomodate all delays
 
-Dim just_had_1hz_scan As Boolean 'data table exclusion flags
-Dim inbetween_1hz_scan As Boolean
-
+Const RUN_TIMER = 1 'aliases
+Const START = 0
+Const STOP_RESET = 3
+Const QUERY = 4
 
 '===============================  VARIABLES  =================================
 
-'----- SENSORS -----
+'---------- SENSORS ----------
 Public sonic(5)
 Alias sonic(1) = sonic_Ux
 Alias sonic(2) = sonic_Uy
@@ -118,6 +119,8 @@ Alias sonic(5) = sonic_diag
 Units sonic = m/s
 Units sonic_Ts = degC
 Units sonic_diag = bitmap
+
+Public disable_sonic As Boolean
 
 Public fast_co2_est
 Units fast_co2_est = ppm
@@ -143,6 +146,8 @@ Units irga_diag = bitmap
   Units irga_H2O_signal = ratio
 #EndIf
 
+Public disable_irga As Boolean
+
 Public hmp45c(2)
 Alias hmp45c(1) = hmp_T
 Alias hmp45c(2) = hmp_RH
@@ -164,12 +169,9 @@ Alias cr5k(2) = LoggerVoltage
 Units LoggerTemp = degC
 Units LoggerVoltage = Volts
 
-'----- PROCESSING ------
+'---------- PROCESSING -----------
 Public Uz_rot 'for real-time coord rotation
 Units Uz_rot = m/s
-
-Public disable_sonic As Boolean 'diagnostic flag handling
-Public disable_irga As Boolean
 
 Dim dummy(3) = {0, 0, 0}
 Dim lagged(14) 'HINT length of `work_lag` table output
@@ -327,25 +329,18 @@ Units Fco2 = g/(m^2 s)
 Units LE = W/m^2
 Units Hs = W/m^2
 
-'----- OPERATING VARIABLES -----
-Public run_control(3) As Boolean 'menus
-Alias run_control(1) = shield_ON
-Alias run_control(2) = run_queued
-Alias run_control(3) = run_aborted
+'---------- OPERATING VARIABLES ----------
+Public shield_ON As Boolean 'menus
+Public run_queued As Boolean
+Public run_aborted As Boolean
 
-'for implicitly updating run start time after queuing a run when using delayed start schedule
-Public run_already_queued As Boolean
+Public run_already_queued As Boolean 'state flags
 Public shld_already_ON As Boolean
 Public is_running As Boolean
 
-Public rtime(9)
+Dim rtime(9)
 Alias rtime(4) = hrofday
 Alias rtime(5) = minofhr
-
-Const RUN_TIMER = 1
-Const START = 0
-Const STOP_RESET = 3
-Const QUERY = 4
 
 Public run_sched(3) As Long
 Alias run_sched(1) = start_run
@@ -370,16 +365,11 @@ Public deadband
 Dim neg_deadband
 Units deadband = m/s
 
-Public ctrlport(8) As Boolean
-Alias ctrlport(1) = updn_mfc_is_off 'up/dn MFC off signal
-Alias ctrlport(2) = zero_mfc_is_off 'makeup air MFC off signal
-'C3, C4 MFC valve purge logic not built into program
-Alias ctrlport(3) = updn_purging 'up/dn MFC valve purge signal
-Alias ctrlport(4) = zero_purging 'makeup air MFC valve purge signal
-Alias ctrlport(5) = vlv_up_is_on 'REA valve up eddy
-Alias ctrlport(6) = vlv_dn_is_on    'REA valve dn eddy
-Alias ctrlport(7) = pump_is_on    'turns air pump off/on
-Alias ctrlport(8) = mfc_pwr_is_on 'zero MFC valve
+Public vlv_up_ON As Boolean
+Public vlv_dn_ON As Boolean
+
+Dim just_had_1hz_scan As Boolean 'data table exclusion flags
+Dim inbetween_1hz_scan As Boolean
 
 
 '============================ SETTINGS RETENTION =============================
@@ -510,8 +500,8 @@ DataTable(work_lag,TRUE,LAG_SCANS)
   #Else
     Sample(3,dummy(1),FP2)
   #EndIf
-  Sample(1,vlv_up_is_on,Boolean)
-  Sample(1,vlv_dn_is_on,Boolean)
+  Sample(1,vlv_up_ON,Boolean)
+  Sample(1,vlv_dn_ON,Boolean)
 EndTable
 
 DataTable(work_cov,TRUE,1)
@@ -541,8 +531,8 @@ DataTable(work_cov,TRUE,1)
   Covariance(4,cov_irga(1,2),IEEE4,disable_irga,4)
   'Covariance(4,cov_irga(1,3),IEEE4,disable_irga,4)
   
-  Totalize(1,vlv_up_is_on,UINT4,vlv_up_is_on=NAN)
-  Totalize(1,vlv_dn_is_on,UINT4,vlv_dn_is_on=NAN)
+  Totalize(1,vlv_up_ON,UINT4,vlv_up_ON=NAN)
+  Totalize(1,vlv_dn_ON,UINT4,vlv_dn_ON=NAN)
   Totalize(1,1,UINT4,False)
 
   Average(1,hmp_T,IEEE4,(inbetween_1hz_scan OR hmp_T=NAN))
@@ -567,8 +557,8 @@ DataTable(ts_fast,True,-1)
     Sample(1,irga_CO2_signal,IEEE4)
     Sample(1,irga_H2O_signal,IEEE4)
   #EndIf
-  Sample(1,vlv_up_is_on,Boolean)
-  Sample(1,vlv_dn_is_on,Boolean)
+  Sample(1,vlv_up_ON,Boolean)
+  Sample(1,vlv_dn_ON,Boolean)
 EndTable
 
 DataTable(ts_slow,True,-1)
@@ -1127,23 +1117,23 @@ BeginProg
       CSAT3(sonic_Ux,1,CSAT_ADDR,CSAT3_CMD,CSAT3_OPT)
       fast_co2_est = dry_mixing_ratio(irga_CO2,irga_H2O,hmp_T,irga_press)
     #EndIf
-    
+
     Uz_rot = sonic_Uz*CT - sonic_Ux*ST*CE - sonic_Uy*ST*SE
     If (NOT is_running) Then
-      vlv_up_is_on = False
-      vlv_dn_is_on = False
+      vlv_up_ON = False
+      vlv_dn_ON = False
     ElseIf (Uz_rot >= deadband) Then
-      vlv_up_is_on = True
-      vlv_dn_is_on = False
+      vlv_up_ON = True
+      vlv_dn_ON = False
     ElseIf (Uz_rot <= neg_deadband) Then
-      vlv_up_is_on = False
-      vlv_dn_is_on = True
+      vlv_up_ON = False
+      vlv_dn_ON = True
     Else 'deadband
-      vlv_up_is_on = False
-      vlv_dn_is_on = False
+      vlv_up_ON = False
+      vlv_dn_ON = False
     EndIf
-    PortSet(C_VLV_UP,vlv_up_is_on) 'HINT PortSet occurs as measurement task
-    PortSet(C_VLV_DN,vlv_dn_is_on) '  but WriteIO is processing task (delayed)
+    PortSet(C_VLV_UP,vlv_up_ON) 'HINT PortSet occurs as measurement task
+    PortSet(C_VLV_DN,vlv_dn_ON) '  but WriteIO is processing task (delayed)
 
     CallTable(ts_fast)
     CallTable(work_lag)
