@@ -1260,7 +1260,7 @@ BeginProg
         #If (DATA_SRCS=SDM_CSAT3A_EC150) Then
           rho_a = density_of_air(irga_tmpr_Avg, irga_press_Avg, hmp_e_Avg)
         #Else
-          rho_a = density_of_air(hmp_T_Avg, irga_press_Avg) 'kg/m^3
+          rho_a = density_of_air(hmp_T_Avg, irga_press_Avg, hmp_e_Avg) 'kg/m^3
         #EndIf
         '? specific heat capacity of moist air: Cpm
         
