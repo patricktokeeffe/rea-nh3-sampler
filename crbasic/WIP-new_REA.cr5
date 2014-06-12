@@ -790,14 +790,14 @@ EndMenu
 '
 'FIXME this function should actually round to STAT_INTV but that's a step up
 '  from complex to complicated.
-Function LongTimeToFP(longtime) As Float
-  If (longtime <= 0) Then Return (longtime)
-  If (longtime >= 100) Then
+Function military_to_FP(timestr) As Float
+  If (timestr <= 0) Then Return (timestr)
+  If (timestr >= 100) Then
     Dim tmp
-    tmp = longtime MOD 100
-    longtime = (longtime INTDV 100) + IIF(tmp >= 59, 0.9833, tmp/60.0)
+    tmp = timestr MOD 100
+    timestr = (timestr INTDV 100) + IIF(tmp >= 59, 0.9833, tmp/60.0)
   EndIf
-  Return (Round(longtime*2, 0)/2)
+  Return (Round(timestr*2, 0)/2)
 EndFunction
 
 '[Tmpr] = C, [Press] = kPa (abs.)
@@ -809,8 +809,7 @@ EndFunction
 'Derived by inverting equations in Appendix D of EC150 manual
 '[Gas] = mmol/m^3, [H2O] = mmol/m^3, [Tmpr] = C, [Press] = kPa (abs.)
 Function dry_mixing_ratio(Gas, H2O, tmpr, press) As Float 'ppm (umol/mol)
-  Dim rhoair 'mmol/m^3 (don't use density_of_air(..) b/c units are so far off)
-  'mmol/m^3 = (kPa)(K mmol/kPa m^3)(1/K)
+  Dim rhoair 'mmol/m^3 = (kPa)(K mmol/kPa m^3)(1/K)
   rhoair = press/(R_ * (tmpr + 273.15))
   'ppm = (umol/mol)(mmol/m^3) / (mmol/^3 - mmol/m^3)
   Return Round(10^6 * Gas / (rhoair - H2O), 0)
@@ -820,14 +819,15 @@ EndFunction
 ' A new formula for latent heat of vaporization as a function of temperature.
 ' By B. Henderson-Sellers, Dept. of Mathematics, University of Salford
 ' Quart. J. R. Met. Soc. (1984), 110, pp 1186-1190
-' Lv = 1.91846E6*(T/(T-33.91))^2    where  Lv = lat. heat of vapor, J/kg
-'                                          T  = temperature, Kelvin
-Function LatentHeatVapH2O(temp)
-  Return 1918.46*( (temp+273.15)/(temp+239.24) )^2 'J/g
+'     Lv = 1.91846E6*(T/(T-33.91))^2    where  Lv = lat. heat of vapor, J/kg
+'                                              T  = temperature, Kelvin
+'[tmpr] = degC
+Function LatentHeatVapH2O(tmpr) As Float 'J/g
+  Return 1918.46*( (tmpr+273.15)/(tmpr+239.24) )^2
 EndFunction
 
 'footprint calc, Hsieh et al, 2000
-Function FootprintEstimate(L_)
+Function FootprintEstimate(L_) As Float 'm
   Dim Dh, Ph, Zu, Zm, Zo
   Zm = sonic_height 'm
   Zo = site_rufness/1000 'cm -> m
@@ -845,17 +845,17 @@ Function FootprintEstimate(L_)
   Return Dh/(0.357*0.4*0.4) * ABS(L_)^(1-Ph) * Zu^Ph
 EndFunction
 
-Dim itt_model
 'integral turbulence test following Hammerle et al. (2007)
-Function TurbulenceTest(zeta)
-    If (zeta < -2 OR zeta >= 1) Then
-      Return 999 'XXX better sentinel? NAN?
-    Else
-      'XXX verify can multiply an IIF
-      itt_model = 1.25*IIF(zeta < 0, (1 + 3*ABS(zeta))^(1/3.), (1 + 0.2*zeta))
-      'XXX fix reference to Uz_std
-      Return 100'*ABS((W_Std/u_star) - itt_model)/itt_model
-    EndIf
+Function TurbulenceTest(zeta) As Float
+  Dim itt_model
+  If (zeta < -2 OR zeta >= 1) Then
+    Return 999 'XXX better sentinel? NAN?
+  Else
+    'XXX verify can multiply an IIF
+    itt_model = 1.25*IIF(zeta < 0, (1 + 3*ABS(zeta))^(1/3.), (1 + 0.2*zeta))
+    'XXX fix reference to Uz_std
+    Return 100'*ABS((W_Std/u_star) - itt_model)/itt_model
+  EndIf
 EndFunction
 
 
@@ -971,10 +971,10 @@ EndSub
 
 Sub save_current_sch_choices()
   'Input validation
-  ch_run_duration = LongTimeToFP(ch_run_duration)
+  ch_run_duration = military_to_FP(ch_run_duration)
   If (ch_run_duration < RUNTIME_MIN) Then ch_run_duration = RUNTIME_MIN
   If (ch_run_duration > RUNTIME_MAX) Then ch_run_duration = RUNTIME_MAX
-  ch_run_tod = LongTimeToFP(ch_run_tod)
+  ch_run_tod = military_to_FP(ch_run_tod)
   ch_run_tod = IIF(ch_run_tod < 0, 0, ch_run_tod MOD 24)
   
   'Populate dependent variables
