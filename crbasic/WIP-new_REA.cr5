@@ -1240,7 +1240,11 @@ BeginProg
         tau = SQR(cov_Ux_Uz*cov_Ux_Uz + cov_Uy_Uz*cov_Uy_Uz) '(m/s)^2
         u_star = SQR(tau)
         tau *= rho_a '(m^2/s^2)(kg/m^3) = (Pa m^3)/m^3 = Pa
-        L = -u_star^3 *(hmp_T_Avg+273.15)/(K_*G_*cov_Ts_Uz)
+        #If (DATA_SRCS=SDM_CSAT3A_EC150) Then
+          L = -u_star^3 *(irga_tmpr_Avg+273.15)/(K_*G_*cov_Ts_Uz)
+        #Else
+          L = -u_star^3 *(hmp_T_Avg+273.15)/(K_*G_*cov_Ts_Uz)
+        #EndIf
 
         Fco2 = cov_CO2_Uz
         LE = cov_H2O_Uz * Lv
