@@ -307,12 +307,14 @@ Public tau    'surface stress
 'Public rho_d  'dry air density
 Public rho_a  'ambient (moist) air density
 Public Lv     'latent heat of vaporization of water
+Public itt    'integral turbulence test
 Units L_ = m
 Units u_star = m/s
 Units tau = Pa
 'Units rho_d = g/m^3
 Units rho_a = kg/m^3
 Units Lv = J/g
+Units itt = dimless 'TODO
 
 Public Fco2 'carbon dioxide flux
 Public LE   'latent heat flux
@@ -824,15 +826,22 @@ Function FootprintEstimate(L) As Float 'm
 EndFunction
 
 'integral turbulence test following Hammerle et al. (2007)
-Function TurbulenceTest(zeta) As Float
-  Dim itt_model
+'
+'TODO : find formula
+'
+'[L] = m
+Function TurbulenceTest(sigma_W, u_star_, L) As Float 'dimless (?) FIXME
+  If (sonic_height=0 OR L=0 OR sigma_W=NAN OR u_star_=NAN OR L=NAN) Then
+    Return NAN
+  EndIf
+  Dim itt_model, zeta
+  zeta = sonic_height/L
   If (zeta < -2 OR zeta >= 1) Then
-    Return 999 'XXX better sentinel? NAN?
+    Return 999 'TODO is NAN more appropriate here? or INF?
   Else
-    'XXX verify can multiply an IIF
-    itt_model = 1.25*IIF(zeta < 0, (1 + 3*ABS(zeta))^(1/3.), (1 + 0.2*zeta))
-    'XXX fix reference to Uz_std
-    Return 100'*ABS((W_Std/u_star) - itt_model)/itt_model
+    'XXX TODO does this suffer from same IIF issue found with setpoints?
+    itt_model = 1.25*IIF(zeta < 0, (1+3*ABS(zeta))^(1/3.), (1+0.2*zeta))
+    Return 100*ABS((sigma_W/u_star_) - itt_model)/itt_model
   EndIf
 EndFunction
 
@@ -1249,6 +1258,8 @@ BeginProg
           L_ = -u_star^3 *(hmp_T_Avg+273.15)/(K_*G_*cov_Ts_Uz)
         #EndIf
 
+        itt = TurbulenceTest(Uz_Std, u_star, L_)
+
         Fco2 = cov_CO2_Uz
         LE = cov_H2O_Uz * Lv
         Hs = cov_Ts_Uz * rho_a * Cpd
@@ -1260,7 +1271,6 @@ BeginProg
         'stability parameter
         'footprint
         'is within fetch
-        'integral turbulence test
         '(bonus: stationarity)
 
         'correction factors for std. L -> L
