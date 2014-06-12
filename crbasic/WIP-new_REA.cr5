@@ -12,11 +12,11 @@
 ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
 
 '=====================  DEVICE CONFIGURATION  ================================
-Const SDM_CSAT3_LI7500 = 1003 'aliases for menu
-Const SDM_CSAT3A_EC150 = 1004
+Const SDM_CSAT3_LI7500_1 = 1 'aliases for menu
+Const SDM_CSAT3A_EC150_2 = 2
 ConstTable
-  'Const DATA_SRCS = SDM_CSAT3_LI7500
-  Const DATA_SRCS = SDM_CSAT3A_EC150
+  Const DATA_SRCS = SDM_CSAT3_LI7500_1
+  'Const DATA_SRCS = SDM_CSAT3A_EC150_2
   'things which MUST be constants and therefore cannot be in "settings file"
   Const SDM_SPEED = 30   'default: 30 usec; accepts 8 usec - 3 msec
   Const CSAT_ADDR = 3    'default CSAT3 SDM address: 3
@@ -134,7 +134,7 @@ Units irga = mmol/m^3
 Units irga_press = kPa
 Units irga_diag = bitmap
 
-#If (DATA_SRCS=SDM_CSAT3A_EC150) Then
+#If (DATA_SRCS=SDM_CSAT3A_EC150_2) Then
   Dim ec100_raw(12) 'Campbellsci EC100/EC150/CSAT3A
 
   Public extra_irga(3)
@@ -392,10 +392,10 @@ Const DEF_DBAND_MIN = 0.05 'm/s
 Const DEF_DBAND_DEF = 0.1 'm/s
 Const DEF_SONIC_AZIMUTH = -1 'degEofN, -1=disabled
 Const DEF_SONIC_HEIGHT = 0 'm, 0=disabled
-#If (DATA_SRCS=SDM_CSAT3_LI7500) Then
+#If (DATA_SRCS=SDM_CSAT3_LI7500_1) Then
   Const DEF_IRGA_VERT_SEP = -99 'cm
   Const DEF_IRGA_HORZ_SEP = -99 'cm
-#ElseIf (DATA_SRCS=SDM_CSAT3A_EC150) Then
+#ElseIf (DATA_SRCS=SDM_CSAT3A_EC150_2) Then
   Const DEF_IRGA_VERT_SEP = 0 'TODO insert predefined values
   Const DEF_IRGA_HORZ_SEP = 0 'based on closest bracket setting
 #EndIf
@@ -496,7 +496,7 @@ Public lastrun_shield_ON 'Boolean (but must be float to save in calfile)
 DataTable(work_lag,TRUE,LAG_SCANS)
   Sample(5,sonic(1),IEEE4)
   Sample(4,irga(1),IEEE4)
-  #If (DATA_SRCS=SDM_CSAT3A_EC150) Then
+  #If (DATA_SRCS=SDM_CSAT3A_EC150_2) Then
     Sample(3,extra_irga(1),IEEE4)
   #Else
     Sample(3,dummy(1),FP2)
@@ -521,7 +521,7 @@ DataTable(work_cov,TRUE,1)
   Average(1,lag_CO2,IEEE4,disable_irga)
   Average(1,lag_H2O,IEEE4,disable_irga)
   Average(1,lag_irga_press,IEEE4,disable_irga)
-  #If (DATA_SRCS=SDM_CSAT3A_EC150) Then
+  #If (DATA_SRCS=SDM_CSAT3A_EC150_2) Then
     Average(1,lag_irga_tmpr,IEEE4,disable_irga)
     Average(1,lag_CO2_signal,IEEE4,disable_irga)
     Average(1,lag_H2O_signal,IEEE4,disable_irga)
@@ -553,7 +553,7 @@ DataTable(ts_fast,True,-1)
   Sample(1,irga_H2O,IEEE4)
   Sample(1,irga_press,IEEE4)
   Sample(1,irga_diag,IEEE4)
-  #If (DATA_SRCS=SDM_CSAT3A_EC150) Then
+  #If (DATA_SRCS=SDM_CSAT3A_EC150_2) Then
     Sample(1,irga_tmpr,IEEE4)
     Sample(1,irga_CO2_signal,IEEE4)
     Sample(1,irga_H2O_signal,IEEE4)
@@ -732,7 +732,7 @@ DisplayMenu("REA DAQ",-1)
 
   SubMenu("Initial setup")
     MenuItem("sonic/IRGA", DATA_SRCS)
-      MenuPick(DATA_SRCS, SDM_CSAT3_LI7500, SDM_CSAT3A_EC150)
+      MenuPick(DATA_SRCS, SDM_CSAT3_LI7500_1, SDM_CSAT3A_EC150_2)
     'SDM speed must be set through const table, menupick would be too onerous
     MenuItem("SDM addr: CSAT3", CSAT_ADDR)
       MenuPick(CSAT_ADDR,0,1,2,3,4,5,6,7,8,9,A_,B_,C_,D_,E_)
@@ -1115,8 +1115,7 @@ BeginProg
     ExciteCAO(MFC_UPDN_CAO,setpnt_updn,False,True) 'XXX do MFCs need boost opt?
     ExciteCAO(MFC_ZERO_CAO,setpnt_zero,False,True)
 
-
-    #If (DATA_SRCS=SDM_CSAT3A_EC150) Then
+    #If (DATA_SRCS=SDM_CSAT3A_EC150_2) Then
       EC100(ec100_raw(1),EC100_ADDR,1)
       Move(sonic(1),5,ec100_raw(1),5)
       irga_CO2 = ec100_raw(6)/MW_co2 'mg/m^3 --> mmol/m^3
@@ -1127,7 +1126,7 @@ BeginProg
       irga_CO2_signal = ec100_raw(11)
       irga_H2O_signal = ec100_raw(12)
       fast_co2_est = dry_mixing_ratio(irga_CO2,irga_H2O,irga_tmpr,irga_press)
-    #ElseIf (DATA_SRCS=SDM_CSAT3_LI7500) Then
+    #ElseIf (DATA_SRCS=SDM_CSAT3_LI7500_1) Then
       CS7500(irga_CO2,1,LI7500_ADDR,LI7500_CMD)
       CSAT3(sonic_Ux,1,CSAT_ADDR,CSAT3_CMD,CSAT3_OPT)
       fast_co2_est = dry_mixing_ratio(irga_CO2,irga_H2O,hmp_T,irga_press)
@@ -1153,14 +1152,14 @@ BeginProg
     CallTable(ts_fast)
     CallTable(work_lag)
     If (work_lag.Output(1,LAG_SCANS)) Then
-      #If (DATA_SRCS=SDM_CSAT3A_EC150) Then
+      #If (DATA_SRCS=SDM_CSAT3A_EC150_2) Then
         GetRecord(lagged(1),work_lag,LAG_SCANS-EC100_DELAY)
         Move(aligned(1),14,lagged(1),14)
         disable_sonic = lag_sonic_diag > 0
         'XXX possibly check for Ux=-99999; see 2014 PROPHET FIS DAQ v1.0.5
         '  and v1.1 changelog for details on why
         disable_irga = lag_irga_diag > 0
-      #ElseIf (DATA_SRCS=SDM_CSAT3_LI7500) Then
+      #ElseIf (DATA_SRCS=SDM_CSAT3_LI7500_1) Then
         GetRecord(lagged(1),work_lag,LAG_SCANS-CSAT3_DELAY)
         Move(aligned(1),5,lagged(1),5)
         disable_sonic = lag_sonic_diag AND &hF000 'bits 12-15 are flags
@@ -1257,7 +1256,7 @@ BeginProg
         hmp_RH_Avg = 100*hmp_e_Avg/hmp_e_sat_Avg
 
         Lv = LatentHeatVapH2O(hmp_T_Avg)
-        #If (DATA_SRCS=SDM_CSAT3A_EC150) Then
+        #If (DATA_SRCS=SDM_CSAT3A_EC150_2) Then
           rho_a = density_of_air(irga_tmpr_Avg, irga_press_Avg, hmp_e_Avg)
         #Else
           rho_a = density_of_air(hmp_T_Avg, irga_press_Avg, hmp_e_Avg) 'kg/m^3
@@ -1267,7 +1266,7 @@ BeginProg
         tau = SQR(cov_Ux_Uz*cov_Ux_Uz + cov_Uy_Uz*cov_Uy_Uz) '(m/s)^2
         u_star = SQR(tau)
         tau *= rho_a '(m^2/s^2)(kg/m^3) = (Pa m^3)/m^3 = Pa
-        #If (DATA_SRCS=SDM_CSAT3A_EC150) Then
+        #If (DATA_SRCS=SDM_CSAT3A_EC150_2) Then
           L_ = -u_star^3 *(irga_tmpr_Avg+273.15)/(K_*G_*cov_Ts_Uz)
         #Else
           L_ = -u_star^3 *(hmp_T_Avg+273.15)/(K_*G_*cov_Ts_Uz)
