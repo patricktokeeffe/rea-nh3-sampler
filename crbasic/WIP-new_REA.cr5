@@ -301,13 +301,13 @@ Public hmp_RH_Avg
 Units hmp_e_sat_Avg = kPa
 Units hmp_RH_Avg = %
 
-Public L      'Obukhov length
+Public L_      'Obukhov length
 Public u_star 'friction velocity
 Public tau    'surface stress
 'Public rho_d  'dry air density
 Public rho_a  'ambient (moist) air density
 Public Lv     'latent heat of vaporization of water
-Units L = m
+Units L_ = m
 Units u_star = m/s
 Units tau = Pa
 'Units rho_d = g/m^3
@@ -805,22 +805,22 @@ Function LatentHeatVapH2O(tmpr) As Float 'J/g
 EndFunction
 
 'footprint calc, Hsieh et al, 2000
-Function FootprintEstimate(L_) As Float 'm
+Function FootprintEstimate(L) As Float 'm
   Dim Dh, Ph, Zu, Zm, Zo
   Zm = sonic_height 'm
   Zo = site_rufness/1000 'cm -> m
   Zu = Zm * (LOG(Zm/Zo) - 1 + (Zo/Zm))
-  If (ABS(Zu/L_) < 0.04) Then 'neutral
+  If (ABS(Zu/L) < 0.04) Then 'neutral
     Dh = 0.97
     Ph = 1
-  ElseIf L_ < 0 'unstable
+  ElseIf L < 0 'unstable
     Dh = 0.28
     Ph = 0.59
   Else          'stable
     Dh = 2.44
     Ph = 1.33
   EndIf
-  Return Dh/(0.357*0.4*0.4) * ABS(L_)^(1-Ph) * Zu^Ph
+  Return (Dh/(0.357*0.4*0.4) * ABS(L)^(1-Ph) * Zu^Ph)
 EndFunction
 
 'integral turbulence test following Hammerle et al. (2007)
@@ -1244,9 +1244,9 @@ BeginProg
         u_star = SQR(tau)
         tau *= rho_a '(m^2/s^2)(kg/m^3) = (Pa m^3)/m^3 = Pa
         #If (DATA_SRCS=SDM_CSAT3A_EC150) Then
-          L = -u_star^3 *(irga_tmpr_Avg+273.15)/(K_*G_*cov_Ts_Uz)
+          L_ = -u_star^3 *(irga_tmpr_Avg+273.15)/(K_*G_*cov_Ts_Uz)
         #Else
-          L = -u_star^3 *(hmp_T_Avg+273.15)/(K_*G_*cov_Ts_Uz)
+          L_ = -u_star^3 *(hmp_T_Avg+273.15)/(K_*G_*cov_Ts_Uz)
         #EndIf
 
         Fco2 = cov_CO2_Uz
