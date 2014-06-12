@@ -292,11 +292,12 @@ Alias rot_angles(3) = CE
 Alias rot_angles(4) = SE
 Units rot_angles = radian
 
-'Public rotated(3) 'rotated output
-'Alias rotated(1) = U_Avg
-'Alias rotated(2) = V_Avg
-'Alias rotated(3) = W_Avg
-'Units rotated = m/s
+Public rotated(4) 'double-rotation outputs
+Alias rotated(1) = U_Avg
+Alias rotated(2) = V_Avg
+Alias rotated(3) = W_Avg
+Alias rotated(4) = W_Std
+Units rotated = m/s
 
 Public hmp_e_sat_Avg 'derived from stats
 Public hmp_RH_Avg
@@ -1221,19 +1222,21 @@ BeginProg
         SE = Uy_Avg/sqrt_UV
         CT = sqrt_UV/sqrt_UVW
         ST = Uz_Avg/sqrt_UVW
-'XXX
-'        U_Avg = Ux_Avg*CT*CE + Uy_Avg*CT*SE + Uz_Avg*ST
-'        V_Avg = Uy_Avg*CE - Ux_Avg*SE
-'        W_Avg = Uz_Avg*CT - Ux_Avg*ST*CE - Uy_Avg*ST*SE
-        
-        'adjust WD to relect sonic azimuth
-        WD_unit_Avg = (360+WD_unit_Avg+sonic_azimuth+site_declin) MOD 360
-        WD_rslt_Avg = (360+WD_rslt_Avg+sonic_azimuth+site_declin) MOD 360
-
-        Uz_Std = SQR(Uz_Std) 'variances -> stdevs
+        U_Avg = Ux_Avg*CT*CE + Uy_Avg*CT*SE + Uz_Avg*ST
+        V_Avg = Uy_Avg*CE - Ux_Avg*SE
+        W_Avg = Uz_Avg*CT - Ux_Avg*ST*CE - Uy_Avg*ST*SE
+        'HINT values with "_Std" suffix are still covariances
+        W_Std = SQR(Uz_Std*CT*CT + Ux_Std*ST*ST*CE*CE + Uy_Std*ST*ST*SE*SE - _
+                    2*cov_Ux_Uz*CT*CE*ST - 2*cov_Uy_Uz*CT*ST*SE + _
+                    2*cov_Ux_Uy*CE*ST*ST*SE)
+        Uz_Std = SQR(Uz_Std) '(co)variances -> stdevs (ignore Ux_Std, Uy_Std)
         Ts_Std = SQR(Ts_Std)
         CO2_Std = SQR(CO2_Std)
         H2O_Std = SQR(H2O_Std)
+
+        'adjust WD to relect sonic azimuth
+        WD_unit_Avg = (360+WD_unit_Avg+sonic_azimuth+site_declin) MOD 360
+        WD_rslt_Avg = (360+WD_rslt_Avg+sonic_azimuth+site_declin) MOD 360
 
         deadband = dband_mult * Uz_Std
         neg_deadband = -1*deadband        
