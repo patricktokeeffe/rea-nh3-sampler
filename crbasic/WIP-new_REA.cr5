@@ -74,6 +74,7 @@ Const Cpd = 1004.67 'specific heat capacity: dry air    J/(kg K)
 Const MW_h2o = 18.01528 'molar weight of water    g/mol
 Const MW_co2 = 44.010 'molar weight of CO2    g/mol
 Const MW_air = 28.98 'molar weight of dry air    g/mol
+Const MU_WPL = MW_air/MW_h2o
 Const R_ = 8.3144621e-6 'universal gas constant    (kPa m^3)/(K mmol)
 Const Rd = 287.058 'specific gas constant: dry air    J/(kg K)
 Const Rv = 461.495 'specific gas constant: water vapor    J/(kg K)
@@ -258,7 +259,8 @@ Units Ux_Avg = m/s
 Units Uy_Avg = m/s
 Units Uz_Avg = m/s
 Units Ts_Avg = degC
-'ignore other cov units
+Units Ts_Std = degC
+'Units cov_Ts_Uz = K*m/s
 Units Uz_Std = m/s
 Units WS_sclr_Avg = m/s
 Units WD_unit_Avg = degEofN
@@ -272,11 +274,10 @@ Units irga_press_Avg = kPa
 Units irga_tmpr_Avg = degC
 Units irga_CO2_signal_Avg = ratio
 Units irga_H2O_signal_Avg = ratio
-Units Ts_Std = degC
-Units Uz_Std = m/s
 Units CO2_Std = mmol/m^3
+'Units cov_CO2_Uz = mmol/(s m^2)
 Units H2O_Std = mmol/m^3
-'ignore other cov units
+'Units cov_H2O_Uz = mmol/(s m^2)
 Units vlv_up_on_Tot = scans
 Units vlv_dn_on_Tot = scans
 Units vlv_possible = scans
@@ -307,27 +308,42 @@ Units hmp_RH_Avg = %
 Public L_      'Obukhov length
 Public u_star 'friction velocity
 Public tau    'surface stress
-'Public rho_d  'dry air density
-Public rho_a  'ambient (moist) air density
+Public rho_c  'carbon dioxide mass density
+Public rho_v  'water vapor mass density
+Public rho_d  'dry air mass density
+Public rho_a  'ambient (moist) air mass density
 Public Lv     'latent heat of vaporization of water
 Public itt    'integral turbulence test
 Public x70    'estimate of 70% of footprint length
 Units L_ = m
 Units u_star = m/s
 Units tau = Pa
-'Units rho_d = g/m^3
+Units rho_c = mg/m^3
+Units rho_v = g/m^3
+Units rho_d = g/m^3
 Units rho_a = kg/m^3
 Units Lv = J/g
 Units itt = dimless 'TODO
 Units x70 = m 'TODO verify
 
-Public Fco2 'carbon dioxide flux
-Public LE   'latent heat flux
-Public Hs   'sensible heat flux
-Dim WPL_LE  'Webb Pearson Leuning (?) correction 1
-Dim WPL_Hs  'WPL correction 2
-Units Fco2 = g/(m^2 s)
+Dim sigma_wpl   'ratio of water vapor to dry air
+Public Fco2_raw 'uncorrected CO2 flux (e.g. plain covariance)
+Public Fco2_LE_wpl 'water vapor WPL80 term
+Public Fco2_H_wpl 'temperature WPL80 term
+Public Fco2     'carbon dioxide flux
+Public LE_raw   'uncorrected water vapor flux (plain cov.)
+Public LE_wpl   'combined WPL80 term
+Public LE       'latent heat flux
+Public Hs_raw   'sensible heat flux using virtual temp
+Public Hs       'sensible heat flux TODO
+Units Fco2_raw = mg/(m^2 s)
+Units Fco2_LE_wpl = mg/(m^2 s)
+Units Fco2_H_wpl = mg/(m^2 s)
+Units Fco2 = mg/(m^2 s)
+Units LE_raw = W/m^2
+Units LE_wpl = W/m^2
 Units LE = W/m^2
+Units Hs_raw = W/m^2
 Units Hs = W/m^2
 
 '---------- OPERATING VARIABLES ----------
@@ -1281,15 +1297,46 @@ BeginProg
 
         itt = TurbulenceTest(Uz_Std, u_star, L_)
         x70 = FootprintEstimate(L_)
-
-        Fco2 = cov_CO2_Uz
-        LE = cov_H2O_Uz * Lv
-        Hs = cov_Ts_Uz * rho_a * Cpd
-
-        'WPL terms for water vapor flux
-        'corrected sensible heat flux
-        'WPL terms for carbon dioxide flux
+        rho_v = H2O_Avg*MW_h2o/1000 'g/m^3 = (mmol/m^3)(g/mol)(mol/1e3 mmol)
+        rho_d = rho_a*1000 - rho_v 'g/m^3 = (kg/m^3)(1e3 g/kg) - g/m^3
+        rho_c = CO2_Avg * MW_co2 'mg/m^3 = (mmol/m^3)(mg/mmol)
+        sigma_wpl = rho_v/rho_d 'dimless
         
+        'WPL80 Eqn 24:
+        'mg/(m^2 s) = (1)(mg/m^3)*(m^3/g)(g/1e3 mg)*(mmol/m^3)(m/s)(mg/mmol)
+        Fco2_LE_wpl = MU_WPL * rho_c/(rho_d*1000) * cov_H2O_Uz * MW_h2o
+        #If (DATA_SRCS=SDM_CSAT3_LI7500_1) Then
+          'mg/(m^2 s) = (1 + (1)(1))(mg/m^3)(K*m/s)(1/K)
+          Fco2_H_wpl = (1 + MU_WPL*sigma_wpl) * rho_c * _
+                                                  cov_Ts_Uz/(hmp_T_Avg+273.15)
+        #ElseIf (DATA_SRCS=SDM_CSAT3A_EC150_2) Then
+          Fco2_H_wpl = (1 + MU_WPL*sigma_wpl) * rho_c * _
+                                              cov_Ts_Uz/(irga_tmpr_Avg+273.15)
+        #EndIf
+        'mg/(m^2 s) = (mmol/m^3)(m/s) * (mg/mmol)
+        Fco2_raw = cov_CO2_Uz * MW_co2
+        Fco2 = Fco2_raw + Fco2_LE_wpl + Fco2_H_wpl 'mg/(m^2 s)
+
+        'WPL80 Eqn 25:
+        #If (DATA_SRCS=SDM_CSAT3_LI7500_1) Then
+          'W/m^2 = (J/g) * (1 + (1)(1)) *
+          '     ( (mmol/m^3)(m/s)(g/mol)(mol/1e3 mmol) + (K*m/s)(g/m^3)(1/K) )
+          LE_wpl = Lv * (1 + MU_WPL*sigma_wpl) * _
+                 (cov_H2O_Uz*MW_h2o/1000 + cov_Ts_Uz*rho_v/(hmp_T_Avg+273.15))
+        #ElseIf (DATA_SRCS=SDM_CSAT3A_EC150_2) Then
+          LE_wpl = Lv * (1 + MU_WPL*sigma_wpl) * _
+             (cov_H2O_Uz*MW_h2o/1000 + cov_Ts_Uz*rho_v/(irga_tmpr_Avg+273.15))
+        #EndIf
+        'W/m^2 = (mmol/m^3)(m/s)(g/mol)(mol/1e3 mmol)(J/g)
+        LE_raw = (cov_H2O_Uz*MW_h2o/1000)*Lv
+        LE = LE_raw + LE_wpl 'W/m^2
+
+        'TODO not WPL-corrections per-se, but DO adjust to use "ambient" tmpr
+        '  instead of sonic (virtual) tmpr
+        'Hs: W/m^2 = J/(s m^2) = (K*m/s)(kg/m^3)(J/(kg K))
+        Hs_raw = cov_Ts_Uz * rho_a * Cpd
+        Hs = Hs_raw
+
         'stability parameter
         'is within fetch
         '(bonus: stationarity)
