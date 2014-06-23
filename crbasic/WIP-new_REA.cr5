@@ -789,10 +789,13 @@ Function military_to_FP(timestr) As Float
   Return (Round(timestr*2, 0)/2)
 EndFunction
 
+'calculate mass density of air weighted for water vapor content
+'
 '[tmpr] = C, [press] = kPa (barometric), [H2Opress] = kPa (water vapor)
 Function density_of_air(tmpr, press, H2Opress) As Float 'kg/m^3
   '(Pa/kPa)[ (kPa)(kg*K/J)(1/K)(J / Pa*m^3) + (kPa)(kg*K/J)(1/K)(J / Pa*m^3) ]
-  Return (1000*(press/(Rd*(tmpr+273.15)) + H2Opress/(Rv*(tmpr+273.15))))
+  Return 1000*( (press-H2Opress)/(Rd*(tmpr+273.15)) + _
+                                                  H2Opress/(Rv*(tmpr+273.15)) )
 EndFunction
 
 'Derived by inverting equations in Appendix D of EC150 manual
