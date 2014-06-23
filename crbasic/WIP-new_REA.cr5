@@ -1086,7 +1086,7 @@ EndSub
 
 '---------------------
 Sub setup()
-  rot_angles(1) = 1.0 'XXX add runtime stuff file!
+  rot_angles(1) = 1.0
   deadband = NAN 'for catching in update_deadband()
   
   load_settings()
@@ -1132,6 +1132,10 @@ BeginProg
       is_running = True
       elapsed_time = Timer(RUN_TIMER,min,START) 'XXX TODO check what happens
         'to this timer if run wraps around past it's start time the next day!
+      'XXX TODO update this logic tree as necessary to ensure updating the schedule while
+      '     conducting a run is possible but does not interfere with current run. That is,
+      '     how to save the run duration & make it effective immediately but to NOT reset the
+      '     start timer, or at least how to not reset the duration timer... (?)
     ElseIf (is_running) Then
       elapsed_time = Timer(RUN_TIMER,min,QUERY)
       If (elapsed_time >= run_dur) Then end_run()
@@ -1275,31 +1279,32 @@ BeginProg
         CO2_Std = SQR(CO2_Std)
         H2O_Std = SQR(H2O_Std)
 
-        'adjust WD to relect sonic azimuth
+        update_deadband() 'must occur after Uz_Std calc
+
         WD_unit_Avg = (360+WD_unit_Avg+sonic_azimuth+site_declin) MOD 360
         WD_rslt_Avg = (360+WD_rslt_Avg+sonic_azimuth+site_declin) MOD 360
-
-        update_deadband() 'must occur after Uz_Std calc
 
         SatVP(hmp_e_sat_Avg,hmp_T_Avg)
         hmp_RH_Avg = 100*hmp_e_Avg/hmp_e_sat_Avg
 
-        Lv = LatentHeatVapH2O(hmp_T_Avg)
         #If (DATA_SRCS=SDM_CSAT3A_EC150_2) Then
           rho_a = density_of_air(irga_tmpr_Avg, irga_press_Avg, hmp_e_Avg)
         #Else
-          rho_a = density_of_air(hmp_T_Avg, irga_press_Avg, hmp_e_Avg) 'kg/m^3
+          rho_a = density_of_air(hmp_T_Avg,irga_press_Avg,hmp_e_Avg) 'kg/m^3
         #EndIf
         '? specific heat capacity of moist air: Cpm
-        
+        Lv = LatentHeatVapH2O(hmp_T_Avg) 'J/g
+
         tau = SQR(cov_Ux_Uz*cov_Ux_Uz + cov_Uy_Uz*cov_Uy_Uz) '(m/s)^2
-        u_star = SQR(tau)
+        u_star = SQR(tau) 'm/s
         tau *= rho_a '(m^2/s^2)(kg/m^3) = (Pa m^3)/m^3 = Pa
         #If (DATA_SRCS=SDM_CSAT3A_EC150_2) Then
-          L_ = -u_star^3 *(irga_tmpr_Avg+273.15)/(K_*G_*cov_Ts_Uz)
+          L_ = -u_star^3 *(irga_tmpr_Avg+273.15)/(K_*G_*cov_Ts_Uz) 'm
         #Else
-          L_ = -u_star^3 *(hmp_T_Avg+273.15)/(K_*G_*cov_Ts_Uz)
+          L_ = -u_star^3 *(hmp_T_Avg+273.15)/(K_*G_*cov_Ts_Uz) 'm
         #EndIf
+        itt = TurbulenceTest(Uz_Std, u_star, L_) 'dimless
+        x70 = FootprintEstimate(L_) 'm
 
         #If (DATA_SRCS=SDM_CSAT3_LI7500_1) Then
           co2_ppm_Avg = dry_mixing_ratio(CO2_Avg, H2O_Avg, _
@@ -1309,8 +1314,6 @@ BeginProg
                                                 irga_tmpr_Avg, irga_press_Avg)
         #EndIf
 
-        itt = TurbulenceTest(Uz_Std, u_star, L_)
-        x70 = FootprintEstimate(L_)
         rho_v = H2O_Avg*MW_h2o/1000 'g/m^3 = (mmol/m^3)(g/mol)(mol/1e3 mmol)
         rho_d = rho_a*1000 - rho_v 'g/m^3 = (kg/m^3)(1e3 g/kg) - g/m^3
         rho_c = CO2_Avg * MW_co2 'mg/m^3 = (mmol/m^3)(mg/mmol)
@@ -1358,12 +1361,6 @@ BeginProg
         'correction factors for std. L -> L
         'new sampling flow rate
         'new zero air flow rate
-        
-        'calculate valve
-        
-        'control REA sampling state
-        'check timer, etc
-
       EndIf
 
     EndIf
