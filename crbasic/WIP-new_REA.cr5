@@ -763,7 +763,7 @@ DisplayMenu("REA DAQ",-1)
     MenuItem("Min zero flow sLpm", ZEROFLOW_MIN)
     MenuItem("Min declin allowed", DECLIN_MIN)
     MenuItem("Max declin allowed", DECLIN_MAX)
-    MenuRecompile("Recompile now?", recompile)
+    MenuRecompile("Apply now?", recompile)
       MenuPick(Cancel,Yes)
   EndSubMenu
 EndMenu
