@@ -82,6 +82,13 @@ Const K_ = 0.41 'Von Karman constant    dimless
 Const G_ = 9.81 'Gravity    m/s^2
 Const PI = 3.14159
 
+'Omega FMA5400 series option 1: 14.7 psia and 70*F
+Const MFC_STP_T = 21.11 + 273.15
+Const MFC_STP_P = 101.35
+
+'Omega FMA5400 series option 2: 0*C and 1.01 bar abs
+'Const MFC_STP_T = 0
+'Const MFC_STP_P = 101
 
 '==========================  PROGRAM OPERATION  ==============================
 
@@ -894,6 +901,15 @@ EndFunction
 '[tmpr] = degC
 Function LatentHeatVapH2O(tmpr) As Float 'J/g
   Return 1918.46*( (tmpr+273.15)/(tmpr+239.24) )^2
+EndFunction
+
+'volumetric flow rate
+'
+'See constants MFC_STP_T and MFC_STP_P for standard conditions definition
+'
+'[massFlow] = std L/min @ STP, [tmpr] = C, [press] = kPa (abs.)
+Function volumetric_flow(massFlow, tmpr, press) As Float 'L/min
+  Return (massFlow * ((tmpr+273.15)/MFC_STP_T) * (MFC_STP_P/press))
 EndFunction
 
 'footprint calc, Hsieh et al, 2000
