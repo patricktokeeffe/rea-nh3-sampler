@@ -585,6 +585,7 @@ DataTable(ts_fast,True,-1)
     Sample(1,irga_CO2_signal,IEEE4)
     Sample(1,irga_H2O_signal,IEEE4)
   #EndIf
+  Sample(1,Uz_rot,FP2)
   Sample(1,vlv_up_ON,Boolean)
   Sample(1,vlv_dn_ON,Boolean)
 EndTable
