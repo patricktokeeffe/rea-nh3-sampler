@@ -328,8 +328,8 @@ Units Lv = J/g
 Units itt = dimless 'TODO
 Units x70 = m 'TODO verify
 
-Public co2_ppm_Avg 'mean CO2 dry mixing ratio
-Units co2_ppm_Avg = ppmV
+Public CO2_ppm_Avg 'mean CO2 dry mixing ratio
+Units CO2_ppm_Avg = ppmV
 
 Dim sigma_wpl   'ratio of water vapor to dry air
 Public Fco2_raw 'uncorrected CO2 flux (e.g. plain covariance)
@@ -1313,10 +1313,10 @@ BeginProg
         x70 = FootprintEstimate(L_) 'm
 
         #If (DATA_SRCS=SDM_CSAT3_LI7500_1) Then
-          co2_ppm_Avg = dry_mixing_ratio(CO2_Avg, H2O_Avg, _
+          CO2_ppm_Avg = dry_mixing_ratio(CO2_Avg, H2O_Avg, _
                                                     hmp_T_Avg, irga_press_Avg)
         #ElseIf (DATA_SRCS=SDM_CSAT3A_EC150_2) Then
-          co2_ppm_Avg = dry_mixing_ratio(CO2_Avg, H2O_Avg, _
+          CO2_ppm_Avg = dry_mixing_ratio(CO2_Avg, H2O_Avg, _
                                                 irga_tmpr_Avg, irga_press_Avg)
         #EndIf
 
