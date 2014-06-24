@@ -569,7 +569,7 @@ DataTable(work_cov,TRUE,1)
 EndTable
 
 DataTable(work_rea,True,-1)
-  DataInterval(0,STAT_INTV,mSec,5)
+  DataInterval(0,STAT_INTV,Min,5)
   
   Totalize(1,vlv_up_ON,UINT4,vlv_up_ON=NAN)
   Totalize(1,vlv_dn_ON,UINT4,vlv_dn_ON=NAN)
