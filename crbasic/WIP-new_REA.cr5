@@ -210,7 +210,7 @@ Public cov_sonic(1,4)'= [ [Ts,  Ux, Uy, Uz] ]
 Public cov_irga(2,4) '= [ [CO2, Ux, Uy, Uz], 
                      '    [H2O, Ux, Uy, Uz],
                      '    [Tc,  Ux, Uy, Uz] ]  <-- Tc not implemented!
-Public cov_out(40)
+Public cov_out(37)
 Alias cov_out(1)  = Ux_Avg 'Average() x4
 Alias cov_out(2)  = Uy_Avg
 Alias cov_out(3)  = Uz_Avg
@@ -250,11 +250,8 @@ Alias cov_out(35) = cov_H2O_Uz
 '  Alias cov_out() = cov_Tc_Ux
 '  Alias cov_out() = cov_Tc_Uy
 '  Alias cov_out() = cov_Tc_Uz
-Alias cov_out(36) = vlv_up_on_Tot 'Totalize() x3
-Alias cov_out(37) = vlv_dn_on_Tot
-Alias cov_out(38) = vlv_possible
-Alias cov_out(39) = hmp_T_Avg 'Average() x2
-Alias cov_out(40) = hmp_e_Avg
+Alias cov_out(36) = hmp_T_Avg 'Average() x2
+Alias cov_out(37) = hmp_e_Avg
 Units Ux_Avg = m/s
 Units Uy_Avg = m/s
 Units Uz_Avg = m/s
@@ -278,11 +275,16 @@ Units CO2_Std = mmol/m^3
 'Units cov_CO2_Uz = mmol/(s m^2)
 Units H2O_Std = mmol/m^3
 'Units cov_H2O_Uz = mmol/(s m^2)
+Units hmp_T_Avg = degC
+Units hmp_e_Avg = kPa
+
+Public rea_out(3) 
+Alias rea_out(1) = vlv_up_on_Tot
+Alias rea_out(2) = vlv_dn_on_Tot
+Alias rea_out(3) = vlv_possible
 Units vlv_up_on_Tot = scans
 Units vlv_dn_on_Tot = scans
 Units vlv_possible = scans
-Units hmp_T_Avg = degC
-Units hmp_e_Avg = kPa
 
 Dim sqrt_UV 'double-rotation calcs
 Dim sqrt_UVW
@@ -552,13 +554,17 @@ DataTable(work_cov,TRUE,1)
   Covariance(4,cov_irga(1,1),IEEE4,disable_irga,4)
   Covariance(4,cov_irga(1,2),IEEE4,disable_irga,4)
   'Covariance(4,cov_irga(1,3),IEEE4,disable_irga,4)
+
+  Average(1,hmp_T,IEEE4,(inbetween_1hz_scan OR hmp_T=NAN))
+  Average(1,hmp_e,IEEE4,(inbetween_1hz_scan OR hmp_e=NAN))
+EndTable
+
+DataTable(work_rea,True,-1)
+  DataInterval(0,STAT_INTV,mSec,5)
   
   Totalize(1,vlv_up_ON,UINT4,vlv_up_ON=NAN)
   Totalize(1,vlv_dn_ON,UINT4,vlv_dn_ON=NAN)
   Totalize(1,1,UINT4,False)
-
-  Average(1,hmp_T,IEEE4,(inbetween_1hz_scan OR hmp_T=NAN))
-  Average(1,hmp_e,IEEE4,(inbetween_1hz_scan OR hmp_e=NAN))
 EndTable
 
 '----- FINAL OUTPUTS -----
