@@ -304,8 +304,10 @@ Units rotated = m/s
 
 Public hmp_e_sat_Avg 'derived from stats
 Public hmp_RH_Avg
+Public hmp_Tdew_Avg
 Units hmp_e_sat_Avg = kPa
 Units hmp_RH_Avg = %
+Units hmp_Tdew_Avg = degC
 
 Public L_      'Obukhov length
 Public u_star 'friction velocity
@@ -649,6 +651,7 @@ DataTable(stats,True,-1)
   Sample(1,WD_CSI_Std,IEEE4)
   
   Sample(1,hmp_T_Avg,IEEE4)
+  Sample(1,hmp_Tdew_Avg,IEEE4)
   Sample(1,hmp_RH_Avg,IEEE4)
   Sample(1,hmp_e_Avg,IEEE4)
   
@@ -1356,8 +1359,9 @@ BeginProg
         WD_unit_Avg = (360+WD_unit_Avg+sonic_azimuth+site_declin) MOD 360
         WD_rslt_Avg = (360+WD_rslt_Avg+sonic_azimuth+site_declin) MOD 360
 
-        SatVP(hmp_e_sat_Avg,hmp_T_Avg)
+        SatVP(hmp_e_sat_Avg, hmp_T_Avg)
         hmp_RH_Avg = 100*hmp_e_Avg/hmp_e_sat_Avg
+        DewPoint(hmp_Tdew_Avg, hmp_T_Avg, hmp_RH_Avg)
 
         #If (DATA_SRCS=SDM_CSAT3A_EC150_2) Then
           rho_a = density_of_air(irga_tmpr_Avg, irga_press_Avg, hmp_e_Avg)
