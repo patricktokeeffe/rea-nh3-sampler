@@ -600,25 +600,90 @@ DataTable(ts_slow,True,-1)
   Sample(1,flow_zero,IEEE4)
 EndTable
 
-DataTable(rea,True,-1) 'XXX rea on trigger?
+DataTable(stats,True,-1)
   DataInterval(0,STAT_INTV,Min,10)
-  CardOut(1,-1) 'XXX make fixed size in days
+  CardOut(1,-1)
+
+  Sample(1,CO2_ppm_Avg,IEEE4)
+  Sample(1,CO2_Avg,IEEE4)
+  Sample(1,CO2_Std,IEEE4)
+  Sample(1,H2O_Avg,IEEE4)
+  Sample(1,H2O_Std,IEEE4)
+  Sample(1,irga_press_Avg,IEEE4)
+  #If (DATA_SRCS=SDM_CSAT3A_EC150_2) Then
+    Sample(1,irga_tmpr_Avg,IEEE4)
+    Sample(1,irga_CO2_signal_Avg,IEEE4)
+    Sample(1,irga_H2O_signal_Avg,IEEE4)
+  #EndIf
   
-  Sample(1,Uz_Std,FP2)
-  'sample beta
-  'sample average flow up & down
-  Sample(1,vlv_up_on_Tot/vlv_possible,FP2)
-    FieldNames("frac_up_on")
-  Sample(1,vlv_dn_on_Tot/vlv_possible,FP2)
-    FieldNames("frac_dn_on")
+  Sample(1,Ts_Avg,IEEE4)
+  Sample(1,Ts_Std,IEEE4)
+  
+  Sample(1,Uz_Std,IEEE4)
+  Sample(1,L_,IEEE4)
+  Sample(1,u_star,IEEE4)
+  Sample(1,tau,IEEE4)
+  Sample(1,itt,IEEE4)
+  Sample(1,x70,IEEE4)
+  
+  Sample(1,Fco2,IEEE4)
+  Sample(1,Fco2_raw,IEEE4)
+  Sample(1,Fco2_LE_wpl,IEEE4)
+  Sample(1,Fco2_H_wpl,IEEE4)
+  Sample(1,LE,IEEE4)
+  Sample(1,LE_raw,IEEE4)
+  Sample(1,LE_wpl,IEEE4)
+  Sample(1,Hs,IEEE4)
+  Sample(1,Hs_raw,IEEE4)
+
+  Sample(1,CE,IEEE4)
+  Sample(1,SE,IEEE4)
+  Sample(1,CT,IEEE4)
+  Sample(1,ST,IEEE4)
+  Sample(1,W_Std,IEEE4)
+
+  Sample(1,WS_sclr_Avg,IEEE4)
+  Sample(1,WS_rslt_Avg,IEEE4)
+  Sample(1,WD_unit_Avg,IEEE4)
+  Sample(1,WD_rslt_Avg,IEEE4)
+  Sample(1,WD_CSI_Std,IEEE4)
+  
+  Sample(1,hmp_T_Avg,IEEE4)
+  Sample(1,hmp_RH_Avg,IEEE4)
+  Sample(1,hmp_e_Avg,IEEE4)
+  
+  Sample(1,rho_a,IEEE4)
+  Sample(1,rho_d,IEEE4)
+  Sample(1,rho_v,IEEE4)
+  Sample(1,rho_c,IEEE4)
+  Sample(1,Lv,IEEE4)
+
+'  Sample(1,flow_zero_Avg,IEEE4)
+  
+'  Sample(1,logger_tmpr,IEEE4)
+'  Sample(1,logger_power,IEEE4)
 EndTable
 
-DataTable(met,True,-1)
-  DataInterval(0,STAT_INTV,Min,10)
-  CardOut(1,-1) 'XXX make fixed size in days
-  Sample(1,1,FP2)
-  'XXX
-EndTable
+'DataTable(rea,True,-1) 'XXX rea on trigger?
+'  DataInterval(0,STAT_INTV,Min,10)
+'  CardOut(1,-1) 'XXX make fixed size in days
+'  
+'  Sample(1,Uz_Std,FP2) '<-- W_std?
+'  'sample beta
+'  Sample(1,flow_up_Avg,IEEE4)
+'    FieldNames("massFlow_up_Avg")
+'  Sample(1,flow_dn_Avg,IEEE4)
+'    FieldNames("massFlow_dn_Avg")
+'  Sample(1,volFlow_up_Avg,IEEE4)
+'  Sample(1,volFlow_dn_Avg,IEEE4)
+'  Sample(1,vlv_up_on_Tot/vlv_possible,FP2)
+'    FieldNames("frac_up_on")
+'  Sample(1,vlv_dn_on_Tot/vlv_possible,FP2)
+'    FieldNames("frac_dn_on")
+'EndTable
+
+
+
 
 DataTable(info,1,100)
   CardOut(1,100)
@@ -1361,6 +1426,8 @@ BeginProg
         Hs_raw = cov_Ts_Uz * rho_a * Cpd
         Hs = Hs_raw
 
+        CallTable(stats)
+
         'stability parameter
         'is within fetch
         '(bonus: stationarity)
@@ -1415,8 +1482,7 @@ BeginProg
     VaporPressure(hmp_e, hmp_T, hmp_RH)
 
     CallTable(ts_slow)
-    CallTable(rea)
-    CallTable(met)
+'    CallTable(rea)
     
     just_had_1hz_scan = True
   NextScan
