@@ -609,8 +609,11 @@ DataTable(ts_slow,True,-1)
   Sample(1,hmp_T,IEEE4)
   Sample(1,hmp_RH,IEEE4)
   Sample(1,flow_up,IEEE4)
+    FieldNames("massFlow_up")
   Sample(1,flow_dn,IEEE4)
+    FieldNames("massFlow_dn")
   Sample(1,flow_zero,IEEE4)
+    FieldNames("massFlow_zero")
 EndTable
 
 DataTable(stats,True,-1)
