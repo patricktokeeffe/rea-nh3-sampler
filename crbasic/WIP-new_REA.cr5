@@ -11,6 +11,10 @@
 '
 ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
 
+'manually update VERSION with results of `git describe` prior to pushing to
+'datalogger but do not check-in file with other than empty string
+Const VERSION = ""
+
 '=====================  DEVICE CONFIGURATION  ================================
 Const SDM_CSAT3_LI7500_1 = 1 'aliases for menu
 Const SDM_CSAT3A_EC150_2 = 2
@@ -728,15 +732,23 @@ DataTable(info,1,100)
     FieldNames("site_fetch_W")
   Sample(1,DATA_SRCS,FP2)
     FieldNames("sonic_irga_source")
+  Sample(1,Status.SerialNumber,UINT2)
+    FieldNames("LoggerSN")
+  Sample(1,Status.OSVersion,String)
+    FieldNames("OSVersion")
   Sample(1,Status.CompileResults,String)
     FieldNames("CompileResults")
   Sample(1,Status.CardStatus,String)
     FieldNames("CardStatus")
-'XXX 
-'  Sample(1,Status.RunSignature,UINT2) 'program information
-'    FieldNames("RunSig")
+'FIXME XXX TODO :: the CR5000 apparently does not have a RunSignature field
+'  in the Status table but the compiler doesn't mind. In contrast, there is
+'  a ProgSignature field but the compiler apparently doesn't know about it.
+  Sample(1,Status.RunSignature,UINT2)
+    FieldNames("RunSig")
 '  Sample(1,Status.ProgSignature,UINT2)
 '    FieldNames("ProgSig")
+  Sample(1,VERSION,String)
+    FieldNames("ProgVersion")
 EndTable
 
 
