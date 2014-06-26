@@ -503,7 +503,7 @@ Const SCHEDULE_FILE = "CPU:rea_schedule.dat"
 Const NUM_SCHEDULE = {4}
 
 Const DEF_RUN_DURATION = 1 'hr
-Const DEF_RUN_BEGINTOD = False
+Const DEF_RUN_BEGINTOD = 0 'XXX use 0 not False b/c False renders as 2.1E+06
 Const DEF_RUN_DELAY = 0 'hr
 Const DEF_RUN_TOD = 0 'hour of day
 
