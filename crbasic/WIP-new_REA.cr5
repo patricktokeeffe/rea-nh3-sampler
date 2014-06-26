@@ -26,7 +26,7 @@ ConstTable
   Const CSAT_ADDR = 3    'default CSAT3 SDM address: 3
   Const LI7500_ADDR = 7  'default LI7500 SDM address: 7
   Const EC100_ADDR = 1   'default EC100/EC150/CSAT3A address: 1
-  
+
   'self-imposed value limits on some settings options
   Const RUNTIME_MIN = 0.5 'hrs
   Const RUNTIME_MAX = 24 'hrs
@@ -215,10 +215,8 @@ Units lag_irga_tmpr = degC
 Units lag_CO2_signal = ratio
 Units lag_H2O_signal = ratio
 
-'Public denom 'for calculating mixing ratios - TODO Dim 
-
 Public cov_sonic(1,4)'= [ [Ts,  Ux, Uy, Uz] ]
-Public cov_irga(2,4) '= [ [CO2, Ux, Uy, Uz], 
+Public cov_irga(2,4) '= [ [CO2, Ux, Uy, Uz],
                      '    [H2O, Ux, Uy, Uz],
                      '    [Tc,  Ux, Uy, Uz] ]  <-- Tc not implemented!
 Public cov_out(37)
@@ -299,7 +297,7 @@ Units vlv_possible = scans
 
 Dim sqrt_UV 'double-rotation calcs
 Dim sqrt_UVW
-Public rot_angles(4) 
+Public rot_angles(4)
 Alias rot_angles(1) = CT
 Alias rot_angles(2) = ST
 Alias rot_angles(3) = CE
@@ -396,7 +394,7 @@ Public mean_up_flow
 Public mean_dn_flow
 Public decreasing_flow As Boolean 'XXX TST
 
-Public deadband 
+Public deadband
 Dim neg_deadband
 Units deadband = m/s
 
@@ -631,17 +629,17 @@ DataTable(stats,True,-1)
     Sample(1,irga_CO2_signal_Avg,IEEE4)
     Sample(1,irga_H2O_signal_Avg,IEEE4)
   #EndIf
-  
+
   Sample(1,Ts_Avg,IEEE4)
   Sample(1,Ts_Std,IEEE4)
-  
+
   Sample(1,Uz_Std,IEEE4)
   Sample(1,L_,IEEE4)
   Sample(1,u_star,IEEE4)
   Sample(1,tau,IEEE4)
   Sample(1,itt,IEEE4)
   Sample(1,x70,IEEE4)
-  
+
   Sample(1,Fco2,IEEE4)
   Sample(1,Fco2_raw,IEEE4)
   Sample(1,Fco2_LE_wpl,IEEE4)
@@ -663,12 +661,12 @@ DataTable(stats,True,-1)
   Sample(1,WD_unit_Avg,IEEE4)
   Sample(1,WD_rslt_Avg,IEEE4)
   Sample(1,WD_CSI_Std,IEEE4)
-  
+
   Sample(1,hmp_T_Avg,IEEE4)
   Sample(1,hmp_Tdew_Avg,IEEE4)
   Sample(1,hmp_RH_Avg,IEEE4)
   Sample(1,hmp_e_Avg,IEEE4)
-  
+
   Sample(1,rho_a,IEEE4)
   Sample(1,rho_d,IEEE4)
   Sample(1,rho_v,IEEE4)
@@ -676,7 +674,7 @@ DataTable(stats,True,-1)
   Sample(1,Lv,IEEE4)
 
 '  Sample(1,flow_zero_Avg,IEEE4)
-  
+
 '  Sample(1,logger_tmpr,IEEE4)
 '  Sample(1,logger_power,IEEE4)
 EndTable
@@ -698,9 +696,6 @@ EndTable
 '  Sample(1,vlv_dn_on_Tot/vlv_possible,FP2)
 '    FieldNames("frac_dn_on")
 'EndTable
-
-
-
 
 DataTable(info,1,100)
   CardOut(1,100)
@@ -1037,7 +1032,7 @@ Sub save_current_choices()
   If (ch_flowSP_updn > UPDNFLOW_MAX) Then (ch_flowSP_updn = UPDNFLOW_MAX)
 
   'HINT treat azimuth differently since 0 is valid option
-  sonic_azimuth = IIF(sonic_azimuth < 0, -1, FIX(sonic_azimuth) MOD 360)  
+  sonic_azimuth = IIF(sonic_azimuth < 0, -1, FIX(sonic_azimuth) MOD 360)
 
   If (ch_sonic_height < 0) Then (ch_sonic_height = 0)
   If (ch_site_declin < DECLIN_MIN) Then (ch_site_declin = DECLIN_MIN)
@@ -1101,7 +1096,7 @@ Sub save_current_sch_choices()
   If (ch_run_duration > RUNTIME_MAX) Then ch_run_duration = RUNTIME_MAX
   ch_run_tod = military_to_FP(ch_run_tod)
   ch_run_tod = IIF(ch_run_tod < 0, 0, ch_run_tod MOD 24)
-  
+
   'Populate dependent variables
   If (ch_run_begintod) Then
     start_run = ch_run_tod * 60
@@ -1194,7 +1189,7 @@ EndSub
 Sub setup()
   rot_angles(1) = 1.0
   deadband = NAN 'for catching in update_deadband()
-  
+
   load_settings()
   load_sch_settings()
   load_shield_state()
@@ -1302,7 +1297,7 @@ BeginProg
         GetRecord(lagged(1),work_lag,LAG_SCANS-CSAT3_DELAY)
         Move(aligned(1),5,lagged(1),5)
         disable_sonic = lag_sonic_diag AND &hF000 'bits 12-15 are flags
-        
+
         GetRecord(lagged(1),work_lag,LAG_SCANS-LI7500_DELAY)
         Move(aligned(6),4,lagged(6),4)
         Move(aligned(10),3,NAN,1)
@@ -1312,7 +1307,7 @@ BeginProg
 
       GetRecord(lagged(1),work_lag,LAG_SCANS)
       Move(aligned(13),2,lagged(13),2) 'inst. valve state
-      
+
       cov_sonic(1,1) = lag_Ts
       Move(cov_sonic(1,2),3,lag_Ux,3)
       cov_irga(1,1) = lag_CO2
@@ -1325,18 +1320,18 @@ BeginProg
       CallTable(work_cov)
       If (work_cov.Output(1,1)) Then
         GetRecord(cov_out(1),work_cov,1)
-        
+
         'TODO sonic_uptime
         'TODO irga_uptime
-        
-        'Wind coordinate rotation: met->natural as described in: 
-        '  Chapter 3, Appendix A from Handbook of Micrometeorology, ed. Lee, 
+
+        'Wind coordinate rotation: met->natural as described in:
+        '  Chapter 3, Appendix A from Handbook of Micrometeorology, ed. Lee,
         '    Massman and Law
         '
         'Also in:
-        '  Finnigan J.J., Clement R., Malhi Y., Leuning R., Cleugh H.A. A 
-        '  re-evaluation of long-term flux measurement techniques, Part I: 
-        '  Averaging and Coordinate Rotation. Boundary-Layer Meteorology 
+        '  Finnigan J.J., Clement R., Malhi Y., Leuning R., Cleugh H.A. A
+        '  re-evaluation of long-term flux measurement techniques, Part I:
+        '  Averaging and Coordinate Rotation. Boundary-Layer Meteorology
         '  107: 1-48, 2003.
         '
         'Given original met components: Ux, Uy, Uz
@@ -1352,9 +1347,9 @@ BeginProg
         '    CT = sqrt( |U1|^2 + |V1|^2 )/sqrt( |U1|^2 + |V1|^2 + |W1|^2 )
         '    ST = |W1|/sqrt( |U1|^2 + |V1|^2 + |W1|^2 )
         '
-        'These two rotations align base vector e1 (x-axis) to mean HZ WD and a 
-        'third rotation is needed to fix e2,e3. This is done by forcing 
-        'Cov(Uy,Uw) to zero but since it often results in physically 
+        'These two rotations align base vector e1 (x-axis) to mean HZ WD and a
+        'third rotation is needed to fix e2,e3. This is done by forcing
+        'Cov(Uy,Uw) to zero but since it often results in physically
         'unrealistic orientations, this step is also often ignored.
         '    U3 = U2
         '    V3 = V2*CB + W2*SB
@@ -1363,9 +1358,9 @@ BeginProg
         '    CB = cos( 0.5*atan(2*Cov(V2,W2) / (Cov(V2,V2) - Cov(W2,W2))) )
         '    SB = sin( 0.5*atan*2*Cov(V2,W2) / (Cov(V2,V2) - Cov(W2,W2))) )
         '
-        'In this program, only first two rotations are performed. Rotated 
-        'values are used in flux calcs but be aware this procecure acts as a 
-        'high-pass filter removing contributions from eddies of period greater 
+        'In this program, only first two rotations are performed. Rotated
+        'values are used in flux calcs but be aware this procecure acts as a
+        'high-pass filter removing contributions from eddies of period greater
         'than averaging time (30min)!
         sqrt_UV = SQR(Ux_Avg^2 + Uy_Avg)
         sqrt_UVW = SQR(Ux_Avg^2 + Uy_Avg^2 + Uz_Avg^2)
@@ -1425,7 +1420,7 @@ BeginProg
         rho_d = rho_a*1000 - rho_v 'g/m^3 = (kg/m^3)(1e3 g/kg) - g/m^3
         rho_c = CO2_Avg * MW_co2 'mg/m^3 = (mmol/m^3)(mg/mmol)
         sigma_wpl = rho_v/rho_d 'dimless
-        
+
         'WPL80 Eqn 24:
         'mg/(m^2 s) = (1)(mg/m^3)*(m^3/g)(g/1e3 mg)*(mmol/m^3)(m/s)(mg/mmol)
         Fco2_LE_wpl = MU_WPL * rho_c/(rho_d*1000) * cov_H2O_Uz * MW_h2o
@@ -1461,19 +1456,15 @@ BeginProg
         Hs_raw = cov_Ts_Uz * rho_a * Cpd
         Hs = Hs_raw
 
-        CallTable(stats)
-
         'stability parameter
         'is within fetch
         '(bonus: stationarity)
 
-        'correction factors for std. L -> L
-        'new sampling flow rate
-        'new zero air flow rate
-      EndIf
+        CallTable(stats)
+      EndIf 'new 30min met record
 
-    EndIf
-    
+    EndIf 'have enough scans to perform real-time lag compensation
+
     If (save_schedule) Then
       save_current_sch_choices()
       save_schedule = Cancel
@@ -1508,17 +1499,17 @@ BeginProg
   Scan(SLOW_INTV,Sec,0,0)
     VoltDiff(hmp_T,1,mv1000,HMP_T_DF,True,0,INTEG,HMP_T_MULT,HMP_T_OFF)
     VoltDiff(hmp_RH,1,mv1000,HMP_RH_DF,True,0,INTEG,HMP_RH_MULT,HMP_RH_OFF)
-    
+
     VoltDiff(flow_up,1,mv5000,MFC_UP_DF,True,0,INTEG,MFC_UPDN_MULT,MFC_UPDN_OFF)
     VoltDiff(flow_dn,1,mv5000,MFC_DN_DF,True,0,INTEG,MFC_UPDN_MULT,MFC_UPDN_OFF)
     VoltSe(flow_zero,1,mv5000,MFC_ZERO_SE,True,0,INTEG,MFC_ZERO_MULT,MFC_ZERO_OFF)
     autothrottle()
 
-    VaporPressure(hmp_e, hmp_T, hmp_RH)
+    VaporPressure(hmp_e, hmp_T, hmp_RH) 'hmp_e needed in work_cov table
 
     CallTable(ts_slow)
 '    CallTable(rea)
-    
+
     just_had_1hz_scan = True
   NextScan
 EndProg
