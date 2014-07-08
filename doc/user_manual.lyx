@@ -107,7 +107,7 @@ End
 \bibtex_command default
 \index_command default
 \float_placement ph
-\paperfontsize 12
+\paperfontsize default
 \spacing single
 \use_hyperref true
 \pdf_title "Denuder-based Trace Gas Sampler Operator's Manual"
@@ -155,8 +155,8 @@ End
 \bottommargin 2.5cm
 \secnumdepth 3
 \tocdepth 2
-\paragraph_separation skip
-\defskip medskip
+\paragraph_separation indent
+\paragraph_indentation default
 \quotes_language english
 \papercolumns 1
 \papersides 2
