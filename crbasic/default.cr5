@@ -484,6 +484,7 @@ Alias settings(18) = site_rufness
 Units flowSP_wait = sLpm
 Units flowSP_zero = sLpm
 'Units flowSP_auto = boolean
+Units flowSP_updn = sLpm
 Units dband_mult = ratio
 Units dband_min = m/s
 Units dband_def = m/s
