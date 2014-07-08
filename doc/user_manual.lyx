@@ -34,31 +34,8 @@
 
 \renewcommand{\nomname}{List of Symbols}
 
-%% define syntax highlighting for CRBASIC code
-% specify listing option `language=[CR]Basic
-\definecolor{crbNormal}{RGB}{0,0,0}
-\definecolor{crbComments}{RGB}{0,128,128}
-\definecolor{crbKeywords}{RGB}{0,0,255}
-\definecolor{crbOperators}{RGB}{0,0,255}
-\definecolor{crbNumbers}{RGB}{0,0,128}
-\definecolor{crbStrings}{RGB}{255,0,255}
-\definecolor{crbBookmarks}{RGB}{0,255,255}
-\definecolor{crbVariables}{RGB}{0,0,128}
-\definecolor{crbLocalVars}{RGB}{0,128,0}
-\lstdefinelanguage[CR]{BASIC}{%
-  basicstyle={\ttfamily\footnotesize},%
-  sensitive=false,%
-  upquote=true,%
-  comment={[l]{'}},%
-  commentstyle={\color{crbComments}\ttfamily\itshape},%
-  string=[bd]{"},% TODO check how delimiters are escaped
-  stringstyle={\color{crbStrings}},%
-  showstringspaces=false,%
-  keywords=[1]{Const, Public, Dim, Alias, Units, ConstTable, EndConstTable, DataTable, EndTable, DataInterval, CardOut, Average, Covariance, WindVector, Sample, FieldNames, Totalize, DisplayMenu, SubMenu, EndSubMenu, MenuItem, MenuPick, MenuRecompile, EndMenu, Sub, EndSub, Function, Return, EndFunction, If, Then, ElseIf, Else, EndIf, While, Wend, Move, OR, AND, XOR, SDMSpeed, CallTable, WriteIO, BeginProg, Scan, SlowSequence, NextScan, EndProg},% TODO !
-  keywordstyle={[1]{\color{crbKeywords}}},%
-  keywords=[2]{\+, \-, \*, \/},%
-  keywordstyle={[2]{\color{crbOperators}}}%
-}
+\usepackage{listings}
+
 \end_preamble
 \options intoc
 \use_default_options true
@@ -134,6 +111,7 @@ logicalmkup
 \papercolumns 1
 \papersides 2
 \paperpagestyle default
+\listings_params "breakatwhitespace=true,breaklines=true,frame=single,numbers=left,numberstyle={\footnotesize},showlines=true"
 \tracking_changes false
 \output_changes false
 \html_math_output 0
@@ -8093,7 +8071,7 @@ The complete program operated by the datalogger:
 \begin_inset CommandInset include
 LatexCommand lstinputlisting
 filename "../crbasic/WIP-new_REA.cr5"
-lstparams "breakatwhitespace,breaklines,frame=single,language={[CR]BASIC},numbers=left,numberstyle={\\footnotesize}"
+lstparams "frame=none,language={[CR]BASIC}"
 
 \end_inset
 
