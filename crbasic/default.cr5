@@ -579,7 +579,7 @@ DataTable(work_rea,True,-1)
 EndTable
 
 '----- FINAL OUTPUTS -----
-DataTable(ts_fast,True,-1)
+DataTable(ts_fast,True,600)
   DataInterval(0,FAST_INTV,mSec,10)
   CardOut(1,-1) 'XXX make fixed size in days
   Sample(1,sonic_Ux,IEEE4)
@@ -601,7 +601,7 @@ DataTable(ts_fast,True,-1)
   Sample(1,vlv_dn_ON,Boolean)
 EndTable
 
-DataTable(ts_slow,True,-1)
+DataTable(ts_slow,True,60)
   DataInterval(0,SLOW_INTV,Sec,10)
   CardOut(1,-1) 'XXX make fixed size in days
   Sample(1,hmp_T,IEEE4)
@@ -614,7 +614,7 @@ DataTable(ts_slow,True,-1)
     FieldNames("massFlow_zero")
 EndTable
 
-DataTable(stats,True,-1)
+DataTable(stats,True,48)
   DataInterval(0,STAT_INTV,Min,10)
   CardOut(1,-1)
 
@@ -705,8 +705,8 @@ EndTable
 '    FieldNames("frac_dn_on")
 'EndTable
 
-DataTable(info,1,100)
-  CardOut(1,100)
+DataTable(info,1,50)
+  CardOut(1,200)
   Sample(1,flowSP_wait,FP2)
     FieldNames("flow_zero_waiting")
   Sample(1,flowSP_zero,FP2)
