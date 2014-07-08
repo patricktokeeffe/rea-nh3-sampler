@@ -34,7 +34,19 @@
 
 \renewcommand{\nomname}{List of Symbols}
 
+\usepackage{framed}
+
 \usepackage{listings}
+
+\renewcommand{\lstlistlistingname}{List of Program Listings}% http://stackoverflow.com/a/9480618/2946116
+
+% number listings by section like figure/table/eqns
+% http://www.latex-community.org/forum/viewtopic.php?f=5&p=10165#p10168
+\AtBeginDocument{\numberwithin{lstlisting}{section}}
+
+% including "Listing" in formatted reference for listings
+% http://tex.stackexchange.com/a/65704/48287
+\newref{lis}{name=listing~,Name=Listing~,names=listings~,Names=Listings~}
 
 \end_preamble
 \options intoc
@@ -8068,11 +8080,50 @@ The complete program operated by the datalogger:
 \end_layout
 
 \begin_layout Standard
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{framed}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
 \begin_inset CommandInset include
 LatexCommand lstinputlisting
-filename "../crbasic/WIP-new_REA.cr5"
+filename "../crbasic/default.cr5"
 lstparams "frame=none,language={[CR]BASIC}"
 
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+end{framed}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Newpage clearpage
 \end_inset
 
 
