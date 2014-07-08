@@ -48,6 +48,9 @@
 % http://tex.stackexchange.com/a/65704/48287
 \newref{lis}{name=listing~,Name=Listing~,names=listings~,Names=Listings~}
 
+% http://jansoehlke.com/2010/06/strikethrough-in-latex/
+% see also new inset added to local layout
+\usepackage[normalem]{ulem} 
 \end_preamble
 \options intoc
 \use_default_options true
@@ -58,6 +61,29 @@ tabs-within-sections
 logicalmkup
 \end_modules
 \maintain_unincluded_children false
+\begin_local_layout
+InsetLayout Flex:MenuItem
+LyxType               charstyle
+LabelString           menu
+LatexType             command
+LatexName             menuitem
+Font
+Family              Sans
+EndFont
+Preamble
+\newcommand*{\menuitem}[1]{{\sffamily #1}}
+EndPreamble
+End
+InsetLayout Flex:Strikeout
+LyxType    charstyle
+LabelString    strikeout
+LatexType    command
+LatexName     strikeout
+Preamble
+\newcommand*{\strikeout}[1]{{\sout {#1}}}
+EndPreamble
+End
+\end_local_layout
 \language english
 \language_package default
 \inputencoding auto
