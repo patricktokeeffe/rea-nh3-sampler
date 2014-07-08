@@ -48,6 +48,9 @@
 % http://tex.stackexchange.com/a/65704/48287
 \newref{lis}{name=listing~,Name=Listing~,names=listings~,Names=Listings~}
 
+\usepackage{currfile} % for capturing timestamp when "printed"
+\usepackage{filemod} % http://tex.stackexchange.com/q/14217/48287
+
 % http://jansoehlke.com/2010/06/strikethrough-in-latex/
 % see also new inset added to local layout
 \usepackage[normalem]{ulem} 
@@ -181,6 +184,22 @@ Department of Civil & Environmental Engineering
 \end_inset
 
 Washington State University
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+Ruminant Nutrition/Beef Cattle Studies
+\begin_inset Newline newline
+\end_inset
+
+Department of Animal Sciences
+\begin_inset Newline newline
+\end_inset
+
+Washington State University
 \end_layout
 
 \begin_layout Standard
@@ -213,7 +232,7 @@ Revision
 \begin_inset Text
 
 \begin_layout Plain Layout
-Date
+Publishing Timestamp
 \end_layout
 
 \end_inset
@@ -251,7 +270,21 @@ Notes
 \begin_inset Text
 
 \begin_layout Plain Layout
-2014-02-13
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+filemodprint{
+\backslash
+currfilepath}
+\end_layout
+
+\end_inset
+
+
 \end_layout
 
 \end_inset
@@ -270,7 +303,7 @@ P.
 \begin_inset Text
 
 \begin_layout Plain Layout
-Initial draft
+Draft
 \end_layout
 
 \end_inset
@@ -452,6 +485,84 @@ Developers include Patrick O'Keeffe, Christopher Gambino, Jennifer Michal,
  Further acknowledgements go to Dr.
  Kristen Baum and Dr.
  Jay Ham.
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset VSpace vfill
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Box Boxed
+position "t"
+hor_pos "c"
+has_inner_box 1
+inner_pos "t"
+use_parbox 0
+use_makebox 0
+width "100col%"
+special "none"
+height "1in"
+height_special "totalheight"
+status open
+
+\begin_layout Plain Layout
+This document, the datalogger program, and supporting files are maintained
+ under version control in a Git
+\begin_inset Foot
+status open
+
+\begin_layout Plain Layout
+http://www.git-scm.org
+\end_layout
+
+\end_inset
+
+ repository hosted on the WSU intranet.
+ 
+\end_layout
+
+\begin_layout Labeling
+\labelwidthstring 00.00.0000
+Repository 
+\begin_inset Flex URL
+status open
+
+\begin_layout Plain Layout
+
+https://lar-d216-share.cee.wsu.edu/repos/git/pokeeffe/sampler-denuder-rea
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Labeling
+\labelwidthstring 00.00.0000
+Project
+\begin_inset space \space{}
+\end_inset
+
+page 
+\begin_inset Flex URL
+status open
+
+\begin_layout Plain Layout
+
+https://lar-d216-share.cee.wsu.edu/redmine/projects/id27
+\end_layout
+
+\end_inset
+
+
 \end_layout
 
 \end_inset
