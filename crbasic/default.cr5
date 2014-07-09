@@ -661,6 +661,7 @@ DataTable(stats,True,-1)
   Sample(1,WS_rslt_Avg,IEEE4)
   Sample(1,WD_unit_Avg,IEEE4)
   Sample(1,WD_rslt_Avg,IEEE4)
+  Sample(1,WD_Yamartino_Std,IEEE4)
   Sample(1,WD_CSI_Std,IEEE4)
 
   Sample(1,hmp_T_Avg,IEEE4)
