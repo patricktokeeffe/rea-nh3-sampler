@@ -683,6 +683,8 @@ DataTable(stats,True,-1)
   Totalize(1,vlv_up_ON,UINT4,vlv_up_ON=NAN)
   Totalize(1,vlv_dn_ON,UINT4,vlv_dn_ON=NAN)
   Totalize(1,1,UINT4,False)
+    FieldNames("samples_Tot")
+    Units samples_Tot = scans
 
 '  Sample(1,logger_tmpr,IEEE4)
 '  Sample(1,logger_power,IEEE4)
