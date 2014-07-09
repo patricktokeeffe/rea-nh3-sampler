@@ -394,6 +394,8 @@ Public mean_up_flow
 Public mean_dn_flow
 Public decreasing_flow As Boolean 'XXX TST
 
+Public azimuth
+
 Public deadband
 Dim neg_deadband
 Units deadband = m/s
@@ -1040,7 +1042,13 @@ Sub save_current_choices()
   If (ch_flowSP_updn > UPDNFLOW_MAX) Then (ch_flowSP_updn = UPDNFLOW_MAX)
 
   'HINT treat azimuth differently since 0 is valid option
-  sonic_azimuth = IIF(sonic_azimuth < 0, -1, FIX(sonic_azimuth) MOD 360)
+  If (ch_sonic_azimuth < 0) Then
+    ch_sonic_azimuth = -1
+    azimuth = 0
+  Else
+    ch_sonic_azimuth = ch_sonic_azimuth MOD 360
+    azimuth = sonic_azimuth
+  EndIf
 
   If (ch_sonic_height < 0) Then (ch_sonic_height = 0)
   If (ch_site_declin < DECLIN_MIN) Then (ch_site_declin = DECLIN_MIN)
@@ -1391,8 +1399,8 @@ BeginProg
 
         update_deadband() 'must occur after Uz_Std calc
 
-        WD_unit_Avg = (360+WD_unit_Avg+sonic_azimuth+site_declin) MOD 360
-        WD_rslt_Avg = (360+WD_rslt_Avg+sonic_azimuth+site_declin) MOD 360
+        WD_unit_Avg = (360+WD_unit_Avg+azimuth+site_declin) MOD 360
+        WD_rslt_Avg = (360+WD_rslt_Avg+azimuth+site_declin) MOD 360
 
         SatVP(hmp_e_sat_Avg, hmp_T_Avg)
         hmp_RH_Avg = 100*hmp_e_Avg/hmp_e_sat_Avg
