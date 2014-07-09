@@ -615,7 +615,7 @@ DataTable(ts_slow,True,60)
     FieldNames("massFlow_zero")
 EndTable
 
-DataTable(stats,True,48)
+DataTable(stats,True,-1)
   DataInterval(0,STAT_INTV,Min,10)
   CardOut(1,-1)
 
