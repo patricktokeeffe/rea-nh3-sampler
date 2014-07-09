@@ -176,10 +176,10 @@ Alias flow(3) = flow_zero
 Units flow = sLpm
 
 Public cr5k(2)
-Alias cr5k(1) = LoggerTemp
-Alias cr5k(2) = LoggerVoltage
-Units LoggerTemp = degC
-Units LoggerVoltage = Volts
+Alias cr5k(1) = logger_tmpr
+Alias cr5k(2) = logger_power
+Units logger_tmpr = degC
+Units logger_power = Volts
 
 '---------- PROCESSING -----------
 Public Uz_rot 'for real-time coord rotation
@@ -686,8 +686,8 @@ DataTable(stats,True,-1)
     FieldNames("samples_Tot")
     Units samples_Tot = scans
 
-'  Sample(1,logger_tmpr,IEEE4)
-'  Sample(1,logger_power,IEEE4)
+  Average(1,logger_tmpr,IEEE4,logger_tmpr=NAN)
+  Average(1,logger_power,IEEE4,logger_power=NAN)
 EndTable
 
 'DataTable(rea,True,-1) 'XXX rea on trigger?
@@ -1512,6 +1512,9 @@ BeginProg
     VoltDiff(flow_dn,1,mv5000,MFC_DN_DF,True,0,INTEG,MFC_UPDN_MULT,MFC_UPDN_OFF)
     VoltSe(flow_zero,1,mv5000,MFC_ZERO_SE,True,0,INTEG,MFC_ZERO_MULT,MFC_ZERO_OFF)
     autothrottle()
+
+    PanelTemp(logger_tmpr,INTEG)
+    Battery(logger_power)
 
     VaporPressure(hmp_e, hmp_T, hmp_RH) 'hmp_e needed in work_cov table
 
