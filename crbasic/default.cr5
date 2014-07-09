@@ -336,8 +336,8 @@ Units rho_v_Avg = g/m^3
 Units rho_d_Avg = g/m^3
 Units rho_a_Avg = kg/m^3
 Units Lv = J/g
-Units itt = dimless 'TODO
 Units x70 = m 'TODO verify
+Units itt = %
 
 Public CO2_ppm_Avg 'mean CO2 dry mixing ratio
 Units CO2_ppm_Avg = ppmV
@@ -958,22 +958,26 @@ Function FootprintEstimate(L) As Float 'm
   Return (Dh/(0.357*0.4*0.4) * ABS(L)^(1-Ph) * Zu^Ph)
 EndFunction
 
-'integral turbulence test following Hammerle et al. (2007)
+'integral turbulence test following eq 1:
+'    Albin Hammerle, Alois Halswanter, Michael Schmitt, Micael Bahn, Ulrike
+'    Tappeiner, Alexander Cernusca, Georg Wohlfahrt. Boundary-Layer Meteorology.
+'    02/2007; 122(2):397-416. DOI: 10.1007/s10546-006-9109-x
 '
-'TODO : find formula
-'
-'[L] = m
-Function TurbulenceTest(sigma_W, u_star_, L) As Float 'dimless (?) FIXME
+'[sigma_W] = m/s, [u_star] = m/s, [L] = m
+Function TurbulenceTest(sigma_W, u_star_, L) As Float '% difference
   If (sonic_height=0 OR L=0 OR sigma_W=NAN OR u_star_=NAN OR L=NAN) Then
     Return NAN
   EndIf
   Dim itt_model, zeta
   zeta = sonic_height/L
   If (zeta < -2 OR zeta >= 1) Then
-    Return 999 'TODO is NAN more appropriate here? or INF?
+    Return NAN
   Else
-    'XXX TODO does this suffer from same IIF issue found with setpoints?
-    itt_model = 1.25*IIF(zeta < 0, (1+3*ABS(zeta))^(1/3.), (1+0.2*zeta))
+    If (zeta < 0) Then
+      itt_model = 1.25 * (1+3*ABS(zeta))^(1/3.)
+    Else
+      itt_model = 1.25 * (1+0.2*zeta)
+    EndIf
     Return 100*ABS((sigma_W/u_star_) - itt_model)/itt_model
   EndIf
 EndFunction
