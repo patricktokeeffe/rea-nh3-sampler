@@ -327,7 +327,7 @@ Public rho_d_Avg  'dry air mass density
 Public rho_a_Avg  'ambient (moist) air mass density
 Public Lv     'latent heat of vaporization of water
 Public itt    'integral turbulence test
-Public x70    'estimate of 70% of footprint length
+Public fetch_70    'estimate of 70% of footprint length
 Units L_ = m
 Units u_star = m/s
 Units tau = Pa
@@ -336,8 +336,8 @@ Units rho_v_Avg = g/m^3
 Units rho_d_Avg = g/m^3
 Units rho_a_Avg = kg/m^3
 Units Lv = J/g
-Units x70 = m 'TODO verify
 Units itt = %
+Units fetch_70 = m 
 
 Public CO2_ppm_Avg 'mean CO2 dry mixing ratio
 Units CO2_ppm_Avg = ppmV
@@ -641,7 +641,7 @@ DataTable(stats,True,-1)
   Sample(1,u_star,IEEE4)
   Sample(1,tau,IEEE4)
   Sample(1,itt,IEEE4)
-  Sample(1,x70,IEEE4)
+  Sample(1,fetch_70,IEEE4)
 
   Sample(1,Fco2,IEEE4)
   Sample(1,Fco2_raw,IEEE4)
@@ -932,20 +932,26 @@ Function volumetric_flow(massFlow, tmpr, press) As Float 'L/min
   Return (massFlow * ((tmpr+273.15)/MFC_STP_T) * (MFC_STP_P/press))
 EndFunction
 
-'footprint calc, Hsieh et al, 2000
+'downwind distance for the measured flux to present 70% of the surface flux
+'equation 15: 
+'    Hsieh, C.I., G.G. Katul AND T.W. Chi (2000), An approximate analytical 
+'    model For footprint estimation of scalar fluxes in thermally stratified 
+'    atmospheric flows. Advances in Water Resources, 23, 765-772.
+'with conventional adaption to express |L| in numerator
 '
-'TODO - find formula
+' X = ( -D * |L|^(1-P) * Zu^P ) / (k^2 * ln(F/So))
+'
+' where k = 0.4, F/So = 0.7 and Zu = Zm * (ln(Zm/Zo) - 1 + Zo/Zm)
 '
 '[L] = m
-Function FootprintEstimate(L) As Float 'm
+Function Footprint70(L) As Float 'm
   If (sonic_height=0 OR site_rufness=0 OR L=0 OR L=NAN) Then
     Return NAN
   EndIf
-  Dim Dh, Ph, Zu, Zm, Zo
-  Zm = sonic_height 'm
+  Dim Dh, Ph, Zu, Zo
   Zo = site_rufness/1000 'cm -> m
-  Zu = Zm * (LOG(Zm/Zo) - 1 + (Zo/Zm))
-  If (ABS(Zu/L) < 0.04) Then 'neutral
+  Zu = sonic_height * (LOG(sonic_height/Zo) - 1 + (Zo/sonic_height)) 'm
+  If (ABS(Zu/L) < 0.04) Then '(near) neutral
     Dh = 0.97
     Ph = 1
   ElseIf L < 0 'unstable
@@ -955,7 +961,7 @@ Function FootprintEstimate(L) As Float 'm
     Dh = 2.44
     Ph = 1.33
   EndIf
-  Return (Dh/(0.357*0.4*0.4) * ABS(L)^(1-Ph) * Zu^Ph)
+  Return (Dh/0.0571 * ABS(L)^(1-Ph) * Zu^Ph)
 EndFunction
 
 'integral turbulence test following eq 1:
@@ -1427,7 +1433,7 @@ BeginProg
           L_ = -u_star^3 *(hmp_T_Avg+273.15)/(K_*G_*cov_Ts_Uz) 'm
         #EndIf
         itt = TurbulenceTest(Uz_Std, u_star, L_) 'dimless
-        x70 = FootprintEstimate(L_) 'm
+        fetch_70 = Footprint70(L_) 'm
 
         #If (DATA_SRCS=SDM_CSAT3_LI7500_1) Then
           CO2_ppm_Avg = dry_mixing_ratio(CO2_Avg, H2O_Avg, _
