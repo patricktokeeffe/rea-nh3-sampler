@@ -19,21 +19,20 @@ Const VERSION = ""
 Const SDM_CSAT3_LI7500_1 = 1 'aliases for menu
 Const SDM_CSAT3A_EC150_2 = 2
 ConstTable
-  Const DATA_SRCS = SDM_CSAT3_LI7500_1
-  'Const DATA_SRCS = SDM_CSAT3A_EC150_2
-  'things which MUST be constants and therefore cannot be in "settings file"
+  'Settings not in 'Initial setup' menu, modify through 'Const Table' menu:
   Const SDM_SPEED = 30   'default: 30 usec; accepts 8 usec - 3 msec
-  Const CSAT_ADDR = 3    'default CSAT3 SDM address: 3
-  Const LI7500_ADDR = 7  'default LI7500 SDM address: 7
-  Const EC100_ADDR = 1   'default EC100/EC150/CSAT3A address: 1
-
-  'self-imposed value limits on some settings options
   Const RUNTIME_MIN = 0.5 'hrs
   Const RUNTIME_MAX = 24 'hrs
   Const UPDNFLOW_MIN = 2 'sLpm, max specified under analog scaling
   Const ZEROFLOW_MIN = 0.4 'sLpm, max specified under analog scaling
   Const DECLIN_MIN = -35 'deg E of TN
   Const DECLIN_MAX = 35 'deg E of TN
+
+  'These are preferrably accessed using 'Initial setup' menu instead:
+  Const DATA_SRCS = SDM_CSAT3_LI7500_1
+  Const CSAT_ADDR = 3    'default CSAT3 SDM address: 3
+  Const LI7500_ADDR = 7  'default LI7500 SDM address: 7
+  Const EC100_ADDR = 1   'default EC100/EC150/CSAT3A address: 1
 EndConstTable
 
 '----- WIRING -----
@@ -847,17 +846,12 @@ DisplayMenu("REA DAQ",-1)
   SubMenu("Initial setup")
     MenuItem("sonic/IRGA", DATA_SRCS)
       MenuPick(DATA_SRCS, SDM_CSAT3_LI7500_1, SDM_CSAT3A_EC150_2)
-    'SDM speed must be set through const table, menupick would be too onerous
     MenuItem("SDM addr: CSAT3", CSAT_ADDR)
       MenuPick(CSAT_ADDR,0,1,2,3,4,5,6,7,8,9,A_,B_,C_,D_,E_)
     MenuItem("SDM addr: LI7500", LI7500_ADDR)
       MenuPick(LI7500_ADDR,0,1,2,3,4,5,6,7,8,9,10,11,12,13,14)
     MenuItem("SDM addr: EC100", EC100_ADDR)
       MenuPick(EC100_ADDR,0,1,2,3,4,5,6,7,8,9,10,11,12,13,14)
-    MenuItem("Min samp flow sLpm", UPDNFLOW_MIN)
-    MenuItem("Min zero flow sLpm", ZEROFLOW_MIN)
-    MenuItem("Min declin allowed", DECLIN_MIN)
-    MenuItem("Max declin allowed", DECLIN_MAX)
     MenuRecompile("Apply now?", recompile)
       MenuPick(Cancel,Yes)
   EndSubMenu
