@@ -807,7 +807,7 @@ DisplayMenu("REA DAQ",-1)
 '    MenuItem("CurrentState",  'TODO
   EndSubMenu
 
-  SubMenu("Settings")
+  SubMenu("REA Settings")
     SubMenu("Flow rates")
       MenuItem("Shield startup", ch_flow_auto_shld)
         MenuPick(LastState,AlwaysOff)
