@@ -321,20 +321,20 @@ Units hmp_Tdew_Avg = degC
 Public L_      'Obukhov length
 Public u_star 'friction velocity
 Public tau    'surface stress
-Public rho_c_Avg  'carbon dioxide mass density
-Public rho_v_Avg  'water vapor mass density
-Public rho_d_Avg  'dry air mass density
-Public rho_a_Avg  'ambient (moist) air mass density
+Public rho_c  'carbon dioxide mass density
+Public rho_v  'water vapor mass density
+Public rho_d  'dry air mass density
+Public rho_a  'ambient (moist) air mass density
 Public Lv     'latent heat of vaporization of water
 Public itt    'integral turbulence test
 Public fetch_70    'estimate of 70% of footprint length
 Units L_ = m
 Units u_star = m/s
 Units tau = Pa
-Units rho_c_Avg = mg/m^3
-Units rho_v_Avg = g/m^3
-Units rho_d_Avg = g/m^3
-Units rho_a_Avg = kg/m^3
+Units rho_c = mg/m^3
+Units rho_v = g/m^3
+Units rho_d = g/m^3
+Units rho_a = kg/m^3
 Units Lv = J/g
 Units itt = %
 Units fetch_70 = m 
@@ -671,10 +671,10 @@ DataTable(stats,True,-1)
   Sample(1,hmp_RH_Avg,IEEE4)
   Sample(1,hmp_e_Avg,IEEE4)
 
-  Sample(1,rho_a_Avg,IEEE4)
-  Sample(1,rho_d_Avg,IEEE4)
-  Sample(1,rho_v_Avg,IEEE4)
-  Sample(1,rho_c_Avg,IEEE4)
+  Sample(1,rho_a,IEEE4)
+  Sample(1,rho_d,IEEE4)
+  Sample(1,rho_v,IEEE4)
+  Sample(1,rho_c,IEEE4)
   Sample(1,Lv,IEEE4)
 
   Average(1,flow_zero,IEEE4,(inbetween_1hz_scan OR flow_zero=NAN))
@@ -1417,16 +1417,16 @@ BeginProg
         DewPoint(hmp_Tdew_Avg, hmp_T_Avg, hmp_RH_Avg)
 
         #If (DATA_SRCS=SDM_CSAT3A_EC150_2) Then
-          rho_a_Avg = density_of_air(irga_tmpr_Avg, irga_press_Avg, hmp_e_Avg)
+          rho_a = density_of_air(irga_tmpr_Avg, irga_press_Avg, hmp_e_Avg)
         #Else
-          rho_a_Avg = density_of_air(hmp_T_Avg,irga_press_Avg,hmp_e_Avg) 'kg/m^3
+          rho_a = density_of_air(hmp_T_Avg,irga_press_Avg,hmp_e_Avg) 'kg/m^3
         #EndIf
         '? specific heat capacity of moist air: Cpm
         Lv = LatentHeatVapH2O(hmp_T_Avg) 'J/g
 
         tau = SQR(cov_Ux_Uz*cov_Ux_Uz + cov_Uy_Uz*cov_Uy_Uz) '(m/s)^2
         u_star = SQR(tau) 'm/s
-        tau *= rho_a_Avg '(m^2/s^2)(kg/m^3) = (Pa m^3)/m^3 = Pa
+        tau *= rho_a '(m^2/s^2)(kg/m^3) = (Pa m^3)/m^3 = Pa
         #If (DATA_SRCS=SDM_CSAT3A_EC150_2) Then
           L_ = -u_star^3 *(irga_tmpr_Avg+273.15)/(K_*G_*cov_Ts_Uz) 'm
         #Else
@@ -1443,20 +1443,20 @@ BeginProg
                                                 irga_tmpr_Avg, irga_press_Avg)
         #EndIf
 
-        rho_v_Avg = H2O_Avg*MW_h2o/1000 'g/m^3 = (mmol/m^3)(g/mol)(mol/1e3 mmol)
-        rho_d_Avg = rho_a_Avg*1000 - rho_v_Avg 'g/m^3 = (kg/m^3)(1e3 g/kg) - g/m^3
-        rho_c_Avg = CO2_Avg * MW_co2 'mg/m^3 = (mmol/m^3)(mg/mmol)
-        sigma_wpl = rho_v_Avg/rho_d_Avg 'dimless
+        rho_v = H2O_Avg*MW_h2o/1000 'g/m^3 = (mmol/m^3)(g/mol)(mol/1e3 mmol)
+        rho_d = rho_a*1000 - rho_v 'g/m^3 = (kg/m^3)(1e3 g/kg) - g/m^3
+        rho_c = CO2_Avg * MW_co2 'mg/m^3 = (mmol/m^3)(mg/mmol)
+        sigma_wpl = rho_v/rho_d 'dimless
 
         'WPL80 Eqn 24:
         'mg/(m^2 s) = (1)(mg/m^3)*(m^3/g)(g/1e3 mg)*(mmol/m^3)(m/s)(mg/mmol)
-        Fco2_LE_wpl = MU_WPL * rho_c_Avg/(rho_d_Avg*1000) * cov_H2O_Uz * MW_h2o
+        Fco2_LE_wpl = MU_WPL * rho_c/(rho_d*1000) * cov_H2O_Uz * MW_h2o
         #If (DATA_SRCS=SDM_CSAT3_LI7500_1) Then
           'mg/(m^2 s) = (1 + (1)(1))(mg/m^3)(K*m/s)(1/K)
-          Fco2_H_wpl = (1 + MU_WPL*sigma_wpl) * rho_c_Avg * _
+          Fco2_H_wpl = (1 + MU_WPL*sigma_wpl) * rho_c * _
                                                   cov_Ts_Uz/(hmp_T_Avg+273.15)
         #ElseIf (DATA_SRCS=SDM_CSAT3A_EC150_2) Then
-          Fco2_H_wpl = (1 + MU_WPL*sigma_wpl) * rho_c_Avg * _
+          Fco2_H_wpl = (1 + MU_WPL*sigma_wpl) * rho_c * _
                                               cov_Ts_Uz/(irga_tmpr_Avg+273.15)
         #EndIf
         'mg/(m^2 s) = (mmol/m^3)(m/s) * (mg/mmol)
@@ -1467,11 +1467,11 @@ BeginProg
         #If (DATA_SRCS=SDM_CSAT3_LI7500_1) Then
           'W/m^2 = (J/g) * (1 + (1)(1)) *
           '     ( (mmol/m^3)(m/s)(g/mol)(mol/1e3 mmol) + (K*m/s)(g/m^3)(1/K) )
-          LE_wpl = Lv*(1 + MU_WPL*sigma_wpl) * (cov_H2O_Uz*MW_h2o/1000 + _
-                                       cov_Ts_Uz*rho_v_Avg/(hmp_T_Avg+273.15))
+          LE_wpl = Lv * (1 + MU_WPL*sigma_wpl) * _
+                 (cov_H2O_Uz*MW_h2o/1000 + cov_Ts_Uz*rho_v/(hmp_T_Avg+273.15))
         #ElseIf (DATA_SRCS=SDM_CSAT3A_EC150_2) Then
-          LE_wpl = Lv*(1 + MU_WPL*sigma_wpl) * (cov_H2O_Uz*MW_h2o/1000 + _
-                                   cov_Ts_Uz*rho_v_Avg/(irga_tmpr_Avg+273.15))
+          LE_wpl = Lv * (1 + MU_WPL*sigma_wpl) * _
+             (cov_H2O_Uz*MW_h2o/1000 + cov_Ts_Uz*rho_v/(irga_tmpr_Avg+273.15))
         #EndIf
         'W/m^2 = (mmol/m^3)(m/s)(g/mol)(mol/1e3 mmol)(J/g)
         LE_raw = (cov_H2O_Uz*MW_h2o/1000)*Lv
@@ -1480,7 +1480,7 @@ BeginProg
         'TODO not WPL-corrections per-se, but DO adjust to use "ambient" tmpr
         '  instead of sonic (virtual) tmpr
         'Hs: W/m^2 = J/(s m^2) = (K*m/s)(kg/m^3)(J/(kg K))
-        Hs_raw = cov_Ts_Uz * rho_a_Avg * Cpd
+        Hs_raw = cov_Ts_Uz * rho_a * Cpd
         Hs = Hs_raw
 
         'stability parameter
