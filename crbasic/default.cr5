@@ -86,13 +86,9 @@ Const K_ = 0.41 'Von Karman constant    dimless
 Const G_ = 9.81 'Gravity    m/s^2
 Const PI = 3.14159
 
-'Omega FMA5400 series option 1: 14.7 psia and 70*F
-Const MFC_STP_T = 21.11 + 273.15
-Const MFC_STP_P = 101.35
-
-'Omega FMA5400 series option 2: 0*C and 1.01 bar abs
-'Const MFC_STP_T = 0
-'Const MFC_STP_P = 101
+'From calibration sheets for Omega FMA5400 series MFCs: 14.69 psia and 70*F
+Const MFC_STP_T = 21.11+273.15 'Kelvin = 70* F
+Const MFC_STP_P = 101.28 'kPa = 14.69 psia
 
 '==========================  PROGRAM OPERATION  ==============================
 
@@ -170,9 +166,9 @@ Public hmp_e 'derived, not measured
 Units hmp_e = kPa
 
 Public flow(3)
-Alias flow(1) = flow_up
-Alias flow(2) = flow_dn
-Alias flow(3) = flow_zero
+Alias flow(1) = massFlow_up
+Alias flow(2) = massFlow_dn
+Alias flow(3) = massFlow_zero
 Units flow = sLpm
 
 Public cr5k(2)
@@ -317,6 +313,9 @@ Public hmp_Tdew_Avg
 Units hmp_e_sat_Avg = kPa
 Units hmp_RH_Avg = %
 Units hmp_Tdew_Avg = degC
+
+Public volFlow_up
+Public volFlow_dn
 
 Public L_      'Obukhov length
 Public u_star 'friction velocity
@@ -609,12 +608,9 @@ DataTable(ts_slow,True,60)
   CardOut(1,-1) 'XXX make fixed size in days
   Sample(1,hmp_T,IEEE4)
   Sample(1,hmp_RH,IEEE4)
-  Sample(1,flow_up,IEEE4)
-    FieldNames("massFlow_up")
-  Sample(1,flow_dn,IEEE4)
-    FieldNames("massFlow_dn")
-  Sample(1,flow_zero,IEEE4)
-    FieldNames("massFlow_zero")
+  Sample(1,massFlow_up,IEEE4)
+  Sample(1,massFlow_dn,IEEE4)
+  Sample(1,massFlow_zero,IEEE4)
 EndTable
 
 DataTable(stats,True,-1)
@@ -677,12 +673,11 @@ DataTable(stats,True,-1)
   Sample(1,rho_c,IEEE4)
   Sample(1,Lv,IEEE4)
 
-  Average(1,flow_zero,IEEE4,(inbetween_1hz_scan OR flow_zero=NAN))
-    FieldNames("massFlow_zero_Avg")
-  Average(1,flow_up,IEEE4,(inbetween_1hz_scan OR flow_up=NAN))
-    FieldNames("massFlow_up_Avg")
-  Average(1,flow_dn,IEEE4,(inbetween_1hz_scan OR flow_dn=NAN))
-    FieldNames("massFlow_dn_Avg")
+  Average(1,massFlow_zero,IEEE4,(inbetween_1hz_scan OR massFlow_zero=NAN))
+  Average(1,massFlow_up,IEEE4,(inbetween_1hz_scan OR massFlow_up=NAN))
+  Average(1,massFlow_dn,IEEE4,(inbetween_1hz_scan OR massFlow_dn=NAN))
+  Average(1,volFlow_up,IEEE4,(inbetween_1hz_scan OR volFlow_up=NAN))
+  Average(1,volFlow_dn,IEEE4,(inbetween_1hz_scan OR volFlow_dn=NAN))
   Totalize(1,vlv_up_ON,UINT4,vlv_up_ON=NAN)
   Totalize(1,vlv_dn_ON,UINT4,vlv_dn_ON=NAN)
   Totalize(1,1,UINT4,False)
@@ -699,10 +694,8 @@ EndTable
 '  
 '  Sample(1,Uz_Std,FP2) '<-- W_std?
 '  'sample beta
-'  Sample(1,flow_up_Avg,IEEE4)
-'    FieldNames("massFlow_up_Avg")
-'  Sample(1,flow_dn_Avg,IEEE4)
-'    FieldNames("massFlow_dn_Avg")
+'  Sample(1,massFlow_up_Avg,IEEE4)
+'  Sample(1,massFlow_dn_Avg,IEEE4)
 '  Sample(1,volFlow_up_Avg,IEEE4)
 '  Sample(1,volFlow_dn_Avg,IEEE4)
 '  Sample(1,vlv_up_on_Tot/vlv_possible,FP2)
@@ -894,6 +887,13 @@ Function military_to_FP(timestr) As Float
   Return (Round(timestr*2, 0)/2)
 EndFunction
 
+'return actual volumetric flow based on mass flow @ specific tmpr/press
+'
+'[massFlow] = std L/min @ mnfctr specs, [tmpr] = degC, [press] = kPa
+Function volumetric_flow(massFlow, tmpr, press) As Float 'L/min
+  Return (massFlow * (MFC_STP_P/press) * ((tmpr+273.15)/MFC_STP_T))
+EndFunction
+
 'calculate mass density of air weighted for water vapor content
 '
 '[tmpr] = C, [press] = kPa (barometric), [H2Opress] = kPa (water vapor)
@@ -921,15 +921,6 @@ EndFunction
 '[tmpr] = degC
 Function LatentHeatVapH2O(tmpr) As Float 'J/g
   Return 1918.46*( (tmpr+273.15)/(tmpr+239.24) )^2
-EndFunction
-
-'volumetric flow rate
-'
-'See constants MFC_STP_T and MFC_STP_P for standard conditions definition
-'
-'[massFlow] = std L/min @ STP, [tmpr] = C, [press] = kPa (abs.)
-Function volumetric_flow(massFlow, tmpr, press) As Float 'L/min
-  Return (massFlow * ((tmpr+273.15)/MFC_STP_T) * (MFC_STP_P/press))
 EndFunction
 
 'downwind distance for the measured flux to present 70% of the surface flux
@@ -1201,8 +1192,8 @@ Sub update_shield_state()
 EndSub
 
 Sub autothrottle()
-  AvgRun(mean_up_flow,1,flow_up,10)
-  AvgRun(mean_dn_flow,1,flow_dn,10)
+  AvgRun(mean_up_flow,1,massFlow_up,10)
+  AvgRun(mean_dn_flow,1,massFlow_dn,10)
   If (ABS(mean_up_flow - mean_dn_flow) > 0.1) Then
     decreasing_flow = True
     setpnt_updn -= (0.1/MFC_UPDN_MULT) 'decrease 0.1 sLpm
@@ -1527,10 +1518,21 @@ BeginProg
     VoltDiff(hmp_T,1,mv1000,HMP_T_DF,True,0,INTEG,HMP_T_MULT,HMP_T_OFF)
     VoltDiff(hmp_RH,1,mv1000,HMP_RH_DF,True,0,INTEG,HMP_RH_MULT,HMP_RH_OFF)
 
-    VoltDiff(flow_up,1,mv5000,MFC_UP_DF,True,0,INTEG,MFC_UPDN_MULT,MFC_UPDN_OFF)
-    VoltDiff(flow_dn,1,mv5000,MFC_DN_DF,True,0,INTEG,MFC_UPDN_MULT,MFC_UPDN_OFF)
-    VoltSe(flow_zero,1,mv5000,MFC_ZERO_SE,True,0,INTEG,MFC_ZERO_MULT,MFC_ZERO_OFF)
+    VoltDiff(massFlow_up,1,mv5000,MFC_UP_DF,True,0,INTEG, _
+                                                   MFC_UPDN_MULT,MFC_UPDN_OFF)
+    VoltDiff(massFlow_dn,1,mv5000,MFC_DN_DF,True,0,INTEG, _
+                                                   MFC_UPDN_MULT,MFC_UPDN_OFF)
+    VoltSe(massFlow_zero,1,mv5000,MFC_ZERO_SE,True,0,INTEG, _
+                                                   MFC_ZERO_MULT,MFC_ZERO_OFF)
     autothrottle()
+
+    #If (DATA_SRCS=SDM_CSAT3A_EC150_2) Then
+      volFlow_up = volumetric_flow(massFlow_up, irga_tmpr, irga_press)
+      volFlow_dn = volumetric_flow(massFlow_dn, irga_tmpr, irga_press)
+    #Else
+      volFlow_up = volumetric_flow(massFlow_up, hmp_T, irga_press)
+      volFlow_dn = volumetric_flow(massFlow_dn, hmp_T, irga_press)
+    #EndIf
 
     PanelTemp(logger_tmpr,INTEG)
     Battery(logger_power)
