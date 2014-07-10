@@ -54,6 +54,10 @@
 % http://jansoehlke.com/2010/06/strikethrough-in-latex/
 % see also new inset added to local layout
 \usepackage[normalem]{ulem} 
+
+% enable color banding in tables
+\usepackage{colortbl}
+\definecolor{band1}{gray}{0.85}
 \end_preamble
 \options intoc
 \use_default_options true
@@ -106,7 +110,7 @@ End
 \output_sync 0
 \bibtex_command default
 \index_command default
-\float_placement ph
+\float_placement h
 \paperfontsize default
 \spacing single
 \use_hyperref true
@@ -120,7 +124,7 @@ End
 \pdf_breaklinks true
 \pdf_pdfborder true
 \pdf_colorlinks true
-\pdf_backref section
+\pdf_backref page
 \pdf_pdfusetitle true
 \pdf_quoted_options "linkcolor=black, citecolor=black, urlcolor=blue, filecolor=blue, pdfpagelayout=OneColumn, pdfnewwindow=true, pdfstartview=XYZ, plainpages=false"
 \papersize letterpaper
@@ -2678,7 +2682,7 @@ Sampling, sLpm
 <cell multirow="4" alignment="left" valignment="top" topline="true" leftline="true" usebox="none">
 \begin_inset Text
 
-\begin_layout Enumerate
+\begin_layout Plain Layout
 
 \end_layout
 
@@ -2767,7 +2771,7 @@ Mult.
 <cell multirow="4" alignment="left" valignment="top" topline="true" leftline="true" usebox="none">
 \begin_inset Text
 
-\begin_layout Enumerate
+\begin_layout Plain Layout
 
 \end_layout
 
@@ -2810,7 +2814,7 @@ Minimum, m/s
 <cell multirow="4" alignment="left" valignment="top" topline="true" leftline="true" usebox="none">
 \begin_inset Text
 
-\begin_layout Enumerate
+\begin_layout Plain Layout
 
 \end_layout
 
@@ -2898,7 +2902,7 @@ Mag declin degEofTN
 <cell multirow="4" alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
 \begin_inset Text
 
-\begin_layout Enumerate
+\begin_layout Plain Layout
 
 \end_layout
 
@@ -2941,7 +2945,7 @@ Roughness length, cm
 <cell multirow="4" alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
 \begin_inset Text
 
-\begin_layout Enumerate
+\begin_layout Plain Layout
 
 \end_layout
 
@@ -2984,7 +2988,7 @@ Max fetch N, m
 <cell multirow="4" alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
 \begin_inset Text
 
-\begin_layout Enumerate
+\begin_layout Plain Layout
 
 \end_layout
 
@@ -3027,7 +3031,7 @@ Max fetch E, m
 <cell multirow="4" alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
 \begin_inset Text
 
-\begin_layout Enumerate
+\begin_layout Plain Layout
 
 \end_layout
 
@@ -3070,7 +3074,7 @@ Max fetch S, m
 <cell multirow="4" alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
 \begin_inset Text
 
-\begin_layout Enumerate
+\begin_layout Plain Layout
 
 \end_layout
 
@@ -3158,7 +3162,7 @@ Azimuth, degEofN
 <cell multirow="4" alignment="left" valignment="top" topline="true" leftline="true" usebox="none">
 \begin_inset Text
 
-\begin_layout Enumerate
+\begin_layout Plain Layout
 
 \end_layout
 
@@ -3305,7 +3309,7 @@ CSAT3A_EC150
 <cell multirow="4" alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
 \begin_inset Text
 
-\begin_layout Enumerate
+\begin_layout Plain Layout
 
 \end_layout
 
@@ -3345,7 +3349,7 @@ SDM speed
 <cell multirow="4" alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
 \begin_inset Text
 
-\begin_layout Enumerate
+\begin_layout Plain Layout
 
 \end_layout
 
@@ -3385,7 +3389,7 @@ SDM addr: CSAT3
 <cell multirow="4" alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
 \begin_inset Text
 
-\begin_layout Enumerate
+\begin_layout Plain Layout
 
 \end_layout
 
@@ -3425,7 +3429,7 @@ SDM addr: LI7500
 <cell multirow="4" alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
 \begin_inset Text
 
-\begin_layout Enumerate
+\begin_layout Plain Layout
 
 \end_layout
 
@@ -3465,7 +3469,7 @@ SDM addr: EC100
 <cell multirow="4" alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
 \begin_inset Text
 
-\begin_layout Enumerate
+\begin_layout Plain Layout
 
 \end_layout
 
@@ -3505,7 +3509,7 @@ Min samp flow sLpm
 <cell multirow="4" alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
 \begin_inset Text
 
-\begin_layout Enumerate
+\begin_layout Plain Layout
 
 \end_layout
 
@@ -3545,7 +3549,7 @@ Min zero flow sLpm
 <cell multirow="4" alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
 \begin_inset Text
 
-\begin_layout Enumerate
+\begin_layout Plain Layout
 
 \end_layout
 
@@ -3585,7 +3589,7 @@ Min declin allowed
 <cell multirow="4" alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
 \begin_inset Text
 
-\begin_layout Enumerate
+\begin_layout Plain Layout
 
 \end_layout
 
@@ -3625,7 +3629,7 @@ Max declin allowed
 <cell multirow="4" alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
 \begin_inset Text
 
-\begin_layout Enumerate
+\begin_layout Plain Layout
 
 \end_layout
 
@@ -4214,814 +4218,6 @@ Yes
 \end_layout
 
 \end_deeper
-\begin_layout Subsection
-Real-time calculations
-\end_layout
-
-\begin_layout Standard
-This section describes calculations which occur in real-time (e.g.
- at 10 Hz).
-\end_layout
-
-\begin_layout Subsubsection
-Unit conversion
-\end_layout
-
-\begin_layout Standard
-When an integrated sonic/IRGA (EC100/EC150/CSAT3) is used, the reported
- measurements of carbon dioxide and water vapor are converted from mass
- density to molar density in real-time:
-\end_layout
-
-\begin_layout Standard
-\begin_inset Formula 
-\begin{eqnarray*}
-CO_{2} & = & (CO_{2})_{i}/MW_{CO_{2}}\\
- & where & \left[CO_{2}\right]=\unitfrac{mmol}{m^{3}}\\
- &  & \left[(CO_{2})_{i}\right]=\unitfrac{mg}{m^{3}}\\
- &  & \left[MW_{CO_{2}}\right]=44.010\:\unitfrac{g}{mol}
-\end{eqnarray*}
-
-\end_inset
-
-
-\begin_inset Formula 
-\begin{eqnarray*}
-H_{2}O & = & \left(1000\:\unitfrac{mmol}{mol}\right)(H_{2}O)_{i}/MW_{H_{2}O}\\
- & where & \left[H_{2}O\right]=\unitfrac{mmol}{m^{3}}\\
- &  & \left[(H_{2}O)_{i}\right]=\unitfrac{g}{m^{3}}\\
- &  & \left[MW_{H_{2}O}\right]=18.01528\:\unitfrac{g}{mol}
-\end{eqnarray*}
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Standard
-These conversions only apply to the integrated sonic/IRGA: the independent
- IRGA (LI7500) reports measurements in molar density (
-\begin_inset Formula $\unitfrac{mmol}{m^{3}}$
-\end_inset
-
-).
-\end_layout
-
-\begin_layout Subsubsection
-Online coordinate rotations
-\end_layout
-
-\begin_layout Standard
-The denuder-REA uses statistics generated every half-hour to perform a 
-\begin_inset Quotes eld
-\end_inset
-
-double-rotation
-\begin_inset Quotes erd
-\end_inset
-
- of measured wind speeds into a stream-wise coordinate system.
- 
-\end_layout
-
-\begin_layout Itemize
-Rotated vertical wind speed 
-\begin_inset Formula $w$
-\end_inset
-
-
-\begin_inset CommandInset nomenclature
-LatexCommand nomenclature
-symbol "$w$"
-description "vertical wind speed rotated into stream-wise coordinate system"
-
-\end_inset
-
- (m/s) is used to assess whether or not up/down-drafts have been detected.
- 
-\end_layout
-
-\begin_layout Itemize
-Rotated vertical wind speed is NOT used in output statistics
-\end_layout
-
-\begin_layout Itemize
-The double-rotation method acts as a high pass filter.
-\end_layout
-
-\begin_layout Itemize
-As currently implemented, no boundaries on rotation angles are enforced.
- If the previous half-hour was not representative and results in unreasonable
- rotation angles, it is possible to have a seriously screwed up sampling
- run.
- 
-\end_layout
-
-\begin_layout Standard
-\begin_inset Formula 
-\begin{eqnarray*}
-w & = & U_{z}(CT)-U_{x}(ST)(CE)-U_{y}(ST)(SE)\\
-CE & = & \frac{\overline{U_{x}}}{\sqrt{\overline{U_{x}}^{2}+\overline{U_{y}}^{2}}}\\
-SE & = & \frac{\overline{U_{y}}}{\sqrt{\overline{U_{x}}^{2}+\overline{U_{y}}^{2}}}\\
-CT & = & \frac{\sqrt{\overline{U_{x}}^{2}+\overline{U_{y}}^{2}}}{\sqrt{\overline{U_{x}}^{2}+\overline{U_{y}}^{2}+\overline{U_{z}}^{2}}}\\
-ST & = & \frac{\overline{U_{z}}}{\sqrt{\overline{U_{x}}^{2}+\overline{U_{y}}^{2}+\overline{U_{z}}^{2}}}
-\end{eqnarray*}
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Subsubsection
-Valve activation
-\end_layout
-
-\begin_layout Standard
-The rotated vertical wind is used to determine which sampling valve to activate
- regardless of whether a denuder-based sampling run is scheduled or occurring.
- This enables the datalogger to simulate REA fluxes of carbon dioxide and
- heat (temperature), which is necessary for estimation of the relaxation
- coefficient 
-\begin_inset Formula $\beta$
-\end_inset
-
-.
- The inlet valves are only triggered if a run is in-progress.
-\end_layout
-
-\begin_layout Standard
-\begin_inset Formula 
-\[
-eqn?
-\]
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Standard
-\begin_inset Box Shadowbox
-position "t"
-hor_pos "c"
-has_inner_box 1
-inner_pos "t"
-use_parbox 0
-use_makebox 0
-width "100col%"
-special "none"
-height "1in"
-height_special "totalheight"
-status open
-
-\begin_layout Plain Layout
---> Does it make sense to do simulated REA runs if not doing denuder run?
- 
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Subsection
-Statistics calculations
-\end_layout
-
-\begin_layout Standard
-This section describes the 
-\begin_inset Quotes eld
-\end_inset
-
-statistics
-\begin_inset Quotes erd
-\end_inset
-
- generated every output interval (half-hour).
-\end_layout
-
-\begin_layout Subsubsection
-Wind direction adjustment
-\end_layout
-
-\begin_layout Standard
-The wind direction calculated for each output period is relative to the
- sonic anemometer's orientation and must be compensated for prior to storage.
- 
-\end_layout
-
-\begin_layout Standard
-The actual wind direction in geographic coordinates, 
-\begin_inset Formula $W\! D$
-\end_inset
-
-
-\begin_inset CommandInset nomenclature
-LatexCommand nomenclature
-symbol "$W\\negthinspace D$"
-description "wind direction"
-
-\end_inset
-
-, is derived from the intermediate wind direction 
-\begin_inset Formula $W\! D_{i}$
-\end_inset
-
-, sonic anemometer 
-\begin_inset Formula $+X$
-\end_inset
-
- axis orientation 
-\begin_inset Formula $V_{az}$
-\end_inset
-
-
-\begin_inset CommandInset nomenclature
-LatexCommand nomenclature
-symbol "$V_{az}$"
-description "anemometer azimuth (bearing of +X axis) "
-
-\end_inset
-
- (degrees East of North
-\begin_inset Foot
-status open
-
-\begin_layout Plain Layout
-If true North, 
-\begin_inset Formula $D_{mag}$
-\end_inset
-
- should be zero; if magnetic North, 
-\emph on
-
-\begin_inset Formula $D_{mag}$
-\end_inset
-
-
-\emph default
- should reflect magnetic declination at deployment site
-\end_layout
-
-\end_inset
-
-), and magnetic declination 
-\begin_inset Formula $D_{mag}$
-\end_inset
-
-
-\begin_inset CommandInset nomenclature
-LatexCommand nomenclature
-symbol "$D_{mag}$"
-description "magnetic declination at deployment site"
-
-\end_inset
-
- (degrees East of True North):
-\end_layout
-
-\begin_layout Standard
-\begin_inset Formula 
-\[
-W\! D=(360+W\! D_{i}+V_{az}+D_{mag})\bmod360
-\]
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Standard
-This adjustment is applied to both resultant mean wind direction, 
-\begin_inset Flex Code
-status collapsed
-
-\begin_layout Plain Layout
-WD_rslt_Avg
-\end_layout
-
-\end_inset
-
-, and unit vector mean wind direction, 
-\begin_inset Flex Code
-status collapsed
-
-\begin_layout Plain Layout
-WD_unit_Avg
-\end_layout
-
-\end_inset
-
-, prior to storage in final data tables.
-\end_layout
-
-\begin_layout Standard
-\begin_inset Box Shadowbox
-position "t"
-hor_pos "c"
-has_inner_box 1
-inner_pos "t"
-use_parbox 0
-use_makebox 0
-width "100col%"
-special "none"
-height "1in"
-height_special "totalheight"
-status open
-
-\begin_layout Plain Layout
--> Applied prior to evaluating whether WD falls within 
-\begin_inset Quotes eld
-\end_inset
-
-OK to sample
-\begin_inset Quotes erd
-\end_inset
-
- sector (not yet implemented)
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Subsubsection
-Standard deviations
-\end_layout
-
-\begin_layout Standard
-The standard deviations of sonic temperature 
-\begin_inset Formula $\sigma{}_{T_{s}}$
-\end_inset
-
-, vertical wind speed 
-\begin_inset Formula $\sigma_{U_{z}}$
-\end_inset
-
-, carbon dioxide concentration
-\begin_inset Foot
-status open
-
-\begin_layout Plain Layout
--> 
-\begin_inset Quotes eld
-\end_inset
-
-mass/molar density
-\begin_inset Quotes erd
-\end_inset
-
- has been used up to this point.
- should there be a distinguishment?
-\end_layout
-
-\end_inset
-
- 
-\begin_inset Formula $\sigma_{CO_{2}}$
-\end_inset
-
-, and water vapor concentration 
-\begin_inset Formula $\sigma_{H_{2}O}$
-\end_inset
-
- are derived by taking the square roots of their variances (produced by
- covariance calculations).
- 
-\begin_inset Formula 
-\begin{eqnarray*}
-\sigma_{T_{s}} & = & \sqrt{\overline{T_{s}^{\prime}T_{s}^{\prime}}}\\
-\sigma_{U_{z}} & = & \sqrt{\overline{U_{z}^{\prime}U_{z}^{\prime}}}\\
-\sigma_{CO_{2}} & = & \sqrt{\overline{CO_{2}^{\prime}CO_{2}^{\prime}}}\\
-\sigma_{H_{2}O} & = & \sqrt{\overline{H_{2}O^{\prime}H_{2}O^{\prime}}}
-\end{eqnarray*}
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Subsubsection
-Relative humidity
-\end_layout
-
-\begin_layout Standard
-Since relative humidity is a complex non-linear scalar, it cannot be meaningfull
-y averaged in a naive manner.
- Instead, the mean saturation vapor pressure 
-\begin_inset Formula $\overline{(e_{HMP})_{sat}}$
-\end_inset
-
- (kPa) is first calculated using mean ambient temperature 
-\begin_inset Formula $\overline{T_{HMP}}$
-\end_inset
-
- (degC) and the built-in program instruction 
-\begin_inset Flex Code
-status collapsed
-
-\begin_layout Plain Layout
-SatVP
-\end_layout
-
-\end_inset
-
-:
-\end_layout
-
-\begin_layout Standard
-\begin_inset Formula 
-\[
-\overline{(e_{HMP})_{sat}}=\mathtt{SatVP(}\overline{T_{HMP}}\mathtt{)}
-\]
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Standard
-\begin_inset Formula 
-\begin{eqnarray*}
-\mathtt{SatVP(T)}:\: e_{sat} & = & 0.1(A_{0}+A_{1}T+A_{2}T^{2}+A_{3}T^{3}+A_{4}T^{4}+A_{5}T^{5}+A_{6}T^{6})\\
-where &  & A_{0}=6.107799961\\
- &  & A_{1}=4.436518521\times10^{-5}\\
- &  & A_{2}=1.428945805\times10^{-2}\\
- &  & A_{3}=2.650648471\times10^{-4}\\
- &  & A_{4}=3.031240396\times10^{-6}\\
- &  & A_{5}=2.034080948\times10^{-8}\\
- &  & A_{6}=6.136820929\times10^{-11}
-\end{eqnarray*}
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Standard
-The mean relative humidity 
-\begin_inset Formula $\overline{RH}$
-\end_inset
-
- (%) is then derived by combining the results with mean water vapor pressure
- 
-\begin_inset Formula $\overline{e_{HMP}}$
-\end_inset
-
- (kPa) : 
-\end_layout
-
-\begin_layout Standard
-\begin_inset Formula 
-\[
-\overline{RH}=\frac{100\times\overline{e_{HMP}}}{\overline{(e_{HMP})_{sat}}}
-\]
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Subsubsection
-Latent heat of vaporization
-\end_layout
-
-\begin_layout Standard
-Since water rarely boils under atmospheric conditions, the typical approximation
-\begin_inset Foot
-status open
-
-\begin_layout Plain Layout
-Oft cited 2260 J/g applies at 100ºC, 1atm; Campbell Scientific typically
- specifies 2440 J/g
-\end_layout
-
-\end_inset
-
- of the latent heat of vaporization 
-\begin_inset Formula $L_{V}$
-\end_inset
-
- (J g
-\begin_inset script superscript
-
-\begin_layout Plain Layout
--1
-\end_layout
-
-\end_inset
-
-) of water is eschewed in favor of a temperature-dependent formula.
- This value, used in the evaluation of latent heat flux, is derived from
- ambient temperature 
-\begin_inset Formula $\overline{T_{HMP}}$
-\end_inset
-
- (degC) as measured by the T/RH probe:
-\end_layout
-
-\begin_layout Standard
-\begin_inset Formula 
-\[
-L_{v}=1918.46\left(\frac{\overline{T_{HMP}}+273.13}{\overline{T_{HMP}}+239.24}\right)^{2}
-\]
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Standard
-This formula is equivalent to formula 8 from 
-\begin_inset Flex Emph
-status collapsed
-
-\begin_layout Plain Layout
-A new formula for latent heat of vaporization as a function of temperature
-\end_layout
-
-\end_inset
-
- 
-\begin_inset CommandInset citation
-LatexCommand cite
-key "formula-Lv"
-
-\end_inset
-
-.
-\end_layout
-
-\begin_layout Subsubsection
-Density of air
-\end_layout
-
-\begin_layout Standard
-Mean density of dry air 
-\begin_inset Formula $\overline{\rho_{d}}$
-\end_inset
-
- (g m
-\begin_inset script superscript
-
-\begin_layout Plain Layout
--3
-\end_layout
-
-\end_inset
-
-) is derived from mean ambient pressure 
-\begin_inset Formula $\overline{P}$
-\end_inset
-
- (kPa), mean water vapor pressure 
-\begin_inset Formula $\overline{e_{HMP}}$
-\end_inset
-
- (kPa) and mean ambient temperature 
-\begin_inset Formula $\overline{T_{HMP}}$
-\end_inset
-
- (degC):
-\end_layout
-
-\begin_layout Standard
-\begin_inset Formula 
-\[
-\overline{\rho_{d}}=\frac{\overline{P}-\overline{e_{HMP}}}{R_{d}(\overline{T_{HMP}}+273.15)}
-\]
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Standard
-Mean density of ambient (moist) air 
-\begin_inset Formula $\overline{\rho_{a}}$
-\end_inset
-
- (kg m
-\begin_inset script superscript
-
-\begin_layout Plain Layout
--3
-\end_layout
-
-\end_inset
-
-) is....
- not presently being calculated!
-\end_layout
-
-\begin_layout Standard
-\begin_inset Box Shadowbox
-position "t"
-hor_pos "c"
-has_inner_box 1
-inner_pos "t"
-use_parbox 0
-use_makebox 0
-width "100col%"
-special "none"
-height "1in"
-height_special "totalheight"
-status open
-
-\begin_layout Plain Layout
--> Look into how Jay did (or didn't) adjust for water vapor when calculating
- ambient density from dry
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Subsubsection
-Friction velocity
-\end_layout
-
-\begin_layout Standard
-Friction velocity 
-\begin_inset Formula $u_{*}$
-\end_inset
-
- (m/s) is derived from covariances of horizontal wind components with vertical
- wind speed:
-\end_layout
-
-\begin_layout Standard
-\begin_inset Formula 
-\[
-u_{*}=\sqrt[4]{\overline{U_{x}^{\prime}U_{z}^{\prime}}+\overline{U_{y}^{\prime}U_{z}^{\prime}}}
-\]
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Subsubsection
-Momentum flux
-\end_layout
-
-\begin_layout Standard
-Momentum flux 
-\begin_inset Formula $\tau$
-\end_inset
-
- (m
-\begin_inset script superscript
-
-\begin_layout Plain Layout
-2
-\end_layout
-
-\end_inset
-
- s
-\begin_inset script superscript
-
-\begin_layout Plain Layout
--2
-\end_layout
-
-\end_inset
-
-) is derived from the same data sources as for friction velocity, with the
- addition of ambient air density 
-\begin_inset Formula $\overline{\rho_{a}}$
-\end_inset
-
- (kg m
-\begin_inset script superscript
-
-\begin_layout Plain Layout
--3
-\end_layout
-
-\end_inset
-
-):
-\end_layout
-
-\begin_layout Standard
-\begin_inset Formula 
-\[
-\tau=\overline{\rho_{a}}\,\sqrt{\overline{U_{x}^{\prime}U_{z}^{\prime}}+\overline{U_{y}^{\prime}U_{z}^{\prime}}}
-\]
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Standard
-\begin_inset Box Shadowbox
-position "t"
-hor_pos "c"
-has_inner_box 1
-inner_pos "t"
-use_parbox 0
-use_makebox 0
-width "100col%"
-special "none"
-height "1in"
-height_special "totalheight"
-status open
-
-\begin_layout Plain Layout
--> Nothing is done with this....
- so why calculate it?
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Subsubsection
-Obukhov length
-\end_layout
-
-\begin_layout Standard
-Obukhov length, 
-\begin_inset Formula $L$
-\end_inset
-
- (m), is calculated using friction velocity 
-\begin_inset Formula $u_{*}$
-\end_inset
-
- (m/s), mean temp 
-\begin_inset Formula $\overline{T_{HMP}}$
-\end_inset
-
- (degC) from T/RH probe and the covariance of vertical wind with sonic temperatu
-re, 
-\begin_inset Formula $\overline{T_{s}^{\prime}U_{z}^{\prime}}$
-\end_inset
-
-, as:
-\end_layout
-
-\begin_layout Standard
-\begin_inset Formula 
-\begin{eqnarray*}
-L & = & \frac{-u_{*}^{3}(\overline{T_{HMP}}+273.15)}{kg\overline{T_{s}^{\prime}U_{z}^{\prime}}}\\
-where &  & k=0.41\:\mathrm{\textrm{(Von Kármán constant)}}\\
- &  & g=9.81\: m/s^{2}\:\mathrm{\textrm{(gravitational acceleration)}}
-\end{eqnarray*}
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Standard
-Note this formula references 
-\begin_inset Flex Strong
-status collapsed
-
-\begin_layout Plain Layout
-unrotated
-\end_layout
-
-\end_inset
-
- vertical wind speed 
-\begin_inset Formula $U_{z}$
-\end_inset
-
- in the covariance term.
-\end_layout
-
-\begin_layout Subsubsection
-Latent heat flux
-\end_layout
-
-\begin_layout Standard
-TODO
-\end_layout
-
-\begin_layout Subsubsection
-Sensible heat flux
-\end_layout
-
-\begin_layout Standard
-TODO
-\end_layout
-
-\begin_layout Subsubsection
-Carbon dioxide flux
-\end_layout
-
-\begin_layout Standard
-TODO
-\end_layout
-
 \begin_layout Standard
 \begin_inset Newpage clearpage
 \end_inset
@@ -5038,15 +4234,463 @@ Data files
 \end_layout
 
 \begin_layout Standard
-These data files are saved to the datalogger's internal memory and to CompactFla
-sh media.
- If no CF media is available, not much data is retained (e.g.
- tens of minutes).
- 
+To retain the large amount of time-series data recorded, external CompactFlash
+ media must be used.
+ The maximum supported CF memory card size is 2 GB.
+ A total of one minute of time-series data will be retained in the datalogger's
+ internal memory; if a blank CF memory card is inserted within one minute
+ of card ejection, the time-series record will be continuous.
 \end_layout
 
 \begin_layout Standard
-Each data file represents a single data table stored in a binary format.
+When no CompactFlash memory card is available, the system will still record
+ a 
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+how large?
+\end_layout
+
+\end_inset
+
+large number of half-hour statistics to it's internal memory.
+ This data must be retrieved via serial (RS-232) connection but it may be
+ acceptable if the time-series data is not of interest.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float table
+placement H
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\begin_inset Box Frameless
+position "t"
+hor_pos "c"
+has_inner_box 1
+inner_pos "t"
+use_parbox 0
+use_makebox 0
+width "100line%"
+special "none"
+height "1in"
+height_special "totalheight"
+status open
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Summary of logger-generated data files
+\begin_inset CommandInset label
+LatexCommand label
+name "tab:data-table-summary"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\align center
+\begin_inset Tabular
+<lyxtabular version="3" rows="7" columns="5">
+<features rotate="0" tabularvalignment="middle">
+<column alignment="center" valignment="top">
+<column alignment="center" valignment="top">
+<column alignment="center" valignment="top">
+<column alignment="center" valignment="top">
+<column alignment="left" valignment="top" width="40text%">
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Table (file)
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Record
+\end_layout
+
+\end_inset
+</cell>
+<cell multicolumn="1" alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Capacity (# records)
+\begin_inset Foot
+status collapsed
+
+\begin_layout Plain Layout
+If not specified, table size is allocated based on size, record frequency
+ and available storage space.
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell multicolumn="2" alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+name
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+interval
+\begin_inset Foot
+status collapsed
+
+\begin_layout Plain Layout
+Anchored at midnight
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Internal
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+External
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Description
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+info
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Foot
+status collapsed
+
+\begin_layout Plain Layout
+At program start-up and whenever settings are modified
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+50
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+200
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Operational state of the program
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+ts_fast
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+100 msec
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+600
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+-
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Unprocessed measurement values from high-frequency sensors
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+ts_slow
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+1 sec
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+60
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+-
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Unprocessed measurement values from other sensors
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+stats
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+30 min
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+-
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+-
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Half-hour summary statistics and derived values
+\end_layout
+
+\end_inset
+</cell>
+</row>
+</lyxtabular>
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Paragraph
+Conversion
+\end_layout
+
+\begin_layout Standard
+Each file represents a single data table stored in a binary format (TOB3).
  A no-cost proprietary program (
 \begin_inset Flex Code
 status collapsed
@@ -5057,7 +4701,7 @@ CardConvert
 
 \end_inset
 
-) is available
+
 \begin_inset Foot
 status open
 
@@ -5073,50 +4717,291 @@ target "http://www.campbellsci.com/pc200w"
 
 \end_inset
 
- to convert these binary files to a plain-text comma-separated format.
- 
-\end_layout
-
-\begin_layout Standard
-The following sections describe each of the data tables and their data columns.
- Derivations are described where appropriate.
- 
-\end_layout
-
-\begin_layout Subsubsection
-ts_fast 
-\end_layout
-
-\begin_layout Standard
-High-frequency sonic anemometer, open-path IRGA, and valve status data is
- recorded to this table whenever the system is powered on.
- Values in this table represent instantaneous measurements (
+) is used to convert these binary files into human-readable formats.
+ The recommended output type is 
 \begin_inset Quotes eld
 \end_inset
 
-grab samples
+TOA5
+\begin_inset CommandInset nomenclature
+LatexCommand nomenclature
+symbol "TOA5"
+description "plain-text comma-separated file format with several header rows"
+
+\end_inset
+
+
 \begin_inset Quotes erd
 \end_inset
 
-) made at 10 Hz with no lag-compensation applied.
+ (a plain-text comma-separated format with header rows) including both timestamp
+s and record numbers.
+\end_layout
+
+\begin_layout Paragraph
+Notes about TOA5
+\end_layout
+
+\begin_layout Itemize
+Timestamps are in ISO-8601
+\begin_inset Foot
+status collapsed
+
+\begin_layout Plain Layout
+\begin_inset Flex URL
+status open
+
+\begin_layout Plain Layout
+
+https://en.wikipedia.org/wiki/ISO_8601
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+ compatible format (YYYY-MM-DD HH:mm:ss)
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+BUT they are surrounded by plain double-quote characters
+\end_layout
+
+\begin_layout Itemize
+AND when fractional seconds are 0, they are not included (e.g.
  
+\begin_inset Flex Code
+status open
+
+\begin_layout Plain Layout
+12:00:01
+\end_layout
+
+\end_inset
+
+, not 
+\begin_inset Flex Code
+status open
+
+\begin_layout Plain Layout
+12:00:01.00
+\end_layout
+
+\end_inset
+
+) which means values are variable-length
+\end_layout
+
+\begin_layout Itemize
+Example: 1:00:00.00 PM on December 1, 2001 is represented as 
+\begin_inset Flex Code
+status open
+
+\begin_layout Plain Layout
+\begin_inset Quotes eld
+\end_inset
+
+2001-12-01 13:00:00
+\begin_inset Quotes erd
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+Time intervals are half-open on the tail end and timestamped with end-of-period
+ time.
+ Example: data recorded at 10 Hz from 13:00:00.00 to 13:29:59.90 (inclusive)
+ is processed and given the timestamp 13:30:00
+\end_layout
+
+\begin_layout Itemize
+Capitalized suffixes indicate a stastical procedure:
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+The abbreviation is generally obvious (Avg: mean; Std: standard deviation;
+ Med: median; Tot: total; ...)
+\end_layout
+
+\begin_layout Itemize
+The program is designed to exclude null values in all cases (NAN) from intermedi
+ate processing; consequently, a null value in output signifies insufficient
+ data available
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+Null values are (generally) indicated by the plain-double-quoted text string
+ 
+\begin_inset Quotes eld
+\end_inset
+
+NAN
+\begin_inset Quotes erd
+\end_inset
+
+
+\begin_inset Foot
+status open
+
+\begin_layout Plain Layout
+The null value sentinel depends largely on data type and while specific
+ possible values are undocumented for the CR5000 datalogger, users may reference
+ Table 115 in §10.3.4.3 of the CR3000 datalogger user manual 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "manual-cr3000"
+
+\end_inset
+
+.
+ 
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsubsection
+info
+\end_layout
+
+\begin_layout Standard
+This file (table 
+\begin_inset CommandInset ref
+LatexCommand vref
+reference "tab:schema-info"
+
+\end_inset
+
+) records all changes made to program settings and tracks useful diagnostic
+ values.
+ A new record is generated each time the program is recompiled (e.g.
+ start-up & initial sensor configuration) or new settings take effect (e.g.
+ when changes are saved).
+ 
+\end_layout
+
+\begin_layout Standard
+Settings saved to this table are covered in sections 
+\begin_inset Flex Strong
+status collapsed
+
+\begin_layout Plain Layout
+????
+\end_layout
+
+\end_inset
+
+ and 
+\begin_inset Flex Strong
+status collapsed
+
+\begin_layout Plain Layout
+????
+\end_layout
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Paragraph
+Notes
+\end_layout
+
+\begin_layout Description
+sonic_azimuth Since 
+\begin_inset Formula $0$
+\end_inset
+
+ is a valid azimuth value, 
+\begin_inset Formula $-1$
+\end_inset
+
+ is used to indicate when the anemometer azimuth has not been set.
+ When specified, this value and 
+\begin_inset Flex Code
+status open
+
+\begin_layout Plain Layout
+site_mag_declin
+\end_layout
+
+\end_inset
+
+ are used to adjust calculated wind directions to geographic coordinates.
+ 
+\begin_inset VSpace smallskip
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+This value may refer to orientation relative to magnetic or geographic (true)
+ north.
+ The datalogger program makes no differentiation.
+ Refer to the explanation of this setting for more detail.
+ 
+\end_layout
+
+\begin_layout Description
+irga_vert_sep/irga_horz_sep These values are retained for the user's post-proces
+sing benefit only.
+ They are not used in intermediate processing steps.
+\end_layout
+
+\begin_layout Description
+site_fetch_* These values are recorded for completeness but the corresponding
+ settings are irrelevant.
+ In earlier versions and possibly in future versions, the decision to conduct
+ REA sampling depended on both components of calculated fetch along the
+ predominant wind direction being less than the corresponding setting value.
+ Presently, sampling occurs regardless of these settings.
 \end_layout
 
 \begin_layout Standard
 \begin_inset Float table
-placement H
 wide false
 sideways false
+status open
+
+\begin_layout Plain Layout
+\begin_inset Box Frameless
+position "t"
+hor_pos "c"
+has_inner_box 1
+inner_pos "t"
+use_parbox 0
+use_makebox 0
+width "100line%"
+special "none"
+height "1in"
+height_special "totalheight"
 status open
 
 \begin_layout Plain Layout
 \begin_inset Caption Standard
 
 \begin_layout Plain Layout
-Data table schema: ts_fast
+Data table schema: info
 \begin_inset CommandInset label
 LatexCommand label
-name "tab:Data-table-schema-ts-fast"
+name "tab:schema-info"
 
 \end_inset
 
@@ -5132,14 +5017,13 @@ name "tab:Data-table-schema-ts-fast"
 \noindent
 \align center
 \begin_inset Tabular
-<lyxtabular version="3" rows="12" columns="5">
+<lyxtabular version="3" rows="22" columns="4">
 <features rotate="0" tabularvalignment="middle">
-<column alignment="center" valignment="middle" width="0pt">
-<column alignment="left" valignment="middle" width="0pt">
-<column alignment="center" valignment="middle">
-<column alignment="center" valignment="middle">
-<column alignment="left" valignment="middle" width="55text%">
-<row endhead="true">
+<column alignment="center" valignment="top">
+<column alignment="left" valignment="top">
+<column alignment="center" valignment="top">
+<column alignment="left" valignment="top" width="50text%">
+<row>
 <cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
 \begin_inset Text
 
@@ -5163,6 +5047,1248 @@ Column name
 
 \begin_layout Plain Layout
 Symbol
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Description
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+1
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+flow_zero_waiting
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+sLpm
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+mass flow rate of shield flow before & after sampling runs
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+2
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+flow_zero_running
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+sLpm
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+mass flow rate of shield flow during sampling runs
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+3
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+flow_sample
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+sLpm
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+mass flow rate in each sampling line 
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+4
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+deadband_mult
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+ratio
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+fraction of most recent 30-min vertical wind speed standard deviation value
+ to use as REA deadband
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+5
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+deadband_min
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+m/s
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+lower bound of permissible deadband values
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+6
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+deadband_default
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+m/s
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+default/initial deadband value
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+7
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+sonic_azimuth
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+degEofN
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+orientation of the sonic anemometer relative to North
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+8
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+sonic_height
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+m
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+height of sonic anemometer midpoint relative to the surface; used with 
+\begin_inset Flex Code
+status open
+
+\begin_layout Plain Layout
+site_roughness
+\end_layout
+
+\end_inset
+
+ in real-time footprint estimation
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+9
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+irga_vert_sep
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+cm
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+vertical separation between IRGA & anemometer sampling volume midpoints
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+10
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+irga_horz_sep
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+cm
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+horizontal separation between IRGA & anemometer sampling volume midpoints
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+11
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+site_mag_declin
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+degEofTN
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+magnetic declination of the monitoring site; 
+\begin_inset Newline newline
+\end_inset
+
+Easterly = (
+\begin_inset Formula $+$
+\end_inset
+
+), Westerly = (
+\begin_inset Formula $-$
+\end_inset
+
+)
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+12
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+site_roughness
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+cm
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+roughness length of the monitoring site; used with 
+\begin_inset Flex Code
+status open
+
+\begin_layout Plain Layout
+sonic_height
+\end_layout
+
+\end_inset
+
+ in real-time footprint estimation
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+13
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+site_fetch_N
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+m
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+boundary of monitoring site to geographic north
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+14
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+site_fetch_E
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+m
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+boundary of monitoring site to geographic east
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+15
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+site_fetch_S
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+m
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+boundary of monitoring site to geographic south
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+16
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+site_fetch_W
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+m
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+boundary of monitoring site to geographic west
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+17
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+sonic_irga_source
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+-
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+1: CSAT3 & LI7500 
+\begin_inset Newline newline
+\end_inset
+
+2: CSAT3A & EC150
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+18
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+CompileResults
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+-
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Indicates errors, if any, generated by compilation or at runtime
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+19
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+CardStatus
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+-
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+State of external memory card (e.g.
+ 
+\begin_inset Quotes eld
+\end_inset
+
+Card OK
+\begin_inset Quotes erd
+\end_inset
+
+, 
+\begin_inset Quotes eld
+\end_inset
+
+No card present
+\begin_inset Quotes erd
+\end_inset
+
+, etc)
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+20
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+RunSig
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+-
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Signature of the compiled binary data structure for the current program;
+ not affected by comments or non-functional changes
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+21
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+ProgVersion
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+-
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Tag of program release for cross-referencing with source code repository;
+ if blank, program is a development version
+\end_layout
+
+\end_inset
+</cell>
+</row>
+</lyxtabular>
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsubsection
+ts_fast
+\begin_inset CommandInset label
+LatexCommand label
+name "sub:ts_fast"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Data from high-frequency sensors is recorded to this file (table 
+\begin_inset CommandInset ref
+LatexCommand vref
+reference "tab:schema-ts_fast"
+
+\end_inset
+
+) whenever the system is powered on.
+ Values in this table represent instantaneous measurements (
+\begin_inset Quotes eld
+\end_inset
+
+grab samples
+\begin_inset Quotes erd
+\end_inset
+
+) made at 10 Hz with no lag-compensation applied.
+ 
+\end_layout
+
+\begin_layout Standard
+The size of the file written to the memory card is determined using an allocatio
+n method designed to maximize available recording time.
+ Some columns are only included when the integrated sonic/IRGA unit is used
+ (CSAT3A + EC150).
+ 
+\end_layout
+
+\begin_layout Paragraph
+Notes
+\end_layout
+
+\begin_layout Description
+sonic_Ux/Uy/Uz Three-dimensional wind speed is reported as cartesian components.
+ Both sonic anemometer models (CSAT3, CSAT3A) employ a right-handed coordinate
+ system where the 
+\begin_inset Formula $+X$
+\end_inset
+
+ axis extends from transducers towards the mounting point, the 
+\begin_inset Formula $+Z$
+\end_inset
+
+ axis is oriented perpindicular to the surface, and 
+\begin_inset Formula $Y$
+\end_inset
+
+ is right-handed orthogonal with respect to both 
+\begin_inset Formula $X$
+\end_inset
+
+ and 
+\begin_inset Formula $Z$
+\end_inset
+
+.
+ 
+\begin_inset VSpace smallskip
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+This coordinate system is an offset reflection of the conventional geographic
+ coordinate system where north is 0º, east is 90º, etc.
+ For example, to calculate wind direction in geographic coordinates, reverse
+ both horizontal components and add the device-specific offset (90º for
+ both CSAT3, CSAT3A), then adjust for the anemometer's orientation relative
+ to north (azimuth): 
+\begin_inset Formula 
+\[
+W\! D=\arctan\!2(-U_{x},-U_{y})+90+azimuth
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Description
+sonic_Ts Sonic temperature is generally a few degrees higher than ambient
+ drybulb temperature because of the effects of water vapor on the speed
+ of sound.
+ The sonic temperature 
+\begin_inset Formula $T_{s}$
+\end_inset
+
+ closely approximates the virtual temperature 
+\begin_inset Formula $T_{v}$
+\end_inset
+
+ as suggested by these relationships between ambient temperature 
+\begin_inset Formula $T_{a}$
+\end_inset
+
+ and specific humidity 
+\begin_inset Formula $q$
+\end_inset
+
+ 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "book-arya-1999,manual-csat3"
+
+\end_inset
+
+: 
+\begin_inset Formula 
+\[
+\begin{array}{ccc}
+T_{s}\approx T_{a}(1+0.51q) & \qquad & T_{v}\approx T_{a}(1+0.61q)\end{array}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Description
+sonic_diag The encoding of this bitmap value is device-specific (CSAT3 vs
+ CSAT3A).
+ No manipulations are performed prior to storage in this table.
+ Refer to the appropriate user manual 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "manual-csat3,manual-ec100"
+
+\end_inset
+
+ for interpretation details.
+ 
+\begin_inset VSpace smallskip
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+TO VERIFY: for the standalone sonic (CSAT3), a flag exists if the value
+ > 4095 (2^12 - 1) and for the integrated sonic, a flag exists for any non-zero
+ value
+\end_layout
+
+\begin_layout Description
+irga_CO2/H2O Molar density of carbon dioxide/water vapor in air.
+ The standalone IRGA (LI7500) reports in 
+\begin_inset Formula $\nicefrac{mmol}{m^{3}}$
+\end_inset
+
+.
+ 
+\begin_inset VSpace smallskip
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+The integrated IRGA (EC150) reports in mass density so when used, values
+ are converted in real-time to molar density as: 
+\end_layout
+
+\begin_layout Standard
+\align center
+\begin_inset Formula $\begin{aligned}C\! O_{2},\,\frac{mmol}{m^{3}} & =\left(CO_{2},\,\frac{mg}{m^{3}}\right)/\left(44\,\frac{g}{mol}\right)\\
+H_{2}\! O,\,\frac{mmol}{m^{3}} & =\left(\frac{1000\, mmol}{mol}\right)\left(H_{2}\! O,\,\frac{g}{m^{3}}\right)/\left(18\,\frac{g}{mol}\right)
+\end{aligned}
+$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+These values for molecular weight correspond to the values used internally
+ by the device [??].
+\end_layout
+
+\begin_layout Description
+irga_diag The encoding of this bitmap value is device-specific (LI7500 vs
+ EC150).
+ No manipulations are performed prior to storage it this table.
+ Refer to the appropriate user manual 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "manual-li7500,manual-ec100"
+
+\end_inset
+
+ for interpretation details.
+\end_layout
+
+\begin_layout Description
+vlv_up_ON/vlv_dn_ON Boolean values indicating state of denuder inlet valves.
+ During proper operation, it is not possible for both valves to be on though
+ both valves may be simulataneously off.
+ These values may be naively summed (0=off, 1=on) then divided by total
+ number of records to derive the 
+\emph on
+valve activation ratio
+\emph default
+.
+\end_layout
+
+\begin_layout Description
+Uz_rot This is the value examined when deciding valve activation.
+ It is the current 
+\begin_inset Flex Code
+status collapsed
+
+\begin_layout Plain Layout
+sonic_Uz
+\end_layout
+
+\end_inset
+
+ measurement after double-rotation subject to the method of 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "article-coordrot,book-lee-2004"
+
+\end_inset
+
+ using the wind measurements of the previous half-hour interval (see 
+\begin_inset Flex MenuItem
+status collapsed
+
+\begin_layout Plain Layout
+W_std
+\end_layout
+
+\end_inset
+
+ under 
+\begin_inset CommandInset ref
+LatexCommand vref
+reference "sub:stats"
+
+\end_inset
+
+ for 
+\begin_inset Formula $CE$
+\end_inset
+
+/
+\begin_inset Formula $SE$
+\end_inset
+
+/
+\begin_inset Formula $CT$
+\end_inset
+
+/
+\begin_inset Formula $ST$
+\end_inset
+
+).
+ 
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{eqnarray*}
+U_{z,rot} & = & U_{z}(CT)-U_{x}(ST)(CE)-U_{y}(ST)(SE)
+\end{eqnarray*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float table
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\begin_inset Box Frameless
+position "t"
+hor_pos "c"
+has_inner_box 1
+inner_pos "t"
+use_parbox 0
+use_makebox 0
+width "100line%"
+special "none"
+height "1in"
+height_special "totalheight"
+status open
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+\begin_inset Argument 1
+status open
+
+\begin_layout Plain Layout
+Data table schema: ts_fast
+\end_layout
+
+\end_inset
+
+Data table schema: ts_fast (shading indicates conditional inclusion)
+\begin_inset CommandInset label
+LatexCommand label
+name "tab:schema-ts_fast"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\noindent
+\align center
+\begin_inset Tabular
+<lyxtabular version="3" rows="16" columns="4">
+<features rotate="0" tabularvalignment="middle">
+<column alignment="center" valignment="middle" width="0pt">
+<column alignment="left" valignment="middle" width="0pt">
+<column alignment="center" valignment="middle">
+<column alignment="left" valignment="middle" width="55text%">
+<row endhead="true">
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Column name
 \end_layout
 
 \end_inset
@@ -5209,26 +6335,6 @@ sonic_Ux
 \begin_inset Text
 
 \begin_layout Plain Layout
-\begin_inset Formula $U_{x}$
-\end_inset
-
-
-\begin_inset CommandInset nomenclature
-LatexCommand nomenclature
-symbol "$U_x$"
-description "wind speed along $X$ axis of sonic anemometer"
-
-\end_inset
-
-
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
 m/s
 \end_layout
 
@@ -5238,7 +6344,8 @@ m/s
 \begin_inset Text
 
 \begin_layout Plain Layout
-(+) = into sonic array along boom axis
+horizontal wind speed; (+) = into sonic array along boom axis from side
+ opposite mounting block
 \end_layout
 
 \end_inset
@@ -5267,26 +6374,6 @@ sonic_Uy
 \begin_inset Text
 
 \begin_layout Plain Layout
-\begin_inset Formula $U_{y}$
-\end_inset
-
-
-\begin_inset CommandInset nomenclature
-LatexCommand nomenclature
-symbol "$U_y$"
-description "wind speed along $Y$ axis of sonic anemometer"
-
-\end_inset
-
-
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
 m/s
 \end_layout
 
@@ -5296,12 +6383,24 @@ m/s
 \begin_inset Text
 
 \begin_layout Plain Layout
-orthogonal (right-handed) to 
-\begin_inset Formula $U_{x}$
+horizontal wind speed; orthogonal (right-handed) to 
+\begin_inset Flex Code
+status collapsed
+
+\begin_layout Plain Layout
+sonic_Ux
+\end_layout
+
 \end_inset
 
-/
-\begin_inset Formula $U_{z}$
+ and 
+\begin_inset Flex Code
+status collapsed
+
+\begin_layout Plain Layout
+sonic_Uz
+\end_layout
+
 \end_inset
 
 
@@ -5333,26 +6432,6 @@ sonic_Uz
 \begin_inset Text
 
 \begin_layout Plain Layout
-\begin_inset Formula $U_{z}$
-\end_inset
-
-
-\begin_inset CommandInset nomenclature
-LatexCommand nomenclature
-symbol "$U_z$"
-description "wind speed along $Z$ axis of sonic anemometer"
-
-\end_inset
-
-
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
 m/s
 \end_layout
 
@@ -5362,7 +6441,7 @@ m/s
 \begin_inset Text
 
 \begin_layout Plain Layout
-(+) = away from surface
+vertical wind speed; (+) = away from surface
 \end_layout
 
 \end_inset
@@ -5383,26 +6462,6 @@ m/s
 
 \begin_layout Plain Layout
 sonic_Ts
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-\begin_inset Formula $T_{s}$
-\end_inset
-
-
-\begin_inset CommandInset nomenclature
-LatexCommand nomenclature
-symbol "$T_s$"
-description "sonic temperature"
-
-\end_inset
-
-
 \end_layout
 
 \end_inset
@@ -5450,15 +6509,6 @@ sonic_diag
 \begin_inset Text
 
 \begin_layout Plain Layout
--
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
 bitmap
 \end_layout
 
@@ -5468,7 +6518,7 @@ bitmap
 \begin_inset Text
 
 \begin_layout Plain Layout
-diagnostic word
+sonic anemometer diagnostic word
 \end_layout
 
 \end_inset
@@ -5497,26 +6547,6 @@ irga_CO2
 \begin_inset Text
 
 \begin_layout Plain Layout
-\begin_inset Formula $CO_{2}$
-\end_inset
-
-
-\begin_inset CommandInset nomenclature
-LatexCommand nomenclature
-symbol "$CO_2$"
-description "molar density of carbon dioxide"
-
-\end_inset
-
-
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
 mmol/m
 \begin_inset script superscript
 
@@ -5535,7 +6565,25 @@ mmol/m
 \begin_inset Text
 
 \begin_layout Plain Layout
-molar density of carbon dioxide
+molar density of carbon dioxide (CO
+\begin_inset script subscript
+
+\begin_layout Plain Layout
+2
+\end_layout
+
+\end_inset
+
+
+\begin_inset CommandInset nomenclature
+LatexCommand nomenclature
+prefix "CO2"
+symbol "$CO_2$"
+description "carbon dioxide"
+
+\end_inset
+
+)
 \end_layout
 
 \end_inset
@@ -5564,26 +6612,6 @@ irga_H2O
 \begin_inset Text
 
 \begin_layout Plain Layout
-\begin_inset Formula $H_{2}O$
-\end_inset
-
-
-\begin_inset CommandInset nomenclature
-LatexCommand nomenclature
-symbol "$H_2O$"
-description "molar density of water vapor"
-
-\end_inset
-
-
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
 mmol/m
 \begin_inset script superscript
 
@@ -5602,7 +6630,16 @@ mmol/m
 \begin_inset Text
 
 \begin_layout Plain Layout
-molar density of water vapor
+molar density of water vapor (H2O
+\begin_inset CommandInset nomenclature
+LatexCommand nomenclature
+prefix "H2O"
+symbol "$H_{2}O$"
+description "water vapor"
+
+\end_inset
+
+)
 \end_layout
 
 \end_inset
@@ -5631,26 +6668,6 @@ irga_press
 \begin_inset Text
 
 \begin_layout Plain Layout
-\begin_inset Formula $P$
-\end_inset
-
-
-\begin_inset CommandInset nomenclature
-LatexCommand nomenclature
-symbol "$P$"
-description "barometric pressure"
-
-\end_inset
-
-
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
 kPa
 \end_layout
 
@@ -5660,7 +6677,7 @@ kPa
 \begin_inset Text
 
 \begin_layout Plain Layout
-barometric pressure
+barometric pressure (IRGA)
 \end_layout
 
 \end_inset
@@ -5689,15 +6706,6 @@ irga_diag
 \begin_inset Text
 
 \begin_layout Plain Layout
--
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
 bitmap
 \end_layout
 
@@ -5707,7 +6715,7 @@ bitmap
 \begin_inset Text
 
 \begin_layout Plain Layout
-diagnostic word
+IRGA diagnostic word
 \end_layout
 
 \end_inset
@@ -5718,16 +6726,19 @@ diagnostic word
 \begin_inset Text
 
 \begin_layout Plain Layout
-10
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+rowcolor{band1}
 \end_layout
 
 \end_inset
-</cell>
-<cell alignment="left" valignment="top" topline="true" leftline="true" usebox="none">
-\begin_inset Text
 
-\begin_layout Plain Layout
-vlv_up_is_on
+10
 \end_layout
 
 \end_inset
@@ -5736,7 +6747,198 @@ vlv_up_is_on
 \begin_inset Text
 
 \begin_layout Plain Layout
--
+irga_tmpr
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+degC
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+ambient temperature (IRGA)
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+rowcolor{band1}
+\end_layout
+
+\end_inset
+
+11
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+irga_CO2_signal
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+ratio
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+rowcolor{band1}
+\end_layout
+
+\end_inset
+
+12
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+irga_H2O_signal
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+ratio
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+multirow{-2}{1
+\backslash
+linewidth}{signal strength values nominally 0-1; typically >0.95 under good
+ conditions}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+13
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Uz_rot
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+m/s
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+vertical wind speed in rotated coordinate system; (+) = away from surface
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+14
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+vlv_up_ON
 \end_layout
 
 \end_inset
@@ -5765,7 +6967,7 @@ sampling updraft if true else recirculating
 \begin_inset Text
 
 \begin_layout Plain Layout
-11
+15
 \end_layout
 
 \end_inset
@@ -5774,16 +6976,7 @@ sampling updraft if true else recirculating
 \begin_inset Text
 
 \begin_layout Plain Layout
-vov_dn_is_on
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
--
+vlv_dn_ON
 \end_layout
 
 \end_inset
@@ -5819,106 +7012,104 @@ sampling downdraft if true else recirculating
 
 \end_layout
 
-\begin_layout Paragraph
-Some notes
-\end_layout
-
-\begin_layout Description
-\begin_inset Formula $U_{x}$
 \end_inset
 
-/
-\begin_inset Formula $U_{y}$
-\end_inset
 
-/
-\begin_inset Formula $U_{z}$
-\end_inset
-
- Three-dimensional wind speed is reported as cartesian components.
- Both sonic anemometer models (CSAT3, CSAT3A) employ a right-handed coordinate
- system where the 
-\begin_inset Formula $-X$
-\end_inset
-
- axis extends from the mounting point towards the transducers, the 
-\begin_inset Formula $+Z$
-\end_inset
-
- axis is oriented perpindicular to the surface, and 
-\begin_inset Formula $Y$
-\end_inset
-
- is right-handed orthogonal with respect to both 
-\begin_inset Formula $X$
-\end_inset
-
- and 
-\begin_inset Formula $Z$
-\end_inset
-
-.
-\end_layout
-
-\begin_layout Description
-\begin_inset Formula $T_{s}$
-\end_inset
-
- Temperature reported by the anemometer closely approximates virtual temperature.
-\end_layout
-
-\begin_layout Description
-sonic_diag/irga_diag A diagnostic word containing possibly many diagnostic
- flags provided with each measurement.
- The value is not modified before storage because interpretation differs
- depending on sensor model.
- 
-\end_layout
-
-\begin_layout Description
-\begin_inset Formula $CO_{2}$
-\end_inset
-
-/
-\begin_inset Formula $H_{2}O$
-\end_inset
-
- Molar density of carbon dioxide/water vapor in air.
- Values from sensors which report mass density (e.g.
- EC150) are converted to molar density before storage.
- The conversion is done using constant values for molecular weight.
- Refer to the program text in Appendix 
-\begin_inset CommandInset ref
-LatexCommand vref
-reference "sec:Program-Listing"
-
-\end_inset
-
- for precise values.
-\end_layout
-
-\begin_layout Description
-vlv_up_is_on/vlv_up_is_dn Boolean values indicating state of denuder inlet
- valves.
- During proper operation, it is not possible for both valves to be on though
- both valves may be simulataneously off.
- These values may be naively summed (0=off, 1=on) then divided by total
- number of records to derive the 
-\emph on
-valve activation ratio
-\emph default
-.
 \end_layout
 
 \begin_layout Subsubsection
-ts_slow 
+ts_slow
+\begin_inset CommandInset label
+LatexCommand label
+name "sub:ts_slow"
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Standard
 Meteorological and flow measurements conducted at 1 Hz are stored in this
- data table whenever the system is powered on.
+ data file (table 
+\begin_inset CommandInset ref
+LatexCommand vref
+reference "tab:schema-ts_slow"
+
+\end_inset
+
+) whenever the system is powered on.
  Values in this table represent instantaneous measurements with no processing
  applied.
+ 
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+Check whether MFCs stay on when shield flow is off or just valves close
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Paragraph
+Notes
+\end_layout
+
+\begin_layout Description
+massFlow* Gas flow rates are reported in mass units: standard L/min of air
+ (N
+\begin_inset script subscript
+
+\begin_layout Plain Layout
+2
+\end_layout
+
+\end_inset
+
+) at manufacturer-specified STP: 14.7 psia, 70°F 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "manual-fma5400"
+
+\end_inset
+
+.
+ 
+\begin_inset VSpace smallskip
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+Instantaneous volumetric flow rate is calculated but only half-hour mean
+ values are retained.
+ See 
+\begin_inset Flex Strong
+status collapsed
+
+\begin_layout Plain Layout
+\begin_inset CommandInset ref
+LatexCommand nameref
+reference "sub:stats"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+ 
+\begin_inset CommandInset ref
+LatexCommand vpageref
+reference "sub:stats"
+
+\end_inset
+
+ for details.
 \end_layout
 
 \begin_layout Standard
@@ -5929,14 +7120,17 @@ sideways false
 status open
 
 \begin_layout Plain Layout
-
-\end_layout
-
-\begin_layout Plain Layout
 \begin_inset Caption Standard
 
 \begin_layout Plain Layout
 Data table schema: ts_slow
+\begin_inset CommandInset label
+LatexCommand label
+name "tab:schema-ts_slow"
+
+\end_inset
+
+
 \end_layout
 
 \end_inset
@@ -5948,11 +7142,10 @@ Data table schema: ts_slow
 \noindent
 \align center
 \begin_inset Tabular
-<lyxtabular version="3" rows="6" columns="5">
+<lyxtabular version="3" rows="6" columns="4">
 <features rotate="0" tabularvalignment="middle">
 <column alignment="center" valignment="top">
 <column alignment="left" valignment="top">
-<column alignment="center" valignment="top">
 <column alignment="center" valignment="top">
 <column alignment="left" valignment="top">
 <row>
@@ -5970,15 +7163,6 @@ Data table schema: ts_slow
 
 \begin_layout Plain Layout
 Column name
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-Symbol
 \end_layout
 
 \end_inset
@@ -6025,26 +7209,6 @@ hmp_T
 \begin_inset Text
 
 \begin_layout Plain Layout
-\begin_inset Formula $T_{HMP}$
-\end_inset
-
-
-\begin_inset CommandInset nomenclature
-LatexCommand nomenclature
-symbol "$T_{HMP}$"
-description "ambient temperature (T/RH probe)"
-
-\end_inset
-
-
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
 degC
 \end_layout
 
@@ -6054,7 +7218,7 @@ degC
 \begin_inset Text
 
 \begin_layout Plain Layout
-ambient temperature
+ambient temperature (T/RH probe)
 \end_layout
 
 \end_inset
@@ -6075,26 +7239,6 @@ ambient temperature
 
 \begin_layout Plain Layout
 hmp_RH
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-\begin_inset Formula $RH$
-\end_inset
-
-
-\begin_inset CommandInset nomenclature
-LatexCommand nomenclature
-symbol "$RH$"
-description "ambient relative humidity (T/RH probe)"
-
-\end_inset
-
-
 \end_layout
 
 \end_inset
@@ -6132,27 +7276,7 @@ ambient relative humidity
 \begin_inset Text
 
 \begin_layout Plain Layout
-flow_up
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-\begin_inset Formula $f_{up}$
-\end_inset
-
-
-\begin_inset CommandInset nomenclature
-LatexCommand nomenclature
-symbol "$f_{up}$"
-description "gas flow through updraft-sampling denuder"
-
-\end_inset
-
-
+massFlow_up
 \end_layout
 
 \end_inset
@@ -6190,27 +7314,7 @@ mass flow through updraft-sampling denuder
 \begin_inset Text
 
 \begin_layout Plain Layout
-flow_dn
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-\begin_inset Formula $f_{dn}$
-\end_inset
-
-
-\begin_inset CommandInset nomenclature
-LatexCommand nomenclature
-symbol "$f_{dn}$"
-description "gas flow through downdraft-sampling denuder"
-
-\end_inset
-
-
+massFlow_dn
 \end_layout
 
 \end_inset
@@ -6248,27 +7352,7 @@ mass flow through downdraft-sampling denuder
 \begin_inset Text
 
 \begin_layout Plain Layout
-flow_zero
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-\begin_inset Formula $f_{Z}$
-\end_inset
-
-
-\begin_inset CommandInset nomenclature
-LatexCommand nomenclature
-symbol "$f_{Z}$"
-description "zero air flow (total) injected into sampling lines"
-
-\end_inset
-
-
+massFlow_zero
 \end_layout
 
 \end_inset
@@ -6304,31 +7388,51 @@ zero air flow (total) injected into sampling lines
 
 \end_layout
 
-\begin_layout Paragraph
-Some notes
-\end_layout
-
-\begin_layout Description
-flow_up/flow_dn/flow_zero Gas flow rates are reported in mass units: Liters/min
- of nitrogen at standard conditions (14.7 psia, 70°F).
- No adjustment for ambient conditions is made prior to storage.
- 
-\end_layout
-
 \begin_layout Subsubsection
-rea
+stats
+\begin_inset CommandInset label
+LatexCommand label
+name "sub:stats"
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Standard
-Quantities needed for calculating REA flux (sigma_W, beta, flow rate, valve
- activation).
- Half-hours.
- Only output during REA sample runs.
+This data file (table 
+\begin_inset CommandInset ref
+LatexCommand vref
+reference "tab:schema-stats"
+
+\end_inset
+
+) contains aggregate values generated every half-hour, on the half-hour.
+ Column name suffixes, if present, denote the result of a built-in processing
+ instruction; see §7.7.3.10 of the CR3000 user manual
+\begin_inset Foot
+status open
+
+\begin_layout Plain Layout
+The CR5000 is retired but much of the CR3000 documentation applies.
+\end_layout
+
+\end_inset
+
+ 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "manual-cr3000"
+
+\end_inset
+
+ for a complete reference on these abbreviations.
+ 
 \end_layout
 
 \begin_layout Standard
 \begin_inset Float table
-placement H
+placement h
 wide false
 sideways false
 status open
@@ -6337,7 +7441,23 @@ status open
 \begin_inset Caption Standard
 
 \begin_layout Plain Layout
-Data table schema: rea
+\begin_inset Argument 1
+status open
+
+\begin_layout Plain Layout
+Data table schema: stats
+\end_layout
+
+\end_inset
+
+Data table schema: stats (shading indicates conditional inclusion)
+\begin_inset CommandInset label
+LatexCommand label
+name "tab:schema-stats"
+
+\end_inset
+
+
 \end_layout
 
 \end_inset
@@ -6349,13 +7469,12 @@ Data table schema: rea
 \noindent
 \align center
 \begin_inset Tabular
-<lyxtabular version="3" rows="7" columns="5">
+<lyxtabular version="3" rows="58" columns="4">
 <features rotate="0" tabularvalignment="middle">
 <column alignment="center" valignment="top">
 <column alignment="left" valignment="top">
 <column alignment="center" valignment="top">
-<column alignment="center" valignment="top">
-<column alignment="left" valignment="top">
+<column alignment="left" valignment="top" width="60line%">
 <row>
 <cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
 \begin_inset Text
@@ -6371,15 +7490,6 @@ Data table schema: rea
 
 \begin_layout Plain Layout
 Column name
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-Symbol
 \end_layout
 
 \end_inset
@@ -6417,7 +7527,7 @@ Description
 \begin_inset Text
 
 \begin_layout Plain Layout
-Uz_std
+CO2_ppm_Avg
 \end_layout
 
 \end_inset
@@ -6426,27 +7536,7 @@ Uz_std
 \begin_inset Text
 
 \begin_layout Plain Layout
-\begin_inset Formula $\sigma_{w}$
-\end_inset
-
-
-\begin_inset CommandInset nomenclature
-LatexCommand nomenclature
-symbol "$\\sigma_{w}$"
-description "standard deviation of vertical wind speed"
-
-\end_inset
-
-
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-m/s
+ppmV
 \end_layout
 
 \end_inset
@@ -6455,422 +7545,15 @@ m/s
 \begin_inset Text
 
 \begin_layout Plain Layout
-Standard deviation of vertical wind speed
-\end_layout
-
-\end_inset
-</cell>
-</row>
-<row>
-<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
-\begin_inset Text
+mean dry mixing ratio of CO
+\begin_inset script subscript
 
 \begin_layout Plain Layout
 2
 \end_layout
 
 \end_inset
-</cell>
-<cell alignment="left" valignment="top" topline="true" leftline="true" usebox="none">
-\begin_inset Text
 
-\begin_layout Plain Layout
-
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-\begin_inset Formula $\beta$
-\end_inset
-
-
-\begin_inset CommandInset nomenclature
-LatexCommand nomenclature
-symbol "$\\beta$"
-description "REA relaxation coefficient"
-
-\end_inset
-
-
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-ratio
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="left" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-Relaxation coefficient
-\end_layout
-
-\end_inset
-</cell>
-</row>
-<row>
-<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-3
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="left" valignment="top" topline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-\begin_inset Formula $\overline{f_{up}}$
-\end_inset
-
-
-\begin_inset CommandInset nomenclature
-LatexCommand nomenclature
-symbol "$\\overline{f_{up}}$"
-description "mean gas flow through updraft-sampling denuder"
-
-\end_inset
-
-
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-Lpm
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="left" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-Mean volumetric flow through updraft denuder
-\end_layout
-
-\end_inset
-</cell>
-</row>
-<row>
-<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-4
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="left" valignment="top" topline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-\begin_inset Formula $\overline{f_{dn}}$
-\end_inset
-
-
-\begin_inset CommandInset nomenclature
-LatexCommand nomenclature
-symbol "$\\overline{f_{dn}}$"
-description "mean gas flow through downdraft-sampling denuder"
-
-\end_inset
-
-
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-Lpm
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="left" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-Mean volumetric flow through downdraft denuder
-\end_layout
-
-\end_inset
-</cell>
-</row>
-<row>
-<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-5
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="left" valignment="top" topline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-frac_up_on
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-\begin_inset Formula $\alpha_{up}$
-\end_inset
-
-
-\begin_inset CommandInset nomenclature
-LatexCommand nomenclature
-symbol "$\\alpha_{up}$"
-description "fraction of period sampling updrafts"
-
-\end_inset
-
-
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-ratio
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="left" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-Fraction of period sampling updrafts
-\end_layout
-
-\end_inset
-</cell>
-</row>
-<row>
-<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-6
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="left" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-frac_dn_on
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-\begin_inset Formula $\alpha_{dn}$
-\end_inset
-
-
-\begin_inset CommandInset nomenclature
-LatexCommand nomenclature
-symbol "$\\alpha_{dn}$"
-description "fraction of period sampling downdrafts"
-
-\end_inset
-
-
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-ratio
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="left" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-Fraction of period sampling downdrafts
-\end_layout
-
-\end_inset
-</cell>
-</row>
-</lyxtabular>
-
-\end_inset
-
-
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Subsubsection
-met
-\end_layout
-
-\begin_layout Standard
-General meteorological parameters calculated on half-hours.
- Always generated
-\end_layout
-
-\begin_layout Standard
-\begin_inset Float table
-placement H
-wide false
-sideways false
-status open
-
-\begin_layout Plain Layout
-\begin_inset Caption Standard
-
-\begin_layout Plain Layout
-Data table schema: stats30
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Plain Layout
-\noindent
-\align center
-\begin_inset Tabular
-<lyxtabular version="3" rows="13" columns="4">
-<features rotate="0" tabularvalignment="middle">
-<column alignment="center" valignment="top">
-<column alignment="left" valignment="top">
-<column alignment="center" valignment="top">
-<column alignment="left" valignment="top">
-<row>
-<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="left" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-Column name
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-Symbol
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="left" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-Description
-\end_layout
-
-\end_inset
-</cell>
-</row>
-<row>
-<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-1
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="left" valignment="top" topline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="left" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
 
 \end_layout
 
@@ -6891,7 +7574,7 @@ Description
 \begin_inset Text
 
 \begin_layout Plain Layout
-
+CO2_Avg
 \end_layout
 
 \end_inset
@@ -6900,7 +7583,7 @@ Description
 \begin_inset Text
 
 \begin_layout Plain Layout
-
+mmol/m^3
 \end_layout
 
 \end_inset
@@ -6909,6 +7592,15 @@ Description
 \begin_inset Text
 
 \begin_layout Plain Layout
+mean molar density of CO
+\begin_inset script subscript
+
+\begin_layout Plain Layout
+2
+\end_layout
+
+\end_inset
+
 
 \end_layout
 
@@ -6929,7 +7621,7 @@ Description
 \begin_inset Text
 
 \begin_layout Plain Layout
-
+CO2_Std
 \end_layout
 
 \end_inset
@@ -6938,7 +7630,7 @@ Description
 \begin_inset Text
 
 \begin_layout Plain Layout
-
+mmol/m^3
 \end_layout
 
 \end_inset
@@ -6947,6 +7639,15 @@ Description
 \begin_inset Text
 
 \begin_layout Plain Layout
+standard deviation of molar density of CO
+\begin_inset script subscript
+
+\begin_layout Plain Layout
+2
+\end_layout
+
+\end_inset
+
 
 \end_layout
 
@@ -6967,7 +7668,7 @@ Description
 \begin_inset Text
 
 \begin_layout Plain Layout
-
+H2O_Avg
 \end_layout
 
 \end_inset
@@ -6976,7 +7677,7 @@ Description
 \begin_inset Text
 
 \begin_layout Plain Layout
-
+mmol/m^3
 \end_layout
 
 \end_inset
@@ -6985,7 +7686,7 @@ Description
 \begin_inset Text
 
 \begin_layout Plain Layout
-
+mean molar density of H2O
 \end_layout
 
 \end_inset
@@ -7005,7 +7706,7 @@ Description
 \begin_inset Text
 
 \begin_layout Plain Layout
-
+H2O_Std
 \end_layout
 
 \end_inset
@@ -7014,7 +7715,7 @@ Description
 \begin_inset Text
 
 \begin_layout Plain Layout
-
+mmol/m^3
 \end_layout
 
 \end_inset
@@ -7023,7 +7724,7 @@ Description
 \begin_inset Text
 
 \begin_layout Plain Layout
-
+standard deviation of molar density of H2O
 \end_layout
 
 \end_inset
@@ -7043,7 +7744,7 @@ Description
 \begin_inset Text
 
 \begin_layout Plain Layout
-
+irga_press_Avg
 \end_layout
 
 \end_inset
@@ -7052,7 +7753,7 @@ Description
 \begin_inset Text
 
 \begin_layout Plain Layout
-
+kPa
 \end_layout
 
 \end_inset
@@ -7061,7 +7762,7 @@ Description
 \begin_inset Text
 
 \begin_layout Plain Layout
-
+mean ambient pressure (IRGA)
 \end_layout
 
 \end_inset
@@ -7072,6 +7773,18 @@ Description
 \begin_inset Text
 
 \begin_layout Plain Layout
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+rowcolor{band1}
+\end_layout
+
+\end_inset
+
 7
 \end_layout
 
@@ -7081,7 +7794,7 @@ Description
 \begin_inset Text
 
 \begin_layout Plain Layout
-
+irga_tmpr_Avg
 \end_layout
 
 \end_inset
@@ -7090,7 +7803,7 @@ Description
 \begin_inset Text
 
 \begin_layout Plain Layout
-
+degC
 \end_layout
 
 \end_inset
@@ -7099,7 +7812,7 @@ Description
 \begin_inset Text
 
 \begin_layout Plain Layout
-
+mean ambient temperature (IRGA)
 \end_layout
 
 \end_inset
@@ -7110,6 +7823,18 @@ Description
 \begin_inset Text
 
 \begin_layout Plain Layout
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+rowcolor{band1}
+\end_layout
+
+\end_inset
+
 8
 \end_layout
 
@@ -7119,7 +7844,7 @@ Description
 \begin_inset Text
 
 \begin_layout Plain Layout
-
+irga_CO2_signal_Avg
 \end_layout
 
 \end_inset
@@ -7128,7 +7853,7 @@ Description
 \begin_inset Text
 
 \begin_layout Plain Layout
-
+ratio
 \end_layout
 
 \end_inset
@@ -7137,7 +7862,7 @@ Description
 \begin_inset Text
 
 \begin_layout Plain Layout
-
+mean signal strength, CO2 channel
 \end_layout
 
 \end_inset
@@ -7148,6 +7873,18 @@ Description
 \begin_inset Text
 
 \begin_layout Plain Layout
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+rowcolor{band1}
+\end_layout
+
+\end_inset
+
 9
 \end_layout
 
@@ -7157,7 +7894,7 @@ Description
 \begin_inset Text
 
 \begin_layout Plain Layout
-
+irga_H2O_signal_Avg
 \end_layout
 
 \end_inset
@@ -7166,7 +7903,7 @@ Description
 \begin_inset Text
 
 \begin_layout Plain Layout
-
+ratio
 \end_layout
 
 \end_inset
@@ -7175,7 +7912,7 @@ Description
 \begin_inset Text
 
 \begin_layout Plain Layout
-
+mean signal strength, H2O channel
 \end_layout
 
 \end_inset
@@ -7195,7 +7932,7 @@ Description
 \begin_inset Text
 
 \begin_layout Plain Layout
-
+Ts_Avg
 \end_layout
 
 \end_inset
@@ -7204,7 +7941,7 @@ Description
 \begin_inset Text
 
 \begin_layout Plain Layout
-
+degC
 \end_layout
 
 \end_inset
@@ -7213,7 +7950,7 @@ Description
 \begin_inset Text
 
 \begin_layout Plain Layout
-
+mean sonic temperature
 \end_layout
 
 \end_inset
@@ -7233,7 +7970,7 @@ Description
 \begin_inset Text
 
 \begin_layout Plain Layout
-
+Ts_Std
 \end_layout
 
 \end_inset
@@ -7242,7 +7979,7 @@ Description
 \begin_inset Text
 
 \begin_layout Plain Layout
-
+degC
 \end_layout
 
 \end_inset
@@ -7251,133 +7988,7 @@ Description
 \begin_inset Text
 
 \begin_layout Plain Layout
-
-\end_layout
-
-\end_inset
-</cell>
-</row>
-<row>
-<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-12
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="left" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="left" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-
-\end_layout
-
-\end_inset
-</cell>
-</row>
-</lyxtabular>
-
-\end_inset
-
-
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Subsubsection
-info
-\end_layout
-
-\begin_layout Standard
-Records settings and program start-up results.
- Called at program start-up and any time settings are modified.
-\end_layout
-
-\begin_layout Standard
-\begin_inset Float table
-placement H
-wide false
-sideways false
-status open
-
-\begin_layout Plain Layout
-\begin_inset Caption Standard
-
-\begin_layout Plain Layout
-Data table schema: info
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Plain Layout
-\noindent
-\align center
-\begin_inset Tabular
-<lyxtabular version="3" rows="19" columns="4">
-<features rotate="0" tabularvalignment="middle">
-<column alignment="center" valignment="top">
-<column alignment="left" valignment="top">
-<column alignment="center" valignment="top">
-<column alignment="left" valignment="top">
-<row>
-<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="left" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-Column name
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-Symbol
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="left" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-Description
+standard deviation of sonic temperature
 \end_layout
 
 \end_inset
@@ -7388,7 +7999,7 @@ Description
 \begin_inset Text
 
 \begin_layout Plain Layout
-1
+12
 \end_layout
 
 \end_inset
@@ -7397,7 +8008,7 @@ Description
 \begin_inset Text
 
 \begin_layout Plain Layout
-sample_flow
+Uz_Std
 \end_layout
 
 \end_inset
@@ -7406,7 +8017,7 @@ sample_flow
 \begin_inset Text
 
 \begin_layout Plain Layout
-sLpm
+m/s
 \end_layout
 
 \end_inset
@@ -7415,425 +8026,7 @@ sLpm
 \begin_inset Text
 
 \begin_layout Plain Layout
-
-\end_layout
-
-\end_inset
-</cell>
-</row>
-<row>
-<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-2
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-zero_flow
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-sLpm
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-
-\end_layout
-
-\end_inset
-</cell>
-</row>
-<row>
-<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-3
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-deadband_mult
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-ratio
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-
-\end_layout
-
-\end_inset
-</cell>
-</row>
-<row>
-<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-4
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-deadband_min
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-m/s
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-
-\end_layout
-
-\end_inset
-</cell>
-</row>
-<row>
-<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-5
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-deadband_default
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-m/s
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-
-\end_layout
-
-\end_inset
-</cell>
-</row>
-<row>
-<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-6
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-site_mag_declin
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-degEofTN
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-
-\end_layout
-
-\end_inset
-</cell>
-</row>
-<row>
-<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-7
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-site_roughness
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-cm
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-
-\end_layout
-
-\end_inset
-</cell>
-</row>
-<row>
-<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-8
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-site_fetch_N
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-m
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-
-\end_layout
-
-\end_inset
-</cell>
-</row>
-<row>
-<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-9
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-site_fetch_E
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-m
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-
-\end_layout
-
-\end_inset
-</cell>
-</row>
-<row>
-<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-10
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-site_fetch_S
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-m
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-
-\end_layout
-
-\end_inset
-</cell>
-</row>
-<row>
-<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-11
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-site_fetch_W
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-m
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-
-\end_layout
-
-\end_inset
-</cell>
-</row>
-<row>
-<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-12
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-sonic_azimuth
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-degEofN
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-
+standard deviation of vertical wind speed
 \end_layout
 
 \end_inset
@@ -7853,7 +8046,7 @@ degEofN
 \begin_inset Text
 
 \begin_layout Plain Layout
-sonic_height
+L_
 \end_layout
 
 \end_inset
@@ -7867,11 +8060,11 @@ m
 
 \end_inset
 </cell>
-<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+<cell alignment="left" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
 \begin_inset Text
 
 \begin_layout Plain Layout
-
+Obukhov length
 \end_layout
 
 \end_inset
@@ -7891,7 +8084,7 @@ m
 \begin_inset Text
 
 \begin_layout Plain Layout
-data_sources
+u_star
 \end_layout
 
 \end_inset
@@ -7900,16 +8093,16 @@ data_sources
 \begin_inset Text
 
 \begin_layout Plain Layout
--
+m/s
 \end_layout
 
 \end_inset
 </cell>
-<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+<cell alignment="left" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
 \begin_inset Text
 
 \begin_layout Plain Layout
-1003: CSAT3 & LI7500 | 1004: CSAT3A & EC150
+friction velocity
 \end_layout
 
 \end_inset
@@ -7925,11 +8118,11 @@ data_sources
 
 \end_inset
 </cell>
-<cell alignment="left" valignment="top" topline="true" leftline="true" usebox="none">
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
 \begin_inset Text
 
 \begin_layout Plain Layout
-CompileResults
+tau
 \end_layout
 
 \end_inset
@@ -7938,7 +8131,7 @@ CompileResults
 \begin_inset Text
 
 \begin_layout Plain Layout
--
+Pa
 \end_layout
 
 \end_inset
@@ -7947,7 +8140,7 @@ CompileResults
 \begin_inset Text
 
 \begin_layout Plain Layout
-
+surface shear stress
 \end_layout
 
 \end_inset
@@ -7963,11 +8156,11 @@ CompileResults
 
 \end_inset
 </cell>
-<cell alignment="left" valignment="top" topline="true" leftline="true" usebox="none">
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
 \begin_inset Text
 
 \begin_layout Plain Layout
-CardStatus
+itt
 \end_layout
 
 \end_inset
@@ -7976,7 +8169,7 @@ CardStatus
 \begin_inset Text
 
 \begin_layout Plain Layout
--
+dimless
 \end_layout
 
 \end_inset
@@ -7985,7 +8178,7 @@ CardStatus
 \begin_inset Text
 
 \begin_layout Plain Layout
-
+integral turbulence test
 \end_layout
 
 \end_inset
@@ -8001,11 +8194,11 @@ CardStatus
 
 \end_inset
 </cell>
-<cell alignment="left" valignment="top" topline="true" leftline="true" usebox="none">
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
 \begin_inset Text
 
 \begin_layout Plain Layout
-RunSig
+fetch_70
 \end_layout
 
 \end_inset
@@ -8014,7 +8207,453 @@ RunSig
 \begin_inset Text
 
 \begin_layout Plain Layout
--
+m
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+estimate of 70% of measurement footprint
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+18
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+fetch_peak
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+m
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+estimate of peak measurement footprint
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+19
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Fco2
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+mg/(m^2 s)
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+density-corrected CO
+\begin_inset script subscript
+
+\begin_layout Plain Layout
+2
+\end_layout
+
+\end_inset
+
+ flux
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+20
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Fco2_raw
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+mg/(m^2 s)
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+unadjusted flux of CO
+\begin_inset script subscript
+
+\begin_layout Plain Layout
+2
+\end_layout
+
+\end_inset
+
+ 
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+21
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Fco2_LE_wpl
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+mg/(m^2 s)
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+water vapor density adjustment term 
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+22
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Fco2_H_wpl
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+mg/(m^2 s)
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+temperature density adjustment term
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+23
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+LE
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+W/m^2
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+latent heat flux
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+24
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+LE_raw
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+W/m^2
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+unadjusted latent heat flux
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+25
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+LE_wpl
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+W/m^2
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+water vapor density adjustment term
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+26
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Hs
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+W/m^2
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+presently, same value as 
+\begin_inset Flex Code
+status collapsed
+
+\begin_layout Plain Layout
+Hs_raw
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+27
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Hs_raw
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+W/m^2
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+sensible heat flux using sonic temperature
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+28
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+CE
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+radian
 \end_layout
 
 \end_inset
@@ -8030,20 +8669,1109 @@ RunSig
 </cell>
 </row>
 <row>
-<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
 \begin_inset Text
 
 \begin_layout Plain Layout
-18
+29
 \end_layout
 
 \end_inset
 </cell>
-<cell alignment="left" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
 \begin_inset Text
 
 \begin_layout Plain Layout
-ProgSig
+SE
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+radian
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+30
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+CT
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+radian
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+31
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+ST
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+radian
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+multirow{-4}{1
+\backslash
+linewidth}{double-rotation angles; see page 
+\backslash
+pageref{subsub:CE/SE/CT/ST}}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+32
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+W_std
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+m/s
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+double-rotated standard deviation of vertical wind speed
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+33
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+WS_sclr_Avg
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+m/s
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+mean scalar wind speed
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+34
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+WS_rslt_Avg
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+m/s
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+mean resultant wind speed
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+35
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+WD_unit_Avg
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+degEofN
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+mean unit wind direction
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+36
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+WD_rslt_Avg
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+degEofN
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+mean resultant wind direction
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+37
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+WD_Yamartino_Std
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+deg
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+standard deviation of wind direction (Yamartino formula)
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+38
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+WD_CSI_Std
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+deg
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+standard deviation of wind direction (CSI formula)
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+39
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+hmp_T_Avg
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+degC
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+mean ambient temperature (T/RH probe)
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+40
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+hmp_Tdew_Avg
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+degC
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+mean dewpoint temperature
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+41
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+hmp_RH_Avg
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+%
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+mean relative humidity
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+42
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+hmp_e_Avg
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+kPa
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+mean water vapor pressure
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+43
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+rho_a
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+kg/m^3
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+mean density of ambient air
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+44
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+rho_d
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+g/m^3
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+mean density of dry air
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+45
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+rho_v
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+g/m^3
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+mean density of H
+\begin_inset script subscript
+
+\begin_layout Plain Layout
+2
+\end_layout
+
+\end_inset
+
+O
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+46
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+rho_c
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+mg/m^3
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+mean density of CO
+\begin_inset script subscript
+
+\begin_layout Plain Layout
+2
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+47
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Lv
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+J/g
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+latent heat of vaporization
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+48
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+massFlow_zero_Avg
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+sLpm
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+mean mass flow of zero (shield) air
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+49
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+massFlow_up_Avg
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+sLpm
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+mean mass flow of air through up-draft denuder
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+50
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+massFlow_dn_Avg
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+sLpm
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+mean mass flow of air through down-draft denuder
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+51
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+volFlow_up_Avg
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+L/min
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+volumetric flow of air through up-draft denuder
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+52
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+volFlow_dn_Avg
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+L/min
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+volumetric flow of air through down-draft denuder
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+53
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+vlv_up_ON_Tot
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+scans
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+total instances of up-draft sampling valve activation
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+54
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+vlv_dn_ON_Tot
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+scans
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+total instances of down-draft sampling valve activation
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+55
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+samples_Tot
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+scans
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+total potential sampling instances
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+56
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+logger_tmpr_Avg
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+degC
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+mean temperature of datalogger
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+57
 \end_layout
 
 \end_inset
@@ -8052,7 +9780,16 @@ ProgSig
 \begin_inset Text
 
 \begin_layout Plain Layout
--
+logger_power_Avg
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+volts
 \end_layout
 
 \end_inset
@@ -8061,7 +9798,7 @@ ProgSig
 \begin_inset Text
 
 \begin_layout Plain Layout
-
+mean supply voltage to datalogger
 \end_layout
 
 \end_inset
@@ -8074,6 +9811,1326 @@ ProgSig
 
 \end_layout
 
+\end_inset
+
+
+\end_layout
+
+\begin_layout Paragraph
+Notes
+\end_layout
+
+\begin_layout Description
+CO2_Std/H2O_Std/Ts_Std/Uz_Std The standard deviations of sonic temperature
+ 
+\begin_inset Formula $\sigma{}_{T_{s}}$
+\end_inset
+
+, vertical wind speed 
+\begin_inset Formula $\sigma_{U_{z}}$
+\end_inset
+
+, carbon dioxide molar density 
+\begin_inset Formula $\sigma_{CO_{2}}$
+\end_inset
+
+, and water vapor molar density 
+\begin_inset Formula $\sigma_{H_{2}O}$
+\end_inset
+
+ are derived by taking the square roots of their (co)variances.
+ 
+\end_layout
+
+\begin_layout Standard
+\align center
+\begin_inset Formula $\begin{array}{ccc}
+\sigma_{T_{s}}=\sqrt{\overline{T_{s}^{\prime}T_{s}^{\prime}}} & \qquad\qquad & \sigma_{CO_{2}}=\sqrt{\overline{CO_{2}^{\prime}CO_{2}^{\prime}}}\\
+\sigma_{U_{z}}=\sqrt{\overline{U_{z}^{\prime}U_{z}^{\prime}}} &  & \sigma_{H_{2}O}=\sqrt{\overline{H_{2}O^{\prime}H_{2}O^{\prime}}}
+\end{array}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Description
+Ts* See notes for 
+\begin_inset Flex MenuItem
+status collapsed
+
+\begin_layout Plain Layout
+sonic_Ts
+\end_layout
+
+\end_inset
+
+ (ts_fast, 
+\begin_inset CommandInset ref
+LatexCommand vref
+reference "sub:ts_fast"
+
+\end_inset
+
+).
+\end_layout
+
+\begin_layout Description
+Uz_Std This value has not been subjected to double-rotation.
+\end_layout
+
+\begin_layout Description
+L_ Obukhov length 
+\begin_inset Formula $L$
+\end_inset
+
+ in meters (
+\begin_inset Flex MenuItem
+status open
+
+\begin_layout Plain Layout
+L_
+\end_layout
+
+\end_inset
+
+) is calculated using friction velocity 
+\begin_inset Formula $u_{*}$
+\end_inset
+
+ (
+\begin_inset Flex MenuItem
+status collapsed
+
+\begin_layout Plain Layout
+u_star
+\end_layout
+
+\end_inset
+
+), mean ambient air temperature 
+\begin_inset Formula $\overline{T_{a}}$
+\end_inset
+
+ (
+\begin_inset Flex MenuItem
+status collapsed
+
+\begin_layout Plain Layout
+irga_tmpr_Avg
+\end_layout
+
+\end_inset
+
+ if EC150 is present, else 
+\begin_inset Flex MenuItem
+status collapsed
+
+\begin_layout Plain Layout
+hmp_T_Avg
+\end_layout
+
+\end_inset
+
+) and the covariance of sonic temperature with unrotated vertical wind speed,
+ 
+\begin_inset Formula $\overline{T_{s}^{\prime}U_{z}^{\prime}}$
+\end_inset
+
+, as:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{eqnarray*}
+L & = & \frac{-u_{*}^{3}(\overline{T_{a}}+273.15)}{kg\overline{T_{s}^{\prime}U_{z}^{\prime}}}\\
+where &  & k=0.41\:\mathrm{\textrm{(Von Kármán constant)}}\\
+ &  & g=9.81\: m/s^{2}\:\mathrm{\textrm{(gravitational acceleration)}}
+\end{eqnarray*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Description
+u_star Friction velocity 
+\begin_inset Formula $u_{*}$
+\end_inset
+
+ in m/s (
+\begin_inset Flex MenuItem
+status open
+
+\begin_layout Plain Layout
+u_star
+\end_layout
+
+\end_inset
+
+) is derived from covariances of horizontal wind components with vertical
+ wind speed:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+u_{*}=\sqrt[4]{\overline{U_{x}^{\prime}U_{z}^{\prime}}+\overline{U_{y}^{\prime}U_{z}^{\prime}}}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Description
+tau Surface shear stress 
+\begin_inset Formula $\tau$
+\end_inset
+
+ in Pascals (
+\begin_inset Flex MenuItem
+status collapsed
+
+\begin_layout Plain Layout
+tau
+\end_layout
+
+\end_inset
+
+) is derived from covariances of horizontal wind components with vertical
+ wind speed and ambient air density 
+\begin_inset Formula $\rho_{a}$
+\end_inset
+
+ (
+\begin_inset Flex MenuItem
+status collapsed
+
+\begin_layout Plain Layout
+rho_a_Avg
+\end_layout
+
+\end_inset
+
+):
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\tau=\rho_{a}\,\sqrt{\overline{U_{x}^{\prime}U_{z}^{\prime}}+\overline{U_{y}^{\prime}U_{z}^{\prime}}}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Description
+itt The integral turbulence test following Hammerle et al (2007) is expressed
+ as the percentage difference between measured ratio of 
+\begin_inset Formula $\sigma_{w}$
+\end_inset
+
+ (
+\begin_inset Flex MenuItem
+status collapsed
+
+\begin_layout Plain Layout
+Uz_Std
+\end_layout
+
+\end_inset
+
+) to 
+\begin_inset Formula $u_{*}$
+\end_inset
+
+ (
+\begin_inset Flex MenuItem
+status collapsed
+
+\begin_layout Plain Layout
+u_star
+\end_layout
+
+\end_inset
+
+) and the theoretical value 
+\begin_inset Formula $\phi_{w}$
+\end_inset
+
+ prescribed by the Monin-Obukhov hypothesis 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "article-itt"
+
+\end_inset
+
+.
+ Outside the range shown for stability parameter 
+\begin_inset Formula $\zeta$
+\end_inset
+
+, 
+\begin_inset Formula $\Delta_{ITT}$
+\end_inset
+
+ is undefined (NAN).
+ 
+\begin_inset Formula 
+\[
+\phi_{w}=\left(\frac{\sigma_{w}}{u_{*}}\right)_{theory}=\begin{cases}
+1.25(1+3|\zeta|)^{1/3} & -2\leq\zeta<0\\
+1.25(1+0.2\zeta) & 0\leq\zeta<1
+\end{cases}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\Delta_{ITT}=100\frac{|\sigma_{w}/u_{*}-\phi_{w}|}{\phi_{w}}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Description
+fetch_70 The 70% flux fetch requirement is the distance downwind 
+\begin_inset Formula $x$
+\end_inset
+
+ to reach 
+\begin_inset Formula $F/S_{o}=0.7$
+\end_inset
+
+ where 
+\begin_inset Formula $F$
+\end_inset
+
+ is measured flux and 
+\begin_inset Formula $S_{o}$
+\end_inset
+
+ is surface flux.
+ This distance is expressed by adapting equation (15) of the model put forth
+ by Hsieh, Katul and Chi (2000) 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "article-footprint"
+
+\end_inset
+
+: 
+\begin_inset Formula 
+\begin{eqnarray*}
+ &  & Z_{u}=Z_{m}(\ln(Z_{m}/Z_{o})-1+Z_{o}/Z_{m})\\
+x=\frac{-D\,|L|^{(1-P)}Z_{u}^{P}}{k^{2}\ln(F/S_{o})} & \quad where & Z_{m}\,\textrm{is measurement height}\\
+ &  & Z_{o}\,\textrm{is roughness height}\\
+ &  & L\,\textrm{is Obukhov length}\\
+ &  & k=0.4\\
+ &  & F/S_{o}=0.7\\
+ & \quad and & \begin{cases}
+D=0.28;\, P=0.59 & \textrm{for unstable conditions}\\
+D=0.97;\, P=1 & \textrm{for near neutral and neutral conditions}\\
+D=2.44;\, P=1.33 & \textrm{for stable conditions}
+\end{cases}
+\end{eqnarray*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Description
+Fco2* The 
+\begin_inset Quotes eld
+\end_inset
+
+raw
+\begin_inset Quotes erd
+\end_inset
+
+ flux of CO2 (
+\begin_inset Flex MenuItem
+status collapsed
+
+\begin_layout Plain Layout
+Fco2_raw
+\end_layout
+
+\end_inset
+
+) is the covariance of molar density of CO2 
+\begin_inset Formula $\varrho_{c}$
+\end_inset
+
+ (
+\begin_inset Flex MenuItem
+status collapsed
+
+\begin_layout Plain Layout
+irga_CO2
+\end_layout
+
+\end_inset
+
+) with unrotated vertical wind speed 
+\begin_inset Formula $U_{z}$
+\end_inset
+
+ (
+\begin_inset Flex MenuItem
+status collapsed
+
+\begin_layout Plain Layout
+sonic_Uz
+\end_layout
+
+\end_inset
+
+), scaled by the molecular weight of CO2 (
+\begin_inset Formula $M\! W_{c}$
+\end_inset
+
+).
+ The 
+\begin_inset Quotes eld
+\end_inset
+
+corrected
+\begin_inset Quotes erd
+\end_inset
+
+ flux (
+\begin_inset Flex MenuItem
+status collapsed
+
+\begin_layout Plain Layout
+Fco2
+\end_layout
+
+\end_inset
+
+) is the 
+\begin_inset Quotes eld
+\end_inset
+
+raw
+\begin_inset Quotes erd
+\end_inset
+
+ flux plus two correction terms (
+\begin_inset Flex MenuItem
+status collapsed
+
+\begin_layout Plain Layout
+Fco2_LE_wpl
+\end_layout
+
+\end_inset
+
+, 
+\begin_inset Flex MenuItem
+status collapsed
+
+\begin_layout Plain Layout
+Fco2_H_wpl
+\end_layout
+
+\end_inset
+
+) as described by equation (24) of Webb, Pearman and Leuning (1980) 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "article-wpl80"
+
+\end_inset
+
+.
+ 
+\begin_inset Formula 
+\[
+F_{CO2}=\left(F_{CO2}\right)_{raw}+\left(F_{CO2}\right)_{LE}+\left(F_{CO2}\right)_{H}\qquad where
+\]
+
+\end_inset
+
+
+\begin_inset Formula 
+\begin{align*}
+\left(F_{CO2}\right)_{raw} & =\overline{\varrho_{c}^{\prime}U_{z}^{\prime}}\left(M\! W_{c}\right) & M\! W_{c} & =44.010\,\textrm{g/mol}\\
+\left(F_{CO2}\right)_{LE} & =\frac{\rho_{c}}{\rho_{d}}\overline{\varrho_{v}^{\prime}U_{z}^{\prime}}\left(M\! W_{d}\right) & M\! W_{v} & =18.01528\,\textrm{g/mol}\\
+\left(F_{CO2}\right)_{H} & =\rho_{c}\left(1+\frac{M\! W_{d}}{M\! W_{v}}\frac{\rho_{v}}{\rho_{d}}\right)\frac{\overline{T_{s}^{\prime}U_{z}^{\prime}}}{\overline{T_{a}}+273.15}\quad & M\! W_{d} & =28.98\,\textrm{g/mol}
+\end{align*}
+
+\end_inset
+
+If the integrated IRGA (EC150) is used, the most recent mean temperature
+ (
+\begin_inset Flex MenuItem
+status collapsed
+
+\begin_layout Plain Layout
+irga_tmpr_Avg
+\end_layout
+
+\end_inset
+
+) is used for ambient temperature 
+\begin_inset Formula $\overline{T_{a}}$
+\end_inset
+
+; otherwise, mean temperature from the T/RH probe is used (
+\begin_inset Flex MenuItem
+status collapsed
+
+\begin_layout Plain Layout
+hmp_T_Avg
+\end_layout
+
+\end_inset
+
+).
+\end_layout
+
+\begin_layout Description
+LE* The 
+\begin_inset Quotes eld
+\end_inset
+
+raw
+\begin_inset Quotes erd
+\end_inset
+
+ latent heat flux 
+\begin_inset Flex MenuItem
+status collapsed
+
+\begin_layout Plain Layout
+(LE_raw
+\end_layout
+
+\end_inset
+
+) is the covariance of molar density of water vapor 
+\begin_inset Formula $\varrho_{v}$
+\end_inset
+
+ (
+\begin_inset Flex MenuItem
+status collapsed
+
+\begin_layout Plain Layout
+irga_H2O
+\end_layout
+
+\end_inset
+
+) with unrotated vertical wind speed 
+\begin_inset Formula $U_{z}$
+\end_inset
+
+ 
+\begin_inset Flex MenuItem
+status collapsed
+
+\begin_layout Plain Layout
+(sonic_Uz
+\end_layout
+
+\end_inset
+
+), scaled by the molecular weight of H2O (
+\begin_inset Formula $M\! W_{H2O}$
+\end_inset
+
+) and latent heat of vaporization 
+\begin_inset Formula $L_{v}$
+\end_inset
+
+ (
+\begin_inset Flex MenuItem
+status collapsed
+
+\begin_layout Plain Layout
+Lv
+\end_layout
+
+\end_inset
+
+).
+ The 
+\begin_inset Quotes eld
+\end_inset
+
+corrected
+\begin_inset Quotes erd
+\end_inset
+
+ flux (LE) is the 
+\begin_inset Quotes eld
+\end_inset
+
+raw
+\begin_inset Quotes erd
+\end_inset
+
+ flux plus a correction term (
+\begin_inset Flex MenuItem
+status collapsed
+
+\begin_layout Plain Layout
+LE_wpl
+\end_layout
+
+\end_inset
+
+) as described by equation (25) of 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "article-wpl80"
+
+\end_inset
+
+.
+ 
+\begin_inset Formula 
+\[
+L\! E=L\! E_{raw}+L\! E_{WPL}\qquad where
+\]
+
+\end_inset
+
+
+\begin_inset Formula $M\! W_{c}$
+\end_inset
+
+, 
+\begin_inset Formula $M\! W_{v}$
+\end_inset
+
+, and 
+\begin_inset Formula $M\! W_{d}$
+\end_inset
+
+ are defined above, and
+\begin_inset Formula 
+\begin{align*}
+L\! E_{raw} & =\overline{\varrho_{c}^{\prime}U_{z}^{\prime}}\left(M\! W_{v}\right)\left(L_{v}\right)\\
+L\! E_{WPL} & =L_{v}\left(1+\frac{M\! W_{d}}{M\! W_{v}}\frac{\rho_{v}}{\rho_{d}}\right)\left(\overline{\varrho_{v}^{\prime}U_{z}^{\prime}}\left(M\! W_{v}\right)+\frac{\overline{T_{s}^{\prime}U_{z}^{\prime}}\rho_{v}}{\overline{T_{a}}+273.15}\right)
+\end{align*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Description
+Hs* Presently, both sensible heat flux values 
+\begin_inset Flex MenuItem
+status collapsed
+
+\begin_layout Plain Layout
+Hs
+\end_layout
+
+\end_inset
+
+ and 
+\begin_inset Flex MenuItem
+status collapsed
+
+\begin_layout Plain Layout
+Hs_raw
+\end_layout
+
+\end_inset
+
+ will be the same.
+ This is because the 
+\begin_inset Quotes eld
+\end_inset
+
+raw
+\begin_inset Quotes erd
+\end_inset
+
+ flux calculated based on sonic temperature is not yet corrected for the
+ effects of water vapor.
+ The 
+\begin_inset Quotes eld
+\end_inset
+
+raw
+\begin_inset Quotes erd
+\end_inset
+
+ flux is calculated using the covariance of sonic temperature 
+\begin_inset Formula $T_{s}$
+\end_inset
+
+ and unrotated vertical wind speed 
+\begin_inset Formula $U_{z}$
+\end_inset
+
+ with ambient air density 
+\begin_inset Formula $\rho_{a}$
+\end_inset
+
+ and specific heat capacity of dry air at constant pressure 
+\begin_inset Formula $C_{pd}$
+\end_inset
+
+ as: 
+\begin_inset Formula 
+\[
+H_{s}=\left(H_{s}\right)_{raw}=\overline{T_{s}^{\prime}U_{z}^{\prime}}\left(\rho_{a}\right)\left(C_{pd}\right)
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Description
+CE/SE/CT/ST
+\begin_inset CommandInset label
+LatexCommand label
+name "subsub:CE/SE/CT/ST"
+
+\end_inset
+
+ These are the cosine and sine values of the two rotation angles, eta and
+ theta.
+ They will be used in the following half-hour interval for real-time rotation
+ of the vertical wind speed (
+\begin_inset Flex MenuItem
+status collapsed
+
+\begin_layout Plain Layout
+Uz_rot
+\end_layout
+
+\end_inset
+
+ under 
+\begin_inset CommandInset ref
+LatexCommand vref
+reference "sub:ts_fast"
+
+\end_inset
+
+) 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "article-coordrot,book-lee-2004"
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+\align center
+\begin_inset Formula $\begin{array}{ccc}
+C\! E=\frac{\overline{U_{x}}}{\sqrt{\overline{U_{x}}^{2}+\overline{U_{y}}^{2}}} & \qquad\qquad & C\! T=\frac{\sqrt{\overline{U_{x}}^{2}+\overline{U_{y}}^{2}}}{\sqrt{\overline{U_{x}}^{2}+\overline{U_{y}}^{2}+\overline{U_{z}}^{2}}}\\
+S\! E=\frac{\overline{U_{y}}}{\sqrt{\overline{U_{x}}^{2}+\overline{U_{y}}^{2}}} &  & S\! T=\frac{\overline{U_{z}}}{\sqrt{\overline{U_{x}}^{2}+\overline{U_{y}}^{2}+\overline{U_{z}}^{2}}}
+\end{array}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Description
+W_Std This value represents 
+\begin_inset Flex MenuItem
+status collapsed
+
+\begin_layout Plain Layout
+Uz_Std
+\end_layout
+
+\end_inset
+
+ after double-rotation using the actual wind statistics of the current half-hour
+ interval.
+ This is in contrast to the rotation applied to 
+\begin_inset Flex MenuItem
+status collapsed
+
+\begin_layout Plain Layout
+Uz_rot
+\end_layout
+
+\end_inset
+
+ of the ts_fast table (
+\begin_inset CommandInset ref
+LatexCommand vref
+reference "sub:ts_fast"
+
+\end_inset
+
+) which is based on the previous half-hour.
+ 
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{eqnarray*}
+\sigma_{W} & = & \sqrt{\sigma_{z}C\! T^{2}+\sigma_{x}S\! T^{2}C\! E^{2}+\sigma_{y}S\! T^{2}S\! E^{2}+2\overline{U_{x}^{\prime}U_{z}^{\prime}}C\! T\cdot C\! E\cdot S\! T-2\overline{U_{y}^{\prime}U_{z}^{\prime}}C\! T\cdot S\! T\cdot S\! E+2\overline{U_{x}^{\prime}U_{y}^{\prime}}C\! E\cdot S\! E\cdot S\! T^{2}}
+\end{eqnarray*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Description
+WD_unit/rslt_Avg If the sonic anemometer azimuth setting has been set, the
+ resulting wind directions are adjusted from the sonic-local coordinate
+ system to geographic coordinates: 
+\begin_inset Formula 
+\[
+W\! D_{geo}=(360+WD_{sonic}+azimuth+magnetic\, declination)\mod360
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Description
+WD_Yamartino_Std Standard deviation of wind direction calculated using Yamartino
+ algorithm.
+ 
+\begin_inset Quotes eld
+\end_inset
+
+This option complies with EPA guidelines for use with straight-line Gaussian
+ dispersion models to model plume transport
+\begin_inset Quotes erd
+\end_inset
+
+ 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "helpfile-windvector"
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Description
+WD_CSI_Std Standard deviation of wind direction calculated using Campbell
+ Scientific's wind speed weighted algorithm.
+ 
+\begin_inset Quotes eld
+\end_inset
+
+Use of the resultant mean horizontal wind direction is not recommended for
+ straight-line Gaussian dispersion models, but may be used to model transport
+ direction in a variable-trajectory model
+\begin_inset Quotes erd
+\end_inset
+
+ 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "helpfile-windvector"
+
+\end_inset
+
+.
+ 
+\end_layout
+
+\begin_layout Description
+hmp_Tdew_Avg 
+\end_layout
+
+\begin_layout Description
+hmp_RH_Avg Since relative humidity is a complex non-linear scalar, it cannot
+ be meaningfully averaged in a naive manner.
+ Instead, the mean saturation vapor pressure 
+\begin_inset Formula $\overline{e_{sat}}$
+\end_inset
+
+ (kPa) is first calculated using mean ambient temperature 
+\begin_inset Formula $\overline{T_{a}}$
+\end_inset
+
+ (degC) and the built-in program instruction 
+\begin_inset Flex Code
+status collapsed
+
+\begin_layout Plain Layout
+SatVP
+\end_layout
+
+\end_inset
+
+:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\overline{e_{sat}}=\mathtt{SatVP(}\overline{T_{a}})
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{eqnarray*}
+\mathtt{SatVP(T)}:\: e_{sat} & = & 0.1(A_{0}+A_{1}T+A_{2}T^{2}+A_{3}T^{3}+A_{4}T^{4}+A_{5}T^{5}+A_{6}T^{6})\\
+where &  & A_{0}=6.107799961\\
+ &  & A_{1}=4.436518521\times10^{-5}\\
+ &  & A_{2}=1.428945805\times10^{-2}\\
+ &  & A_{3}=2.650648471\times10^{-4}\\
+ &  & A_{4}=3.031240396\times10^{-6}\\
+ &  & A_{5}=2.034080948\times10^{-8}\\
+ &  & A_{6}=6.136820929\times10^{-11}
+\end{eqnarray*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+The mean relative humidity 
+\begin_inset Formula $\overline{RH}$
+\end_inset
+
+ (%) is then derived by combining the results with 
+\begin_inset Flex MenuItem
+status collapsed
+
+\begin_layout Plain Layout
+hmp_e_Avg
+\end_layout
+
+\end_inset
+
+, the mean water vapor pressure 
+\begin_inset Formula $\overline{e}$
+\end_inset
+
+ (kPa): 
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\overline{RH}=100\cdot\frac{\overline{e}}{\overline{e_{sat}}}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Description
+hmp_e_Avg The mean water vapor pressure is the mean value of 1 Hz values
+ of water vapor pressure calculated using the built-in instruction 
+\begin_inset Flex Code
+status collapsed
+
+\begin_layout Plain Layout
+VaporPressure
+\end_layout
+
+\end_inset
+
+ and 
+\begin_inset Flex MenuItem
+status collapsed
+
+\begin_layout Plain Layout
+hmp_T
+\end_layout
+
+\end_inset
+
+/
+\begin_inset Flex MenuItem
+status collapsed
+
+\begin_layout Plain Layout
+hmp_RH
+\end_layout
+
+\end_inset
+
+ from the ts_slow table (pg 
+\begin_inset CommandInset ref
+LatexCommand vref
+reference "sub:ts_slow"
+
+\end_inset
+
+).
+ 
+\begin_inset Formula 
+\[
+\overline{e}=\overline{R\! H\frac{e_{sat}}{100}}
+\]
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+Internally, 
+\begin_inset Flex Code
+status collapsed
+
+\begin_layout Plain Layout
+VaporPressure
+\end_layout
+
+\end_inset
+
+ uses the saturation vapor pressure 
+\begin_inset Formula $e_{sat}$
+\end_inset
+
+ is calculated from 
+\begin_inset Flex MenuItem
+status collapsed
+
+\begin_layout Plain Layout
+hmp_T
+\end_layout
+
+\end_inset
+
+/
+\begin_inset Flex MenuItem
+status collapsed
+
+\begin_layout Plain Layout
+hmp_RH
+\end_layout
+
+\end_inset
+
+ using the formula described in 
+\begin_inset Flex MenuItem
+status collapsed
+
+\begin_layout Plain Layout
+hmp_RH_Avg
+\end_layout
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Description
+rho_a The mass density of ambient air 
+\begin_inset Formula $\rho_{a}$
+\end_inset
+
+ accounts for the water vapor content.
+ If an integrated sonic/IRGA (EC150) is used, the mean IRGA temperature
+ is used for ambient air temperature 
+\begin_inset Formula $\overline{T_{a}}$
+\end_inset
+
+, otherwise the mean T/RH probe temperature is used.
+ The mean barometric pressure 
+\begin_inset Formula $\overline{P_{a}}$
+\end_inset
+
+ is always from the IRGA and the mean water vapor pressure 
+\begin_inset Formula $\overline{e}$
+\end_inset
+
+ is always from the T/RH probe.
+ 
+\begin_inset Formula 
+\[
+\rho_{a}=1000\left(\frac{\overline{P_{a}}-\overline{e}}{R_{d}(\overline{T_{a}}+273.15)}+\frac{\overline{e}}{R_{v}(\overline{T_{a}}+273.15)}\right)
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{eqnarray*}
+R_{d}=287.058\,\unitfrac{J}{kg\cdot K} & \qquad\qquad & R_{v}=461.495\,\nicefrac{J}{kg\cdot K}
+\end{eqnarray*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\frac{kg}{m^{3}}=\left(\frac{1000\, Pa}{kPa}\right)\left(\frac{kPa}{\left(\nicefrac{J}{kg\cdot K}\right)K}\cdot\frac{J}{Pa\cdot m^{3}}+\frac{kPa}{\left(\nicefrac{J}{kg\cdot K}\right)K}\cdot\frac{J}{Pa\cdot m^{3}}\right)
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Description
+rho_d The mass density of dry air 
+\begin_inset Formula $\rho_{d}$
+\end_inset
+
+ is the ambient air density 
+\begin_inset Formula $\rho_{a}$
+\end_inset
+
+ (
+\begin_inset Flex MenuItem
+status collapsed
+
+\begin_layout Plain Layout
+rho_a
+\end_layout
+
+\end_inset
+
+) less the density of water vapor 
+\begin_inset Formula $\rho_{v}$
+\end_inset
+
+ (
+\begin_inset Flex MenuItem
+status collapsed
+
+\begin_layout Plain Layout
+rho_v
+\end_layout
+
+\end_inset
+
+).
+ 
+\begin_inset Formula 
+\[
+\overline{\rho_{d}},\,\frac{g}{m^{3}}=\left(\overline{\rho_{a}},\,\frac{kg}{m^{3}}\right)\left(\frac{10^{3}g}{kg}\right)-\left(\overline{\rho_{v}},\,\frac{g}{m^{3}}\right)
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Description
+rho_c/rho_v The mass densities 
+\begin_inset Formula $\rho_{c}$
+\end_inset
+
+ and 
+\begin_inset Formula $\rho_{v}$
+\end_inset
+
+ of CO
+\begin_inset script subscript
+
+\begin_layout Plain Layout
+2
+\end_layout
+
+\end_inset
+
+ and H
+\begin_inset script subscript
+
+\begin_layout Plain Layout
+2
+\end_layout
+
+\end_inset
+
+O, respectively, are the molar densities 
+\begin_inset Flex MenuItem
+status collapsed
+
+\begin_layout Plain Layout
+CO2_Avg
+\end_layout
+
+\end_inset
+
+ and 
+\begin_inset Flex MenuItem
+status collapsed
+
+\begin_layout Plain Layout
+H2O_Avg
+\end_layout
+
+\end_inset
+
+ scaled by molecular weight:
+\end_layout
+
+\begin_layout Standard
+\align center
+\begin_inset Formula $\begin{aligned}\rho_{c},\,\frac{mg}{m^{3}} & =\left(CO_{2},\,\frac{mmol}{m^{3}}\right)\left(44.010\,\frac{g}{mol}\right)\\
+\rho_{v},\,\frac{g}{m^{3}} & =\left(H_{2}\! O,\,\frac{g}{m^{3}}\right)\left(18.01528\,\frac{g}{mol}\right)\left(\frac{mol}{10^{3}\, mmol}\right)
+\end{aligned}
+$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Description
+Lv The latent heat of vaporization for water 
+\begin_inset Formula $L_{v}$
+\end_inset
+
+ is calculated according to formula 8 of 
+\emph on
+A new formula for latent heat of vaporization as a function of temperature
+\emph default
+ 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "article-Lv"
+
+\end_inset
+
+ where ambient temperature 
+\begin_inset Formula $T_{a}$
+\end_inset
+
+ is in degrees Celcius.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+L_{v},\,\frac{J}{g}=1918.46\left(\frac{\overline{T_{a}}+273.13}{\overline{T_{a}}+239.24}\right)^{2}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Description
+volFlow_up/dn_Avg These values represent mean volumetric flow 
+\begin_inset Formula $V$
+\end_inset
+
+ calculated using 1 Hz measurements of mass flow rate 
+\begin_inset Formula $\dot{m}$
+\end_inset
+
+, ambient temperature 
+\begin_inset Formula $T_{a}$
+\end_inset
+
+, and barometric pressure 
+\begin_inset Formula $P_{a}$
+\end_inset
+
+.
+ The mean of point-to-point conversions is thought to be more representative
+ than a conversion based on half-hour mean values.
+ 
+\begin_inset VSpace smallskip
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+Using the manufacturer-defined values for standard conditions of 
+\begin_inset Formula $T_{0}=$
+\end_inset
+
+70 ºF (21.1 ºC) and 
+\begin_inset Formula $P_{0}=$
+\end_inset
+
+14.69 psia (101.28 kPa), the volumetric flow is: 
+\begin_inset Formula 
+\[
+V,\,\frac{L}{min}=\left(\dot{m},\,\frac{std.\, L}{min}\right)\left(\frac{P_{0}}{P_{a}}\right)\left(\frac{T_{a}+273.15}{T_{0}+273.15}\right)
+\]
+
+\end_inset
+
+If the integrated IRGA (EC150) is used, its measurements (
+\begin_inset Flex MenuItem
+status collapsed
+
+\begin_layout Plain Layout
+irga_tmpr
+\end_layout
+
+\end_inset
+
+) are used for ambient temperature; otherwise, temperature from the T/RH
+ probe is used (
+\begin_inset Flex MenuItem
+status collapsed
+
+\begin_layout Plain Layout
+hmp_T
+\end_layout
+
+\end_inset
+
+).
+\end_layout
+
+\begin_layout Description
+vlv_up/dn_ON_Tot The valve activation ratio is expressed as the ratio of
+ these values to 
+\begin_inset Flex MenuItem
+status collapsed
+
+\begin_layout Plain Layout
+samples_Tot
+\end_layout
+
+\end_inset
+
+.
+ 
+\begin_inset Formula 
+\begin{eqnarray*}
+\alpha_{up}=\frac{\textrm{vlv\_up\_ON\_Tot}}{\textrm{samples\_Tot}} & \qquad & \alpha_{dn}=\frac{\textrm{vlv\_dn\_ON\_Tot}}{\textrm{samples\_Tot}}
+\end{eqnarray*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Newpage clearpage
 \end_inset
 
 
@@ -8157,6 +11214,68 @@ Standard deviation of vertical wind
 \end_inset
 
 
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+addcontentsline{toc}{section}{References}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "book-arya-1999"
+
+\end_inset
+
+Arya.
+ S.
+ Pal.
+ 
+\emph on
+Air Pollution Meteorology and Dispersion
+\emph default
+.
+ 1999.
+ Oxford University Press, Inc.
+ ISBN: 0-19-507398-3.
+ 
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "manual-cr3000"
+
+\end_inset
+
+Campbell Scientific Inc.
+ 
+\emph on
+CR3000 Measurement and Control System Operator's Manual
+\emph default
+.
+ Rev 3/13.
+ Online: 
+\begin_inset Flex URL
+status collapsed
+
+\begin_layout Plain Layout
+
+http://s.campbellsci.com/documents/us/manuals/cr3000.pdf
+\end_layout
+
+\end_inset
+
+.
 \end_layout
 
 \begin_layout Bibliography
@@ -8173,33 +11292,262 @@ CSAT3 Three Dimensional Sonic Anemometer.
 
 \emph default
  Rev 11/07.
- Online: http://campbellsci.com/manuals
+ Online: 
+\begin_inset Flex URL
+status collapsed
+
+\begin_layout Plain Layout
+
+http://s.campbellsci.com/documents/us/manuals/csat3.pdf
+\end_layout
+
+\end_inset
+
+.
 \end_layout
 
 \begin_layout Bibliography
 \begin_inset CommandInset bibitem
 LatexCommand bibitem
-key "formula-Lv"
+key "manual-ec100"
+
+\end_inset
+
+Campbell Scientific Inc.
+ 
+\emph on
+EC150 CO2 and H2O Open-Path Gas Analyzer and EC100 Electronics with Optional
+ CSAT3A 3D Sonic Anemometer Instruction Manual.
+
+\emph default
+ Rev 3/11.
+ Online: 
+\begin_inset Flex URL
+status collapsed
+
+\begin_layout Plain Layout
+
+http://s.campbellsci.com/documents/us/manuals/ec150.pdf
+\end_layout
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "helpfile-windvector"
+
+\end_inset
+
+Campbell Scientific Inc.
+ 
+\begin_inset Quotes eld
+\end_inset
+
+WindVector.
+\begin_inset Quotes erd
+\end_inset
+
+ 
+\emph on
+CRBasic Program Reference
+\emph default
+.
+ Version CR5000.Std.07.
+ 2013-06-06.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "article-coordrot"
+
+\end_inset
+
+Finnigan J.J., Clement R., Malhi Y., Leuning R., and Cleugh H.A.
+ A re-evaluation of long-term flux measurement techniques, Part I: Averaging
+ and Coordinate Rotation.
+ Boundary-Layer Meteorology 107: 1-48, 2003.
+ 
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "article-itt"
+
+\end_inset
+
+Hammerle, A., A.
+ Haslwanter, M.
+ Schmitt, M.
+ Bahn, U.
+ Tappeiner, A.
+ Cernusca and G.
+ Wohlfahrt.
+ Eddy covariance measurements of carbon dioxide, latent and sensible energy
+ fluxes above a meadow on a mountain slope.
+ Boundary-Layer Meteorology.
+ 02/2007; 122(2):397-416.
+ DOI: 10.1007/s10546-006-9109-x.
+ Online: 
+\begin_inset Flex URL
+status collapsed
+
+\begin_layout Plain Layout
+
+http://www.researchgate.net/publication/225103117_Eddy_covariance_measurements_of_
+carbon_dioxide_latent_and_sensible_energy_fluxes_above_a_meadow_on_a_mountain_sl
+ope
+\end_layout
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "article-Lv"
 
 \end_inset
 
 Henderson-Sellers, B.
  (1984), A new formula for latent heat of vaporization of water as a function
  of temperature.
- Q.J.R.
- Meteorol.
+ Quart.
+ J.
+ R.
+ Met.
  Soc., 110: 1186–1190.
- doi: 10.1002/qj.49711046626
+ DOI: 10.1002/qj.49711046626
 \end_layout
 
 \begin_layout Bibliography
 \begin_inset CommandInset bibitem
 LatexCommand bibitem
-key "key-3"
+key "article-footprint"
 
 \end_inset
 
+Hsieh, C.I., G.G.
+ Katul and T.W.
+ Chi (2000), An approximate analytical model for footprint estimation of
+ scalar fluxes in thermally stratified atmospheric flows.
+ Advances in Water Resources, 23, 765-772.
+ Online: 
+\begin_inset Flex URL
+status collapsed
 
+\begin_layout Plain Layout
+
+http://nicholas.duke.edu/people/faculty/katul/hsiehawr2000.pdf
+\end_layout
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "book-lee-2004"
+
+\end_inset
+
+Lee, X.
+ and Massman, W.J.
+ and Law, B.
+ 
+\emph on
+Handbook of Micrometeorology: A Guide for Surface Flux Measurement and Analysis
+\emph default
+.
+ 2004.
+ Springer.
+ ISBN: 9781402022647.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "manual-li7500"
+
+\end_inset
+
+LI-COR.
+ 
+\emph on
+Open Path CO2/H2O Analyzer Instruction Manual
+\emph default
+.
+ Revision 4 - January 2004.
+ Online: 
+\begin_inset Flex URL
+status collapsed
+
+\begin_layout Plain Layout
+
+ftp://ftp.licor.com/perm/env/LI-7500/Manual/LI-7500Manual_V4.pdf
+\end_layout
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "manual-fma5400"
+
+\end_inset
+
+Omega Engineering Inc.
+ 
+\emph on
+FMA 5400/FMA 5500 Mass Flow Controllers User's Guide
+\emph default
+.
+ Manual No.
+ M2898.
+ Rev 0412.
+ Online: 
+\begin_inset Flex URL
+status collapsed
+
+\begin_layout Plain Layout
+
+http://www.omega.com/manuals/manualpdf/M2898.pdf
+\end_layout
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "article-wpl80"
+
+\end_inset
+
+Webb, E.K, G.I.
+ Pearman and R.
+ Leuning (1980), Correction of flux measurements for density effects due
+ to heat and water vapour transfer.
+ Quart.
+ J.
+ R.
+ Met.
+ Soc., 106: 85-100.
+ 
 \end_layout
 
 \begin_layout Standard
