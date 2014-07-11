@@ -1516,7 +1516,7 @@ BeginProg
                                                    MFC_UPDN_MULT,MFC_UPDN_OFF)
     VoltSe(massFlow_zero,1,mv5000,MFC_ZERO_SE,True,0,INTEG, _
                                                    MFC_ZERO_MULT,MFC_ZERO_OFF)
-    autothrottle()
+    If (shield_ON AND flowSP_auto AND is_running) Then autothrottle()
 
     #If (DATA_SRCS=SDM_CSAT3A_EC150_2) Then
       volFlow_up = volumetric_flow(massFlow_up, irga_tmpr, irga_press)
