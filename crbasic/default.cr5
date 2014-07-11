@@ -776,12 +776,9 @@ Dim reset_settings As Boolean
 Dim recompile As Boolean
 
 DisplayMenu("REA DAQ",-1)
-  DisplayValue("is running", is_running)
-'  SubMenu("View REA data")
-'    DisplayValue("Status", somevar) 'MetOnly / Armed / Running / Spent
-'  EndSubMenu
-
   SubMenu("Run control")
+    MenuItem("Shield flow", shield_ON)
+      MenuPick(Enable, Disable)
     SubMenu("Schedule")
       MenuItem("Duration", ch_run_duration)
       MenuItem("Begin time", ch_run_begintod)
@@ -798,13 +795,10 @@ DisplayMenu("REA DAQ",-1)
           MenuPick(Cancel, Yes)
       EndSubMenu
     EndSubMenu
-    MenuItem("Shield flow", shield_ON)
-      MenuPick(Enable, Disable)
     MenuItem("Queue run", run_queued)
       MenuPick(Cancel, Yes)
     MenuItem("Abort run", run_aborted)
       MenuPick(Cancel, Yes)
-'    MenuItem("CurrentState",  'TODO
   EndSubMenu
 
   SubMenu("Settings")
