@@ -1267,6 +1267,7 @@ BeginProg
       EC100(ec100_raw(1),EC100_ADDR,1)
       Move(sonic(1),5,ec100_raw(1),5)
       'HINT EC150 uses simple values 44, 18 [device manual, appendix B]
+      ' confirmed 2014-07-10 by Sasha Ivans, Campbell Scientific
       irga_CO2 = ec100_raw(6)/44 'mg/m^3 --> mmol/m^3
       irga_H2O = ec100_raw(7)*1000/18 'g/m^3 --> mmol/m^3
       irga_diag = ec100_raw(8)
