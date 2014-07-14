@@ -215,7 +215,7 @@ Public cov_sonic(1,4)'= [ [Ts,  Ux, Uy, Uz] ]
 Public cov_irga(2,4) '= [ [CO2, Ux, Uy, Uz],
                      '    [H2O, Ux, Uy, Uz],
                      '    [Tc,  Ux, Uy, Uz] ]  <-- Tc not implemented!
-Public cov_out(37)
+Public cov_out(43)
 Alias cov_out(1)  = Ux_Avg 'Average() x4
 Alias cov_out(2)  = Uy_Avg
 Alias cov_out(3)  = Uz_Avg
@@ -257,6 +257,12 @@ Alias cov_out(35) = cov_H2O_Uz
 '  Alias cov_out() = cov_Tc_Uz
 Alias cov_out(36) = hmp_T_Avg 'Average() x2
 Alias cov_out(37) = hmp_e_Avg
+Alias cov_out(38) = rea_co2_up_Avg
+Alias cov_out(39) = rea_co2_dn_Avg
+Alias cov_out(40) = rea_h2o_up_Avg
+Alias cov_out(41) = rea_h2o_dn_Avg
+Alias cov_out(42) = rea_tmpr_up_Avg
+Alias cov_out(43) = rea_tmpr_dn_Avg
 Units Ux_Avg = m/s
 Units Uy_Avg = m/s
 Units Uz_Avg = m/s
@@ -282,6 +288,12 @@ Units H2O_Std = mmol/m^3
 'Units cov_H2O_Uz = mmol/(s m^2)
 Units hmp_T_Avg = degC
 Units hmp_e_Avg = kPa
+Units rea_co2_up_Avg = mmol/m^3
+Units rea_co2_dn_Avg = mmol/m^3
+Units rea_h2o_up_Avg = mmol/m^3
+Units rea_h2o_dn_Avg = mmol/m^3
+Units rea_tmpr_up_Avg = degC
+Units rea_tmpr_dn_Avg = degC
 
 Public rea_out(3) 
 Alias rea_out(1) = vlv_up_on_Tot
@@ -360,6 +372,20 @@ Units LE_wpl = W/m^2
 Units LE = W/m^2
 Units Hs_raw = W/m^2
 Units Hs = W/m^2
+
+Public rea_sim(6)
+Alias rea_sim(1) = rea_co2_up
+Alias rea_sim(2) = rea_co2_dn
+Alias rea_sim(3) = rea_h2o_up
+Alias rea_sim(4) = rea_h2o_dn
+Alias rea_sim(5) = rea_tmpr_up
+Alias rea_sim(6) = rea_tmpr_dn
+
+Public beta(3)
+Alias beta(1) = beta_CO2
+Alias beta(2) = beta_H2O
+Alias beta(3) = beta_Ts
+Units beta = dimless
 
 '---------- OPERATING VARIABLES ----------
 Public shield_ON As Boolean 'menus
@@ -570,6 +596,13 @@ DataTable(work_cov,TRUE,1)
 
   Average(1,hmp_T,IEEE4,(inbetween_1hz_scan OR hmp_T=NAN))
   Average(1,hmp_e,IEEE4,(inbetween_1hz_scan OR hmp_e=NAN))
+  
+  Average(1,rea_co2_up,IEEE4,rea_co2_up=NAN)
+  Average(1,rea_co2_dn,IEEE4,rea_co2_dn=NAN)
+  Average(1,rea_h2o_up,IEEE4,rea_h2o_up=NAN)
+  Average(1,rea_h2o_dn,IEEE4,rea_h2o_dn=NAN)
+  Average(1,rea_tmpr_up,IEEE4,rea_tmpr_up=NAN)
+  Average(1,rea_tmpr_dn,IEEE4,rea_tmpr_dn=NAN)
 EndTable
 
 DataTable(work_rea,True,-1)
@@ -672,6 +705,10 @@ DataTable(stats,True,-1)
   Sample(1,rho_v,IEEE4)
   Sample(1,rho_c,IEEE4)
   Sample(1,Lv,IEEE4)
+  
+  Sample(1,beta_CO2,IEEE4)
+  Sample(1,beta_H2O,IEEE4)
+  Sample(1,beta_Ts,IEEE4)
 
   Average(1,massFlow_zero,IEEE4,(inbetween_1hz_scan OR massFlow_zero=NAN))
   Average(1,massFlow_up,IEEE4,(inbetween_1hz_scan OR massFlow_up=NAN))
@@ -1215,6 +1252,7 @@ BeginProg
   Call setup()
   Move(sonic(1),5,NAN,1)
   Move(irga(1),4,NAN,1)
+  Move(rea_sim(1),6,NAN,1)
 
   Scan(FAST_INTV,mSec,FAST_BUFF,0)
     'impose logical order on run controls
@@ -1283,12 +1321,25 @@ BeginProg
     ElseIf (Uz_rot >= deadband) Then
       vlv_up_ON = True
       vlv_dn_ON = False
+      rea_co2_up = irga_CO2
+      rea_co2_dn = NAN
+      rea_h2o_up = irga_H2O
+      rea_h2o_dn = NAN
+      rea_tmpr_up = sonic_Ts
+      rea_tmpr_dn = NAN
     ElseIf (Uz_rot <= neg_deadband) Then
       vlv_up_ON = False
       vlv_dn_ON = True
+      rea_co2_up = NAN
+      rea_co2_dn = irga_CO2
+      rea_h2o_up = NAN
+      rea_h2o_dn = irga_H2O
+      rea_tmpr_up = NAN
+      rea_tmpr_dn = sonic_Ts
     Else 'deadband
       vlv_up_ON = False
       vlv_dn_ON = False
+      Move(rea_sim(1),6,NAN,1)
     EndIf
     PortSet(C_VLV_UP,vlv_up_ON) 'HINT PortSet occurs as measurement task
     PortSet(C_VLV_DN,vlv_dn_ON) '  but WriteIO is processing task (delayed)
@@ -1469,6 +1520,14 @@ BeginProg
         'stability parameter
         'is within fetch
         '(bonus: stationarity)
+
+        'dimless: (mg/(m^2 s))(s/m)(mmol/mg)(m^3/mmol - m^3/mmol)
+        beta_CO2 = Fco2/(Uz_Std * MW_co2 * (rea_co2_up_Avg - rea_co2_dn_Avg))
+        'dimless: (W/m^2)(g/J)(J/(W*s))(s/m)(mmol/g)(m^3/mmol - m^3/mmol)
+        beta_H2O = LE / (Lv * Uz_Std * (MW_h2o/1000) * _
+                                            (rea_h2o_up_Avg - rea_h2o_dn_Avg))
+        'dimless: (K)(m/s)(s/m)(1/K - 1/K)
+        beta_Ts = cov_Ts_Uz / (Uz_Std * (rea_tmpr_up_Avg - rea_tmpr_dn_Avg))
 
         CallTable(stats)
       EndIf 'new 30min met record

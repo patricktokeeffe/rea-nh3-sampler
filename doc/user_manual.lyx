@@ -11594,6 +11594,1404 @@ key "manual-cr3000"
  
 \end_layout
 
+\begin_layout Paragraph
+Notes
+\end_layout
+
+\begin_layout Description
+CO2_Std/H2O_Std/Ts_Std/Uz_Std The standard deviations of sonic temperature
+ 
+\begin_inset Formula $\sigma{}_{T_{s}}$
+\end_inset
+
+, vertical wind speed 
+\begin_inset Formula $\sigma_{U_{z}}$
+\end_inset
+
+, carbon dioxide molar density 
+\begin_inset Formula $\sigma_{CO_{2}}$
+\end_inset
+
+, and water vapor molar density 
+\begin_inset Formula $\sigma_{H_{2}O}$
+\end_inset
+
+ are derived by taking the square roots of their (co)variances.
+ 
+\end_layout
+
+\begin_layout Standard
+\align center
+\begin_inset Formula $\begin{array}{ccc}
+\sigma_{T_{s}}=\sqrt{\overline{T_{s}^{\prime}T_{s}^{\prime}}} & \qquad\qquad & \sigma_{CO_{2}}=\sqrt{\overline{CO_{2}^{\prime}CO_{2}^{\prime}}}\\
+\sigma_{U_{z}}=\sqrt{\overline{U_{z}^{\prime}U_{z}^{\prime}}} &  & \sigma_{H_{2}O}=\sqrt{\overline{H_{2}O^{\prime}H_{2}O^{\prime}}}
+\end{array}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Description
+Ts* See notes for 
+\begin_inset Flex MenuItem
+status collapsed
+
+\begin_layout Plain Layout
+sonic_Ts
+\end_layout
+
+\end_inset
+
+ (ts_fast, 
+\begin_inset CommandInset ref
+LatexCommand vref
+reference "sub:ts_fast"
+
+\end_inset
+
+).
+\end_layout
+
+\begin_layout Description
+Uz_Std This value has not been subjected to double-rotation.
+\end_layout
+
+\begin_layout Description
+L_ Obukhov length 
+\begin_inset Formula $L$
+\end_inset
+
+ in meters (
+\begin_inset Flex MenuItem
+status open
+
+\begin_layout Plain Layout
+L_
+\end_layout
+
+\end_inset
+
+) is calculated using friction velocity 
+\begin_inset Formula $u_{*}$
+\end_inset
+
+ (
+\begin_inset Flex MenuItem
+status collapsed
+
+\begin_layout Plain Layout
+u_star
+\end_layout
+
+\end_inset
+
+), mean ambient air temperature 
+\begin_inset Formula $\overline{T_{a}}$
+\end_inset
+
+ (
+\begin_inset Flex MenuItem
+status collapsed
+
+\begin_layout Plain Layout
+irga_tmpr_Avg
+\end_layout
+
+\end_inset
+
+ if EC150 is present, else 
+\begin_inset Flex MenuItem
+status collapsed
+
+\begin_layout Plain Layout
+hmp_T_Avg
+\end_layout
+
+\end_inset
+
+) and the covariance of sonic temperature with unrotated vertical wind speed,
+ 
+\begin_inset Formula $\overline{T_{s}^{\prime}U_{z}^{\prime}}$
+\end_inset
+
+, as:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{eqnarray*}
+L & = & \frac{-u_{*}^{3}(\overline{T_{a}}+273.15)}{kg\overline{T_{s}^{\prime}U_{z}^{\prime}}}\\
+where &  & k=0.41\:\mathrm{\textrm{(Von Kármán constant)}}\\
+ &  & g=9.81\: m/s^{2}\:\mathrm{\textrm{(gravitational acceleration)}}
+\end{eqnarray*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Description
+u_star Friction velocity 
+\begin_inset Formula $u_{*}$
+\end_inset
+
+ in m/s (
+\begin_inset Flex MenuItem
+status open
+
+\begin_layout Plain Layout
+u_star
+\end_layout
+
+\end_inset
+
+) is derived from covariances of horizontal wind components with vertical
+ wind speed:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+u_{*}=\sqrt[4]{\overline{U_{x}^{\prime}U_{z}^{\prime}}+\overline{U_{y}^{\prime}U_{z}^{\prime}}}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Description
+tau Surface shear stress 
+\begin_inset Formula $\tau$
+\end_inset
+
+ in Pascals (
+\begin_inset Flex MenuItem
+status collapsed
+
+\begin_layout Plain Layout
+tau
+\end_layout
+
+\end_inset
+
+) is derived from covariances of horizontal wind components with vertical
+ wind speed and ambient air density 
+\begin_inset Formula $\rho_{a}$
+\end_inset
+
+ (
+\begin_inset Flex MenuItem
+status collapsed
+
+\begin_layout Plain Layout
+rho_a_Avg
+\end_layout
+
+\end_inset
+
+):
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\tau=\rho_{a}\,\sqrt{\overline{U_{x}^{\prime}U_{z}^{\prime}}+\overline{U_{y}^{\prime}U_{z}^{\prime}}}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Description
+itt The integral turbulence test following Hammerle et al (2007) is expressed
+ as the percentage difference between measured ratio of 
+\begin_inset Formula $\sigma_{w}$
+\end_inset
+
+ (
+\begin_inset Flex MenuItem
+status collapsed
+
+\begin_layout Plain Layout
+Uz_Std
+\end_layout
+
+\end_inset
+
+) to 
+\begin_inset Formula $u_{*}$
+\end_inset
+
+ (
+\begin_inset Flex MenuItem
+status collapsed
+
+\begin_layout Plain Layout
+u_star
+\end_layout
+
+\end_inset
+
+) and the theoretical value 
+\begin_inset Formula $\phi_{w}$
+\end_inset
+
+ prescribed by the Monin-Obukhov hypothesis 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "article-itt"
+
+\end_inset
+
+.
+ Outside the range shown for stability parameter 
+\begin_inset Formula $\zeta$
+\end_inset
+
+, 
+\begin_inset Formula $\Delta_{ITT}$
+\end_inset
+
+ is undefined (NAN).
+ 
+\begin_inset Formula 
+\[
+\phi_{w}=\left(\frac{\sigma_{w}}{u_{*}}\right)_{theory}=\begin{cases}
+1.25(1+3|\zeta|)^{1/3} & -2\leq\zeta<0\\
+1.25(1+0.2\zeta) & 0\leq\zeta<1
+\end{cases}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\Delta_{ITT}=100\frac{|\sigma_{w}/u_{*}-\phi_{w}|}{\phi_{w}}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Description
+fetch_70 The 70% flux fetch requirement is the distance downwind 
+\begin_inset Formula $x$
+\end_inset
+
+ to reach 
+\begin_inset Formula $F/S_{o}=0.7$
+\end_inset
+
+ where 
+\begin_inset Formula $F$
+\end_inset
+
+ is measured flux and 
+\begin_inset Formula $S_{o}$
+\end_inset
+
+ is surface flux.
+ This distance is expressed by adapting equation (15) of the model put forth
+ by Hsieh, Katul and Chi (2000) 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "article-footprint"
+
+\end_inset
+
+: 
+\begin_inset Formula 
+\begin{eqnarray*}
+ &  & Z_{u}=Z_{m}(\ln(Z_{m}/Z_{o})-1+Z_{o}/Z_{m})\\
+x=\frac{-D\,|L|^{(1-P)}Z_{u}^{P}}{k^{2}\ln(F/S_{o})} & \quad where & Z_{m}\,\textrm{is measurement height}\\
+ &  & Z_{o}\,\textrm{is roughness height}\\
+ &  & L\,\textrm{is Obukhov length}\\
+ &  & k=0.4\\
+ &  & F/S_{o}=0.7\\
+ & \quad and & \begin{cases}
+D=0.28;\, P=0.59 & \textrm{for unstable conditions}\\
+D=0.97;\, P=1 & \textrm{for near neutral and neutral conditions}\\
+D=2.44;\, P=1.33 & \textrm{for stable conditions}
+\end{cases}
+\end{eqnarray*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Description
+Fco2* The 
+\begin_inset Quotes eld
+\end_inset
+
+raw
+\begin_inset Quotes erd
+\end_inset
+
+ flux of CO2 (
+\begin_inset Flex MenuItem
+status collapsed
+
+\begin_layout Plain Layout
+Fco2_raw
+\end_layout
+
+\end_inset
+
+) is the covariance of molar density of CO2 
+\begin_inset Formula $\varrho_{c}$
+\end_inset
+
+ (
+\begin_inset Flex MenuItem
+status collapsed
+
+\begin_layout Plain Layout
+irga_CO2
+\end_layout
+
+\end_inset
+
+) with unrotated vertical wind speed 
+\begin_inset Formula $U_{z}$
+\end_inset
+
+ (
+\begin_inset Flex MenuItem
+status collapsed
+
+\begin_layout Plain Layout
+sonic_Uz
+\end_layout
+
+\end_inset
+
+), scaled by the molecular weight of CO2 (
+\begin_inset Formula $M\! W_{c}$
+\end_inset
+
+).
+ The 
+\begin_inset Quotes eld
+\end_inset
+
+corrected
+\begin_inset Quotes erd
+\end_inset
+
+ flux (
+\begin_inset Flex MenuItem
+status collapsed
+
+\begin_layout Plain Layout
+Fco2
+\end_layout
+
+\end_inset
+
+) is the 
+\begin_inset Quotes eld
+\end_inset
+
+raw
+\begin_inset Quotes erd
+\end_inset
+
+ flux plus two correction terms (
+\begin_inset Flex MenuItem
+status collapsed
+
+\begin_layout Plain Layout
+Fco2_LE_wpl
+\end_layout
+
+\end_inset
+
+, 
+\begin_inset Flex MenuItem
+status collapsed
+
+\begin_layout Plain Layout
+Fco2_H_wpl
+\end_layout
+
+\end_inset
+
+) as described by equation (24) of Webb, Pearman and Leuning (1980) 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "article-wpl80"
+
+\end_inset
+
+.
+ 
+\begin_inset Formula 
+\[
+F_{CO2},\,\frac{mg}{m^{2}s}=\left(F_{CO2}\right)_{raw}+\left(F_{CO2}\right)_{LE}+\left(F_{CO2}\right)_{H}\qquad where
+\]
+
+\end_inset
+
+
+\begin_inset Formula 
+\begin{align*}
+\left(F_{CO2}\right)_{raw} & =\overline{\varrho_{c}^{\prime}U_{z}^{\prime}}\left(M\! W_{c}\right) & M\! W_{c} & =44.010\,\textrm{g/mol}\\
+\left(F_{CO2}\right)_{LE} & =\frac{\rho_{c}}{\rho_{d}}\overline{\varrho_{v}^{\prime}U_{z}^{\prime}}\left(M\! W_{d}\right) & M\! W_{v} & =18.01528\,\textrm{g/mol}\\
+\left(F_{CO2}\right)_{H} & =\rho_{c}\left(1+\frac{M\! W_{d}}{M\! W_{v}}\frac{\rho_{v}}{\rho_{d}}\right)\frac{\overline{T_{s}^{\prime}U_{z}^{\prime}}}{\overline{T_{a}}+273.15}\quad & M\! W_{d} & =28.98\,\textrm{g/mol}
+\end{align*}
+
+\end_inset
+
+If the integrated IRGA (EC150) is used, the most recent mean temperature
+ (
+\begin_inset Flex MenuItem
+status collapsed
+
+\begin_layout Plain Layout
+irga_tmpr_Avg
+\end_layout
+
+\end_inset
+
+) is used for ambient temperature 
+\begin_inset Formula $\overline{T_{a}}$
+\end_inset
+
+; otherwise, mean temperature from the T/RH probe is used (
+\begin_inset Flex MenuItem
+status collapsed
+
+\begin_layout Plain Layout
+hmp_T_Avg
+\end_layout
+
+\end_inset
+
+).
+\end_layout
+
+\begin_layout Description
+LE* The 
+\begin_inset Quotes eld
+\end_inset
+
+raw
+\begin_inset Quotes erd
+\end_inset
+
+ latent heat flux 
+\begin_inset Flex MenuItem
+status collapsed
+
+\begin_layout Plain Layout
+(LE_raw
+\end_layout
+
+\end_inset
+
+) is the covariance of molar density of water vapor 
+\begin_inset Formula $\varrho_{v}$
+\end_inset
+
+ (
+\begin_inset Flex MenuItem
+status collapsed
+
+\begin_layout Plain Layout
+irga_H2O
+\end_layout
+
+\end_inset
+
+) with unrotated vertical wind speed 
+\begin_inset Formula $U_{z}$
+\end_inset
+
+ 
+\begin_inset Flex MenuItem
+status collapsed
+
+\begin_layout Plain Layout
+(sonic_Uz
+\end_layout
+
+\end_inset
+
+), scaled by the molecular weight of H2O (
+\begin_inset Formula $M\! W_{H2O}$
+\end_inset
+
+) and latent heat of vaporization 
+\begin_inset Formula $L_{v}$
+\end_inset
+
+ (
+\begin_inset Flex MenuItem
+status collapsed
+
+\begin_layout Plain Layout
+Lv
+\end_layout
+
+\end_inset
+
+).
+ The 
+\begin_inset Quotes eld
+\end_inset
+
+corrected
+\begin_inset Quotes erd
+\end_inset
+
+ flux (LE) is the 
+\begin_inset Quotes eld
+\end_inset
+
+raw
+\begin_inset Quotes erd
+\end_inset
+
+ flux plus a correction term (
+\begin_inset Flex MenuItem
+status collapsed
+
+\begin_layout Plain Layout
+LE_wpl
+\end_layout
+
+\end_inset
+
+) as described by equation (25) of 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "article-wpl80"
+
+\end_inset
+
+.
+ 
+\begin_inset Formula 
+\[
+L\! E=L\! E_{raw}+L\! E_{WPL}
+\]
+
+\end_inset
+
+where 
+\begin_inset Formula $M\! W_{c}$
+\end_inset
+
+, 
+\begin_inset Formula $M\! W_{v}$
+\end_inset
+
+, and 
+\begin_inset Formula $M\! W_{d}$
+\end_inset
+
+ are defined above, and
+\begin_inset Formula 
+\begin{align*}
+L\! E_{raw} & =\overline{\varrho_{c}^{\prime}U_{z}^{\prime}}\left(M\! W_{v}\right)\left(L_{v}\right)\\
+L\! E_{WPL} & =L_{v}\left(1+\frac{M\! W_{d}}{M\! W_{v}}\frac{\rho_{v}}{\rho_{d}}\right)\left(\overline{\varrho_{v}^{\prime}U_{z}^{\prime}}\left(M\! W_{v}\right)+\frac{\overline{T_{s}^{\prime}U_{z}^{\prime}}\rho_{v}}{\overline{T_{a}}+273.15}\right)
+\end{align*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Description
+Hs* Presently, both sensible heat flux values 
+\begin_inset Flex MenuItem
+status collapsed
+
+\begin_layout Plain Layout
+Hs
+\end_layout
+
+\end_inset
+
+ and 
+\begin_inset Flex MenuItem
+status collapsed
+
+\begin_layout Plain Layout
+Hs_raw
+\end_layout
+
+\end_inset
+
+ will be the same.
+ This is because the 
+\begin_inset Quotes eld
+\end_inset
+
+raw
+\begin_inset Quotes erd
+\end_inset
+
+ flux calculated based on sonic temperature is not yet corrected for the
+ effects of water vapor.
+ The 
+\begin_inset Quotes eld
+\end_inset
+
+raw
+\begin_inset Quotes erd
+\end_inset
+
+ flux is calculated using the covariance of sonic temperature 
+\begin_inset Formula $T_{s}$
+\end_inset
+
+ and unrotated vertical wind speed 
+\begin_inset Formula $U_{z}$
+\end_inset
+
+ with ambient air density 
+\begin_inset Formula $\rho_{a}$
+\end_inset
+
+ and specific heat capacity of dry air at constant pressure 
+\begin_inset Formula $C_{pd}$
+\end_inset
+
+ as: 
+\begin_inset Formula 
+\[
+H_{s}=\left(H_{s}\right)_{raw}=\overline{T_{s}^{\prime}U_{z}^{\prime}}\left(\rho_{a}\right)\left(C_{pd}\right)
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Description
+CE/SE/CT/ST
+\begin_inset CommandInset label
+LatexCommand label
+name "subsub:CE/SE/CT/ST"
+
+\end_inset
+
+ These are the cosine and sine values of the two rotation angles, eta and
+ theta.
+ They will be used in the following half-hour interval for real-time rotation
+ of the vertical wind speed (
+\begin_inset Flex MenuItem
+status collapsed
+
+\begin_layout Plain Layout
+Uz_rot
+\end_layout
+
+\end_inset
+
+ under 
+\begin_inset CommandInset ref
+LatexCommand vref
+reference "sub:ts_fast"
+
+\end_inset
+
+) 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "article-coordrot,book-lee-2004"
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+\align center
+\begin_inset Formula $\begin{array}{ccc}
+C\! E=\frac{\overline{U_{x}}}{\sqrt{\overline{U_{x}}^{2}+\overline{U_{y}}^{2}}} & \qquad\qquad & C\! T=\frac{\sqrt{\overline{U_{x}}^{2}+\overline{U_{y}}^{2}}}{\sqrt{\overline{U_{x}}^{2}+\overline{U_{y}}^{2}+\overline{U_{z}}^{2}}}\\
+S\! E=\frac{\overline{U_{y}}}{\sqrt{\overline{U_{x}}^{2}+\overline{U_{y}}^{2}}} &  & S\! T=\frac{\overline{U_{z}}}{\sqrt{\overline{U_{x}}^{2}+\overline{U_{y}}^{2}+\overline{U_{z}}^{2}}}
+\end{array}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Description
+W_Std This value represents 
+\begin_inset Flex MenuItem
+status collapsed
+
+\begin_layout Plain Layout
+Uz_Std
+\end_layout
+
+\end_inset
+
+ after double-rotation using the actual wind statistics of the current half-hour
+ interval.
+ This is in contrast to the rotation applied to 
+\begin_inset Flex MenuItem
+status collapsed
+
+\begin_layout Plain Layout
+Uz_rot
+\end_layout
+
+\end_inset
+
+ of the ts_fast table (
+\begin_inset CommandInset ref
+LatexCommand vref
+reference "sub:ts_fast"
+
+\end_inset
+
+) which is based on the previous half-hour.
+ 
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{eqnarray*}
+\sigma_{W} & = & \sqrt{\sigma_{z}C\! T^{2}+\sigma_{x}S\! T^{2}C\! E^{2}+\sigma_{y}S\! T^{2}S\! E^{2}+2\overline{U_{x}^{\prime}U_{z}^{\prime}}C\! T\cdot C\! E\cdot S\! T-2\overline{U_{y}^{\prime}U_{z}^{\prime}}C\! T\cdot S\! T\cdot S\! E+2\overline{U_{x}^{\prime}U_{y}^{\prime}}C\! E\cdot S\! E\cdot S\! T^{2}}
+\end{eqnarray*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Description
+WD_unit/rslt_Avg If the sonic anemometer azimuth setting has been set, the
+ resulting wind directions are adjusted from the sonic-local coordinate
+ system to geographic coordinates: 
+\begin_inset Formula 
+\[
+W\! D_{geo}=(360+WD_{sonic}+azimuth+magnetic\, declination)\mod360
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Description
+WD_Yamartino_Std Standard deviation of wind direction calculated using Yamartino
+ algorithm.
+ 
+\begin_inset Quotes eld
+\end_inset
+
+This option complies with EPA guidelines for use with straight-line Gaussian
+ dispersion models to model plume transport
+\begin_inset Quotes erd
+\end_inset
+
+ 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "helpfile-windvector"
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Description
+WD_CSI_Std Standard deviation of wind direction calculated using Campbell
+ Scientific's wind speed weighted algorithm.
+ 
+\begin_inset Quotes eld
+\end_inset
+
+Use of the resultant mean horizontal wind direction is not recommended for
+ straight-line Gaussian dispersion models, but may be used to model transport
+ direction in a variable-trajectory model
+\begin_inset Quotes erd
+\end_inset
+
+ 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "helpfile-windvector"
+
+\end_inset
+
+.
+ 
+\end_layout
+
+\begin_layout Description
+hmp_Tdew_Avg 
+\end_layout
+
+\begin_layout Description
+hmp_RH_Avg Since relative humidity is a complex non-linear scalar, it cannot
+ be meaningfully averaged in a naive manner.
+ Instead, the mean saturation vapor pressure 
+\begin_inset Formula $\overline{e_{sat}}$
+\end_inset
+
+ (kPa) is first calculated using mean ambient temperature 
+\begin_inset Formula $\overline{T_{a}}$
+\end_inset
+
+ (degC) and the built-in program instruction 
+\begin_inset Flex Code
+status collapsed
+
+\begin_layout Plain Layout
+SatVP
+\end_layout
+
+\end_inset
+
+:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\overline{e_{sat}}=\mathtt{SatVP(}\overline{T_{a}})
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{eqnarray*}
+\mathtt{SatVP(T)}:\: e_{sat} & = & 0.1(A_{0}+A_{1}T+A_{2}T^{2}+A_{3}T^{3}+A_{4}T^{4}+A_{5}T^{5}+A_{6}T^{6})\\
+where &  & A_{0}=6.107799961\\
+ &  & A_{1}=4.436518521\times10^{-5}\\
+ &  & A_{2}=1.428945805\times10^{-2}\\
+ &  & A_{3}=2.650648471\times10^{-4}\\
+ &  & A_{4}=3.031240396\times10^{-6}\\
+ &  & A_{5}=2.034080948\times10^{-8}\\
+ &  & A_{6}=6.136820929\times10^{-11}
+\end{eqnarray*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+The mean relative humidity 
+\begin_inset Formula $\overline{RH}$
+\end_inset
+
+ (%) is then derived by combining the results with 
+\begin_inset Flex MenuItem
+status collapsed
+
+\begin_layout Plain Layout
+hmp_e_Avg
+\end_layout
+
+\end_inset
+
+, the mean water vapor pressure 
+\begin_inset Formula $\overline{e}$
+\end_inset
+
+ (kPa): 
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\overline{RH}=100\cdot\frac{\overline{e}}{\overline{e_{sat}}}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Description
+hmp_e_Avg The mean water vapor pressure is the mean value of 1 Hz values
+ of water vapor pressure calculated using the built-in instruction 
+\begin_inset Flex Code
+status collapsed
+
+\begin_layout Plain Layout
+VaporPressure
+\end_layout
+
+\end_inset
+
+ and 
+\begin_inset Flex MenuItem
+status collapsed
+
+\begin_layout Plain Layout
+hmp_T
+\end_layout
+
+\end_inset
+
+/
+\begin_inset Flex MenuItem
+status collapsed
+
+\begin_layout Plain Layout
+hmp_RH
+\end_layout
+
+\end_inset
+
+ from the ts_slow table (pg 
+\begin_inset CommandInset ref
+LatexCommand vref
+reference "sub:ts_slow"
+
+\end_inset
+
+).
+ 
+\begin_inset Formula 
+\[
+\overline{e}=\overline{R\! H\frac{e_{sat}}{100}}
+\]
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+Internally, 
+\begin_inset Flex Code
+status collapsed
+
+\begin_layout Plain Layout
+VaporPressure
+\end_layout
+
+\end_inset
+
+ uses the saturation vapor pressure 
+\begin_inset Formula $e_{sat}$
+\end_inset
+
+ is calculated from 
+\begin_inset Flex MenuItem
+status collapsed
+
+\begin_layout Plain Layout
+hmp_T
+\end_layout
+
+\end_inset
+
+/
+\begin_inset Flex MenuItem
+status collapsed
+
+\begin_layout Plain Layout
+hmp_RH
+\end_layout
+
+\end_inset
+
+ using the formula described in 
+\begin_inset Flex MenuItem
+status collapsed
+
+\begin_layout Plain Layout
+hmp_RH_Avg
+\end_layout
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Description
+rho_a The mass density of ambient air 
+\begin_inset Formula $\rho_{a}$
+\end_inset
+
+ accounts for the water vapor content.
+ If an integrated sonic/IRGA (EC150) is used, the mean IRGA temperature
+ is used for ambient air temperature 
+\begin_inset Formula $\overline{T_{a}}$
+\end_inset
+
+, otherwise the mean T/RH probe temperature is used.
+ The mean barometric pressure 
+\begin_inset Formula $\overline{P_{a}}$
+\end_inset
+
+ is always from the IRGA and the mean water vapor pressure 
+\begin_inset Formula $\overline{e}$
+\end_inset
+
+ is always from the T/RH probe.
+ 
+\begin_inset Formula 
+\[
+\rho_{a}=1000\left(\frac{\overline{P_{a}}-\overline{e}}{R_{d}(\overline{T_{a}}+273.15)}+\frac{\overline{e}}{R_{v}(\overline{T_{a}}+273.15)}\right)
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{eqnarray*}
+R_{d}=287.058\,\unitfrac{J}{kg\cdot K} & \qquad\qquad & R_{v}=461.495\,\nicefrac{J}{kg\cdot K}
+\end{eqnarray*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\frac{kg}{m^{3}}=\left(\frac{1000\, Pa}{kPa}\right)\left(\frac{kPa}{\left(\nicefrac{J}{kg\cdot K}\right)K}\cdot\frac{J}{Pa\cdot m^{3}}+\frac{kPa}{\left(\nicefrac{J}{kg\cdot K}\right)K}\cdot\frac{J}{Pa\cdot m^{3}}\right)
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Description
+rho_d The mass density of dry air 
+\begin_inset Formula $\rho_{d}$
+\end_inset
+
+ is the ambient air density 
+\begin_inset Formula $\rho_{a}$
+\end_inset
+
+ (
+\begin_inset Flex MenuItem
+status collapsed
+
+\begin_layout Plain Layout
+rho_a
+\end_layout
+
+\end_inset
+
+) less the density of water vapor 
+\begin_inset Formula $\rho_{v}$
+\end_inset
+
+ (
+\begin_inset Flex MenuItem
+status collapsed
+
+\begin_layout Plain Layout
+rho_v
+\end_layout
+
+\end_inset
+
+).
+ 
+\begin_inset Formula 
+\[
+\overline{\rho_{d}},\,\frac{g}{m^{3}}=\left(\overline{\rho_{a}},\,\frac{kg}{m^{3}}\right)\left(\frac{10^{3}g}{kg}\right)-\left(\overline{\rho_{v}},\,\frac{g}{m^{3}}\right)
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Description
+rho_c/rho_v The mass densities 
+\begin_inset Formula $\rho_{c}$
+\end_inset
+
+ and 
+\begin_inset Formula $\rho_{v}$
+\end_inset
+
+ of CO
+\begin_inset script subscript
+
+\begin_layout Plain Layout
+2
+\end_layout
+
+\end_inset
+
+ and H
+\begin_inset script subscript
+
+\begin_layout Plain Layout
+2
+\end_layout
+
+\end_inset
+
+O, respectively, are the molar densities 
+\begin_inset Flex MenuItem
+status collapsed
+
+\begin_layout Plain Layout
+CO2_Avg
+\end_layout
+
+\end_inset
+
+ and 
+\begin_inset Flex MenuItem
+status collapsed
+
+\begin_layout Plain Layout
+H2O_Avg
+\end_layout
+
+\end_inset
+
+ scaled by molecular weight:
+\end_layout
+
+\begin_layout Standard
+\align center
+\begin_inset Formula $\begin{aligned}\rho_{c},\,\frac{mg}{m^{3}} & =\left(CO_{2},\,\frac{mmol}{m^{3}}\right)\left(44.010\,\frac{g}{mol}\right)\\
+\rho_{v},\,\frac{g}{m^{3}} & =\left(H_{2}\! O,\,\frac{g}{m^{3}}\right)\left(18.01528\,\frac{g}{mol}\right)\left(\frac{mol}{10^{3}\, mmol}\right)
+\end{aligned}
+$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Description
+Lv The latent heat of vaporization for water 
+\begin_inset Formula $L_{v}$
+\end_inset
+
+ is calculated according to formula 8 of 
+\emph on
+A new formula for latent heat of vaporization as a function of temperature
+\emph default
+ 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "article-Lv"
+
+\end_inset
+
+ where ambient temperature 
+\begin_inset Formula $T_{a}$
+\end_inset
+
+ is in degrees Celcius.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+L_{v},\,\frac{J}{g}=1918.46\left(\frac{\overline{T_{a}}+273.13}{\overline{T_{a}}+239.24}\right)^{2}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Description
+beta_CO2/H2O/Ts
+\begin_inset CommandInset label
+LatexCommand label
+name "subsub:beta"
+
+\end_inset
+
+ These dimensionless relaxation coefficients are derived from relating simulated
+ REA fluxes to eddy-covariance fluxes of carbon dioxide (
+\begin_inset Flex MenuItem
+status collapsed
+
+\begin_layout Plain Layout
+Fco2
+\end_layout
+
+\end_inset
+
+), latent heat (
+\begin_inset Flex MenuItem
+status collapsed
+
+\begin_layout Plain Layout
+LE
+\end_layout
+
+\end_inset
+
+) and sensible heat (
+\begin_inset Flex MenuItem
+status collapsed
+
+\begin_layout Plain Layout
+Hs
+\end_layout
+
+\end_inset
+
+), respectively: 
+\begin_inset Formula 
+\begin{eqnarray*}
+\beta_{c} & = & \frac{F_{CO2}}{\sigma_{U_{z}}\left(M\! W_{c}\right)\left[\left(\overline{\varrho_{c}}\right)_{up}-\left(\overline{\varrho_{c}}\right)_{down}\right]}\\
+\beta_{v} & = & \frac{L\! E/L_{v}}{\sigma_{U_{z}}\left(M\! W_{v}\right)\left[\left(\overline{\varrho_{v}}\right)_{up}-\left(\overline{\varrho_{v}}\right)_{down}\right]}\\
+\beta_{T} & = & \frac{H_{s}/\left(M\! W_{a}C_{pd}\right)}{\sigma_{U_{z}}\left[\left(\overline{T_{s}}\right)_{up}-\left(\overline{T_{s}}\right)_{down}\right]}
+\end{eqnarray*}
+
+\end_inset
+
+where 
+\begin_inset Formula $M\! W_{c}$
+\end_inset
+
+, 
+\begin_inset Formula $M\! W_{v}$
+\end_inset
+
+ are defined as for 
+\begin_inset Flex MenuItem
+status collapsed
+
+\begin_layout Plain Layout
+Fco2*
+\end_layout
+
+\end_inset
+
+ notes above and 
+\begin_inset Formula $M\! W_{a}$
+\end_inset
+
+ is ambient air density (
+\begin_inset Flex MenuItem
+status collapsed
+
+\begin_layout Plain Layout
+rho_a
+\end_layout
+
+\end_inset
+
+).
+ 
+\end_layout
+
+\begin_layout Description
+volFlow_up/dn_Avg These values represent mean volumetric flow 
+\begin_inset Formula $V$
+\end_inset
+
+ calculated using 1 Hz measurements of mass flow rate 
+\begin_inset Formula $\dot{m}$
+\end_inset
+
+, ambient temperature 
+\begin_inset Formula $T_{a}$
+\end_inset
+
+, and barometric pressure 
+\begin_inset Formula $P_{a}$
+\end_inset
+
+.
+ The mean of point-to-point conversions is thought to be more representative
+ than a conversion based on half-hour mean values.
+ 
+\begin_inset VSpace smallskip
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+Using the manufacturer-defined values for standard conditions of 
+\begin_inset Formula $T_{0}=$
+\end_inset
+
+70 ºF (21.1 ºC) and 
+\begin_inset Formula $P_{0}=$
+\end_inset
+
+14.69 psia (101.28 kPa), the volumetric flow is: 
+\begin_inset Formula 
+\[
+V,\,\frac{L}{min}=\left(\dot{m},\,\frac{std.\, L}{min}\right)\left(\frac{P_{0}}{P_{a}}\right)\left(\frac{T_{a}+273.15}{T_{0}+273.15}\right)
+\]
+
+\end_inset
+
+If the integrated IRGA (EC150) is used, its measurements (
+\begin_inset Flex MenuItem
+status collapsed
+
+\begin_layout Plain Layout
+irga_tmpr
+\end_layout
+
+\end_inset
+
+) are used for ambient temperature; otherwise, temperature from the T/RH
+ probe is used (
+\begin_inset Flex MenuItem
+status collapsed
+
+\begin_layout Plain Layout
+hmp_T
+\end_layout
+
+\end_inset
+
+).
+\end_layout
+
+\begin_layout Description
+vlv_up/dn_ON_Tot The valve activation ratio is expressed as the ratio of
+ these values to 
+\begin_inset Flex MenuItem
+status collapsed
+
+\begin_layout Plain Layout
+samples_Tot
+\end_layout
+
+\end_inset
+
+.
+ 
+\begin_inset Formula 
+\begin{eqnarray*}
+\alpha_{up}=\frac{\textrm{vlv\_up\_ON\_Tot}}{\textrm{samples\_Tot}} & \qquad & \alpha_{dn}=\frac{\textrm{vlv\_dn\_ON\_Tot}}{\textrm{samples\_Tot}}
+\end{eqnarray*}
+
+\end_inset
+
+
+\end_layout
+
 \begin_layout Standard
 \begin_inset Float table
 placement h
@@ -11633,7 +13031,7 @@ name "tab:schema-stats"
 \noindent
 \align center
 \begin_inset Tabular
-<lyxtabular version="3" rows="58" columns="4">
+<lyxtabular version="3" rows="61" columns="4">
 <features rotate="0" tabularvalignment="middle">
 <column alignment="center" valignment="top">
 <column alignment="left" valignment="top">
@@ -13602,6 +15000,136 @@ latent heat of vaporization
 \begin_inset Text
 
 \begin_layout Plain Layout
+beta_CO2
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+dimless
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+49
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+beta_H2O
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+dimless
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+50
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+beta_Ts
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+dimless
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+multirow{-3}{1
+\backslash
+linewidth}{relaxation coefficients of simulated REA fluxes; see page 
+\backslash
+pageref{subsub:beta}}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+51
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
 massFlow_zero_Avg
 \end_layout
 
@@ -13631,7 +15159,7 @@ mean mass flow of zero (shield) air
 \begin_inset Text
 
 \begin_layout Plain Layout
-49
+52
 \end_layout
 
 \end_inset
@@ -13669,7 +15197,7 @@ mean mass flow of air through up-draft denuder
 \begin_inset Text
 
 \begin_layout Plain Layout
-50
+53
 \end_layout
 
 \end_inset
@@ -13707,7 +15235,7 @@ mean mass flow of air through down-draft denuder
 \begin_inset Text
 
 \begin_layout Plain Layout
-51
+54
 \end_layout
 
 \end_inset
@@ -13745,7 +15273,7 @@ volumetric flow of air through up-draft denuder
 \begin_inset Text
 
 \begin_layout Plain Layout
-52
+55
 \end_layout
 
 \end_inset
@@ -13783,7 +15311,7 @@ volumetric flow of air through down-draft denuder
 \begin_inset Text
 
 \begin_layout Plain Layout
-53
+56
 \end_layout
 
 \end_inset
@@ -13821,7 +15349,7 @@ total instances of up-draft sampling valve activation
 \begin_inset Text
 
 \begin_layout Plain Layout
-54
+57
 \end_layout
 
 \end_inset
@@ -13859,7 +15387,7 @@ total instances of down-draft sampling valve activation
 \begin_inset Text
 
 \begin_layout Plain Layout
-55
+58
 \end_layout
 
 \end_inset
@@ -13897,7 +15425,7 @@ total potential sampling instances
 \begin_inset Text
 
 \begin_layout Plain Layout
-56
+59
 \end_layout
 
 \end_inset
@@ -13935,7 +15463,7 @@ mean temperature of datalogger
 \begin_inset Text
 
 \begin_layout Plain Layout
-57
+60
 \end_layout
 
 \end_inset
@@ -13974,1319 +15502,6 @@ mean supply voltage to datalogger
 
 
 \end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Paragraph
-Notes
-\end_layout
-
-\begin_layout Description
-CO2_Std/H2O_Std/Ts_Std/Uz_Std The standard deviations of sonic temperature
- 
-\begin_inset Formula $\sigma{}_{T_{s}}$
-\end_inset
-
-, vertical wind speed 
-\begin_inset Formula $\sigma_{U_{z}}$
-\end_inset
-
-, carbon dioxide molar density 
-\begin_inset Formula $\sigma_{CO_{2}}$
-\end_inset
-
-, and water vapor molar density 
-\begin_inset Formula $\sigma_{H_{2}O}$
-\end_inset
-
- are derived by taking the square roots of their (co)variances.
- 
-\end_layout
-
-\begin_layout Standard
-\align center
-\begin_inset Formula $\begin{array}{ccc}
-\sigma_{T_{s}}=\sqrt{\overline{T_{s}^{\prime}T_{s}^{\prime}}} & \qquad\qquad & \sigma_{CO_{2}}=\sqrt{\overline{CO_{2}^{\prime}CO_{2}^{\prime}}}\\
-\sigma_{U_{z}}=\sqrt{\overline{U_{z}^{\prime}U_{z}^{\prime}}} &  & \sigma_{H_{2}O}=\sqrt{\overline{H_{2}O^{\prime}H_{2}O^{\prime}}}
-\end{array}$
-\end_inset
-
-
-\end_layout
-
-\begin_layout Description
-Ts* See notes for 
-\begin_inset Flex MenuItem
-status collapsed
-
-\begin_layout Plain Layout
-sonic_Ts
-\end_layout
-
-\end_inset
-
- (ts_fast, 
-\begin_inset CommandInset ref
-LatexCommand vref
-reference "sub:ts_fast"
-
-\end_inset
-
-).
-\end_layout
-
-\begin_layout Description
-Uz_Std This value has not been subjected to double-rotation.
-\end_layout
-
-\begin_layout Description
-L_ Obukhov length 
-\begin_inset Formula $L$
-\end_inset
-
- in meters (
-\begin_inset Flex MenuItem
-status open
-
-\begin_layout Plain Layout
-L_
-\end_layout
-
-\end_inset
-
-) is calculated using friction velocity 
-\begin_inset Formula $u_{*}$
-\end_inset
-
- (
-\begin_inset Flex MenuItem
-status collapsed
-
-\begin_layout Plain Layout
-u_star
-\end_layout
-
-\end_inset
-
-), mean ambient air temperature 
-\begin_inset Formula $\overline{T_{a}}$
-\end_inset
-
- (
-\begin_inset Flex MenuItem
-status collapsed
-
-\begin_layout Plain Layout
-irga_tmpr_Avg
-\end_layout
-
-\end_inset
-
- if EC150 is present, else 
-\begin_inset Flex MenuItem
-status collapsed
-
-\begin_layout Plain Layout
-hmp_T_Avg
-\end_layout
-
-\end_inset
-
-) and the covariance of sonic temperature with unrotated vertical wind speed,
- 
-\begin_inset Formula $\overline{T_{s}^{\prime}U_{z}^{\prime}}$
-\end_inset
-
-, as:
-\end_layout
-
-\begin_layout Standard
-\begin_inset Formula 
-\begin{eqnarray*}
-L & = & \frac{-u_{*}^{3}(\overline{T_{a}}+273.15)}{kg\overline{T_{s}^{\prime}U_{z}^{\prime}}}\\
-where &  & k=0.41\:\mathrm{\textrm{(Von Kármán constant)}}\\
- &  & g=9.81\: m/s^{2}\:\mathrm{\textrm{(gravitational acceleration)}}
-\end{eqnarray*}
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Description
-u_star Friction velocity 
-\begin_inset Formula $u_{*}$
-\end_inset
-
- in m/s (
-\begin_inset Flex MenuItem
-status open
-
-\begin_layout Plain Layout
-u_star
-\end_layout
-
-\end_inset
-
-) is derived from covariances of horizontal wind components with vertical
- wind speed:
-\end_layout
-
-\begin_layout Standard
-\begin_inset Formula 
-\[
-u_{*}=\sqrt[4]{\overline{U_{x}^{\prime}U_{z}^{\prime}}+\overline{U_{y}^{\prime}U_{z}^{\prime}}}
-\]
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Description
-tau Surface shear stress 
-\begin_inset Formula $\tau$
-\end_inset
-
- in Pascals (
-\begin_inset Flex MenuItem
-status collapsed
-
-\begin_layout Plain Layout
-tau
-\end_layout
-
-\end_inset
-
-) is derived from covariances of horizontal wind components with vertical
- wind speed and ambient air density 
-\begin_inset Formula $\rho_{a}$
-\end_inset
-
- (
-\begin_inset Flex MenuItem
-status collapsed
-
-\begin_layout Plain Layout
-rho_a_Avg
-\end_layout
-
-\end_inset
-
-):
-\end_layout
-
-\begin_layout Standard
-\begin_inset Formula 
-\[
-\tau=\rho_{a}\,\sqrt{\overline{U_{x}^{\prime}U_{z}^{\prime}}+\overline{U_{y}^{\prime}U_{z}^{\prime}}}
-\]
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Description
-itt The integral turbulence test following Hammerle et al (2007) is expressed
- as the percentage difference between measured ratio of 
-\begin_inset Formula $\sigma_{w}$
-\end_inset
-
- (
-\begin_inset Flex MenuItem
-status collapsed
-
-\begin_layout Plain Layout
-Uz_Std
-\end_layout
-
-\end_inset
-
-) to 
-\begin_inset Formula $u_{*}$
-\end_inset
-
- (
-\begin_inset Flex MenuItem
-status collapsed
-
-\begin_layout Plain Layout
-u_star
-\end_layout
-
-\end_inset
-
-) and the theoretical value 
-\begin_inset Formula $\phi_{w}$
-\end_inset
-
- prescribed by the Monin-Obukhov hypothesis 
-\begin_inset CommandInset citation
-LatexCommand cite
-key "article-itt"
-
-\end_inset
-
-.
- Outside the range shown for stability parameter 
-\begin_inset Formula $\zeta$
-\end_inset
-
-, 
-\begin_inset Formula $\Delta_{ITT}$
-\end_inset
-
- is undefined (NAN).
- 
-\begin_inset Formula 
-\[
-\phi_{w}=\left(\frac{\sigma_{w}}{u_{*}}\right)_{theory}=\begin{cases}
-1.25(1+3|\zeta|)^{1/3} & -2\leq\zeta<0\\
-1.25(1+0.2\zeta) & 0\leq\zeta<1
-\end{cases}
-\]
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Standard
-\begin_inset Formula 
-\[
-\Delta_{ITT}=100\frac{|\sigma_{w}/u_{*}-\phi_{w}|}{\phi_{w}}
-\]
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Description
-fetch_70 The 70% flux fetch requirement is the distance downwind 
-\begin_inset Formula $x$
-\end_inset
-
- to reach 
-\begin_inset Formula $F/S_{o}=0.7$
-\end_inset
-
- where 
-\begin_inset Formula $F$
-\end_inset
-
- is measured flux and 
-\begin_inset Formula $S_{o}$
-\end_inset
-
- is surface flux.
- This distance is expressed by adapting equation (15) of the model put forth
- by Hsieh, Katul and Chi (2000) 
-\begin_inset CommandInset citation
-LatexCommand cite
-key "article-footprint"
-
-\end_inset
-
-: 
-\begin_inset Formula 
-\begin{eqnarray*}
- &  & Z_{u}=Z_{m}(\ln(Z_{m}/Z_{o})-1+Z_{o}/Z_{m})\\
-x=\frac{-D\,|L|^{(1-P)}Z_{u}^{P}}{k^{2}\ln(F/S_{o})} & \quad where & Z_{m}\,\textrm{is measurement height}\\
- &  & Z_{o}\,\textrm{is roughness height}\\
- &  & L\,\textrm{is Obukhov length}\\
- &  & k=0.4\\
- &  & F/S_{o}=0.7\\
- & \quad and & \begin{cases}
-D=0.28;\, P=0.59 & \textrm{for unstable conditions}\\
-D=0.97;\, P=1 & \textrm{for near neutral and neutral conditions}\\
-D=2.44;\, P=1.33 & \textrm{for stable conditions}
-\end{cases}
-\end{eqnarray*}
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Description
-Fco2* The 
-\begin_inset Quotes eld
-\end_inset
-
-raw
-\begin_inset Quotes erd
-\end_inset
-
- flux of CO2 (
-\begin_inset Flex MenuItem
-status collapsed
-
-\begin_layout Plain Layout
-Fco2_raw
-\end_layout
-
-\end_inset
-
-) is the covariance of molar density of CO2 
-\begin_inset Formula $\varrho_{c}$
-\end_inset
-
- (
-\begin_inset Flex MenuItem
-status collapsed
-
-\begin_layout Plain Layout
-irga_CO2
-\end_layout
-
-\end_inset
-
-) with unrotated vertical wind speed 
-\begin_inset Formula $U_{z}$
-\end_inset
-
- (
-\begin_inset Flex MenuItem
-status collapsed
-
-\begin_layout Plain Layout
-sonic_Uz
-\end_layout
-
-\end_inset
-
-), scaled by the molecular weight of CO2 (
-\begin_inset Formula $M\! W_{c}$
-\end_inset
-
-).
- The 
-\begin_inset Quotes eld
-\end_inset
-
-corrected
-\begin_inset Quotes erd
-\end_inset
-
- flux (
-\begin_inset Flex MenuItem
-status collapsed
-
-\begin_layout Plain Layout
-Fco2
-\end_layout
-
-\end_inset
-
-) is the 
-\begin_inset Quotes eld
-\end_inset
-
-raw
-\begin_inset Quotes erd
-\end_inset
-
- flux plus two correction terms (
-\begin_inset Flex MenuItem
-status collapsed
-
-\begin_layout Plain Layout
-Fco2_LE_wpl
-\end_layout
-
-\end_inset
-
-, 
-\begin_inset Flex MenuItem
-status collapsed
-
-\begin_layout Plain Layout
-Fco2_H_wpl
-\end_layout
-
-\end_inset
-
-) as described by equation (24) of Webb, Pearman and Leuning (1980) 
-\begin_inset CommandInset citation
-LatexCommand cite
-key "article-wpl80"
-
-\end_inset
-
-.
- 
-\begin_inset Formula 
-\[
-F_{CO2}=\left(F_{CO2}\right)_{raw}+\left(F_{CO2}\right)_{LE}+\left(F_{CO2}\right)_{H}\qquad where
-\]
-
-\end_inset
-
-
-\begin_inset Formula 
-\begin{align*}
-\left(F_{CO2}\right)_{raw} & =\overline{\varrho_{c}^{\prime}U_{z}^{\prime}}\left(M\! W_{c}\right) & M\! W_{c} & =44.010\,\textrm{g/mol}\\
-\left(F_{CO2}\right)_{LE} & =\frac{\rho_{c}}{\rho_{d}}\overline{\varrho_{v}^{\prime}U_{z}^{\prime}}\left(M\! W_{d}\right) & M\! W_{v} & =18.01528\,\textrm{g/mol}\\
-\left(F_{CO2}\right)_{H} & =\rho_{c}\left(1+\frac{M\! W_{d}}{M\! W_{v}}\frac{\rho_{v}}{\rho_{d}}\right)\frac{\overline{T_{s}^{\prime}U_{z}^{\prime}}}{\overline{T_{a}}+273.15}\quad & M\! W_{d} & =28.98\,\textrm{g/mol}
-\end{align*}
-
-\end_inset
-
-If the integrated IRGA (EC150) is used, the most recent mean temperature
- (
-\begin_inset Flex MenuItem
-status collapsed
-
-\begin_layout Plain Layout
-irga_tmpr_Avg
-\end_layout
-
-\end_inset
-
-) is used for ambient temperature 
-\begin_inset Formula $\overline{T_{a}}$
-\end_inset
-
-; otherwise, mean temperature from the T/RH probe is used (
-\begin_inset Flex MenuItem
-status collapsed
-
-\begin_layout Plain Layout
-hmp_T_Avg
-\end_layout
-
-\end_inset
-
-).
-\end_layout
-
-\begin_layout Description
-LE* The 
-\begin_inset Quotes eld
-\end_inset
-
-raw
-\begin_inset Quotes erd
-\end_inset
-
- latent heat flux 
-\begin_inset Flex MenuItem
-status collapsed
-
-\begin_layout Plain Layout
-(LE_raw
-\end_layout
-
-\end_inset
-
-) is the covariance of molar density of water vapor 
-\begin_inset Formula $\varrho_{v}$
-\end_inset
-
- (
-\begin_inset Flex MenuItem
-status collapsed
-
-\begin_layout Plain Layout
-irga_H2O
-\end_layout
-
-\end_inset
-
-) with unrotated vertical wind speed 
-\begin_inset Formula $U_{z}$
-\end_inset
-
- 
-\begin_inset Flex MenuItem
-status collapsed
-
-\begin_layout Plain Layout
-(sonic_Uz
-\end_layout
-
-\end_inset
-
-), scaled by the molecular weight of H2O (
-\begin_inset Formula $M\! W_{H2O}$
-\end_inset
-
-) and latent heat of vaporization 
-\begin_inset Formula $L_{v}$
-\end_inset
-
- (
-\begin_inset Flex MenuItem
-status collapsed
-
-\begin_layout Plain Layout
-Lv
-\end_layout
-
-\end_inset
-
-).
- The 
-\begin_inset Quotes eld
-\end_inset
-
-corrected
-\begin_inset Quotes erd
-\end_inset
-
- flux (LE) is the 
-\begin_inset Quotes eld
-\end_inset
-
-raw
-\begin_inset Quotes erd
-\end_inset
-
- flux plus a correction term (
-\begin_inset Flex MenuItem
-status collapsed
-
-\begin_layout Plain Layout
-LE_wpl
-\end_layout
-
-\end_inset
-
-) as described by equation (25) of 
-\begin_inset CommandInset citation
-LatexCommand cite
-key "article-wpl80"
-
-\end_inset
-
-.
- 
-\begin_inset Formula 
-\[
-L\! E=L\! E_{raw}+L\! E_{WPL}\qquad where
-\]
-
-\end_inset
-
-
-\begin_inset Formula $M\! W_{c}$
-\end_inset
-
-, 
-\begin_inset Formula $M\! W_{v}$
-\end_inset
-
-, and 
-\begin_inset Formula $M\! W_{d}$
-\end_inset
-
- are defined above, and
-\begin_inset Formula 
-\begin{align*}
-L\! E_{raw} & =\overline{\varrho_{c}^{\prime}U_{z}^{\prime}}\left(M\! W_{v}\right)\left(L_{v}\right)\\
-L\! E_{WPL} & =L_{v}\left(1+\frac{M\! W_{d}}{M\! W_{v}}\frac{\rho_{v}}{\rho_{d}}\right)\left(\overline{\varrho_{v}^{\prime}U_{z}^{\prime}}\left(M\! W_{v}\right)+\frac{\overline{T_{s}^{\prime}U_{z}^{\prime}}\rho_{v}}{\overline{T_{a}}+273.15}\right)
-\end{align*}
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Description
-Hs* Presently, both sensible heat flux values 
-\begin_inset Flex MenuItem
-status collapsed
-
-\begin_layout Plain Layout
-Hs
-\end_layout
-
-\end_inset
-
- and 
-\begin_inset Flex MenuItem
-status collapsed
-
-\begin_layout Plain Layout
-Hs_raw
-\end_layout
-
-\end_inset
-
- will be the same.
- This is because the 
-\begin_inset Quotes eld
-\end_inset
-
-raw
-\begin_inset Quotes erd
-\end_inset
-
- flux calculated based on sonic temperature is not yet corrected for the
- effects of water vapor.
- The 
-\begin_inset Quotes eld
-\end_inset
-
-raw
-\begin_inset Quotes erd
-\end_inset
-
- flux is calculated using the covariance of sonic temperature 
-\begin_inset Formula $T_{s}$
-\end_inset
-
- and unrotated vertical wind speed 
-\begin_inset Formula $U_{z}$
-\end_inset
-
- with ambient air density 
-\begin_inset Formula $\rho_{a}$
-\end_inset
-
- and specific heat capacity of dry air at constant pressure 
-\begin_inset Formula $C_{pd}$
-\end_inset
-
- as: 
-\begin_inset Formula 
-\[
-H_{s}=\left(H_{s}\right)_{raw}=\overline{T_{s}^{\prime}U_{z}^{\prime}}\left(\rho_{a}\right)\left(C_{pd}\right)
-\]
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Description
-CE/SE/CT/ST
-\begin_inset CommandInset label
-LatexCommand label
-name "subsub:CE/SE/CT/ST"
-
-\end_inset
-
- These are the cosine and sine values of the two rotation angles, eta and
- theta.
- They will be used in the following half-hour interval for real-time rotation
- of the vertical wind speed (
-\begin_inset Flex MenuItem
-status collapsed
-
-\begin_layout Plain Layout
-Uz_rot
-\end_layout
-
-\end_inset
-
- under 
-\begin_inset CommandInset ref
-LatexCommand vref
-reference "sub:ts_fast"
-
-\end_inset
-
-) 
-\begin_inset CommandInset citation
-LatexCommand cite
-key "article-coordrot,book-lee-2004"
-
-\end_inset
-
-.
-\end_layout
-
-\begin_layout Standard
-\align center
-\begin_inset Formula $\begin{array}{ccc}
-C\! E=\frac{\overline{U_{x}}}{\sqrt{\overline{U_{x}}^{2}+\overline{U_{y}}^{2}}} & \qquad\qquad & C\! T=\frac{\sqrt{\overline{U_{x}}^{2}+\overline{U_{y}}^{2}}}{\sqrt{\overline{U_{x}}^{2}+\overline{U_{y}}^{2}+\overline{U_{z}}^{2}}}\\
-S\! E=\frac{\overline{U_{y}}}{\sqrt{\overline{U_{x}}^{2}+\overline{U_{y}}^{2}}} &  & S\! T=\frac{\overline{U_{z}}}{\sqrt{\overline{U_{x}}^{2}+\overline{U_{y}}^{2}+\overline{U_{z}}^{2}}}
-\end{array}$
-\end_inset
-
-
-\end_layout
-
-\begin_layout Description
-W_Std This value represents 
-\begin_inset Flex MenuItem
-status collapsed
-
-\begin_layout Plain Layout
-Uz_Std
-\end_layout
-
-\end_inset
-
- after double-rotation using the actual wind statistics of the current half-hour
- interval.
- This is in contrast to the rotation applied to 
-\begin_inset Flex MenuItem
-status collapsed
-
-\begin_layout Plain Layout
-Uz_rot
-\end_layout
-
-\end_inset
-
- of the ts_fast table (
-\begin_inset CommandInset ref
-LatexCommand vref
-reference "sub:ts_fast"
-
-\end_inset
-
-) which is based on the previous half-hour.
- 
-\end_layout
-
-\begin_layout Standard
-\begin_inset Formula 
-\begin{eqnarray*}
-\sigma_{W} & = & \sqrt{\sigma_{z}C\! T^{2}+\sigma_{x}S\! T^{2}C\! E^{2}+\sigma_{y}S\! T^{2}S\! E^{2}+2\overline{U_{x}^{\prime}U_{z}^{\prime}}C\! T\cdot C\! E\cdot S\! T-2\overline{U_{y}^{\prime}U_{z}^{\prime}}C\! T\cdot S\! T\cdot S\! E+2\overline{U_{x}^{\prime}U_{y}^{\prime}}C\! E\cdot S\! E\cdot S\! T^{2}}
-\end{eqnarray*}
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Description
-WD_unit/rslt_Avg If the sonic anemometer azimuth setting has been set, the
- resulting wind directions are adjusted from the sonic-local coordinate
- system to geographic coordinates: 
-\begin_inset Formula 
-\[
-W\! D_{geo}=(360+WD_{sonic}+azimuth+magnetic\, declination)\mod360
-\]
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Description
-WD_Yamartino_Std Standard deviation of wind direction calculated using Yamartino
- algorithm.
- 
-\begin_inset Quotes eld
-\end_inset
-
-This option complies with EPA guidelines for use with straight-line Gaussian
- dispersion models to model plume transport
-\begin_inset Quotes erd
-\end_inset
-
- 
-\begin_inset CommandInset citation
-LatexCommand cite
-key "helpfile-windvector"
-
-\end_inset
-
-.
-\end_layout
-
-\begin_layout Description
-WD_CSI_Std Standard deviation of wind direction calculated using Campbell
- Scientific's wind speed weighted algorithm.
- 
-\begin_inset Quotes eld
-\end_inset
-
-Use of the resultant mean horizontal wind direction is not recommended for
- straight-line Gaussian dispersion models, but may be used to model transport
- direction in a variable-trajectory model
-\begin_inset Quotes erd
-\end_inset
-
- 
-\begin_inset CommandInset citation
-LatexCommand cite
-key "helpfile-windvector"
-
-\end_inset
-
-.
- 
-\end_layout
-
-\begin_layout Description
-hmp_Tdew_Avg 
-\end_layout
-
-\begin_layout Description
-hmp_RH_Avg Since relative humidity is a complex non-linear scalar, it cannot
- be meaningfully averaged in a naive manner.
- Instead, the mean saturation vapor pressure 
-\begin_inset Formula $\overline{e_{sat}}$
-\end_inset
-
- (kPa) is first calculated using mean ambient temperature 
-\begin_inset Formula $\overline{T_{a}}$
-\end_inset
-
- (degC) and the built-in program instruction 
-\begin_inset Flex Code
-status collapsed
-
-\begin_layout Plain Layout
-SatVP
-\end_layout
-
-\end_inset
-
-:
-\end_layout
-
-\begin_layout Standard
-\begin_inset Formula 
-\[
-\overline{e_{sat}}=\mathtt{SatVP(}\overline{T_{a}})
-\]
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Standard
-\begin_inset Formula 
-\begin{eqnarray*}
-\mathtt{SatVP(T)}:\: e_{sat} & = & 0.1(A_{0}+A_{1}T+A_{2}T^{2}+A_{3}T^{3}+A_{4}T^{4}+A_{5}T^{5}+A_{6}T^{6})\\
-where &  & A_{0}=6.107799961\\
- &  & A_{1}=4.436518521\times10^{-5}\\
- &  & A_{2}=1.428945805\times10^{-2}\\
- &  & A_{3}=2.650648471\times10^{-4}\\
- &  & A_{4}=3.031240396\times10^{-6}\\
- &  & A_{5}=2.034080948\times10^{-8}\\
- &  & A_{6}=6.136820929\times10^{-11}
-\end{eqnarray*}
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Standard
-The mean relative humidity 
-\begin_inset Formula $\overline{RH}$
-\end_inset
-
- (%) is then derived by combining the results with 
-\begin_inset Flex MenuItem
-status collapsed
-
-\begin_layout Plain Layout
-hmp_e_Avg
-\end_layout
-
-\end_inset
-
-, the mean water vapor pressure 
-\begin_inset Formula $\overline{e}$
-\end_inset
-
- (kPa): 
-\end_layout
-
-\begin_layout Standard
-\begin_inset Formula 
-\[
-\overline{RH}=100\cdot\frac{\overline{e}}{\overline{e_{sat}}}
-\]
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Description
-hmp_e_Avg The mean water vapor pressure is the mean value of 1 Hz values
- of water vapor pressure calculated using the built-in instruction 
-\begin_inset Flex Code
-status collapsed
-
-\begin_layout Plain Layout
-VaporPressure
-\end_layout
-
-\end_inset
-
- and 
-\begin_inset Flex MenuItem
-status collapsed
-
-\begin_layout Plain Layout
-hmp_T
-\end_layout
-
-\end_inset
-
-/
-\begin_inset Flex MenuItem
-status collapsed
-
-\begin_layout Plain Layout
-hmp_RH
-\end_layout
-
-\end_inset
-
- from the ts_slow table (pg 
-\begin_inset CommandInset ref
-LatexCommand vref
-reference "sub:ts_slow"
-
-\end_inset
-
-).
- 
-\begin_inset Formula 
-\[
-\overline{e}=\overline{R\! H\frac{e_{sat}}{100}}
-\]
-
-\end_inset
-
-
-\begin_inset Newline newline
-\end_inset
-
-Internally, 
-\begin_inset Flex Code
-status collapsed
-
-\begin_layout Plain Layout
-VaporPressure
-\end_layout
-
-\end_inset
-
- uses the saturation vapor pressure 
-\begin_inset Formula $e_{sat}$
-\end_inset
-
- is calculated from 
-\begin_inset Flex MenuItem
-status collapsed
-
-\begin_layout Plain Layout
-hmp_T
-\end_layout
-
-\end_inset
-
-/
-\begin_inset Flex MenuItem
-status collapsed
-
-\begin_layout Plain Layout
-hmp_RH
-\end_layout
-
-\end_inset
-
- using the formula described in 
-\begin_inset Flex MenuItem
-status collapsed
-
-\begin_layout Plain Layout
-hmp_RH_Avg
-\end_layout
-
-\end_inset
-
-.
-\end_layout
-
-\begin_layout Description
-rho_a The mass density of ambient air 
-\begin_inset Formula $\rho_{a}$
-\end_inset
-
- accounts for the water vapor content.
- If an integrated sonic/IRGA (EC150) is used, the mean IRGA temperature
- is used for ambient air temperature 
-\begin_inset Formula $\overline{T_{a}}$
-\end_inset
-
-, otherwise the mean T/RH probe temperature is used.
- The mean barometric pressure 
-\begin_inset Formula $\overline{P_{a}}$
-\end_inset
-
- is always from the IRGA and the mean water vapor pressure 
-\begin_inset Formula $\overline{e}$
-\end_inset
-
- is always from the T/RH probe.
- 
-\begin_inset Formula 
-\[
-\rho_{a}=1000\left(\frac{\overline{P_{a}}-\overline{e}}{R_{d}(\overline{T_{a}}+273.15)}+\frac{\overline{e}}{R_{v}(\overline{T_{a}}+273.15)}\right)
-\]
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Standard
-\begin_inset Formula 
-\begin{eqnarray*}
-R_{d}=287.058\,\unitfrac{J}{kg\cdot K} & \qquad\qquad & R_{v}=461.495\,\nicefrac{J}{kg\cdot K}
-\end{eqnarray*}
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Standard
-\begin_inset Formula 
-\[
-\frac{kg}{m^{3}}=\left(\frac{1000\, Pa}{kPa}\right)\left(\frac{kPa}{\left(\nicefrac{J}{kg\cdot K}\right)K}\cdot\frac{J}{Pa\cdot m^{3}}+\frac{kPa}{\left(\nicefrac{J}{kg\cdot K}\right)K}\cdot\frac{J}{Pa\cdot m^{3}}\right)
-\]
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Description
-rho_d The mass density of dry air 
-\begin_inset Formula $\rho_{d}$
-\end_inset
-
- is the ambient air density 
-\begin_inset Formula $\rho_{a}$
-\end_inset
-
- (
-\begin_inset Flex MenuItem
-status collapsed
-
-\begin_layout Plain Layout
-rho_a
-\end_layout
-
-\end_inset
-
-) less the density of water vapor 
-\begin_inset Formula $\rho_{v}$
-\end_inset
-
- (
-\begin_inset Flex MenuItem
-status collapsed
-
-\begin_layout Plain Layout
-rho_v
-\end_layout
-
-\end_inset
-
-).
- 
-\begin_inset Formula 
-\[
-\overline{\rho_{d}},\,\frac{g}{m^{3}}=\left(\overline{\rho_{a}},\,\frac{kg}{m^{3}}\right)\left(\frac{10^{3}g}{kg}\right)-\left(\overline{\rho_{v}},\,\frac{g}{m^{3}}\right)
-\]
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Description
-rho_c/rho_v The mass densities 
-\begin_inset Formula $\rho_{c}$
-\end_inset
-
- and 
-\begin_inset Formula $\rho_{v}$
-\end_inset
-
- of CO
-\begin_inset script subscript
-
-\begin_layout Plain Layout
-2
-\end_layout
-
-\end_inset
-
- and H
-\begin_inset script subscript
-
-\begin_layout Plain Layout
-2
-\end_layout
-
-\end_inset
-
-O, respectively, are the molar densities 
-\begin_inset Flex MenuItem
-status collapsed
-
-\begin_layout Plain Layout
-CO2_Avg
-\end_layout
-
-\end_inset
-
- and 
-\begin_inset Flex MenuItem
-status collapsed
-
-\begin_layout Plain Layout
-H2O_Avg
-\end_layout
-
-\end_inset
-
- scaled by molecular weight:
-\end_layout
-
-\begin_layout Standard
-\align center
-\begin_inset Formula $\begin{aligned}\rho_{c},\,\frac{mg}{m^{3}} & =\left(CO_{2},\,\frac{mmol}{m^{3}}\right)\left(44.010\,\frac{g}{mol}\right)\\
-\rho_{v},\,\frac{g}{m^{3}} & =\left(H_{2}\! O,\,\frac{g}{m^{3}}\right)\left(18.01528\,\frac{g}{mol}\right)\left(\frac{mol}{10^{3}\, mmol}\right)
-\end{aligned}
-$
-\end_inset
-
-
-\end_layout
-
-\begin_layout Description
-Lv The latent heat of vaporization for water 
-\begin_inset Formula $L_{v}$
-\end_inset
-
- is calculated according to formula 8 of 
-\emph on
-A new formula for latent heat of vaporization as a function of temperature
-\emph default
- 
-\begin_inset CommandInset citation
-LatexCommand cite
-key "article-Lv"
-
-\end_inset
-
- where ambient temperature 
-\begin_inset Formula $T_{a}$
-\end_inset
-
- is in degrees Celcius.
-\end_layout
-
-\begin_layout Standard
-\begin_inset Formula 
-\[
-L_{v},\,\frac{J}{g}=1918.46\left(\frac{\overline{T_{a}}+273.13}{\overline{T_{a}}+239.24}\right)^{2}
-\]
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Description
-volFlow_up/dn_Avg These values represent mean volumetric flow 
-\begin_inset Formula $V$
-\end_inset
-
- calculated using 1 Hz measurements of mass flow rate 
-\begin_inset Formula $\dot{m}$
-\end_inset
-
-, ambient temperature 
-\begin_inset Formula $T_{a}$
-\end_inset
-
-, and barometric pressure 
-\begin_inset Formula $P_{a}$
-\end_inset
-
-.
- The mean of point-to-point conversions is thought to be more representative
- than a conversion based on half-hour mean values.
- 
-\begin_inset VSpace smallskip
-\end_inset
-
-
-\begin_inset Newline newline
-\end_inset
-
-Using the manufacturer-defined values for standard conditions of 
-\begin_inset Formula $T_{0}=$
-\end_inset
-
-70 ºF (21.1 ºC) and 
-\begin_inset Formula $P_{0}=$
-\end_inset
-
-14.69 psia (101.28 kPa), the volumetric flow is: 
-\begin_inset Formula 
-\[
-V,\,\frac{L}{min}=\left(\dot{m},\,\frac{std.\, L}{min}\right)\left(\frac{P_{0}}{P_{a}}\right)\left(\frac{T_{a}+273.15}{T_{0}+273.15}\right)
-\]
-
-\end_inset
-
-If the integrated IRGA (EC150) is used, its measurements (
-\begin_inset Flex MenuItem
-status collapsed
-
-\begin_layout Plain Layout
-irga_tmpr
-\end_layout
-
-\end_inset
-
-) are used for ambient temperature; otherwise, temperature from the T/RH
- probe is used (
-\begin_inset Flex MenuItem
-status collapsed
-
-\begin_layout Plain Layout
-hmp_T
-\end_layout
-
-\end_inset
-
-).
-\end_layout
-
-\begin_layout Description
-vlv_up/dn_ON_Tot The valve activation ratio is expressed as the ratio of
- these values to 
-\begin_inset Flex MenuItem
-status collapsed
-
-\begin_layout Plain Layout
-samples_Tot
-\end_layout
-
-\end_inset
-
-.
- 
-\begin_inset Formula 
-\begin{eqnarray*}
-\alpha_{up}=\frac{\textrm{vlv\_up\_ON\_Tot}}{\textrm{samples\_Tot}} & \qquad & \alpha_{dn}=\frac{\textrm{vlv\_dn\_ON\_Tot}}{\textrm{samples\_Tot}}
-\end{eqnarray*}
 
 \end_inset
 
