@@ -12969,22 +12969,27 @@ hmp_T
 \end_layout
 
 \begin_layout Description
-vlv_up/dn_ON_Tot The valve activation ratio is expressed as the ratio of
- these values to 
-\begin_inset Flex MenuItem
+vlv_up/dn_ON_Tot 
+\begin_inset Flex Strong
 status collapsed
 
 \begin_layout Plain Layout
-samples_Tot
+DEPRECATED
 \end_layout
 
 \end_inset
 
-.
+
+\end_layout
+
+\begin_layout Description
+vlv_up/dn_fraction The fraction of time spent sampling up- or down-drafts
+ is represented by ratio of number of actual valve activations to possible
+ activations.
  
 \begin_inset Formula 
 \begin{eqnarray*}
-\alpha_{up}=\frac{\textrm{vlv\_up\_ON\_Tot}}{\textrm{samples\_Tot}} & \qquad & \alpha_{dn}=\frac{\textrm{vlv\_dn\_ON\_Tot}}{\textrm{samples\_Tot}}
+\alpha_{up}=\frac{\textrm{vlv\_up\_ON\_Tot}}{\textrm{vlv\_possible}} & \qquad & \alpha_{dn}=\frac{\textrm{vlv\_dn\_ON\_Tot}}{\textrm{vlv\_possible}}
 \end{eqnarray*}
 
 \end_inset
@@ -13031,7 +13036,7 @@ name "tab:schema-stats"
 \noindent
 \align center
 \begin_inset Tabular
-<lyxtabular version="3" rows="61" columns="4">
+<lyxtabular version="3" rows="63" columns="4">
 <features rotate="0" tabularvalignment="middle">
 <column alignment="center" valignment="top">
 <column alignment="left" valignment="top">
@@ -15396,7 +15401,7 @@ total instances of down-draft sampling valve activation
 \begin_inset Text
 
 \begin_layout Plain Layout
-samples_Tot
+vlv_possible
 \end_layout
 
 \end_inset
@@ -15410,7 +15415,7 @@ scans
 
 \end_inset
 </cell>
-<cell alignment="left" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
 \begin_inset Text
 
 \begin_layout Plain Layout
@@ -15426,6 +15431,82 @@ total potential sampling instances
 
 \begin_layout Plain Layout
 59
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+vlv_up_fraction
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+ratio
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+fraction of time up-draft sampling valve is activated
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+60
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+vlv_dn_fraction
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+ratio
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+fraction of time down-draft sampling valve is activated
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+61
 \end_layout
 
 \end_inset
@@ -15463,7 +15544,7 @@ mean temperature of datalogger
 \begin_inset Text
 
 \begin_layout Plain Layout
-60
+62
 \end_layout
 
 \end_inset

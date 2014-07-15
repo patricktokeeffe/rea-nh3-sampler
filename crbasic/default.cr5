@@ -215,7 +215,7 @@ Public cov_sonic(1,4)'= [ [Ts,  Ux, Uy, Uz] ]
 Public cov_irga(2,4) '= [ [CO2, Ux, Uy, Uz],
                      '    [H2O, Ux, Uy, Uz],
                      '    [Tc,  Ux, Uy, Uz] ]  <-- Tc not implemented!
-Public cov_out(43)
+Public cov_out(46)
 Alias cov_out(1)  = Ux_Avg 'Average() x4
 Alias cov_out(2)  = Uy_Avg
 Alias cov_out(3)  = Uz_Avg
@@ -257,12 +257,15 @@ Alias cov_out(35) = cov_H2O_Uz
 '  Alias cov_out() = cov_Tc_Uz
 Alias cov_out(36) = hmp_T_Avg 'Average() x2
 Alias cov_out(37) = hmp_e_Avg
-Alias cov_out(38) = rea_co2_up_Avg
+Alias cov_out(38) = rea_co2_up_Avg 'Average() x 6
 Alias cov_out(39) = rea_co2_dn_Avg
 Alias cov_out(40) = rea_h2o_up_Avg
 Alias cov_out(41) = rea_h2o_dn_Avg
 Alias cov_out(42) = rea_tmpr_up_Avg
 Alias cov_out(43) = rea_tmpr_dn_Avg
+Alias cov_out(44) = vlv_up_ON_Tot 'Totalize() x 3
+Alias cov_out(45) = vlv_dn_ON_Tot
+Alias cov_out(46) = vlv_possible
 Units Ux_Avg = m/s
 Units Uy_Avg = m/s
 Units Uz_Avg = m/s
@@ -294,13 +297,8 @@ Units rea_h2o_up_Avg = mmol/m^3
 Units rea_h2o_dn_Avg = mmol/m^3
 Units rea_tmpr_up_Avg = degC
 Units rea_tmpr_dn_Avg = degC
-
-Public rea_out(3) 
-Alias rea_out(1) = vlv_up_on_Tot
-Alias rea_out(2) = vlv_dn_on_Tot
-Alias rea_out(3) = vlv_possible
-Units vlv_up_on_Tot = scans
-Units vlv_dn_on_Tot = scans
+Units vlv_up_ON_Tot = scans
+Units vlv_dn_ON_Tot = scans
 Units vlv_possible = scans
 
 Dim sqrt_UV 'double-rotation calcs
@@ -386,6 +384,11 @@ Alias beta(1) = beta_CO2
 Alias beta(2) = beta_H2O
 Alias beta(3) = beta_Ts
 Units beta = dimless
+
+Public vlv_up_fraction
+Public vlv_dn_fraction
+Units vlv_up_fraction = ratio
+Units vlv_dn_fraction = ratio
 
 '---------- OPERATING VARIABLES ----------
 Public shield_ON As Boolean 'menus
@@ -715,11 +718,11 @@ DataTable(stats,True,-1)
   Average(1,massFlow_dn,IEEE4,(inbetween_1hz_scan OR massFlow_dn=NAN))
   Average(1,volFlow_up,IEEE4,(inbetween_1hz_scan OR volFlow_up=NAN))
   Average(1,volFlow_dn,IEEE4,(inbetween_1hz_scan OR volFlow_dn=NAN))
-  Totalize(1,vlv_up_ON,UINT4,vlv_up_ON=NAN)
-  Totalize(1,vlv_dn_ON,UINT4,vlv_dn_ON=NAN)
-  Totalize(1,1,UINT4,False)
-    FieldNames("samples_Tot")
-    Units samples_Tot = scans
+  Sample(1,vlv_up_ON_Tot,UINT4)
+  Sample(1,vlv_dn_ON_Tot,UINT4)
+  Sample(1,vlv_possible,UINT4)
+  Sample(1,vlv_up_fraction,IEEE4)
+  Sample(1,vlv_dn_fraction,IEEE4)
 
   Average(1,logger_tmpr,IEEE4,logger_tmpr=NAN)
   Average(1,logger_power,IEEE4,logger_power=NAN)
@@ -1528,6 +1531,9 @@ BeginProg
                                             (rea_h2o_up_Avg - rea_h2o_dn_Avg))
         'dimless: (K)(m/s)(s/m)(1/K - 1/K)
         beta_Ts = cov_Ts_Uz / (Uz_Std * (rea_tmpr_up_Avg - rea_tmpr_dn_Avg))
+
+        vlv_up_fraction = vlv_up_ON_Tot/vlv_possible
+        vlv_dn_fraction = vlv_dn_ON_Tot/vlv_possible
 
         CallTable(stats)
       EndIf 'new 30min met record
