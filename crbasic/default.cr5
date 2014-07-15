@@ -928,8 +928,7 @@ EndFunction
 '[tmpr] = C, [press] = kPa (barometric), [H2Opress] = kPa (water vapor)
 Function density_of_air(tmpr, press, H2Opress) As Float 'kg/m^3
   '(Pa/kPa)[ (kPa)(kg*K/J)(1/K)(J / Pa*m^3) + (kPa)(kg*K/J)(1/K)(J / Pa*m^3) ]
-  Return 1000*( (press-H2Opress)/(Rd*(tmpr+273.15)) + _
-                                                  H2Opress/(Rv*(tmpr+273.15)) )
+  Return 1000*( (press-H2Opress)/(Rd*(tmpr+273.15)) + H2Opress/(Rv*(tmpr+273.15)) )
 EndFunction
 
 'Derived by inverting equations in Appendix D of EC150 manual
@@ -1436,9 +1435,7 @@ BeginProg
         V_Avg = Uy_Avg*CE - Ux_Avg*SE
         W_Avg = Uz_Avg*CT - Ux_Avg*ST*CE - Uy_Avg*ST*SE
         'HINT values with "_Std" suffix are still covariances
-        W_Std = SQR(Uz_Std*CT*CT + Ux_Std*ST*ST*CE*CE + Uy_Std*ST*ST*SE*SE - _
-                    2*cov_Ux_Uz*CT*CE*ST - 2*cov_Uy_Uz*CT*ST*SE + _
-                    2*cov_Ux_Uy*CE*ST*ST*SE)
+        W_Std = SQR(Uz_Std*CT*CT + Ux_Std*ST*ST*CE*CE + Uy_Std*ST*ST*SE*SE - 2*cov_Ux_Uz*CT*CE*ST - 2*cov_Uy_Uz*CT*ST*SE + 2*cov_Ux_Uy*CE*ST*ST*SE)
         Uz_Std = SQR(Uz_Std) '(co)variances -> stdevs (ignore Ux_Std, Uy_Std)
         Ts_Std = SQR(Ts_Std)
         CO2_Std = SQR(CO2_Std)
@@ -1473,11 +1470,9 @@ BeginProg
         fetch_70 = Footprint70(L_) 'm
 
         #If (DATA_SRCS=SDM_CSAT3_LI7500_1) Then
-          CO2_ppm_Avg = dry_mixing_ratio(CO2_Avg, H2O_Avg, _
-                                                    hmp_T_Avg, irga_press_Avg)
+          CO2_ppm_Avg = dry_mixing_ratio(CO2_Avg, H2O_Avg, hmp_T_Avg, irga_press_Avg)
         #ElseIf (DATA_SRCS=SDM_CSAT3A_EC150_2) Then
-          CO2_ppm_Avg = dry_mixing_ratio(CO2_Avg, H2O_Avg, _
-                                                irga_tmpr_Avg, irga_press_Avg)
+          CO2_ppm_Avg = dry_mixing_ratio(CO2_Avg, H2O_Avg, irga_tmpr_Avg, irga_press_Avg)
         #EndIf
 
         rho_v = H2O_Avg*MW_h2o/1000 'g/m^3 = (mmol/m^3)(g/mol)(mol/1e3 mmol)
@@ -1490,11 +1485,9 @@ BeginProg
         Fco2_LE_wpl = MU_WPL * rho_c/(rho_d*1000) * cov_H2O_Uz * MW_h2o
         #If (DATA_SRCS=SDM_CSAT3_LI7500_1) Then
           'mg/(m^2 s) = (1 + (1)(1))(mg/m^3)(K*m/s)(1/K)
-          Fco2_H_wpl = (1 + MU_WPL*sigma_wpl) * rho_c * _
-                                                  cov_Ts_Uz/(hmp_T_Avg+273.15)
+          Fco2_H_wpl = (1 + MU_WPL*sigma_wpl) * rho_c * cov_Ts_Uz/(hmp_T_Avg+273.15)
         #ElseIf (DATA_SRCS=SDM_CSAT3A_EC150_2) Then
-          Fco2_H_wpl = (1 + MU_WPL*sigma_wpl) * rho_c * _
-                                              cov_Ts_Uz/(irga_tmpr_Avg+273.15)
+          Fco2_H_wpl = (1 + MU_WPL*sigma_wpl) * rho_c * cov_Ts_Uz/(irga_tmpr_Avg+273.15)
         #EndIf
         'mg/(m^2 s) = (mmol/m^3)(m/s) * (mg/mmol)
         Fco2_raw = cov_CO2_Uz * MW_co2
@@ -1504,11 +1497,9 @@ BeginProg
         #If (DATA_SRCS=SDM_CSAT3_LI7500_1) Then
           'W/m^2 = (J/g) * (1 + (1)(1)) *
           '     ( (mmol/m^3)(m/s)(g/mol)(mol/1e3 mmol) + (K*m/s)(g/m^3)(1/K) )
-          LE_wpl = Lv * (1 + MU_WPL*sigma_wpl) * _
-                 (cov_H2O_Uz*MW_h2o/1000 + cov_Ts_Uz*rho_v/(hmp_T_Avg+273.15))
+          LE_wpl = Lv * (1 + MU_WPL*sigma_wpl) * (cov_H2O_Uz*MW_h2o/1000 + cov_Ts_Uz*rho_v/(hmp_T_Avg+273.15))
         #ElseIf (DATA_SRCS=SDM_CSAT3A_EC150_2) Then
-          LE_wpl = Lv * (1 + MU_WPL*sigma_wpl) * _
-             (cov_H2O_Uz*MW_h2o/1000 + cov_Ts_Uz*rho_v/(irga_tmpr_Avg+273.15))
+          LE_wpl = Lv * (1 + MU_WPL*sigma_wpl) * (cov_H2O_Uz*MW_h2o/1000 + cov_Ts_Uz*rho_v/(irga_tmpr_Avg+273.15))
         #EndIf
         'W/m^2 = (mmol/m^3)(m/s)(g/mol)(mol/1e3 mmol)(J/g)
         LE_raw = (cov_H2O_Uz*MW_h2o/1000)*Lv
@@ -1527,8 +1518,7 @@ BeginProg
         'dimless: (mg/(m^2 s))(s/m)(mmol/mg)(m^3/mmol - m^3/mmol)
         beta_CO2 = Fco2/(Uz_Std * MW_co2 * (rea_co2_up_Avg - rea_co2_dn_Avg))
         'dimless: (W/m^2)(g/J)(J/(W*s))(s/m)(mmol/g)(m^3/mmol - m^3/mmol)
-        beta_H2O = LE / (Lv * Uz_Std * (MW_h2o/1000) * _
-                                            (rea_h2o_up_Avg - rea_h2o_dn_Avg))
+        beta_H2O = LE / (Lv * Uz_Std * (MW_h2o/1000) * (rea_h2o_up_Avg - rea_h2o_dn_Avg))
         'dimless: (K)(m/s)(s/m)(1/K - 1/K)
         beta_Ts = cov_Ts_Uz / (Uz_Std * (rea_tmpr_up_Avg - rea_tmpr_dn_Avg))
 
@@ -1575,12 +1565,9 @@ BeginProg
     VoltDiff(hmp_T,1,mv1000,HMP_T_DF,True,0,INTEG,HMP_T_MULT,HMP_T_OFF)
     VoltDiff(hmp_RH,1,mv1000,HMP_RH_DF,True,0,INTEG,HMP_RH_MULT,HMP_RH_OFF)
 
-    VoltDiff(massFlow_up,1,mv5000,MFC_UP_DF,True,0,INTEG, _
-                                                   MFC_UPDN_MULT,MFC_UPDN_OFF)
-    VoltDiff(massFlow_dn,1,mv5000,MFC_DN_DF,True,0,INTEG, _
-                                                   MFC_UPDN_MULT,MFC_UPDN_OFF)
-    VoltSe(massFlow_zero,1,mv5000,MFC_ZERO_SE,True,0,INTEG, _
-                                                   MFC_ZERO_MULT,MFC_ZERO_OFF)
+    VoltDiff(massFlow_up,1,mv5000,MFC_UP_DF,True,0,INTEG, MFC_UPDN_MULT,MFC_UPDN_OFF)
+    VoltDiff(massFlow_dn,1,mv5000,MFC_DN_DF,True,0,INTEG, MFC_UPDN_MULT,MFC_UPDN_OFF)
+    VoltSe(massFlow_zero,1,mv5000,MFC_ZERO_SE,True,0,INTEG, MFC_ZERO_MULT,MFC_ZERO_OFF)
     If (shield_ON AND flowSP_auto AND is_running) Then autothrottle()
 
     #If (DATA_SRCS=SDM_CSAT3A_EC150_2) Then
