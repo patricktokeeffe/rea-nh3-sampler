@@ -1317,10 +1317,7 @@ BeginProg
     #EndIf
 
     Uz_rot = sonic_Uz*CT - sonic_Ux*ST*CE - sonic_Uy*ST*SE
-    If (NOT is_running) Then
-      vlv_up_ON = False
-      vlv_dn_ON = False
-    ElseIf (Uz_rot >= deadband) Then
+    If (Uz_rot >= deadband) Then
       vlv_up_ON = True
       vlv_dn_ON = False
       rea_co2_up = irga_CO2
@@ -1342,6 +1339,10 @@ BeginProg
       vlv_up_ON = False
       vlv_dn_ON = False
       Move(rea_sim(1),6,NAN,1)
+    EndIf
+    If (NOT is_running) Then
+      vlv_up_ON = False
+      vlv_dn_ON = False
     EndIf
     PortSet(C_VLV_UP,vlv_up_ON) 'HINT PortSet occurs as measurement task
     PortSet(C_VLV_DN,vlv_dn_ON) '  but WriteIO is processing task (delayed)
