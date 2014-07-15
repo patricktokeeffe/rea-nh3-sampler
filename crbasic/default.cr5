@@ -608,13 +608,13 @@ DataTable(work_cov,TRUE,1)
   Average(1,rea_tmpr_dn,IEEE4,rea_tmpr_dn=NAN)
 EndTable
 
-DataTable(work_rea,True,-1)
-  DataInterval(0,STAT_INTV,Min,5)
-  
-  Totalize(1,vlv_up_ON,UINT4,vlv_up_ON=NAN)
-  Totalize(1,vlv_dn_ON,UINT4,vlv_dn_ON=NAN)
-  Totalize(1,1,UINT4,False)
-EndTable
+'DataTable(work_rea,True,-1)
+'  DataInterval(0,STAT_INTV,Min,5)
+'  
+'  Totalize(1,vlv_up_ON,UINT4,vlv_up_ON=NAN)
+'  Totalize(1,vlv_dn_ON,UINT4,vlv_dn_ON=NAN)
+'  Totalize(1,1,UINT4,False)
+'EndTable
 
 '----- FINAL OUTPUTS -----
 DataTable(ts_fast,True,600)
