@@ -15,6 +15,8 @@
 'datalogger but do not check-in file with other than empty string
 Const VERSION = ""
 
+Public decreasing_flow As Boolean 'XXX TST
+
 '=====================  DEVICE CONFIGURATION  ================================
 Const SDM_CSAT3_LI7500_1 = 1 'aliases for menu
 Const SDM_CSAT3A_EC150_2 = 2
@@ -420,7 +422,6 @@ Alias flow_setpnt(2) = setpnt_updn
 
 Public mean_up_flow
 Public mean_dn_flow
-Public decreasing_flow As Boolean 'XXX TST
 
 Public azimuth
 
@@ -1230,7 +1231,7 @@ Sub autothrottle()
   AvgRun(mean_dn_flow,1,massFlow_dn,10)
   If (ABS(mean_up_flow - mean_dn_flow) > 0.1) Then
     decreasing_flow = True
-    setpnt_updn -= (0.1/MFC_UPDN_MULT) 'decrease 0.1 sLpm
+    'setpnt_updn -= (0.1/MFC_UPDN_MULT) 'decrease 0.1 sLpm
   Else
     decreasing_flow = False
   EndIf
