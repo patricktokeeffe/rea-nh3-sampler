@@ -432,6 +432,7 @@ Units deadband = m/s
 Public vlv_up_ON As Boolean
 Public vlv_dn_ON As Boolean
 
+Dim rea_finished As Boolean 'openinterval data table trigger var
 Dim just_had_1hz_scan As Boolean 'data table exclusion flags
 Dim inbetween_1hz_scan As Boolean
 
@@ -613,15 +614,30 @@ DataTable(work_cov,TRUE,1)
   Totalize(1,1,UINT4,False)
 EndTable
 
-'DataTable(work_rea,True,-1)
-'  DataInterval(0,STAT_INTV,Min,5)
-'  
-'  Totalize(1,vlv_up_ON,UINT4,vlv_up_ON=NAN)
-'  Totalize(1,vlv_dn_ON,UINT4,vlv_dn_ON=NAN)
-'  Totalize(1,1,UINT4,False)
-'EndTable
-
 '----- FINAL OUTPUTS -----
+DataTable(rea,rea_finished,10)
+  OpenInterval
+  CardOut(1,100)
+
+  StdDev(1,sonic_Uz,IEEE4,sonic_Uz=NAN OR disable_sonic)
+  StdDev(1,Uz_rot,IEEE4,Uz_rot=NAN or disable_sonic)
+  
+  Average(1,volFlow_up,IEEE4,(inbetween_1hz_scan OR volFlow_up=NAN))
+  Average(1,volFlow_dn,IEEE4,(inbetween_1hz_scan OR volFlow_dn=NAN))
+  
+  Totalize(1,vlv_up_ON,UINT4,vlv_up_ON=NAN)
+  Totalize(1,vlv_dn_ON,UINT4,vlv_dn_ON=NAN)
+  Totalize(1,1,UINT4,False)
+    FieldNames("vlv_possible")
+  
+  Average(1,rea_co2_up,IEEE4,rea_co2_up=NAN)
+  Average(1,rea_co2_dn,IEEE4,rea_co2_dn=NAN)
+  Average(1,rea_h2o_up,IEEE4,rea_h2o_up=NAN)
+  Average(1,rea_h2o_dn,IEEE4,rea_h2o_dn=NAN)
+  Average(1,rea_tmpr_up,IEEE4,rea_tmpr_up=NAN)
+  Average(1,rea_tmpr_dn,IEEE4,rea_tmpr_dn=NAN)
+EndTable
+
 DataTable(ts_fast,True,600)
   DataInterval(0,FAST_INTV,mSec,10)
   CardOut(1,-1) 'XXX make fixed size in days
@@ -732,22 +748,6 @@ DataTable(stats,True,-1)
   Average(1,logger_tmpr,IEEE4,logger_tmpr=NAN)
   Average(1,logger_power,IEEE4,logger_power=NAN)
 EndTable
-
-'DataTable(rea,True,-1) 'XXX rea on trigger?
-'  DataInterval(0,STAT_INTV,Min,10)
-'  CardOut(1,-1) 'XXX make fixed size in days
-'  
-'  Sample(1,Uz_Std,FP2) '<-- W_std?
-'  'sample beta
-'  Sample(1,massFlow_up_Avg,IEEE4)
-'  Sample(1,massFlow_dn_Avg,IEEE4)
-'  Sample(1,volFlow_up_Avg,IEEE4)
-'  Sample(1,volFlow_dn_Avg,IEEE4)
-'  Sample(1,vlv_up_on_Tot/vlv_possible,FP2)
-'    FieldNames("frac_up_on")
-'  Sample(1,vlv_dn_on_Tot/vlv_possible,FP2)
-'    FieldNames("frac_dn_on")
-'EndTable
 
 DataTable(info,1,50)
   CardOut(1,200)
@@ -1019,14 +1019,6 @@ Sub update_delayed_start_time()
   start_run = ((hrofday+ch_run_delay) MOD 24)*60 + IIF(minofhr >= 30, 60, 30)
 EndSub
 
-Sub end_run()
-  is_running = False
-  run_aborted = Cancel
-  run_queued = Cancel
-  run_already_queued = False
-  elapsed_time = Timer(RUN_TIMER,min,STOP_RESET)
-EndSub
-
 Sub update_deadband()
   'HINT deadband is set to NAN at start-up so it can be caught by the next
   '  line; a change to settings (dband_def, dband_mult, dband_min) skips
@@ -1226,6 +1218,7 @@ Sub update_shield_state()
   EndIf
 EndSub
 
+'---------------------
 Sub autothrottle()
   AvgRun(mean_up_flow,1,massFlow_up,10)
   AvgRun(mean_dn_flow,1,massFlow_dn,10)
@@ -1235,6 +1228,18 @@ Sub autothrottle()
   Else
     decreasing_flow = False
   EndIf
+EndSub
+
+Sub end_run()
+  is_running = False
+  run_aborted = Cancel
+  run_queued = Cancel
+  run_already_queued = False
+  elapsed_time = Timer(RUN_TIMER,min,STOP_RESET)
+
+  rea_finished = True
+  CallTable(rea)
+  rea_finished = False
 EndSub
 
 '---------------------
@@ -1533,6 +1538,8 @@ BeginProg
 
         CallTable(stats)
       EndIf 'new 30min met record
+      
+      If (is_running) Then CallTable(rea)
 
     EndIf 'have enough scans to perform real-time lag compensation
 
@@ -1590,8 +1597,6 @@ BeginProg
     VaporPressure(hmp_e, hmp_T, hmp_RH) 'hmp_e needed in work_cov table
 
     CallTable(ts_slow)
-'    CallTable(rea)
-
     just_had_1hz_scan = True
   NextScan
 EndProg
