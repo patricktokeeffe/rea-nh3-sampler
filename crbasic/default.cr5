@@ -599,13 +599,17 @@ DataTable(work_cov,TRUE,1)
 
   Average(1,hmp_T,IEEE4,(inbetween_1hz_scan OR hmp_T=NAN))
   Average(1,hmp_e,IEEE4,(inbetween_1hz_scan OR hmp_e=NAN))
-  
+
   Average(1,rea_co2_up,IEEE4,rea_co2_up=NAN)
   Average(1,rea_co2_dn,IEEE4,rea_co2_dn=NAN)
   Average(1,rea_h2o_up,IEEE4,rea_h2o_up=NAN)
   Average(1,rea_h2o_dn,IEEE4,rea_h2o_dn=NAN)
   Average(1,rea_tmpr_up,IEEE4,rea_tmpr_up=NAN)
   Average(1,rea_tmpr_dn,IEEE4,rea_tmpr_dn=NAN)
+  
+  Totalize(1,vlv_up_ON,UINT4,vlv_up_ON=NAN)
+  Totalize(1,vlv_dn_ON,UINT4,vlv_dn_ON=NAN)
+  Totalize(1,1,UINT4,False)
 EndTable
 
 'DataTable(work_rea,True,-1)
