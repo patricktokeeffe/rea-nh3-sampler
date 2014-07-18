@@ -1435,7 +1435,7 @@ BeginProg
         'values are used in flux calcs but be aware this procecure acts as a
         'high-pass filter removing contributions from eddies of period greater
         'than averaging time (30min)!
-        sqrt_UV = SQR(Ux_Avg^2 + Uy_Avg)
+        sqrt_UV = SQR(Ux_Avg^2 + Uy_Avg^2)
         sqrt_UVW = SQR(Ux_Avg^2 + Uy_Avg^2 + Uz_Avg^2)
         CE = Ux_Avg/sqrt_UV
         SE = Uy_Avg/sqrt_UV
