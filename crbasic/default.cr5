@@ -43,10 +43,9 @@ Const HMP_T_DF = 11
 Const HMP_RH_DF = 12
 
 Const MFC_UP_DF = 1
-Const MFC_DN_DF = 2
+Const MFC_ZERO_DF = 2
+Const MFC_DN_DF = 3
 Const MFC_UPDN_CAO = 1 'MFCs share port
-
-Const MFC_ZERO_SE = 5  'note: single-ended
 Const MFC_ZERO_CAO = 2
 
 Const C_UPDN_OFF = 1 'C1: valve off for UP/DN MFCs
@@ -1580,7 +1579,7 @@ BeginProg
 
     VoltDiff(massFlow_up,1,mv5000,MFC_UP_DF,True,0,INTEG, MFC_UPDN_MULT,MFC_UPDN_OFF)
     VoltDiff(massFlow_dn,1,mv5000,MFC_DN_DF,True,0,INTEG, MFC_UPDN_MULT,MFC_UPDN_OFF)
-    VoltSe(massFlow_zero,1,mv5000,MFC_ZERO_SE,True,0,INTEG, MFC_ZERO_MULT,MFC_ZERO_OFF)
+    VoltDiff(massFlow_zero,1,mv5000,MFC_ZERO_DF,True,0,INTEG, MFC_ZERO_MULT,MFC_ZERO_OFF)
     If (shield_ON AND flowSP_auto AND is_running) Then autothrottle()
 
     #If (DATA_SRCS=SDM_CSAT3A_EC150_2) Then
