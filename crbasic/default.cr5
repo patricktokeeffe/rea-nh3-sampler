@@ -745,8 +745,8 @@ DataTable(stats,True,-1)
   Sample(1,vlv_up_fraction,FP2)
   Sample(1,vlv_dn_fraction,FP2)
 
-  Average(1,logger_tmpr,FP2,logger_tmpr=NAN)
-  Average(1,logger_power,FP2,logger_power=NAN)
+  Average(1,logger_tmpr,FP2,(inbetween_1hz_scan OR logger_tmpr=NAN))
+  Average(1,logger_power,FP2,(inbetween_1hz_scan OR logger_power=NAN))
 EndTable
 
 DataTable(info,1,50)
