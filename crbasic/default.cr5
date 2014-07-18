@@ -1008,8 +1008,8 @@ Function TurbulenceTest(sigma_W, u_star_, L) As Float '% difference
     Else
       itt_model = 1.25 * (1+0.2*zeta)
     EndIf
-    Return 100*ABS((sigma_W/u_star_) - itt_model)/itt_model
   EndIf
+  Return (100*ABS((sigma_W/u_star_) - itt_model)/itt_model)
 EndFunction
 
 
