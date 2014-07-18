@@ -1243,8 +1243,13 @@ Sub end_run()
 EndSub
 
 '---------------------
+Sub reset_rotangles()
+  CT = 1.0
+  Move(rot_angles(2),3,0,3)
+EndSub
+
 Sub setup()
-  rot_angles(1) = 1.0
+  reset_rotangles()
   deadband = NAN 'for catching in update_deadband()
 
   load_settings()
@@ -1440,6 +1445,7 @@ BeginProg
         SE = Uy_Avg/sqrt_UV
         CT = sqrt_UV/sqrt_UVW
         ST = Uz_Avg/sqrt_UVW
+        If (CE=NAN OR SE=NAN OR CT=NAN OR ST=NAN) Then reset_rotangles()
         U_Avg = Ux_Avg*CT*CE + Uy_Avg*CT*SE + Uz_Avg*ST
         V_Avg = Uy_Avg*CE - Ux_Avg*SE
         W_Avg = Uz_Avg*CT - Ux_Avg*ST*CE - Uy_Avg*ST*SE
