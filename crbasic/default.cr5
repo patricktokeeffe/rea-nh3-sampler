@@ -608,8 +608,8 @@ DataTable(work_cov,TRUE,1)
   Average(1,rea_tmpr_up,IEEE4,rea_tmpr_up=NAN)
   Average(1,rea_tmpr_dn,IEEE4,rea_tmpr_dn=NAN)
   
-  Totalize(1,vlv_up_ON,UINT4,vlv_up_ON=NAN)
-  Totalize(1,vlv_dn_ON,UINT4,vlv_dn_ON=NAN)
+  Totalize(1,1,UINT4,NOT vlv_up_ON OR vlv_up_ON=NAN)
+  Totalize(1,1,UINT4,NOT vlv_dn_ON OR vlv_dn_ON=NAN)
   Totalize(1,1,UINT4,False)
 EndTable
 
