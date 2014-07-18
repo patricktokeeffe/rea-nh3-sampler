@@ -1236,7 +1236,11 @@ Sub autothrottle()
   AvgRun(mean_dn_flow,1,massFlow_dn,10)
   If (ABS(mean_up_flow - mean_dn_flow) > 0.1) Then
     decreasing_flow = True
-    'setpnt_updn -= (0.1/MFC_UPDN_MULT) 'decrease 0.1 sLpm
+    'HINT limit autothrottling to 60% of "target setpoint"
+    'TODO provide user access to lower bound
+    If (setpnt_updn > 0.6*UPDNFLOW_MAX/MFC_UPDN_MULT) Then
+      setpnt_updn -= (0.1/MFC_UPDN_MULT) 'decrease 0.1 sLpm
+    EndIf
   Else
     decreasing_flow = False
   EndIf
