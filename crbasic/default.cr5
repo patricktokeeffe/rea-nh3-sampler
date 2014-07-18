@@ -710,6 +710,7 @@ DataTable(stats,True,-1)
   Sample(1,CT,IEEE4)
   Sample(1,ST,IEEE4)
   Sample(1,W_Std,IEEE4)
+  Sample(1,deadband,IEEE4)
 
   Sample(1,WS_sclr_Avg,IEEE4)
   Sample(1,WS_rslt_Avg,IEEE4)

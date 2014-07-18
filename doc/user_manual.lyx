@@ -14270,7 +14270,7 @@ name "tab:schema-stats"
 \noindent
 \align center
 \begin_inset Tabular
-<lyxtabular version="3" rows="63" columns="4">
+<lyxtabular version="3" rows="64" columns="4">
 <features rotate="0" tabularvalignment="middle">
 <column alignment="center" valignment="top">
 <column alignment="left" valignment="top">
@@ -15651,6 +15651,44 @@ double-rotated standard deviation of vertical wind speed
 \begin_inset Text
 
 \begin_layout Plain Layout
+deadband
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+m/s
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+vertical wind speed threshold for sampling up-/down-drafts
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+34
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
 WS_sclr_Avg
 \end_layout
 
@@ -15680,7 +15718,7 @@ mean scalar wind speed
 \begin_inset Text
 
 \begin_layout Plain Layout
-34
+35
 \end_layout
 
 \end_inset
@@ -15718,7 +15756,7 @@ mean resultant wind speed
 \begin_inset Text
 
 \begin_layout Plain Layout
-35
+36
 \end_layout
 
 \end_inset
@@ -15756,7 +15794,7 @@ mean unit wind direction
 \begin_inset Text
 
 \begin_layout Plain Layout
-36
+37
 \end_layout
 
 \end_inset
@@ -15794,7 +15832,7 @@ mean resultant wind direction
 \begin_inset Text
 
 \begin_layout Plain Layout
-37
+38
 \end_layout
 
 \end_inset
@@ -15832,7 +15870,7 @@ standard deviation of wind direction (Yamartino formula)
 \begin_inset Text
 
 \begin_layout Plain Layout
-38
+39
 \end_layout
 
 \end_inset
@@ -15870,7 +15908,7 @@ standard deviation of wind direction (CSI formula)
 \begin_inset Text
 
 \begin_layout Plain Layout
-39
+40
 \end_layout
 
 \end_inset
@@ -15908,7 +15946,7 @@ mean ambient temperature (T/RH probe)
 \begin_inset Text
 
 \begin_layout Plain Layout
-40
+41
 \end_layout
 
 \end_inset
@@ -15946,7 +15984,7 @@ mean dewpoint temperature
 \begin_inset Text
 
 \begin_layout Plain Layout
-41
+42
 \end_layout
 
 \end_inset
@@ -15984,7 +16022,7 @@ mean relative humidity
 \begin_inset Text
 
 \begin_layout Plain Layout
-42
+43
 \end_layout
 
 \end_inset
@@ -16022,7 +16060,7 @@ mean water vapor pressure
 \begin_inset Text
 
 \begin_layout Plain Layout
-43
+44
 \end_layout
 
 \end_inset
@@ -16060,7 +16098,7 @@ mean density of ambient air
 \begin_inset Text
 
 \begin_layout Plain Layout
-44
+45
 \end_layout
 
 \end_inset
@@ -16098,7 +16136,7 @@ mean density of dry air
 \begin_inset Text
 
 \begin_layout Plain Layout
-45
+46
 \end_layout
 
 \end_inset
@@ -16145,7 +16183,7 @@ O
 \begin_inset Text
 
 \begin_layout Plain Layout
-46
+47
 \end_layout
 
 \end_inset
@@ -16192,7 +16230,7 @@ mean density of CO
 \begin_inset Text
 
 \begin_layout Plain Layout
-47
+48
 \end_layout
 
 \end_inset
@@ -16230,7 +16268,7 @@ latent heat of vaporization
 \begin_inset Text
 
 \begin_layout Plain Layout
-48
+49
 \end_layout
 
 \end_inset
@@ -16268,7 +16306,7 @@ dimless
 \begin_inset Text
 
 \begin_layout Plain Layout
-49
+50
 \end_layout
 
 \end_inset
@@ -16306,7 +16344,7 @@ dimless
 \begin_inset Text
 
 \begin_layout Plain Layout
-50
+51
 \end_layout
 
 \end_inset
@@ -16360,7 +16398,7 @@ pageref{subsub:beta}}
 \begin_inset Text
 
 \begin_layout Plain Layout
-51
+52
 \end_layout
 
 \end_inset
@@ -16398,7 +16436,7 @@ mean mass flow of zero (shield) air
 \begin_inset Text
 
 \begin_layout Plain Layout
-52
+53
 \end_layout
 
 \end_inset
@@ -16436,7 +16474,7 @@ mean mass flow of air through up-draft denuder
 \begin_inset Text
 
 \begin_layout Plain Layout
-53
+54
 \end_layout
 
 \end_inset
@@ -16474,7 +16512,7 @@ mean mass flow of air through down-draft denuder
 \begin_inset Text
 
 \begin_layout Plain Layout
-54
+55
 \end_layout
 
 \end_inset
@@ -16512,7 +16550,7 @@ volumetric flow of air through up-draft denuder
 \begin_inset Text
 
 \begin_layout Plain Layout
-55
+56
 \end_layout
 
 \end_inset
@@ -16550,7 +16588,7 @@ volumetric flow of air through down-draft denuder
 \begin_inset Text
 
 \begin_layout Plain Layout
-56
+57
 \end_layout
 
 \end_inset
@@ -16588,7 +16626,7 @@ total instances of up-draft sampling valve activation
 \begin_inset Text
 
 \begin_layout Plain Layout
-57
+58
 \end_layout
 
 \end_inset
@@ -16626,7 +16664,7 @@ total instances of down-draft sampling valve activation
 \begin_inset Text
 
 \begin_layout Plain Layout
-58
+59
 \end_layout
 
 \end_inset
@@ -16664,7 +16702,7 @@ total potential sampling instances
 \begin_inset Text
 
 \begin_layout Plain Layout
-59
+60
 \end_layout
 
 \end_inset
@@ -16702,7 +16740,7 @@ fraction of time up-draft sampling valve is activated
 \begin_inset Text
 
 \begin_layout Plain Layout
-60
+61
 \end_layout
 
 \end_inset
@@ -16740,7 +16778,7 @@ fraction of time down-draft sampling valve is activated
 \begin_inset Text
 
 \begin_layout Plain Layout
-61
+62
 \end_layout
 
 \end_inset
@@ -16778,7 +16816,7 @@ mean temperature of datalogger
 \begin_inset Text
 
 \begin_layout Plain Layout
-62
+63
 \end_layout
 
 \end_inset
