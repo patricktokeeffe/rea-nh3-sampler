@@ -1363,10 +1363,8 @@ BeginProg
       #If (DATA_SRCS=SDM_CSAT3A_EC150_2) Then
         GetRecord(lagged(1),work_lag,LAG_SCANS-EC100_DELAY)
         Move(aligned(1),14,lagged(1),14)
-        disable_sonic = lag_sonic_diag > 0
-        'XXX possibly check for Ux=-99999; see 2014 PROPHET FIS DAQ v1.0.5
-        '  and v1.1 changelog for details on why
-        disable_irga = lag_irga_diag > 0
+        disable_sonic = lag_sonic_diag > 0 OR lag_Ux = -99999 OR lag_Ux = NAN
+        disable_irga = lag_irga_diag > 0 OR lag_CO2 = -99999 OR lag_CO2 = NAN
       #ElseIf (DATA_SRCS=SDM_CSAT3_LI7500_1) Then
         GetRecord(lagged(1),work_lag,LAG_SCANS-CSAT3_DELAY)
         Move(aligned(1),5,lagged(1),5)
