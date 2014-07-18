@@ -985,7 +985,7 @@ Function Footprint70(L) As Float 'm
     Dh = 2.44
     Ph = 1.33
   EndIf
-  Return (Dh/0.0571 * ABS(L)^(1-Ph) * Zu^Ph)
+  Return Round((Dh/0.0571 * ABS(L)^(1-Ph) * Zu^Ph), 0)
 EndFunction
 
 'integral turbulence test following eq 1:
