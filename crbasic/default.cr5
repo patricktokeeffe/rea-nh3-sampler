@@ -735,8 +735,12 @@ DataTable(stats,True,-1)
   Sample(1,beta_Ts,FP2)
 
   Average(1,massFlow_zero,FP2,(inbetween_1hz_scan OR massFlow_zero=NAN))
+  StdDev (1,massFlow_zero,FP2,(inbetween_1hz_scan OR massFlow_zero=NAN))
   Average(1,massFlow_up,FP2,(inbetween_1hz_scan OR massFlow_up=NAN))
+  StdDev (1,massFlow_up,FP2,(inbetween_1hz_scan OR massFlow_up=NAN))
   Average(1,massFlow_dn,FP2,(inbetween_1hz_scan OR massFlow_dn=NAN))
+  StdDev (1,massFlow_dn,FP2,(inbetween_1hz_scan OR massFlow_dn=NAN))
+
   Average(1,volFlow_up,FP2,(inbetween_1hz_scan OR volFlow_up=NAN))
   Average(1,volFlow_dn,FP2,(inbetween_1hz_scan OR volFlow_dn=NAN))
   Sample(1,vlv_up_ON_Tot,UINT4)
