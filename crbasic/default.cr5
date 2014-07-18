@@ -1547,9 +1547,8 @@ BeginProg
 
         vlv_up_fraction = vlv_up_ON_Tot/vlv_possible
         vlv_dn_fraction = vlv_dn_ON_Tot/vlv_possible
-
-        CallTable(stats)
       EndIf 'new 30min met record
+      CallTable(stats)
       
       If (is_running) Then CallTable(rea)
 
