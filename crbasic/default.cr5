@@ -624,8 +624,8 @@ DataTable(rea,rea_finished,10)
   Average(1,volFlow_up,IEEE4,(inbetween_1hz_scan OR volFlow_up=NAN))
   Average(1,volFlow_dn,IEEE4,(inbetween_1hz_scan OR volFlow_dn=NAN))
   
-  Totalize(1,vlv_up_ON,UINT4,vlv_up_ON=NAN)
-  Totalize(1,vlv_dn_ON,UINT4,vlv_dn_ON=NAN)
+  Totalize(1,1,UINT4,(vlv_up_ON=NAN OR vlv_up_ON=NAN))
+  Totalize(1,1,UINT4,(vlv_dn_ON=NAN OR vlv_dn_ON=NAN))
   Totalize(1,1,UINT4,False)
     FieldNames("vlv_possible")
   
