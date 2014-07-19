@@ -300,6 +300,38 @@ Units vlv_up_ON_Tot = scans
 Units vlv_dn_ON_Tot = scans
 Units vlv_possible = scans
 
+Dim rea_out(15)
+Alias rea_out(1)  = sonic_Uz_Std
+Alias rea_out(2)  = Uz_rot_Std
+Alias rea_out(3)  = volFlow_up_Avg
+Alias rea_out(4)  = volFlow_up_Std
+Alias rea_out(5)  = volFlow_dn_Avg
+Alias rea_out(6)  = volFlow_dn_Std
+Alias rea_out(7)  = vlv_up_ON_Tot2
+Alias rea_out(8)  = vlv_dn_ON_Tot2
+Alias rea_out(9)  = vlv_possible2
+Alias rea_out(10) = rea_co2_up_Avg2
+Alias rea_out(11) = rea_co2_dn_Avg2
+Alias rea_out(12) = rea_h2o_up_Avg2
+Alias rea_out(13) = rea_h2o_dn_Avg2
+Alias rea_out(14) = rea_tmpr_up_Avg2
+Alias rea_out(15) = rea_tmpr_dn_Avg2
+Units sonic_Uz_Std = m/s
+Units Uz_rot_Std = m/s
+Units volFlow_up_Avg = L/min
+Units volFlow_up_Std = L/min
+Units volFlow_dn_Avg = L/min
+Units volFlow_dn_Std = L/min
+Units vlv_up_ON_Tot2 = scans
+Units vlv_dn_ON_Tot2 = scans
+Units vlv_possible2 = scans
+Units rea_co2_up_Avg2 = mmol/m^3
+Units rea_co2_dn_Avg2 = mmol/m^3
+Units rea_h2o_up_Avg2 = mmol/m^3
+Units rea_h2o_dn_Avg2 = mmol/m^3
+Units rea_tmpr_up_Avg2 = degC
+Units rea_tmpr_dn_Avg2 = degC
+
 Dim sqrt_UV 'double-rotation calcs
 Dim sqrt_UVW
 Public rot_angles(4)
@@ -383,6 +415,15 @@ Alias beta(1) = beta_CO2
 Alias beta(2) = beta_H2O
 Alias beta(3) = beta_Ts
 Units beta = dimless
+
+'FIXME -- stand-in unless/until beta factors are calculated for whole REA run
+Public delta(3)
+Alias delta(1) = delta_CO2
+Alias delta(2) = delta_H2O
+Alias delta(3) = delta_Ts
+Units delta_CO2 = mmol/m^3
+Units delta_H2O = mmol/^3
+Units delta_Ts = degC
 
 Public vlv_up_fraction
 Public vlv_dn_fraction
@@ -615,28 +656,40 @@ DataTable(work_cov,TRUE,1)
   Totalize(1,1,UINT4,False)
 EndTable
 
-'----- FINAL OUTPUTS -----
-DataTable(rea,rea_finished,10)
+DataTable(work_rea,rea_finished,10)
   OpenInterval
-  CardOut(1,100)
-
   StdDev(1,sonic_Uz,IEEE4,sonic_Uz=NAN OR disable_sonic)
-  StdDev(1,Uz_rot,IEEE4,Uz_rot=NAN or disable_sonic)
-  
-  Average(1,volFlow_up,IEEE4,(inbetween_1hz_scan OR volFlow_up=NAN))
-  Average(1,volFlow_dn,IEEE4,(inbetween_1hz_scan OR volFlow_dn=NAN))
-  
+  StdDev(1,Uz_rot,IEEE4,Uz_rot=NAN OR disable_sonic)
+  Average(1,volFlow_up,FP2,(inbetween_1hz_scan OR volFlow_up=NAN))
+  StdDev (1,volFlow_up,FP2,(inbetween_1hz_scan OR volFlow_up=NAN))
+  Average(1,volFlow_dn,FP2,(inbetween_1hz_scan OR volFlow_dn=NAN))
+  StdDev (1,volFlow_dn,FP2,(inbetween_1hz_scan OR volFlow_dn=NAN))
   Totalize(1,1,UINT4,(vlv_up_ON=NAN OR vlv_up_ON=NAN))
   Totalize(1,1,UINT4,(vlv_dn_ON=NAN OR vlv_dn_ON=NAN))
   Totalize(1,1,UINT4,False)
-    FieldNames("vlv_possible")
-  
   Average(1,rea_co2_up,IEEE4,rea_co2_up=NAN)
   Average(1,rea_co2_dn,IEEE4,rea_co2_dn=NAN)
   Average(1,rea_h2o_up,IEEE4,rea_h2o_up=NAN)
   Average(1,rea_h2o_dn,IEEE4,rea_h2o_dn=NAN)
   Average(1,rea_tmpr_up,IEEE4,rea_tmpr_up=NAN)
   Average(1,rea_tmpr_dn,IEEE4,rea_tmpr_dn=NAN)
+EndTable
+
+'----- FINAL OUTPUTS -----
+DataTable(rea,True,10)
+  OpenInterval
+  CardOut(1,100)
+  Sample(1,delta_CO2,FP2)
+  Sample(1,delta_H2O,FP2)
+  Sample(1,delta_Ts,FP2)
+  Sample(1,sonic_Uz_Std,FP2)
+  Sample(1,Uz_rot_Std,FP2)
+  Sample(1,volFlow_up_Avg,FP2)
+  Sample(1,volFlow_up_Std,FP2)
+  Sample(1,volFlow_dn_Avg,FP2)
+  Sample(1,volFlow_dn_Std,FP2)
+  Sample(1,vlv_up_fraction,FP2)
+  Sample(1,vlv_dn_fraction,FP2)
 EndTable
 
 DataTable(ts_fast,True,600)
@@ -1235,6 +1288,17 @@ Sub autothrottle()
   EndIf
 EndSub
 
+Sub process_rea_data()
+  GetRecord(rea_out(1),work_rea,1)
+  'TODO: beta calculations <-- this would require calculating EC fluxes!
+  delta_CO2 = rea_co2_up_Avg2 - rea_co2_dn_Avg2
+  delta_H2O = rea_h2o_up_Avg2 - rea_h2o_dn_Avg2
+  delta_Ts = rea_tmpr_up_Avg2 - rea_tmpr_dn_Avg2
+  vlv_up_fraction = vlv_up_ON_Tot2 / vlv_possible2
+  vlv_up_fraction = vlv_dn_ON_Tot2 / vlv_possible2
+  CallTable(rea)
+EndSub
+
 Sub end_run()
   is_running = False
   run_aborted = Cancel
@@ -1243,7 +1307,8 @@ Sub end_run()
   elapsed_time = Timer(RUN_TIMER,min,STOP_RESET)
 
   rea_finished = True
-  CallTable(rea)
+  CallTable(work_rea)
+  If (work_rea.Output(1,1)) Then process_rea_data()
   rea_finished = False
 EndSub
 
@@ -1547,7 +1612,7 @@ BeginProg
       EndIf 'new 30min met record
       CallTable(stats)
       
-      If (is_running) Then CallTable(rea)
+      If (is_running) Then CallTable(work_rea)
 
     EndIf 'have enough scans to perform real-time lag compensation
 

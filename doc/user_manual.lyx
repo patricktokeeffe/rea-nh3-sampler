@@ -10430,7 +10430,19 @@ Notes
 \end_layout
 
 \begin_layout Description
-Uz_Std This value is the equivalent of 
+delta* These deltas are calculated as
+\begin_inset Formula 
+\[
+\Delta=X_{up}-X_{down}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Description
+sonic_Uz_Std Calculated equivalently to 
 \begin_inset Flex MenuItem
 status collapsed
 
@@ -10475,7 +10487,7 @@ ts_fast
 
 \end_inset
 
- table) but it is not the direct equivalent of 
+ table) so comparable, but not equivalent to, 
 \begin_inset Flex MenuItem
 status collapsed
 
@@ -10495,41 +10507,8 @@ stats
 
 \end_inset
 
- table.
+ table (which is double-rotated standard deviation value).
  
-\end_layout
-
-\begin_layout Description
-vlv_* Use these values to determine fraction of time spent sampling up-
- and down-drafts.
- For example: 
-\begin_inset Formula 
-\[
-\alpha_{up}=\frac{\textrm{vlv\_up\_ON\_Tot}}{\textrm{vlv\_possible}}
-\]
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Description
-rea_*_Avg These three pairs of values are provided so simulated REA fluxes
- of CO2, H2O and temperature may be compared to corresponding EC fluxes
- to derive the relaxation coefficient, 
-\begin_inset Formula $\beta$
-\end_inset
-
-.
- For example: 
-\begin_inset Formula 
-\[
-\beta_{c}=\frac{\left(F_{c}\right)_{EC}/M\! W_{c}}{\sigma_{U_{z}}\left(\textrm{rea\_co2\_up\_Avg}-\textrm{rea\_co2\_dn\_Avg}\right)}
-\]
-
-\end_inset
-
-
 \end_layout
 
 \begin_layout Standard
@@ -10574,12 +10553,12 @@ name "tab:schema-rea"
 \begin_layout Plain Layout
 \align center
 \begin_inset Tabular
-<lyxtabular version="3" rows="14" columns="4">
+<lyxtabular version="3" rows="12" columns="4">
 <features rotate="0" tabularvalignment="middle">
 <column alignment="center" valignment="top">
 <column alignment="left" valignment="top">
 <column alignment="center" valignment="top">
-<column alignment="left" valignment="top">
+<column alignment="left" valignment="top" width="50col%">
 <row>
 <cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
 \begin_inset Text
@@ -10632,7 +10611,121 @@ Description
 \begin_inset Text
 
 \begin_layout Plain Layout
-Uz_Std
+delta_CO2
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+mmol/m^3
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+difference in CO2 between up- and down-drafts 
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+2
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+delta_H2O
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+mmol/m^3
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+difference in H2O between up- and down-drafts 
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+3
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+delta_Ts
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+degC
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+difference in temperature between up- and down-drafts 
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+4
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+sonic_Uz_Std
 \end_layout
 
 \end_inset
@@ -10661,7 +10754,7 @@ standard deviation of unrotated vertical wind speed
 \begin_inset Text
 
 \begin_layout Plain Layout
-2
+5
 \end_layout
 
 \end_inset
@@ -10699,7 +10792,7 @@ standard deviation of double-rotated vertical wind speed
 \begin_inset Text
 
 \begin_layout Plain Layout
-3
+6
 \end_layout
 
 \end_inset
@@ -10737,7 +10830,45 @@ mean volumetric flow through up-draft sampling denuder
 \begin_inset Text
 
 \begin_layout Plain Layout
-4
+7
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+volFlow_up_Std
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+L/min
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+standard deviation of volumetric flow through up-draft sampling denuder
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+8
 \end_layout
 
 \end_inset
@@ -10775,158 +10906,6 @@ mean volumetric flow through down-draft sampling denuder
 \begin_inset Text
 
 \begin_layout Plain Layout
-5
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="left" valignment="top" topline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-vlv_up_ON_Tot
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-scans
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="left" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-number of activations of up-draft sampling valve
-\end_layout
-
-\end_inset
-</cell>
-</row>
-<row>
-<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-6
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="left" valignment="top" topline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-vlv_dn_ON_Tot
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-scans
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="left" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-number of activations of down-draft sampling valve
-\end_layout
-
-\end_inset
-</cell>
-</row>
-<row>
-<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-7
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="left" valignment="top" topline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-vlv_possible
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-scans
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="left" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-number of total possible activations
-\end_layout
-
-\end_inset
-</cell>
-</row>
-<row>
-<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-8
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="left" valignment="top" topline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-rea_co2_up_Avg
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-mmol/m^3
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="left" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-mean CO2 molar density of up-drafts
-\end_layout
-
-\end_inset
-</cell>
-</row>
-<row>
-<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
 9
 \end_layout
 
@@ -10936,7 +10915,7 @@ mean CO2 molar density of up-drafts
 \begin_inset Text
 
 \begin_layout Plain Layout
-rea_co2_dn_Avg
+volFlow_dn_Std
 \end_layout
 
 \end_inset
@@ -10945,16 +10924,16 @@ rea_co2_dn_Avg
 \begin_inset Text
 
 \begin_layout Plain Layout
-mmol/m^3
+L/min
 \end_layout
 
 \end_inset
 </cell>
-<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+<cell alignment="left" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
 \begin_inset Text
 
 \begin_layout Plain Layout
-mean CO2 molar density of down-drafts
+standard deviation of volumetric flow through down-draft sampling denuder
 \end_layout
 
 \end_inset
@@ -10970,11 +10949,11 @@ mean CO2 molar density of down-drafts
 
 \end_inset
 </cell>
-<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+<cell alignment="left" valignment="top" topline="true" leftline="true" usebox="none">
 \begin_inset Text
 
 \begin_layout Plain Layout
-rea_h2o_up_Avg
+vlv_up_fraction
 \end_layout
 
 \end_inset
@@ -10983,23 +10962,23 @@ rea_h2o_up_Avg
 \begin_inset Text
 
 \begin_layout Plain Layout
-mmol/m^3
+scans
 \end_layout
 
 \end_inset
 </cell>
-<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+<cell alignment="left" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
 \begin_inset Text
 
 \begin_layout Plain Layout
-mean H2O molar density of up-drafts
+fraction of samples with up-draft sampling valve active
 \end_layout
 
 \end_inset
 </cell>
 </row>
 <row>
-<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
 \begin_inset Text
 
 \begin_layout Plain Layout
@@ -11008,78 +10987,11 @@ mean H2O molar density of up-drafts
 
 \end_inset
 </cell>
-<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+<cell alignment="left" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
 \begin_inset Text
 
 \begin_layout Plain Layout
-rea_h2o_dn_Avg
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-mmol/m^3
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-mean H2O molar density of down-drafts
-\end_layout
-
-\end_inset
-</cell>
-</row>
-<row>
-<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-12
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-rea_tmpr_up_Avg
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-degC
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-mean temperature of up-drafts
-\end_layout
-
-\end_inset
-</cell>
-</row>
-<row>
-<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-13
+vlv_dn_fraction
 \end_layout
 
 \end_inset
@@ -11088,25 +11000,16 @@ mean temperature of up-drafts
 \begin_inset Text
 
 \begin_layout Plain Layout
-rea_tmpr_dn_Avg
+scans
 \end_layout
 
 \end_inset
 </cell>
-<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+<cell alignment="left" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
 \begin_inset Text
 
 \begin_layout Plain Layout
-degC
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-mean temperature of down-drafts
+fraction of samples with down-draft sampling valve active
 \end_layout
 
 \end_inset
