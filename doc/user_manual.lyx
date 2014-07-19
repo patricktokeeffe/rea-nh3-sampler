@@ -3133,6 +3133,13 @@ Const Table
 \end_inset
 
  menu
+\begin_inset CommandInset label
+LatexCommand label
+name "tab:menu-consttable"
+
+\end_inset
+
+
 \end_layout
 
 \end_inset
@@ -3687,7 +3694,11 @@ Option descriptions
 \end_layout
 
 \begin_layout Description
-Standby\SpecialChar \menuseparator
+Flow
+\begin_inset space \space{}
+\end_inset
+
+rates\SpecialChar \menuseparator
 
 \end_layout
 
@@ -3952,6 +3963,61 @@ Manual
 \end_inset
 
 , this setting is irrelevant.
+\end_layout
+
+\begin_layout Description
+Auto
+\begin_inset space \space{}
+\end_inset
+
+rate
+\begin_inset space \space{}
+\end_inset
+
+min Lower bound of flow rate when 
+\begin_inset Flex MenuItem
+status collapsed
+
+\begin_layout Plain Layout
+Sample
+\begin_inset space \space{}
+\end_inset
+
+SP
+\begin_inset space \space{}
+\end_inset
+
+mode
+\end_layout
+
+\end_inset
+
+ is set to 
+\begin_inset Flex MenuItem
+status collapsed
+
+\begin_layout Plain Layout
+Auto
+\end_layout
+
+\end_inset
+
+; value is expressed as a ratio (0-1) of the maximum supported flow rate
+ (10 sLpm) but the effective lower limit is the ratio 
+\begin_inset Formula $\mathtt{UPDNFLOW\_MIN}/10$
+\end_inset
+
+ (
+\begin_inset CommandInset ref
+LatexCommand formatted
+reference "tab:menu-consttable"
+
+\end_inset
+
+).
+ Values outside this range will be range-truncated.
+ A value of 1 effectively disables autothrottling.
+ 
 \end_layout
 
 \end_deeper
@@ -4603,7 +4669,7 @@ Settings
 \noindent
 \align center
 \begin_inset Tabular
-<lyxtabular version="3" rows="22" columns="5">
+<lyxtabular version="3" rows="23" columns="5">
 <features rotate="0" tabularvalignment="middle">
 <column alignment="left" valignment="top" width="12col%">
 <column alignment="left" valignment="top">
@@ -4803,15 +4869,6 @@ sLpm
 \begin_inset Text
 
 \begin_layout Plain Layout
-\begin_inset Formula $\left(F_{zero}\right)_{min}\leq X\leq5$
-\end_inset
-
- 
-\begin_inset Foot
-status collapsed
-
-\begin_layout Plain Layout
-Minimum set by 
 \begin_inset Flex Code
 status collapsed
 
@@ -4821,14 +4878,23 @@ ZEROFLOW_MIN
 
 \end_inset
 
- option (§
+
+\begin_inset Formula $\leq X\leq5$
+\end_inset
+
+ 
+\begin_inset Foot
+status collapsed
+
+\begin_layout Plain Layout
+§
 \begin_inset CommandInset ref
 LatexCommand vref
 reference "sub:Hidden-settings"
 
 \end_inset
 
-); maximum set by device limits
+
 \end_layout
 
 \end_inset
@@ -5035,15 +5101,6 @@ sLpm
 \begin_inset Text
 
 \begin_layout Plain Layout
-\begin_inset Formula $\left(F_{up/dn}\right)_{min}\leq X\leq10$
-\end_inset
-
- 
-\begin_inset Foot
-status collapsed
-
-\begin_layout Plain Layout
-Minimum set by 
 \begin_inset Flex Code
 status collapsed
 
@@ -5053,14 +5110,100 @@ UPDNFLOW_MIN
 
 \end_inset
 
- option (§
-\begin_inset CommandInset ref
-LatexCommand vref
-reference "sub:Hidden-settings"
+ 
+\begin_inset Formula $\leq X\leq10$
+\end_inset
+
+ 
+\begin_inset script superscript
+
+\begin_layout Plain Layout
+
+\emph on
+a
+\end_layout
 
 \end_inset
 
-); maximum set by device limits
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell multirow="4" alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Flex Code
+status collapsed
+
+\begin_layout Plain Layout
+Auto rate min
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $0.6$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+ratio
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Flex Code
+status collapsed
+
+\begin_layout Plain Layout
+UPDNFLOW_MIN
+\end_layout
+
+\end_inset
+
+
+\begin_inset Formula $/10\leq X\leq1$
+\end_inset
+
+ 
+\begin_inset script superscript
+
+\begin_layout Plain Layout
+
+\emph on
+a
 \end_layout
 
 \end_inset
@@ -5133,22 +5276,26 @@ ratio
 \begin_inset Text
 
 \begin_layout Plain Layout
-\begin_inset Formula $0\leq X\leq MULT_{max}$
+\begin_inset Formula $0\leq X\leq$
 \end_inset
 
  
-\begin_inset Foot
+\begin_inset Flex Code
 status collapsed
 
 \begin_layout Plain Layout
-Maximum determined by DBMULT_MAX option (§
-\begin_inset CommandInset ref
-LatexCommand vref
-reference "sub:Hidden-settings"
+DBMULT_MAX
+\end_layout
 
 \end_inset
 
-)
+ 
+\begin_inset script superscript
+
+\begin_layout Plain Layout
+
+\emph on
+a
 \end_layout
 
 \end_inset
@@ -5606,32 +5753,36 @@ degEofTN
 \begin_inset Text
 
 \begin_layout Plain Layout
-\begin_inset Formula $\left(D_{mag}\right)_{min}\leq X\leq\left(D_{mag}\right)_{max}$
-\end_inset
-
- 
-\begin_inset Foot
-status collapsed
-
-\begin_layout Plain Layout
-Minimum/maximum values determined by 
 \begin_inset Flex Code
 status collapsed
 
 \begin_layout Plain Layout
-DECLIN_MIN/MAX
+DECLIN_MIN
 \end_layout
 
 \end_inset
 
- options (§
-\begin_inset CommandInset ref
-LatexCommand vref
-reference "sub:Hidden-settings"
+ 
+\begin_inset Formula $\leq X\leq$
+\end_inset
+
+ 
+\begin_inset Flex Code
+status collapsed
+
+\begin_layout Plain Layout
+DECLIN_MAX
+\end_layout
 
 \end_inset
 
-)
+ 
+\begin_inset script superscript
+
+\begin_layout Plain Layout
+
+\emph on
+a
 \end_layout
 
 \end_inset
@@ -6176,6 +6327,94 @@ Set default?
 \end_inset
 
 
+\end_layout
+
+\begin_layout Subsubsection
+Autothrottle
+\end_layout
+
+\begin_layout Standard
+By default, the flow rate setpoint is set to 
+\begin_inset Flex Code
+status collapsed
+
+\begin_layout Plain Layout
+Automatic
+\end_layout
+
+\end_inset
+
+.
+ In this mode, the system will begin at the maximum sampling setpoint (10
+ sLpm) then slowly reduce the setpoint until both sampling channels have
+ sufficiently equivalent flow rates.
+ 5-second running means are used when comparing the current flow rates and
+ the throttling rate is 1 sLpm per 20 seconds.
+ The setpoint will continue to be reduced as necessary to maintain equal
+ flows and will not be raised
+\begin_inset Foot
+status collapsed
+
+\begin_layout Plain Layout
+This particular feature is subject to change in future versions: the setpoint
+ might be reset to the maximum or some intermediate setpoint.
+\end_layout
+
+\end_inset
+
+ until (a) the system is powered off or (b) the user manually changes the
+ setpoint.
+ 
+\end_layout
+
+\begin_layout Standard
+The autothrottle feature can be effectively disabled by setting the 
+\begin_inset Flex MenuItem
+status collapsed
+
+\begin_layout Plain Layout
+Auto
+\begin_inset space \space{}
+\end_inset
+
+rate
+\begin_inset space \space{}
+\end_inset
+
+min
+\end_layout
+
+\end_inset
+
+ option to 1 or by setting the 
+\begin_inset Flex MenuItem
+status collapsed
+
+\begin_layout Plain Layout
+Sample
+\begin_inset space \space{}
+\end_inset
+
+SP
+\begin_inset space \space{}
+\end_inset
+
+mode
+\end_layout
+
+\end_inset
+
+ option to 
+\begin_inset Flex Code
+status collapsed
+
+\begin_layout Plain Layout
+Manual
+\end_layout
+
+\end_inset
+
+.
 \end_layout
 
 \begin_layout Subsection

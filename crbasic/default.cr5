@@ -15,8 +15,6 @@
 'datalogger but do not check-in file with other than empty string
 Const VERSION = ""
 
-Public decreasing_flow As Boolean 'XXX TST
-
 '=====================  DEVICE CONFIGURATION  ================================
 Const SDM_CSAT3_LI7500_1 = 1 'aliases for menu
 Const SDM_CSAT3A_EC150_2 = 2
@@ -445,7 +443,7 @@ Const LastState = True
 
 '----- DEFAULT SETTINGS -----
 Const SETTINGS_FILE = "CPU:rea_settings.dat"
-Const NUM_SETTINGS = {18}
+Const NUM_SETTINGS = {19}
 
 Const DEF_FLOW_AUTO_SHLD = LastState
 Const DEF_FLOWSP_WAIT = 2.0 'sLpm
@@ -470,6 +468,7 @@ Const DEF_SITE_FETCH_E = 0 'm, 0=disabled
 Const DEF_SITE_FETCH_S = 0 'm, 0=disabled
 Const DEF_SITE_FETCH_W = 0 'm, 0=disabled
 Const DEF_SITE_RUFNESS = 0 'm, 0=disabled
+Const DEF_THROTTLE_MIN = 0.6 'ratio
 
 Public choice(NUM_SETTINGS)
 Alias choice(1)  = ch_flow_auto_shld
@@ -490,6 +489,7 @@ Alias choice(15) = ch_site_fetch_E
 Alias choice(16) = ch_site_fetch_S
 Alias choice(17) = ch_site_fetch_W
 Alias choice(18) = ch_site_rufness
+Alias choice(19) = ch_throttle_min
 
 Public settings(NUM_SETTINGS)
 Alias settings(1)  = flow_auto_shld
@@ -510,6 +510,7 @@ Alias settings(15) = site_fetch_E
 Alias settings(16) = site_fetch_S
 Alias settings(17) = site_fetch_W
 Alias settings(18) = site_rufness
+Alias settings(19) = throttle_min
 'HINT define units despite non-Public b/c many are saved to `info` table
 'Units flow_auto_shld = boolean
 Units flowSP_wait = sLpm
@@ -529,6 +530,7 @@ Units site_fetch_E = m
 Units site_fetch_S = m
 Units site_fetch_W = m
 Units site_rufness = cm
+Units throttle_min = %
 
 '----- DEFAULT SCHEDULE -----
 Const SCHEDULE_FILE = "CPU:rea_schedule.dat"
@@ -859,6 +861,7 @@ DisplayMenu("REA DAQ",-1)
       MenuItem("Sample SP mode", ch_flowSP_auto)
         MenuPick(Automatic, Manual)
       MenuItem("Manual rate", ch_flowSP_updn)
+      MenuItem("Auto rate min", ch_throttle_min)
     EndSubMenu
     SubMenu("Deadband")
       MenuItem("Multiplier", ch_dband_mult)
@@ -1064,6 +1067,7 @@ Sub set_default_choices()
   ch_site_fetch_S = DEF_SITE_FETCH_S
   ch_site_fetch_W = DEF_SITE_FETCH_W
   ch_site_rufness = DEF_SITE_RUFNESS
+  ch_throttle_min = DEF_THROTTLE_MIN
 EndSub
 
 Sub populate_choices()
@@ -1105,6 +1109,12 @@ Sub save_current_choices()
     ch_dband_mult = DEF_DBAND_MULT
   EndIf
   update_deadband()
+  
+  If (ch_throttle_min < UPDNFLOW_MIN/UPDNFLOW_MAX) Then
+    ch_throttle_min = UPDNFLOW_MIN/UPDNFLOW_MAX
+  ElseIf (ch_throttle_min > 1) Then
+    ch_throttle_min = 1
+  EndIf
 
   'Populate dependent variables
   shld_SPval = ch_flowSP_shld/MFC_ZERO_MULT
@@ -1232,17 +1242,12 @@ EndSub
 
 '---------------------
 Sub autothrottle()
-  AvgRun(mean_up_flow,1,massFlow_up,10)
-  AvgRun(mean_dn_flow,1,massFlow_dn,10)
-  If (ABS(mean_up_flow - mean_dn_flow) > 0.1) Then
-    decreasing_flow = True
-    'HINT limit autothrottling to 60% of "target setpoint"
-    'TODO provide user access to lower bound
-    If (setpnt_updn > 0.6*UPDNFLOW_MAX/MFC_UPDN_MULT) Then
-      setpnt_updn -= (0.1/MFC_UPDN_MULT) 'decrease 0.1 sLpm
+  AvgRun(mean_up_flow,1,massFlow_up,5)
+  AvgRun(mean_dn_flow,1,massFlow_dn,5)
+  If (ABS(mean_up_flow - mean_dn_flow) > 0.05) Then
+    If (setpnt_updn > throttle_min*UPDNFLOW_MAX/MFC_UPDN_MULT) Then
+      setpnt_updn -= (0.05/MFC_UPDN_MULT) '1 sLpm decrease per 20 seconds
     EndIf
-  Else
-    decreasing_flow = False
   EndIf
 EndSub
 
