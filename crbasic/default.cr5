@@ -1471,8 +1471,8 @@ BeginProg
 
         update_deadband() 'must occur after Uz_Std calc
 
-        WD_unit_Avg = Round(WD_unit_Avg+azimuth+site_declin MOD 360, 0)
-        WD_rslt_Avg = Round(WD_rslt_Avg+azimuth+site_declin MOD 360, 0)
+        WD_unit_Avg = Round((WD_unit_Avg+azimuth+site_declin) MOD 360, 0)
+        WD_rslt_Avg = Round((WD_rslt_Avg+azimuth+site_declin) MOD 360, 0)
 
         SatVP(hmp_e_sat_Avg, hmp_T_Avg)
         hmp_RH_Avg = 100*hmp_e_Avg/hmp_e_sat_Avg
