@@ -841,6 +841,47 @@ Mounting boom: 6-8 ft of Bosch-brand 45mm T-slotted square tube
 Assorted hardware, notably U-bolts
 \end_layout
 
+\begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\align center
+\begin_inset Graphics
+	filename images/system_components.png
+	lyxscale 50
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+System components
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:System-components"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
 \begin_layout Subsection
 Consumables
 \end_layout
@@ -1225,6 +1266,41 @@ In the REA method, high-frequency measurements of vertical wind speed are
  traps.
  Constituents of interest are then evaluted later using wet chemistry techniques.
  
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\align center
+\begin_inset Graphics
+	filename images/valve_detail.png
+	lyxscale 50
+	width 45line%
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Valve action detail
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Subsection
@@ -1914,6 +1990,48 @@ PURGE GAS to zero air tank
 Connect exhaust tubes to the NC ports of the ‘up’ and ‘down’ valves and
  route away from the sampling inlets.
  
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\align center
+\begin_inset Graphics
+	filename images/tubing_connections.png
+	lyxscale 50
+	width 75line%
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Tubing connection diagram
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:Tubing-connection-diagram"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Standard
