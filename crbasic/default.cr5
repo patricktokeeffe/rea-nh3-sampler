@@ -1199,7 +1199,11 @@ Sub save_current_sch_choices()
   If (ch_run_duration < RUNTIME_MIN) Then ch_run_duration = RUNTIME_MIN
   If (ch_run_duration > RUNTIME_MAX) Then ch_run_duration = RUNTIME_MAX
   ch_run_tod = military_to_FP(ch_run_tod)
-  ch_run_tod = IIF(ch_run_tod < 0, 0, ch_run_tod MOD 24)
+  If (ch_run_tod < 0) Then
+    ch_run_tod = 0
+  Else
+    ch_run_tod = ch_run_tod MOD 24
+  EndIf
 
   'Populate dependent variables
   If (ch_run_begintod) Then
