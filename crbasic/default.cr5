@@ -458,10 +458,9 @@ Public flow_setpnt(2) 'TODO Dim
 Alias flow_setpnt(1) = setpnt_zero
 Alias flow_setpnt(2) = setpnt_updn
 
-Public mean_up_flow
-Public mean_dn_flow
-
 Public azimuth
+Public mean_up_flow, mean_dn_flow
+Public zeta, itt_model
 
 Public deadband
 Dim neg_deadband
@@ -1040,31 +1039,6 @@ Function Footprint70(L) As Float 'm
   Return Round((Dh/0.0571 * ABS(L)^(1-Ph) * Zu^Ph), 0)
 EndFunction
 
-'integral turbulence test following eq 1:
-'    Albin Hammerle, Alois Halswanter, Michael Schmitt, Micael Bahn, Ulrike
-'    Tappeiner, Alexander Cernusca, Georg Wohlfahrt. Boundary-Layer Meteorology.
-'    02/2007; 122(2):397-416. DOI: 10.1007/s10546-006-9109-x
-'
-'[sigma_W] = m/s, [u_star] = m/s, [L] = m
-Function TurbulenceTest(sigma_W, u_star_, L) As Float '% difference
-  Dim itt_model, zeta, ans
-  If (sonic_height=0 OR u_star_=0 OR L=0 OR sigma_W=NAN OR u_star_=NAN OR L=NAN) Then
-    ans = -999
-  EndIf
-  zeta = sonic_height/L
-  If (zeta < -2 OR zeta >= 1) Then
-    ans = -999
-  Else
-    If (zeta < 0) Then
-      itt_model = 1.25 * (1+3*ABS(zeta))^(1/3.)
-    Else
-      itt_model = 1.25 * (1+0.2*zeta)
-    EndIf
-    ans = 100*ABS(sigma_W/u_star_ - itt_model)/itt_model
-  EndIf
-  Return ans
-EndFunction
-
 
 '===============================  SUBROUTINES  ===============================
 Sub update_delayed_start_time()
@@ -1556,9 +1530,28 @@ BeginProg
         #Else
           L_ = -u_star^3 *(hmp_T_Avg+273.15)/(K_*G_*cov_Ts_Uz) 'm
         #EndIf
-        itt = TurbulenceTest(Uz_Std, u_star, L_) 'dimless
-        If (itt = -999) Then itt = NAN
         fetch_70 = Footprint70(L_) 'm
+
+        'integral turbulence test following eq 1:
+        '    Albin Hammerle, Alois Halswanter, Michael Schmitt, Micael Bahn,
+        '    Ulrike Tappeiner, Alexander Cernusca, Georg Wohlfahrt.
+        '    Boundary-Layer Meteorology. 02/2007; 122(2):397-416.
+        '    DOI: 10.1007/s10546-006-9109-x
+        If (sonic_height=0) Then
+          itt = NAN
+        Else
+          zeta = sonic_height/L_
+          If (zeta < -2 OR zeta >= 1) Then
+            itt = NAN
+          Else
+            If (zeta < 0) Then
+              itt_model = 1.25 * (1+3*ABS(zeta))^(1/3.)
+            Else
+              itt_model = 1.25 * (1+0.2*zeta)
+            EndIf
+            itt = 100*ABS(Uz_Std/u_star - itt_model)/itt_model
+          EndIf
+        EndIf
 
         #If (DATA_SRCS=SDM_CSAT3_LI7500_1) Then
           CO2_ppm_Avg = dry_mixing_ratio(CO2_Avg, H2O_Avg, hmp_T_Avg, irga_press_Avg)
