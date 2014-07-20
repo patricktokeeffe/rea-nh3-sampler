@@ -569,7 +569,7 @@ Units site_fetch_N = m
 Units site_fetch_E = m
 Units site_fetch_S = m
 Units site_fetch_W = m
-Units site_rufness = cm
+Units site_rufness = m
 Units throttle_min = %
 
 '----- DEFAULT SCHEDULE -----
@@ -1024,7 +1024,7 @@ Function Footprint70(L) As Float 'm
     Return NAN
   EndIf
   Dim Dh, Ph, Zu, Zo
-  Zo = site_rufness/1000 'cm -> m
+  Zo = site_rufness 'm
   Zu = sonic_height * (LOG(sonic_height/Zo) - 1 + (Zo/sonic_height)) 'm
   If (ABS(Zu/L) < 0.04) Then '(near) neutral
     Dh = 0.97

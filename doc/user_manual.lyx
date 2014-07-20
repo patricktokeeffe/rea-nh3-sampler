@@ -4569,7 +4569,17 @@ Roughness
 \begin_inset space ~
 \end_inset
 
-length Surface roughness of the monitoring site.
+length Surface roughness of the monitoring site in 
+\begin_inset Flex Strong
+status collapsed
+
+\begin_layout Plain Layout
+meters
+\end_layout
+
+\end_inset
+
+.
  This value is used in the calculation of 70% flux footprint estimate (fetch_70)
  reported in the 
 \begin_inset Flex Strong
@@ -6203,7 +6213,7 @@ Roughness length
 \begin_inset Text
 
 \begin_layout Plain Layout
-cm
+m
 \end_layout
 
 \end_inset
