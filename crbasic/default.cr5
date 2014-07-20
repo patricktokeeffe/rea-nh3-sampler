@@ -1041,9 +1041,13 @@ EndFunction
 
 
 '===============================  SUBROUTINES  ===============================
-Sub update_delayed_start_time()
-  RealTime(rtime)
-  start_run = ((hrofday+ch_run_delay) MOD 24)*60 + IIF(minofhr >= 30, 60, 30)
+Sub update_start_time()
+  If (run_begintod) Then
+    start_run = run_tod * 60
+  Else
+    RealTime(rtime)
+    start_run = ((hrofday+run_delay) MOD 24)*60 + IIF(minofhr >= 30, 60, 30)
+  EndIf
 EndSub
 
 Sub update_deadband()
@@ -1178,17 +1182,12 @@ Sub save_current_sch_choices()
   Else
     ch_run_tod = ch_run_tod MOD 24
   EndIf
-
-  'Populate dependent variables
-  If (ch_run_begintod) Then
-    start_run = ch_run_tod * 60
-  Else
-    update_delayed_start_time()
-  EndIf
-  run_dur = ch_run_duration * 60
-
   Move(sch_settings(1),NUM_SCHEDULE,sch_choice(1),NUM_SCHEDULE)
   Calfile(sch_settings,NUM_SCHEDULE,SCHEDULE_FILE,WRITEFILE)
+
+  'Update dependent variables
+  update_start_time()
+  run_dur = run_duration * 60
 EndSub
 
 Sub load_sch_settings()
@@ -1331,8 +1330,8 @@ BeginProg
       If (NOT shield_ON) Then
         run_queued = Cancel 'force enabling shield flow before can queue run
         run_already_queued = False
-      ElseIf (NOT run_begintod AND NOT run_already_queued) Then
-        update_delayed_start_time()
+      ElseIf (NOT run_already_queued) Then
+        update_start_time()
         run_already_queued = True
       Else
         shield_ON = Enable 'prevent disabling shield once run is queued
