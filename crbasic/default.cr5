@@ -398,7 +398,7 @@ Public LE_raw   'uncorrected water vapor flux (plain cov.)
 Public LE_wpl   'combined WPL80 term
 Public LE       'latent heat flux
 Public Hs_raw   'sensible heat flux using virtual temp
-Public Hs       'sensible heat flux TODO
+Public Hs       'sensible heat flux, corrected @ flux level
 Public Hc       'sensible heat flux, corrected @ temp. level
 Units Fco2_raw = mg/(m^2 s)
 Units Fco2_LE_wpl = mg/(m^2 s)
@@ -1618,12 +1618,12 @@ BeginProg
         '  instead of sonic (virtual) tmpr
         'Hs: W/m^2 = J/(s m^2) = (K*m/s)(kg/m^3)(J/(kg K))
         Hs_raw = cov_Ts_Uz * rho_a * Cpd
-        Hs = Hs_raw
+        #If (DATA_SRCS=SDM_CSAT3_LI7500_1) Then
+          Hs = (Hs_raw - (rho_a*Cpd*0.51*Rd*LE*(hmp_T_Avg+273.15)^2) /(irga_press_Avg*Lv))*(hmp_T_Avg+273.15)/(Ts_Avg+273.15)
+        #ElseIf (DATA_SRCS=SDM_CSAT3A_EC150_2) Then
+          Hs = (Hs_raw - (rho_a*Cpd*0.51*Rd*LE*(irga_tmpr_Avg+273.15)^2) /(irga_press_Avg*Lv))*(irga_tmpr_Avg+273.15)/(Ts_Avg+273.15)
+        #EndIf
         Hc = cov_Tc_Uz * rho_a * Cpd
-
-        'stability parameter
-        'is within fetch
-        '(bonus: stationarity)
 
         'dimless: (mg/(m^2 s))(s/m)(mmol/mg)(m^3/mmol - m^3/mmol)
         beta_CO2 = Fco2/(Uz_Std * MW_co2 * (rea_co2_up_Avg - rea_co2_dn_Avg))

@@ -13835,17 +13835,7 @@ This approach is adopted from the Regional Approaches to Climate Change
 \end_layout
 
 \begin_layout Description
-Hs* Presently, both sensible heat flux values 
-\begin_inset Flex MenuItem
-status collapsed
-
-\begin_layout Plain Layout
-Hs
-\end_layout
-
-\end_inset
-
- and 
+Hs This is naive sensible heat flux (
 \begin_inset Flex MenuItem
 status collapsed
 
@@ -13855,8 +13845,23 @@ Hs_raw
 
 \end_inset
 
- will be the same.
- This is because the 
+) with post-processing to remove the effects of water vapor.
+ The author isn't quite sure what's going on here.
+ 
+\begin_inset Formula 
+\[
+H_{s}=\left(\left(H_{s}\right)_{raw}-\frac{\left(\overline{\rho_{a}}\right)\left(C_{pd}\right)\left(0.51\right)\left(\overline{T_{a}}+273.15\right)^{2}L\! E}{\left(\overline{P_{a}}\right)\left(L_{v}\right)}\right)\left(\frac{\overline{T_{a}}+273.15}{\overline{T_{s}}+273.15}\right)
+\]
+
+\end_inset
+
+This approach is the initial method of Jay Ham and Kristin Baum (the author
+ believes).
+ 
+\end_layout
+
+\begin_layout Description
+Hs_raw The 
 \begin_inset Quotes eld
 \end_inset
 
@@ -13864,17 +13869,8 @@ raw
 \begin_inset Quotes erd
 \end_inset
 
- flux calculated based on sonic temperature is not yet corrected for the
- effects of water vapor.
- The 
-\begin_inset Quotes eld
-\end_inset
-
-raw
-\begin_inset Quotes erd
-\end_inset
-
- flux is calculated using the covariance of sonic temperature 
+ sensible heat flux is calculated using the covariance of uncorrected sonic
+ temperature 
 \begin_inset Formula $T_{s}$
 \end_inset
 
@@ -13890,10 +13886,11 @@ raw
 \begin_inset Formula $C_{pd}$
 \end_inset
 
- as: 
+.
+ 
 \begin_inset Formula 
 \[
-H_{s}=\left(H_{s}\right)_{raw}=\overline{T_{s}^{\prime}U_{z}^{\prime}}\left(\overline{\rho_{a}}\right)\left(C_{pd}\right)
+\left(H_{s}\right)_{raw}=\overline{T_{s}^{\prime}U_{z}^{\prime}}\left(\overline{\rho_{a}}\right)\left(C_{pd}\right)
 \]
 
 \end_inset
@@ -15880,17 +15877,8 @@ W/m^2
 \begin_inset Text
 
 \begin_layout Plain Layout
-presently, same value as 
-\begin_inset Flex Code
-status collapsed
-
-\begin_layout Plain Layout
-Hs_raw
-\end_layout
-
-\end_inset
-
-
+sensible heat flux using sonic temperature, then corrected to remove water
+ vapor effects
 \end_layout
 
 \end_inset
