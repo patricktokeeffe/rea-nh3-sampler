@@ -1360,9 +1360,29 @@ BeginProg
     ExciteCAO(MFC_UPDN_CAO,setpnt_updn,False,True) 'XXX do MFCs need boost opt?
     ExciteCAO(MFC_ZERO_CAO,setpnt_zero,False,True)
 
-    #If (DATA_SRCS=SDM_CSAT3A_EC150_2) Then
+    #If (DATA_SRCS=SDM_CSAT3_LI7500_1) Then
+      CS7500(irga_CO2,1,LI7500_ADDR,LI7500_CMD)
+      CSAT3(sonic_Ux,1,CSAT_ADDR,CSAT3_CMD,CSAT3_OPT)
+    #ElseIf (DATA_SRCS=SDM_CSAT3A_EC150_2) Then
       EC100(ec100_raw(1),EC100_ADDR,1)
       Move(sonic(1),5,ec100_raw(1),5)
+    #EndIf
+    Uz_rot = sonic_Uz*CT - sonic_Ux*ST*CE - sonic_Uy*ST*SE
+    vlv_up_ON = False
+    vlv_dn_ON = False
+    If (NOT is_running) Then
+      'do nothing
+    ElseIf (Uz_rot >= deadband) Then
+      vlv_up_ON = True
+    ElseIf (Uz_rot <= neg_deadband) Then
+      vlv_dn_ON = True
+    EndIf
+    PortSet(C_VLV_UP,vlv_up_ON) 'use PortSet (measurement task)
+    PortSet(C_VLV_DN,vlv_dn_ON) 'not WriteIO (processing task = delayed)
+
+    #If (DATA_SRCS=SDM_CSAT3_LI7500_1) Then
+      fast_co2_est = dry_mixing_ratio(irga_CO2,irga_H2O,hmp_T,irga_press)
+    #ElseIf (DATA_SRCS=SDM_CSAT3A_EC150_2) Then
       'HINT EC150 uses simple values 44, 18 [device manual, appendix B]
       ' confirmed 2014-07-10 by Sasha Ivans, Campbell Scientific
       irga_CO2 = ec100_raw(6)/44 'mg/m^3 --> mmol/m^3
@@ -1373,42 +1393,18 @@ BeginProg
       irga_CO2_signal = ec100_raw(11)
       irga_H2O_signal = ec100_raw(12)
       fast_co2_est = dry_mixing_ratio(irga_CO2,irga_H2O,irga_tmpr,irga_press)
-    #ElseIf (DATA_SRCS=SDM_CSAT3_LI7500_1) Then
-      CS7500(irga_CO2,1,LI7500_ADDR,LI7500_CMD)
-      CSAT3(sonic_Ux,1,CSAT_ADDR,CSAT3_CMD,CSAT3_OPT)
-      fast_co2_est = dry_mixing_ratio(irga_CO2,irga_H2O,hmp_T,irga_press)
     #EndIf
 
-    Uz_rot = sonic_Uz*CT - sonic_Ux*ST*CE - sonic_Uy*ST*SE
+    Move(rea_sim(1),6,NAN,1)
     If (Uz_rot >= deadband) Then
-      vlv_up_ON = True
-      vlv_dn_ON = False
       rea_co2_up = irga_CO2
-      rea_co2_dn = NAN
       rea_h2o_up = irga_H2O
-      rea_h2o_dn = NAN
       rea_tmpr_up = sonic_Ts
-      rea_tmpr_dn = NAN
     ElseIf (Uz_rot <= neg_deadband) Then
-      vlv_up_ON = False
-      vlv_dn_ON = True
-      rea_co2_up = NAN
       rea_co2_dn = irga_CO2
-      rea_h2o_up = NAN
       rea_h2o_dn = irga_H2O
-      rea_tmpr_up = NAN
       rea_tmpr_dn = sonic_Ts
-    Else 'deadband
-      vlv_up_ON = False
-      vlv_dn_ON = False
-      Move(rea_sim(1),6,NAN,1)
     EndIf
-    If (NOT is_running) Then
-      vlv_up_ON = False
-      vlv_dn_ON = False
-    EndIf
-    PortSet(C_VLV_UP,vlv_up_ON) 'HINT PortSet occurs as measurement task
-    PortSet(C_VLV_DN,vlv_dn_ON) '  but WriteIO is processing task (delayed)
 
     CallTable(ts_fast)
     CallTable(work_lag)
