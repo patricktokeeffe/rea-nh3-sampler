@@ -673,8 +673,8 @@ DataTable(work_rea,rea_finished,10)
   StdDev (1,volFlow_up,FP2,(inbetween_1hz_scan OR volFlow_up=NAN))
   Average(1,volFlow_dn,FP2,(inbetween_1hz_scan OR volFlow_dn=NAN))
   StdDev (1,volFlow_dn,FP2,(inbetween_1hz_scan OR volFlow_dn=NAN))
-  Totalize(1,1,UINT4,(vlv_up_ON=NAN OR vlv_up_ON=NAN))
-  Totalize(1,1,UINT4,(vlv_dn_ON=NAN OR vlv_dn_ON=NAN))
+  Totalize(1,1,UINT4,NOT vlv_up_ON OR vlv_up_ON=NAN)
+  Totalize(1,1,UINT4,NOT vlv_dn_ON OR vlv_dn_ON=NAN)
   Totalize(1,1,UINT4,False)
   Average(1,rea_co2_up,IEEE4,rea_co2_up=NAN)
   Average(1,rea_co2_dn,IEEE4,rea_co2_dn=NAN)
@@ -1286,7 +1286,7 @@ Sub process_rea_data()
   delta_H2O = rea_h2o_up_Avg2 - rea_h2o_dn_Avg2
   delta_Ts = rea_tmpr_up_Avg2 - rea_tmpr_dn_Avg2
   vlv_up_fraction = vlv_up_ON_Tot2 / vlv_possible2
-  vlv_up_fraction = vlv_dn_ON_Tot2 / vlv_possible2
+  vlv_dn_fraction = vlv_dn_ON_Tot2 / vlv_possible2
   CallTable(rea)
 EndSub
 
