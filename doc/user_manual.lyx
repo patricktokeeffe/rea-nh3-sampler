@@ -13157,6 +13157,72 @@ reference "sub:ts_fast"
 \end_layout
 
 \begin_layout Description
+Tc* An ambient temperature 
+\begin_inset Formula $T_{c}$
+\end_inset
+
+ (
+\begin_inset Quotes eld
+\end_inset
+
+corrected sonic temperature
+\begin_inset Quotes erd
+\end_inset
+
+) is calculated using equation 3 of Kaimal and Gaynor 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "article-sonicthermometry"
+
+\end_inset
+
+ and the ideal gas law.
+ The calculation is done in real-time using high-frequency sonic temperature
+ 
+\begin_inset Formula $T_{s}$
+\end_inset
+
+, high-frequency water vapor molar density 
+\begin_inset Formula $\varrho_{v}$
+\end_inset
+
+, low-frequency barometric pressure 
+\begin_inset Formula $P_{a}$
+\end_inset
+
+, and ambient temperature 
+\begin_inset Formula $T_{a}$
+\end_inset
+
+.
+ If the integrated sonic/IRGA (EC150) is not available to provide high-frequency
+ ambient temperature, then low-frequency data from the T/RH probe (HMP)
+ is used instead.
+ 
+\begin_inset Formula 
+\begin{align*}
+T_{s}=T_{a}\left(1+0.32\frac{e}{P}\right)\\
+e=P_{v}=\left(\frac{nRT}{V}\right)_{v}=\varrho_{v}RT_{a} &  & T_{c}=\frac{T_{s}+273.15}{\left(1+0.32\cfrac{\varrho_{v}RT_{a}}{P_{a}}\right)}-273.15
+\end{align*}
+
+\end_inset
+
+The corrected sonic temperature is calculated in real-time and used to generate
+ 
+\begin_inset Flex MenuItem
+status collapsed
+
+\begin_layout Plain Layout
+Hc
+\end_layout
+
+\end_inset
+
+ but it is not stored in the time-series table.
+ Only the mean and standard deviation values in this table are retained.
+\end_layout
+
+\begin_layout Description
 Uz_Std This value has not been subjected to double-rotation.
 \end_layout
 
@@ -13716,6 +13782,59 @@ L\! E_{WPL} & =L_{v}\left(1+\frac{M\! W_{d}}{M\! W_{v}}\frac{\rho_{v}}{\rho_{d}}
 \end_layout
 
 \begin_layout Description
+Hc This is sensible heat flux based on sonic temperature after compensation
+ for water vapor content.
+ The 
+\begin_inset Quotes eld
+\end_inset
+
+corrected
+\begin_inset Quotes erd
+\end_inset
+
+ sonic temperature 
+\begin_inset Formula $T_{c}$
+\end_inset
+
+ is calculated in real-time (see 
+\begin_inset Flex MenuItem
+status collapsed
+
+\begin_layout Plain Layout
+Tc*
+\end_layout
+
+\end_inset
+
+ above) and the heat flux is the covariance of this temperature with vertical
+ wind speed 
+\begin_inset Formula $U_{z}$
+\end_inset
+
+ scaled by ambient air density 
+\begin_inset Formula $\rho_{c}$
+\end_inset
+
+ and specific heat capacity of dry air at constant pressure 
+\begin_inset Formula $C_{pd}$
+\end_inset
+
+.
+ 
+\begin_inset Formula 
+\begin{align*}
+H_{c}=\overline{T_{c}^{\prime}U_{z}^{\prime}}\left(\overline{\rho_{a}}\right)\left(C_{pd}\right) &  & \overline{\rho_{a}} & =\texttt{rho\_a}\\
+ &  & C_{pd} & =\unitfrac[1004.67]{J}{kg\, K}
+\end{align*}
+
+\end_inset
+
+This approach is adopted from the Regional Approaches to Climate Change
+ eddy-covariance monitoring tower datalogger program.
+ 
+\end_layout
+
+\begin_layout Description
 Hs* Presently, both sensible heat flux values 
 \begin_inset Flex MenuItem
 status collapsed
@@ -13774,7 +13893,7 @@ raw
  as: 
 \begin_inset Formula 
 \[
-H_{s}=\left(H_{s}\right)_{raw}=\overline{T_{s}^{\prime}U_{z}^{\prime}}\left(\rho_{a}\right)\left(C_{pd}\right)
+H_{s}=\left(H_{s}\right)_{raw}=\overline{T_{s}^{\prime}U_{z}^{\prime}}\left(\overline{\rho_{a}}\right)\left(C_{pd}\right)
 \]
 
 \end_inset
@@ -14149,7 +14268,7 @@ rho_a The mass density of ambient air
  
 \begin_inset Formula 
 \[
-\rho_{a}=1000\left(\frac{\overline{P_{a}}-\overline{e}}{R_{d}(\overline{T_{a}}+273.15)}+\frac{\overline{e}}{R_{v}(\overline{T_{a}}+273.15)}\right)
+\overline{\rho_{a}}=1000\left(\frac{\overline{P_{a}}-\overline{e}}{R_{d}(\overline{T_{a}}+273.15)}+\frac{\overline{e}}{R_{v}(\overline{T_{a}}+273.15)}\right)
 \]
 
 \end_inset
@@ -14276,8 +14395,8 @@ H2O_Avg
 
 \begin_layout Standard
 \align center
-\begin_inset Formula $\begin{aligned}\rho_{c},\,\frac{mg}{m^{3}} & =\left(CO_{2},\,\frac{mmol}{m^{3}}\right)\left(44.010\,\frac{g}{mol}\right)\\
-\rho_{v},\,\frac{g}{m^{3}} & =\left(H_{2}\! O,\,\frac{g}{m^{3}}\right)\left(18.01528\,\frac{g}{mol}\right)\left(\frac{mol}{10^{3}\, mmol}\right)
+\begin_inset Formula $\begin{aligned}\overline{\rho_{c}},\,\frac{mg}{m^{3}} & =\left(CO_{2},\,\frac{mmol}{m^{3}}\right)\left(44.010\,\frac{g}{mol}\right)\\
+\overline{\rho_{v}},\,\frac{g}{m^{3}} & =\left(H_{2}\! O,\,\frac{g}{m^{3}}\right)\left(18.01528\,\frac{g}{mol}\right)\left(\frac{mol}{10^{3}\, mmol}\right)
 \end{aligned}
 $
 \end_inset
@@ -14540,7 +14659,7 @@ name "tab:schema-stats"
 \noindent
 \align center
 \begin_inset Tabular
-<lyxtabular version="3" rows="64" columns="4">
+<lyxtabular version="3" rows="67" columns="4">
 <features rotate="0" tabularvalignment="middle">
 <column alignment="center" valignment="top">
 <column alignment="left" valignment="top">
@@ -15075,6 +15194,82 @@ standard deviation of sonic temperature
 
 \end_inset
 </cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Tc_Avg
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+degC
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+mean ambient (corrected sonic) temperature
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+13
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Tc_Std
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+degC
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+standard deviation of ambient (corrected sonic) temperature
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+14
+\end_layout
+
+\end_inset
+</cell>
 <cell alignment="left" valignment="top" topline="true" leftline="true" usebox="none">
 \begin_inset Text
 
@@ -15108,7 +15303,7 @@ standard deviation of vertical wind speed
 \begin_inset Text
 
 \begin_layout Plain Layout
-13
+15
 \end_layout
 
 \end_inset
@@ -15146,7 +15341,7 @@ Obukhov length
 \begin_inset Text
 
 \begin_layout Plain Layout
-14
+16
 \end_layout
 
 \end_inset
@@ -15184,7 +15379,7 @@ friction velocity
 \begin_inset Text
 
 \begin_layout Plain Layout
-15
+17
 \end_layout
 
 \end_inset
@@ -15222,7 +15417,7 @@ surface shear stress
 \begin_inset Text
 
 \begin_layout Plain Layout
-16
+18
 \end_layout
 
 \end_inset
@@ -15260,7 +15455,7 @@ integral turbulence test
 \begin_inset Text
 
 \begin_layout Plain Layout
-17
+19
 \end_layout
 
 \end_inset
@@ -15298,7 +15493,7 @@ estimate of 70% of measurement footprint
 \begin_inset Text
 
 \begin_layout Plain Layout
-18
+20
 \end_layout
 
 \end_inset
@@ -15336,7 +15531,7 @@ estimate of peak measurement footprint
 \begin_inset Text
 
 \begin_layout Plain Layout
-19
+21
 \end_layout
 
 \end_inset
@@ -15383,7 +15578,7 @@ density-corrected CO
 \begin_inset Text
 
 \begin_layout Plain Layout
-20
+22
 \end_layout
 
 \end_inset
@@ -15430,7 +15625,7 @@ unadjusted flux of CO
 \begin_inset Text
 
 \begin_layout Plain Layout
-21
+23
 \end_layout
 
 \end_inset
@@ -15468,7 +15663,7 @@ water vapor density adjustment term
 \begin_inset Text
 
 \begin_layout Plain Layout
-22
+24
 \end_layout
 
 \end_inset
@@ -15506,7 +15701,7 @@ temperature density adjustment term
 \begin_inset Text
 
 \begin_layout Plain Layout
-23
+25
 \end_layout
 
 \end_inset
@@ -15544,7 +15739,7 @@ latent heat flux
 \begin_inset Text
 
 \begin_layout Plain Layout
-24
+26
 \end_layout
 
 \end_inset
@@ -15582,7 +15777,7 @@ unadjusted latent heat flux
 \begin_inset Text
 
 \begin_layout Plain Layout
-25
+27
 \end_layout
 
 \end_inset
@@ -15620,7 +15815,45 @@ water vapor density adjustment term
 \begin_inset Text
 
 \begin_layout Plain Layout
-26
+28
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Hc
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+W/m^2
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+sensible heat flux using ambient (corrected sonic) temperature
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+29
 \end_layout
 
 \end_inset
@@ -15668,7 +15901,7 @@ Hs_raw
 \begin_inset Text
 
 \begin_layout Plain Layout
-27
+30
 \end_layout
 
 \end_inset
@@ -15706,7 +15939,7 @@ sensible heat flux using sonic temperature
 \begin_inset Text
 
 \begin_layout Plain Layout
-28
+31
 \end_layout
 
 \end_inset
@@ -15744,7 +15977,7 @@ radian
 \begin_inset Text
 
 \begin_layout Plain Layout
-29
+32
 \end_layout
 
 \end_inset
@@ -15782,7 +16015,7 @@ radian
 \begin_inset Text
 
 \begin_layout Plain Layout
-30
+33
 \end_layout
 
 \end_inset
@@ -15820,7 +16053,7 @@ radian
 \begin_inset Text
 
 \begin_layout Plain Layout
-31
+34
 \end_layout
 
 \end_inset
@@ -15874,7 +16107,7 @@ pageref{subsub:CE/SE/CT/ST}}
 \begin_inset Text
 
 \begin_layout Plain Layout
-32
+35
 \end_layout
 
 \end_inset
@@ -15912,7 +16145,7 @@ double-rotated standard deviation of vertical wind speed
 \begin_inset Text
 
 \begin_layout Plain Layout
-33
+36
 \end_layout
 
 \end_inset
@@ -15950,7 +16183,7 @@ vertical wind speed threshold for sampling up-/down-drafts
 \begin_inset Text
 
 \begin_layout Plain Layout
-34
+37
 \end_layout
 
 \end_inset
@@ -15988,7 +16221,7 @@ mean scalar wind speed
 \begin_inset Text
 
 \begin_layout Plain Layout
-35
+38
 \end_layout
 
 \end_inset
@@ -16026,7 +16259,7 @@ mean resultant wind speed
 \begin_inset Text
 
 \begin_layout Plain Layout
-36
+39
 \end_layout
 
 \end_inset
@@ -16064,7 +16297,7 @@ mean unit wind direction
 \begin_inset Text
 
 \begin_layout Plain Layout
-37
+40
 \end_layout
 
 \end_inset
@@ -16102,7 +16335,7 @@ mean resultant wind direction
 \begin_inset Text
 
 \begin_layout Plain Layout
-38
+41
 \end_layout
 
 \end_inset
@@ -16140,7 +16373,7 @@ standard deviation of wind direction (Yamartino formula)
 \begin_inset Text
 
 \begin_layout Plain Layout
-39
+42
 \end_layout
 
 \end_inset
@@ -16178,7 +16411,7 @@ standard deviation of wind direction (CSI formula)
 \begin_inset Text
 
 \begin_layout Plain Layout
-40
+43
 \end_layout
 
 \end_inset
@@ -16216,7 +16449,7 @@ mean ambient temperature (T/RH probe)
 \begin_inset Text
 
 \begin_layout Plain Layout
-41
+44
 \end_layout
 
 \end_inset
@@ -16254,7 +16487,7 @@ mean dewpoint temperature
 \begin_inset Text
 
 \begin_layout Plain Layout
-42
+45
 \end_layout
 
 \end_inset
@@ -16292,7 +16525,7 @@ mean relative humidity
 \begin_inset Text
 
 \begin_layout Plain Layout
-43
+46
 \end_layout
 
 \end_inset
@@ -16330,7 +16563,7 @@ mean water vapor pressure
 \begin_inset Text
 
 \begin_layout Plain Layout
-44
+47
 \end_layout
 
 \end_inset
@@ -16368,7 +16601,7 @@ mean density of ambient air
 \begin_inset Text
 
 \begin_layout Plain Layout
-45
+48
 \end_layout
 
 \end_inset
@@ -16406,7 +16639,7 @@ mean density of dry air
 \begin_inset Text
 
 \begin_layout Plain Layout
-46
+49
 \end_layout
 
 \end_inset
@@ -16453,7 +16686,7 @@ O
 \begin_inset Text
 
 \begin_layout Plain Layout
-47
+50
 \end_layout
 
 \end_inset
@@ -16500,7 +16733,7 @@ mean density of CO
 \begin_inset Text
 
 \begin_layout Plain Layout
-48
+51
 \end_layout
 
 \end_inset
@@ -16538,7 +16771,7 @@ latent heat of vaporization
 \begin_inset Text
 
 \begin_layout Plain Layout
-49
+52
 \end_layout
 
 \end_inset
@@ -16576,7 +16809,7 @@ dimless
 \begin_inset Text
 
 \begin_layout Plain Layout
-50
+53
 \end_layout
 
 \end_inset
@@ -16614,7 +16847,7 @@ dimless
 \begin_inset Text
 
 \begin_layout Plain Layout
-51
+54
 \end_layout
 
 \end_inset
@@ -16668,7 +16901,7 @@ pageref{subsub:beta}}
 \begin_inset Text
 
 \begin_layout Plain Layout
-52
+55
 \end_layout
 
 \end_inset
@@ -16706,7 +16939,7 @@ mean mass flow of zero (shield) air
 \begin_inset Text
 
 \begin_layout Plain Layout
-53
+56
 \end_layout
 
 \end_inset
@@ -16744,7 +16977,7 @@ mean mass flow of air through up-draft denuder
 \begin_inset Text
 
 \begin_layout Plain Layout
-54
+57
 \end_layout
 
 \end_inset
@@ -16782,7 +17015,7 @@ mean mass flow of air through down-draft denuder
 \begin_inset Text
 
 \begin_layout Plain Layout
-55
+58
 \end_layout
 
 \end_inset
@@ -16820,7 +17053,7 @@ volumetric flow of air through up-draft denuder
 \begin_inset Text
 
 \begin_layout Plain Layout
-56
+59
 \end_layout
 
 \end_inset
@@ -16858,7 +17091,7 @@ volumetric flow of air through down-draft denuder
 \begin_inset Text
 
 \begin_layout Plain Layout
-57
+60
 \end_layout
 
 \end_inset
@@ -16896,7 +17129,7 @@ total instances of up-draft sampling valve activation
 \begin_inset Text
 
 \begin_layout Plain Layout
-58
+61
 \end_layout
 
 \end_inset
@@ -16934,7 +17167,7 @@ total instances of down-draft sampling valve activation
 \begin_inset Text
 
 \begin_layout Plain Layout
-59
+62
 \end_layout
 
 \end_inset
@@ -16972,7 +17205,7 @@ total potential sampling instances
 \begin_inset Text
 
 \begin_layout Plain Layout
-60
+63
 \end_layout
 
 \end_inset
@@ -17010,7 +17243,7 @@ fraction of time up-draft sampling valve is activated
 \begin_inset Text
 
 \begin_layout Plain Layout
-61
+64
 \end_layout
 
 \end_inset
@@ -17048,7 +17281,7 @@ fraction of time down-draft sampling valve is activated
 \begin_inset Text
 
 \begin_layout Plain Layout
-62
+65
 \end_layout
 
 \end_inset
@@ -17086,7 +17319,7 @@ mean temperature of datalogger
 \begin_inset Text
 
 \begin_layout Plain Layout
-63
+66
 \end_layout
 
 \end_inset
@@ -17453,6 +17686,22 @@ Campbell Scientific Support.
 
  Email.
  2014-07-10.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "article-sonicthermometry"
+
+\end_inset
+
+Kaimal J.C.
+ and J.
+ E.
+ Gaynor.
+ Another Look at Sonic Thermometry.
+ Boundary-Layer Meteorology 56: 401-410, 1991.
+ 
 \end_layout
 
 \begin_layout Bibliography

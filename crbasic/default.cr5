@@ -180,6 +180,9 @@ Units logger_power = Volts
 Public Uz_rot 'for real-time coord rotation
 Units Uz_rot = m/s
 
+Public lag_Tc 'for "corrected" sensible heat flux
+Units lag_Tc = degC
+
 Dim dummy(3) = {0, 0, 0}
 Dim lagged(14) 'HINT length of `work_lag` table output
 Public aligned(14)
@@ -211,10 +214,10 @@ Units lag_CO2_signal = ratio
 Units lag_H2O_signal = ratio
 
 Public cov_sonic(1,4)'= [ [Ts,  Ux, Uy, Uz] ]
-Public cov_irga(2,4) '= [ [CO2, Ux, Uy, Uz],
+Public cov_irga(3,4) '= [ [CO2, Ux, Uy, Uz],
                      '    [H2O, Ux, Uy, Uz],
-                     '    [Tc,  Ux, Uy, Uz] ]  <-- Tc not implemented!
-Public cov_out(46)
+                     '    [Tc,  Ux, Uy, Uz] ]
+Public cov_out(51)
 Alias cov_out(1)  = Ux_Avg 'Average() x4
 Alias cov_out(2)  = Uy_Avg
 Alias cov_out(3)  = Uz_Avg
@@ -250,21 +253,22 @@ Alias cov_out(32) = H2O_Std 'Covariance(cov_irga(2,1) .. limit:4)
 Alias cov_out(33) = cov_H2O_Ux
 Alias cov_out(34) = cov_H2O_Uy
 Alias cov_out(35) = cov_H2O_Uz
-'  Alias cov_out() = Tc_Std 'Covariance(cov_irga(3,1) .. limit:4)
-'  Alias cov_out() = cov_Tc_Ux
-'  Alias cov_out() = cov_Tc_Uy
-'  Alias cov_out() = cov_Tc_Uz
-Alias cov_out(36) = hmp_T_Avg 'Average() x2
-Alias cov_out(37) = hmp_e_Avg
-Alias cov_out(38) = rea_co2_up_Avg 'Average() x 6
-Alias cov_out(39) = rea_co2_dn_Avg
-Alias cov_out(40) = rea_h2o_up_Avg
-Alias cov_out(41) = rea_h2o_dn_Avg
-Alias cov_out(42) = rea_tmpr_up_Avg
-Alias cov_out(43) = rea_tmpr_dn_Avg
-Alias cov_out(44) = vlv_up_ON_Tot 'Totalize() x 3
-Alias cov_out(45) = vlv_dn_ON_Tot
-Alias cov_out(46) = vlv_possible
+Alias cov_out(36) = Tc_Std 'Covariance(cov_irga(3,1) .. limit:4)
+Alias cov_out(37) = cov_Tc_Ux
+Alias cov_out(38) = cov_Tc_Uy
+Alias cov_out(39) = cov_Tc_Uz
+Alias cov_out(40) = Tc_Avg
+Alias cov_out(41) = hmp_T_Avg 'Average() x2
+Alias cov_out(42) = hmp_e_Avg
+Alias cov_out(43) = rea_co2_up_Avg 'Average() x 6
+Alias cov_out(44) = rea_co2_dn_Avg
+Alias cov_out(45) = rea_h2o_up_Avg
+Alias cov_out(46) = rea_h2o_dn_Avg
+Alias cov_out(47) = rea_tmpr_up_Avg
+Alias cov_out(48) = rea_tmpr_dn_Avg
+Alias cov_out(49) = vlv_up_ON_Tot 'Totalize() x 3
+Alias cov_out(50) = vlv_dn_ON_Tot
+Alias cov_out(51) = vlv_possible
 Units Ux_Avg = m/s
 Units Uy_Avg = m/s
 Units Uz_Avg = m/s
@@ -288,6 +292,9 @@ Units CO2_Std = mmol/m^3
 'Units cov_CO2_Uz = mmol/(s m^2)
 Units H2O_Std = mmol/m^3
 'Units cov_H2O_Uz = mmol/(s m^2)
+Units Tc_Std = degC
+'Units cov_Tc_Uz = degC*m/s
+Units Tc_Avg = degC
 Units hmp_T_Avg = degC
 Units hmp_e_Avg = kPa
 Units rea_co2_up_Avg = mmol/m^3
@@ -392,6 +399,7 @@ Public LE_wpl   'combined WPL80 term
 Public LE       'latent heat flux
 Public Hs_raw   'sensible heat flux using virtual temp
 Public Hs       'sensible heat flux TODO
+Public Hc       'sensible heat flux, corrected @ temp. level
 Units Fco2_raw = mg/(m^2 s)
 Units Fco2_LE_wpl = mg/(m^2 s)
 Units Fco2_H_wpl = mg/(m^2 s)
@@ -401,6 +409,7 @@ Units LE_wpl = W/m^2
 Units LE = W/m^2
 Units Hs_raw = W/m^2
 Units Hs = W/m^2
+Units Hc = W/m^2
 
 Public rea_sim(6)
 Alias rea_sim(1) = rea_co2_up
@@ -638,7 +647,8 @@ DataTable(work_cov,TRUE,1)
   #EndIf
   Covariance(4,cov_irga(1,1),IEEE4,disable_irga,4)
   Covariance(4,cov_irga(1,2),IEEE4,disable_irga,4)
-  'Covariance(4,cov_irga(1,3),IEEE4,disable_irga,4)
+  Covariance(4,cov_irga(1,3),IEEE4,disable_irga,4)
+  Average(1,lag_Tc,IEEE4,disable_irga OR lag_Tc=NAN)
 
   Average(1,hmp_T,IEEE4,(inbetween_1hz_scan OR hmp_T=NAN))
   Average(1,hmp_e,IEEE4,(inbetween_1hz_scan OR hmp_e=NAN))
@@ -742,6 +752,8 @@ DataTable(stats,True,-1)
   Sample(1,Ts_Avg,FP2)
   Sample(1,Ts_Std,FP2)
 
+  Sample(1,Tc_Avg,FP2)
+  Sample(1,Tc_Std,FP2)
   Sample(1,Uz_Std,FP2)
   Sample(1,L_,FP2)
   Sample(1,u_star,FP2)
@@ -756,6 +768,7 @@ DataTable(stats,True,-1)
   Sample(1,LE,FP2)
   Sample(1,LE_raw,FP2)
   Sample(1,LE_wpl,FP2)
+  Sample(1,Hc,FP2)
   Sample(1,Hs,FP2)
   Sample(1,Hs_raw,FP2)
 
@@ -1433,10 +1446,26 @@ BeginProg
       Move(cov_sonic(1,2),3,lag_Ux,3)
       cov_irga(1,1) = lag_CO2
       cov_irga(2,1) = lag_H2O
-      'cov_irga(3,1) = lag_Tc
+      cov_irga(3,1) = lag_Tc
       Move(cov_irga(1,2),3,lag_Ux,3)
       Move(cov_irga(2,2),3,lag_Ux,3)
-      'Move(cov_irga(3,2),3,lag_Ux,3)
+      Move(cov_irga(3,2),3,lag_Ux,3)
+      
+      'Kaimal and Gaynor, eqn 3
+      '
+      ' Ts = (Ta)(1 + 0.32e/P)   where [T] = Kelvin
+      '                                 e  = water vapor pressure
+      '                                 P  = barometric pressure
+      ' From ideal gas law:
+      '  PV = nRT   -->  P = nRT/V  and n/V is molar density so
+      '   e = (h2o, mmol/m^3)*(R, kPa*m^3/(K*mmol))*(T, K)
+      '
+      ' Ta = Ts/( 1 + 0.32*(lag_H2O*R*Ta)/P )
+      #If (DATA_SRCS=SDM_CSAT3_LI7500_1) Then
+        lag_Tc = (lag_Ts/(1 + 0.32*lag_H2O*R_*(hmp_T+273.15)/irga_press)) - 273.15
+      #ElseIf (DATA_SRCS=SDM_CSAT3A_EC150_2) Then
+        lag_Tc = (lag_Ts/(1 + 0.32*lag_H2O*R_*(irga_tmpr+273.15)/irga_press)) - 273.15
+      #EndIf
 
       CallTable(work_cov)
       If (work_cov.Output(1,1)) Then
@@ -1497,6 +1526,7 @@ BeginProg
         W_Std = SQR(Uz_Std*CT*CT + Ux_Std*ST*ST*CE*CE + Uy_Std*ST*ST*SE*SE - 2*cov_Ux_Uz*CT*CE*ST - 2*cov_Uy_Uz*CT*ST*SE + 2*cov_Ux_Uy*CE*ST*ST*SE)
         Uz_Std = SQR(Uz_Std) '(co)variances -> stdevs (ignore Ux_Std, Uy_Std)
         Ts_Std = SQR(Ts_Std)
+        Tc_Std = SQR(Tc_Std)
         CO2_Std = SQR(CO2_Std)
         H2O_Std = SQR(H2O_Std)
 
@@ -1589,6 +1619,7 @@ BeginProg
         'Hs: W/m^2 = J/(s m^2) = (K*m/s)(kg/m^3)(J/(kg K))
         Hs_raw = cov_Ts_Uz * rho_a * Cpd
         Hs = Hs_raw
+        Hc = cov_Tc_Uz * rho_a * Cpd
 
         'stability parameter
         'is within fetch
