@@ -646,10 +646,10 @@ DataTable(work_cov,TRUE,1)
   #Else
     Sample(3,dummy(1),FP2)
   #EndIf
-  Covariance(4,cov_irga(1,1),IEEE4,disable_irga,4)
-  Covariance(4,cov_irga(1,2),IEEE4,disable_irga,4)
-  Covariance(4,cov_irga(1,3),IEEE4,disable_irga,4)
-  Average(1,lag_Tc,IEEE4,disable_irga OR lag_Tc=NAN)
+  Covariance(4,cov_irga(1,1),IEEE4,disable_irga OR disable_sonic,4)
+  Covariance(4,cov_irga(1,2),IEEE4,disable_irga OR disable_sonic,4)
+  Covariance(4,cov_irga(1,3),IEEE4,disable_irga OR disable_sonic,4)
+  Average(1,lag_Tc,IEEE4,disable_irga OR disable_sonic OR lag_Tc=NAN)
 
   Average(1,hmp_T,IEEE4,(inbetween_1hz_scan OR hmp_T=NAN))
   Average(1,hmp_e,IEEE4,(inbetween_1hz_scan OR hmp_e=NAN))
@@ -811,6 +811,21 @@ DataTable(stats,True,-1)
 
   Average(1,logger_tmpr,FP2,(inbetween_1hz_scan OR logger_tmpr=NAN))
   Average(1,logger_power,FP2,(inbetween_1hz_scan OR logger_power=NAN))
+
+  'XXX -- troubleshooting why fluxes always have NANs during first period
+  Sample(1,cov_Ts_Uz,IEEE4)
+  Sample(1,cov_Tc_Uz,IEEE4)
+  Sample(1,cov_CO2_Ux,IEEE4)
+  Sample(1,cov_CO2_Uy,IEEE4)
+  Sample(1,cov_CO2_Uz,IEEE4)
+  Sample(1,cov_H2O_Ux,IEEE4)
+  Sample(1,cov_H2O_Uy,IEEE4)
+  Sample(1,cov_H2O_Uz,IEEE4)
+  Sample(1,MW_co2,IEEE4)
+  Sample(1,MW_h2o,IEEE4)
+  Sample(1,MU_WPL,IEEE4)
+  Sample(1,sigma_wpl,IEEE4)
+  Sample(1,Cpd,IEEE4)
 EndTable
 
 DataTable(info,1,50)
@@ -1442,18 +1457,26 @@ BeginProg
       #If (DATA_SRCS=SDM_CSAT3A_EC150_2) Then
         GetRecord(lagged(1),work_lag,LAG_SCANS-EC100_DELAY)
         Move(aligned(1),14,lagged(1),14)
-        disable_sonic = lag_sonic_diag > 0 OR lag_Ux = -99999 OR lag_Ux = NAN
-        disable_irga = lag_irga_diag > 0 OR lag_CO2 = -99999 OR lag_CO2 = NAN
+        If (lag_sonic_diag > 0 OR lag_Ux = -99999 OR lag_Ux=NAN OR lag_Uy=NAN OR lag_Uz=NAN) Then
+          disable_sonic = True
+        EndIf
+        If (lag_irga_diag > 0 OR lag_CO2 = -99999 OR lag_CO2=NAN OR lag_H2O=NAN) Then
+          disable_irga = True
+        EndIf
       #ElseIf (DATA_SRCS=SDM_CSAT3_LI7500_1) Then
         GetRecord(lagged(1),work_lag,LAG_SCANS-CSAT3_DELAY)
         Move(aligned(1),5,lagged(1),5)
         disable_sonic = lag_sonic_diag AND &hF000 'bits 12-15 are flags
+        If (lag_Ux=NAN OR lag_Uy=NAN OR lag_Uz=NAN OR lag_Ts=NAN) Then
+          disable_sonic = True
+        EndIf
 
         GetRecord(lagged(1),work_lag,LAG_SCANS-LI7500_DELAY)
         Move(aligned(6),4,lagged(6),4)
         Move(aligned(10),3,NAN,1)
         'bits 4-7 are "OK" flags & AGC% encoded in bits 0-3
         disable_irga = (lag_irga_diag XOR &hF0) AND &hF0
+        If (lag_CO2=NAN OR lag_H2O=NAN) Then disable_irga = True
       #EndIf
 
       GetRecord(lagged(1),work_lag,LAG_SCANS)
