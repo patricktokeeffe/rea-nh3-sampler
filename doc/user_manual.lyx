@@ -13416,30 +13416,57 @@ key "article-itt"
 \end_inset
 
 .
- Outside the range shown for stability parameter 
+ Empirical coefficients are selected based on stability parameter 
 \begin_inset Formula $\zeta$
 \end_inset
 
-, 
-\begin_inset Formula $\Delta_{ITT}$
+, defined as ratio of sampling height (
+\begin_inset Flex MenuItem
+status collapsed
+
+\begin_layout Plain Layout
+Settings\SpecialChar \menuseparator
+Site
+\begin_inset space \space{}
 \end_inset
 
- is undefined (NAN).
+&
+\begin_inset space \space{}
+\end_inset
+
+sensors\SpecialChar \menuseparator
+Sonic
+\begin_inset space \space{}
+\end_inset
+
+height
+\end_layout
+
+\end_inset
+
+) to Obukhov length (
+\begin_inset Flex MenuItem
+status collapsed
+
+\begin_layout Plain Layout
+L_
+\end_layout
+
+\end_inset
+
+).
  
 \begin_inset Formula 
 \[
-\phi_{w}=\left(\frac{\sigma_{w}}{u_{*}}\right)_{theory}=\begin{cases}
+\phi_{w}=\left(\frac{\sigma_{w}}{u_{*}}\right)_{theoretical}=\begin{cases}
 1.25(1+3|\zeta|)^{1/3} & -2\leq\zeta<0\\
 1.25(1+0.2\zeta) & 0\leq\zeta<1
-\end{cases}
+\end{cases}\quad where\:\zeta=\frac{z_{m}}{L}
 \]
 
 \end_inset
 
 
-\end_layout
-
-\begin_layout Standard
 \begin_inset Formula 
 \[
 \Delta_{ITT}=100\frac{|\sigma_{w}/u_{*}-\phi_{w}|}{\phi_{w}}
@@ -13447,7 +13474,20 @@ key "article-itt"
 
 \end_inset
 
+Outside the range shown for stability parameter 
+\begin_inset Formula $\zeta$
+\end_inset
 
+, 
+\begin_inset Formula $\Delta_{ITT}$
+\end_inset
+
+ is reported as 
+\begin_inset Formula $-1$
+\end_inset
+
+; for all other errors, it is reported as a null value (NAN).
+ 
 \end_layout
 
 \begin_layout Description
@@ -15432,7 +15472,7 @@ itt
 \begin_inset Text
 
 \begin_layout Plain Layout
-dimless
+%
 \end_layout
 
 \end_inset
