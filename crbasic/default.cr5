@@ -1616,9 +1616,10 @@ BeginProg
         'Hs: W/m^2 = J/(s m^2) = (K*m/s)(kg/m^3)(J/(kg K))
         Hs_raw = cov_Ts_Uz * rho_a * Cpd
         #If (DATA_SRCS=SDM_CSAT3_LI7500_1) Then
-          Hs = (Hs_raw - (rho_a*Cpd*0.51*Rd*LE*(hmp_T_Avg+273.15)^2) /(irga_press_Avg*Lv))*(hmp_T_Avg+273.15)/(Ts_Avg+273.15)
+          'FIXME TODO -- replace Rd = 8.3143e-3/29 = 2.867e-4 with ????
+          Hs = (Hs_raw - (rho_a*Cpd*0.51*2.867e-4*LE*(hmp_T_Avg+273.15)^2) /(irga_press_Avg*Lv))*(hmp_T_Avg+273.15)/(Ts_Avg+273.15)
         #ElseIf (DATA_SRCS=SDM_CSAT3A_EC150_2) Then
-          Hs = (Hs_raw - (rho_a*Cpd*0.51*Rd*LE*(irga_tmpr_Avg+273.15)^2) /(irga_press_Avg*Lv))*(irga_tmpr_Avg+273.15)/(Ts_Avg+273.15)
+          Hs = (Hs_raw - (rho_a*Cpd*0.51*2.867e-4*LE*(irga_tmpr_Avg+273.15)^2) /(irga_press_Avg*Lv))*(irga_tmpr_Avg+273.15)/(Ts_Avg+273.15)
         #EndIf
         Hc = cov_Tc_Uz * rho_a * Cpd
 
