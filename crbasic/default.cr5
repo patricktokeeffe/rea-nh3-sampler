@@ -1479,9 +1479,9 @@ BeginProg
       '
       ' Ta = Ts/( 1 + 0.32*(lag_H2O*R*Ta)/P )
       #If (DATA_SRCS=SDM_CSAT3_LI7500_1) Then
-        lag_Tc = (lag_Ts/(1 + 0.32*lag_H2O*R_*(hmp_T+273.15)/irga_press)) - 273.15
+        lag_Tc = (lag_Ts+273.15)/(1 + 0.32*lag_H2O*R_*(hmp_T+273.15)/irga_press) - 273.15
       #ElseIf (DATA_SRCS=SDM_CSAT3A_EC150_2) Then
-        lag_Tc = (lag_Ts/(1 + 0.32*lag_H2O*R_*(irga_tmpr+273.15)/irga_press)) - 273.15
+        lag_Tc = (lag_Ts+273.15)/(1 + 0.32*lag_H2O*R_*(irga_tmpr+273.15)/irga_press) - 273.15
       #EndIf
 
       CallTable(work_cov)
