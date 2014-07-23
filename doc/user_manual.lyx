@@ -18704,11 +18704,11 @@ The complete program operated by the datalogger:
 
 \begin_layout Standard
 \begin_inset ERT
-status collapsed
+status open
 
 \begin_layout Plain Layout
 
-
+%%
 \backslash
 begin{framed}
 \end_layout
@@ -18731,11 +18731,11 @@ lstparams "frame=none,language={[CR]BASIC}"
 
 \begin_layout Standard
 \begin_inset ERT
-status collapsed
+status open
 
 \begin_layout Plain Layout
 
-
+%%
 \backslash
 end{framed}
 \end_layout
