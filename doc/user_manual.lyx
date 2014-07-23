@@ -10558,18 +10558,6 @@ Notes
 \end_layout
 
 \begin_layout Description
-delta* These deltas are calculated as
-\begin_inset Formula 
-\[
-\Delta=X_{up}-X_{down}
-\]
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Description
 sonic_Uz_Std Calculated equivalently to 
 \begin_inset Flex MenuItem
 status collapsed
@@ -14596,6 +14584,53 @@ rho_a
 
 ).
  
+\begin_inset VSpace defskip
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset Box Shaded
+position "t"
+hor_pos "c"
+has_inner_box 1
+inner_pos "t"
+use_parbox 0
+use_makebox 0
+width "100col%"
+special "none"
+height "1in"
+height_special "totalheight"
+status open
+
+\begin_layout Plain Layout
+Since these values were first introduced for the 
+\begin_inset Flex Code
+status collapsed
+
+\begin_layout Plain Layout
+20140715-cattlelab
+\end_layout
+
+\end_inset
+
+ test release, the temperature-based beta coefficient has used the naive
+ sensible heat expression in the numerator: 
+\begin_inset Formula 
+\[
+\overline{T_{s}^{\prime}U_{z}^{\prime}}\equiv H_{s}/\left(M\! W_{a}C_{pd}\right)
+\]
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Description
@@ -14667,6 +14702,18 @@ hmp_T
 \end_layout
 
 \begin_layout Description
+delta* These deltas are calculated as
+\begin_inset Formula 
+\[
+\Delta=X_{up}-X_{down}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Description
 vlv_up/dn_ON_Tot 
 \begin_inset Flex Strong
 status collapsed
@@ -14734,7 +14781,7 @@ name "tab:schema-stats"
 \noindent
 \align center
 \begin_inset Tabular
-<lyxtabular version="3" rows="67" columns="4">
+<lyxtabular version="3" rows="70" columns="4">
 <features rotate="0" tabularvalignment="middle">
 <column alignment="center" valignment="top">
 <column alignment="left" valignment="top">
@@ -17166,6 +17213,120 @@ volumetric flow of air through down-draft denuder
 \begin_inset Text
 
 \begin_layout Plain Layout
+delta_CO2
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+mmol/m^3
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+difference in CO2 concentration between up- and down-drafts
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+61
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+delta_H2O
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+mmol/m^3
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+difference in H2O concentration between up- and down-drafts
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+62
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+delta_Ts
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+degC
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+difference in temperature between up- and down-drafts
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+63
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
 vlv_up_ON_Tot
 \end_layout
 
@@ -17195,7 +17356,7 @@ total instances of up-draft sampling valve activation
 \begin_inset Text
 
 \begin_layout Plain Layout
-61
+64
 \end_layout
 
 \end_inset
@@ -17233,7 +17394,7 @@ total instances of down-draft sampling valve activation
 \begin_inset Text
 
 \begin_layout Plain Layout
-62
+65
 \end_layout
 
 \end_inset
@@ -17271,7 +17432,7 @@ total potential sampling instances
 \begin_inset Text
 
 \begin_layout Plain Layout
-63
+66
 \end_layout
 
 \end_inset
@@ -17309,7 +17470,7 @@ fraction of time up-draft sampling valve is activated
 \begin_inset Text
 
 \begin_layout Plain Layout
-64
+67
 \end_layout
 
 \end_inset
@@ -17347,7 +17508,7 @@ fraction of time down-draft sampling valve is activated
 \begin_inset Text
 
 \begin_layout Plain Layout
-65
+68
 \end_layout
 
 \end_inset
@@ -17385,7 +17546,7 @@ mean temperature of datalogger
 \begin_inset Text
 
 \begin_layout Plain Layout
-66
+69
 \end_layout
 
 \end_inset

@@ -805,6 +805,9 @@ DataTable(stats,True,-1)
 
   Average(1,volFlow_up,FP2,(inbetween_1hz_scan OR volFlow_up=NAN))
   Average(1,volFlow_dn,FP2,(inbetween_1hz_scan OR volFlow_dn=NAN))
+  Sample(1,delta_CO2,IEEE4)
+  Sample(1,delta_H2O,IEEE4)
+  Sample(1,delta_Ts,IEEE4)
   Sample(1,vlv_up_fraction,FP2)
   Sample(1,vlv_dn_fraction,FP2)
 
@@ -1649,15 +1652,18 @@ BeginProg
         #EndIf
         Hc = cov_Tc_Uz * rho_a * Cpd
 
+        delta_CO2 = rea_co2_up_Avg - rea_co2_dn_Avg
+        delta_H2O = rea_h2o_up_Avg - rea_h2o_dn_Avg
+        delta_Ts = rea_tmpr_up_Avg - rea_tmpr_dn_Avg
+        vlv_up_fraction = vlv_up_ON_Tot/vlv_possible
+        vlv_dn_fraction = vlv_dn_ON_Tot/vlv_possible
+
         'dimless: (mg/(m^2 s))(s/m)(mmol/mg)(m^3/mmol - m^3/mmol)
         beta_CO2 = Fco2/(Uz_Std * MW_co2 * (rea_co2_up_Avg - rea_co2_dn_Avg))
         'dimless: (W/m^2)(g/J)(J/(W*s))(s/m)(mmol/g)(m^3/mmol - m^3/mmol)
         beta_H2O = LE / (Lv * Uz_Std * (MW_h2o/1000) * (rea_h2o_up_Avg - rea_h2o_dn_Avg))
         'dimless: (K)(m/s)(s/m)(1/K - 1/K)
         beta_Ts = cov_Ts_Uz / (Uz_Std * (rea_tmpr_up_Avg - rea_tmpr_dn_Avg))
-
-        vlv_up_fraction = vlv_up_ON_Tot/vlv_possible
-        vlv_dn_fraction = vlv_dn_ON_Tot/vlv_possible
       EndIf 'new 30min met record
       CallTable(stats)
       
