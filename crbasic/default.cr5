@@ -111,6 +111,7 @@ Const LAG_SCANS = 5    'large enough to accomodate all delays
 
 Const RUN_TIMER = 1 'aliases
 Const START = 0
+Const STOP = 1
 Const STOP_RESET = 3
 Const QUERY = 4
 
@@ -700,6 +701,8 @@ DataTable(rea,True,10)
   Sample(1,volFlow_dn_Std,FP2)
   Sample(1,vlv_up_fraction,FP2)
   Sample(1,vlv_dn_fraction,FP2)
+  Sample(1,elapsed_time,UINT2)
+    FieldNames("run_duration")
 EndTable
 
 DataTable(ts_fast,True,600)
@@ -1313,12 +1316,13 @@ Sub end_run()
   run_aborted = Cancel
   run_queued = Cancel
   run_already_queued = False
-  elapsed_time = Timer(RUN_TIMER,min,STOP_RESET)
+  elapsed_time = Timer(RUN_TIMER,min,STOP)
 
   rea_finished = True
   CallTable(work_rea)
   If (work_rea.Output(1,1)) Then process_rea_data()
   rea_finished = False
+  Timer(RUN_TIMER,min,STOP_RESET)
 EndSub
 
 '---------------------
