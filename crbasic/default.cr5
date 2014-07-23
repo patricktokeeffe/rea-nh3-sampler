@@ -1300,17 +1300,6 @@ Sub autothrottle()
   EndIf
 EndSub
 
-Sub process_rea_data()
-  GetRecord(rea_out(1),work_rea,1)
-  'TODO: beta calculations <-- this would require calculating EC fluxes!
-  delta_CO2 = rea_co2_up_Avg2 - rea_co2_dn_Avg2
-  delta_H2O = rea_h2o_up_Avg2 - rea_h2o_dn_Avg2
-  delta_Ts = rea_tmpr_up_Avg2 - rea_tmpr_dn_Avg2
-  vlv_up_fraction = vlv_up_ON_Tot2 / vlv_possible2
-  vlv_dn_fraction = vlv_dn_ON_Tot2 / vlv_possible2
-  CallTable(rea)
-EndSub
-
 Sub end_run()
   is_running = False
   run_aborted = Cancel
@@ -1318,9 +1307,18 @@ Sub end_run()
   run_already_queued = False
   elapsed_time = Timer(RUN_TIMER,min,STOP)
 
-  rea_finished = True
   CallTable(work_rea)
-  If (work_rea.Output(1,1)) Then process_rea_data()
+  If (work_rea.Output(1,1)) Then
+    GetRecord(rea_out(1),work_rea,1)
+    delta_CO2 = rea_co2_up_Avg2 - rea_co2_dn_Avg2
+    delta_H2O = rea_h2o_up_Avg2 - rea_h2o_dn_Avg2
+    delta_Ts = rea_tmpr_up_Avg2 - rea_tmpr_dn_Avg2
+    vlv_up_fraction = vlv_up_ON_Tot2 / vlv_possible2
+    vlv_dn_fraction = vlv_dn_ON_Tot2 / vlv_possible2
+    rea_finished = True
+    CallTable(rea)
+  EndIf
+  
   rea_finished = False
   Timer(RUN_TIMER,min,STOP_RESET)
 EndSub
