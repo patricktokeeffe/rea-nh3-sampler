@@ -811,21 +811,6 @@ DataTable(stats,True,-1)
 
   Average(1,logger_tmpr,FP2,(inbetween_1hz_scan OR logger_tmpr=NAN))
   Average(1,logger_power,FP2,(inbetween_1hz_scan OR logger_power=NAN))
-
-  'XXX -- troubleshooting why fluxes always have NANs during first period
-  Sample(1,cov_Ts_Uz,IEEE4)
-  Sample(1,cov_Tc_Uz,IEEE4)
-  Sample(1,cov_CO2_Ux,IEEE4)
-  Sample(1,cov_CO2_Uy,IEEE4)
-  Sample(1,cov_CO2_Uz,IEEE4)
-  Sample(1,cov_H2O_Ux,IEEE4)
-  Sample(1,cov_H2O_Uy,IEEE4)
-  Sample(1,cov_H2O_Uz,IEEE4)
-  Sample(1,MW_co2,IEEE4)
-  Sample(1,MW_h2o,IEEE4)
-  Sample(1,MU_WPL,IEEE4)
-  Sample(1,sigma_wpl,IEEE4)
-  Sample(1,Cpd,IEEE4)
 EndTable
 
 DataTable(info,1,50)
