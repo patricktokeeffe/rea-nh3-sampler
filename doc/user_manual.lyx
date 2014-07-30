@@ -13965,55 +13965,6 @@ raw
 \end_layout
 
 \begin_layout Description
-CE/SE/CT/ST
-\begin_inset CommandInset label
-LatexCommand label
-name "subsub:CE/SE/CT/ST"
-
-\end_inset
-
- These are the cosine and sine values of the two rotation angles, eta and
- theta.
- They will be used in the following half-hour interval for real-time rotation
- of the vertical wind speed (
-\begin_inset Flex MenuItem
-status collapsed
-
-\begin_layout Plain Layout
-Uz_rot
-\end_layout
-
-\end_inset
-
- under 
-\begin_inset CommandInset ref
-LatexCommand vref
-reference "sub:ts_fast"
-
-\end_inset
-
-) 
-\begin_inset CommandInset citation
-LatexCommand cite
-key "article-coordrot,book-lee-2004"
-
-\end_inset
-
-.
-\end_layout
-
-\begin_layout Standard
-\align center
-\begin_inset Formula $\begin{array}{ccc}
-C\! E=\frac{\overline{U_{x}}}{\sqrt{\overline{U_{x}}^{2}+\overline{U_{y}}^{2}}} & \qquad\qquad & C\! T=\frac{\sqrt{\overline{U_{x}}^{2}+\overline{U_{y}}^{2}}}{\sqrt{\overline{U_{x}}^{2}+\overline{U_{y}}^{2}+\overline{U_{z}}^{2}}}\\
-S\! E=\frac{\overline{U_{y}}}{\sqrt{\overline{U_{x}}^{2}+\overline{U_{y}}^{2}}} &  & S\! T=\frac{\overline{U_{z}}}{\sqrt{\overline{U_{x}}^{2}+\overline{U_{y}}^{2}+\overline{U_{z}}^{2}}}
-\end{array}$
-\end_inset
-
-
-\end_layout
-
-\begin_layout Description
 eta Direction of mean wind vector relative to U
 \begin_inset script subscript
 
@@ -14032,7 +13983,14 @@ z
 
 \end_inset
 
- axis.
+ axis 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "article-coordrot,book-lee-2004"
+
+\end_inset
+
+.
  This is 
 \begin_inset Flex Strong
 status collapsed
@@ -14049,11 +14007,66 @@ yaw
 \end_inset
 
  are possible.
+ The sine and cosine values 
+\begin_inset Formula $S\! E$
+\end_inset
+
+ and 
+\begin_inset Formula $C\! E$
+\end_inset
+
+ are used elsewhere in the program (
+\begin_inset Flex MenuItem
+status collapsed
+
+\begin_layout Plain Layout
+Uz_rot
+\end_layout
+
+\end_inset
+
+ under 
+\begin_inset CommandInset ref
+LatexCommand vref
+reference "sub:ts_fast"
+
+\end_inset
+
+ and 
+\begin_inset Flex MenuItem
+status collapsed
+
+\begin_layout Plain Layout
+W_Std
+\end_layout
+
+\end_inset
+
+) but are not saved in this data table.
  
+\begin_inset Formula 
+\[
+\begin{array}{ccc}
+\eta=\arctan\left(\cfrac{S\! E}{C\! E}\right) & \qquad where & S\! E=\cfrac{\overline{U_{y}}}{\sqrt{\overline{U_{x}}^{2}+\overline{U_{y}}^{2}}}\\
+ &  & C\! E=\cfrac{\overline{U_{x}}}{\sqrt{\overline{U_{x}}^{2}+\overline{U_{y}}^{2}}}
+\end{array}
+\]
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Description
-theta Direction of mean wind vector relative to X-Y plane.
+theta Direction of mean wind vector relative to X-Y plane expressed as an
+ elevation angle from horizontal 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "article-coordrot,book-lee-2004"
+
+\end_inset
+
+.
  This is 
 \begin_inset Flex Strong
 status collapsed
@@ -14064,8 +14077,48 @@ pitch
 
 \end_inset
 
- or tilt from horizontal.
+ or tilt from the plane orthogonal to U
+\begin_inset script subscript
+
+\begin_layout Plain Layout
+z
+\end_layout
+
+\end_inset
+
+ axis.
  Values should remain relatively close to zero.
+ As with 
+\begin_inset Flex MenuItem
+status collapsed
+
+\begin_layout Plain Layout
+eta
+\end_layout
+
+\end_inset
+
+, the sine and cosine values 
+\begin_inset Formula $S\! T$
+\end_inset
+
+ and 
+\begin_inset Formula $C\! T$
+\end_inset
+
+ are used elsewhere in the program but are not retained in this data table.
+ 
+\begin_inset Formula 
+\[
+\begin{array}{ccc}
+\theta=\arctan\left(\cfrac{S\! T}{C\! T}\right) & \qquad where & S\! T=\cfrac{\overline{U_{z}}}{\sqrt{\overline{U_{x}}^{2}+\overline{U_{y}}^{2}+\overline{U_{z}}^{2}}}\\
+ &  & C\! T=\cfrac{\sqrt{\overline{U_{x}}^{2}+\overline{U_{y}}^{2}}}{\sqrt{\overline{U_{x}}^{2}+\overline{U_{y}}^{2}+\overline{U_{z}}^{2}}}
+\end{array}
+\]
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Description
@@ -14836,7 +14889,7 @@ name "tab:schema-stats"
 \noindent
 \align center
 \begin_inset Tabular
-<lyxtabular version="3" rows="72" columns="4">
+<lyxtabular version="3" rows="68" columns="4">
 <features rotate="0" tabularvalignment="middle">
 <column alignment="center" valignment="top">
 <column alignment="left" valignment="top">
@@ -16116,174 +16169,6 @@ sensible heat flux using sonic temperature
 \begin_inset Text
 
 \begin_layout Plain Layout
-CE
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-dimless
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="left" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-
-\end_layout
-
-\end_inset
-</cell>
-</row>
-<row>
-<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-32
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-SE
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-dimless
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="left" valignment="top" leftline="true" rightline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-
-\end_layout
-
-\end_inset
-</cell>
-</row>
-<row>
-<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-33
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-CT
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-dimless
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="left" valignment="top" leftline="true" rightline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-
-\end_layout
-
-\end_inset
-</cell>
-</row>
-<row>
-<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-34
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-ST
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-dimless
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="left" valignment="top" leftline="true" rightline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-\begin_inset ERT
-status open
-
-\begin_layout Plain Layout
-
-
-\backslash
-multirow{-4}{1
-\backslash
-linewidth}{components of double-rotation angles; see page 
-\backslash
-pageref{subsub:CE/SE/CT/ST}}
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\end_inset
-</cell>
-</row>
-<row>
-<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-35
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
 eta
 \end_layout
 
@@ -16313,7 +16198,7 @@ angle of rotation about Uz axis
 \begin_inset Text
 
 \begin_layout Plain Layout
-36
+32
 \end_layout
 
 \end_inset
@@ -16351,7 +16236,7 @@ angle of rotation relative to Ux-Uy plane
 \begin_inset Text
 
 \begin_layout Plain Layout
-37
+33
 \end_layout
 
 \end_inset
@@ -16389,7 +16274,7 @@ double-rotated standard deviation of vertical wind speed
 \begin_inset Text
 
 \begin_layout Plain Layout
-38
+34
 \end_layout
 
 \end_inset
@@ -16427,7 +16312,7 @@ vertical wind speed threshold for sampling up-/down-drafts
 \begin_inset Text
 
 \begin_layout Plain Layout
-39
+35
 \end_layout
 
 \end_inset
@@ -16465,7 +16350,7 @@ mean scalar wind speed
 \begin_inset Text
 
 \begin_layout Plain Layout
-40
+36
 \end_layout
 
 \end_inset
@@ -16503,7 +16388,7 @@ mean resultant wind speed
 \begin_inset Text
 
 \begin_layout Plain Layout
-41
+37
 \end_layout
 
 \end_inset
@@ -16541,7 +16426,7 @@ mean unit wind direction
 \begin_inset Text
 
 \begin_layout Plain Layout
-42
+38
 \end_layout
 
 \end_inset
@@ -16579,7 +16464,7 @@ mean resultant wind direction
 \begin_inset Text
 
 \begin_layout Plain Layout
-43
+39
 \end_layout
 
 \end_inset
@@ -16617,7 +16502,7 @@ standard deviation of wind direction (Yamartino formula)
 \begin_inset Text
 
 \begin_layout Plain Layout
-44
+40
 \end_layout
 
 \end_inset
@@ -16655,7 +16540,7 @@ standard deviation of wind direction (CSI formula)
 \begin_inset Text
 
 \begin_layout Plain Layout
-45
+41
 \end_layout
 
 \end_inset
@@ -16693,7 +16578,7 @@ mean ambient temperature (T/RH probe)
 \begin_inset Text
 
 \begin_layout Plain Layout
-46
+42
 \end_layout
 
 \end_inset
@@ -16731,7 +16616,7 @@ mean dewpoint temperature
 \begin_inset Text
 
 \begin_layout Plain Layout
-47
+43
 \end_layout
 
 \end_inset
@@ -16769,7 +16654,7 @@ mean relative humidity
 \begin_inset Text
 
 \begin_layout Plain Layout
-48
+44
 \end_layout
 
 \end_inset
@@ -16807,7 +16692,7 @@ mean water vapor pressure
 \begin_inset Text
 
 \begin_layout Plain Layout
-49
+45
 \end_layout
 
 \end_inset
@@ -16845,7 +16730,7 @@ mean density of ambient air
 \begin_inset Text
 
 \begin_layout Plain Layout
-50
+46
 \end_layout
 
 \end_inset
@@ -16883,7 +16768,7 @@ mean density of dry air
 \begin_inset Text
 
 \begin_layout Plain Layout
-51
+47
 \end_layout
 
 \end_inset
@@ -16930,7 +16815,7 @@ O
 \begin_inset Text
 
 \begin_layout Plain Layout
-52
+48
 \end_layout
 
 \end_inset
@@ -16977,7 +16862,7 @@ mean density of CO
 \begin_inset Text
 
 \begin_layout Plain Layout
-53
+49
 \end_layout
 
 \end_inset
@@ -17015,7 +16900,7 @@ latent heat of vaporization
 \begin_inset Text
 
 \begin_layout Plain Layout
-54
+50
 \end_layout
 
 \end_inset
@@ -17053,7 +16938,7 @@ dimless
 \begin_inset Text
 
 \begin_layout Plain Layout
-55
+51
 \end_layout
 
 \end_inset
@@ -17091,7 +16976,7 @@ dimless
 \begin_inset Text
 
 \begin_layout Plain Layout
-56
+52
 \end_layout
 
 \end_inset
@@ -17145,7 +17030,7 @@ pageref{subsub:beta}}
 \begin_inset Text
 
 \begin_layout Plain Layout
-57
+53
 \end_layout
 
 \end_inset
@@ -17183,7 +17068,7 @@ mean mass flow of zero (shield) air
 \begin_inset Text
 
 \begin_layout Plain Layout
-58
+54
 \end_layout
 
 \end_inset
@@ -17221,7 +17106,7 @@ mean mass flow of air through up-draft denuder
 \begin_inset Text
 
 \begin_layout Plain Layout
-59
+55
 \end_layout
 
 \end_inset
@@ -17259,7 +17144,7 @@ mean mass flow of air through down-draft denuder
 \begin_inset Text
 
 \begin_layout Plain Layout
-60
+56
 \end_layout
 
 \end_inset
@@ -17297,7 +17182,7 @@ volumetric flow of air through up-draft denuder
 \begin_inset Text
 
 \begin_layout Plain Layout
-61
+57
 \end_layout
 
 \end_inset
@@ -17335,7 +17220,7 @@ volumetric flow of air through down-draft denuder
 \begin_inset Text
 
 \begin_layout Plain Layout
-62
+58
 \end_layout
 
 \end_inset
@@ -17373,7 +17258,7 @@ difference in CO2 concentration between up- and down-drafts
 \begin_inset Text
 
 \begin_layout Plain Layout
-63
+59
 \end_layout
 
 \end_inset
@@ -17411,7 +17296,7 @@ difference in H2O concentration between up- and down-drafts
 \begin_inset Text
 
 \begin_layout Plain Layout
-64
+60
 \end_layout
 
 \end_inset
@@ -17449,7 +17334,7 @@ difference in temperature between up- and down-drafts
 \begin_inset Text
 
 \begin_layout Plain Layout
-65
+61
 \end_layout
 
 \end_inset
@@ -17487,7 +17372,7 @@ total instances of up-draft sampling valve activation
 \begin_inset Text
 
 \begin_layout Plain Layout
-66
+62
 \end_layout
 
 \end_inset
@@ -17525,7 +17410,7 @@ total instances of down-draft sampling valve activation
 \begin_inset Text
 
 \begin_layout Plain Layout
-67
+63
 \end_layout
 
 \end_inset
@@ -17563,7 +17448,7 @@ total potential sampling instances
 \begin_inset Text
 
 \begin_layout Plain Layout
-68
+64
 \end_layout
 
 \end_inset
@@ -17601,7 +17486,7 @@ fraction of time up-draft sampling valve is activated
 \begin_inset Text
 
 \begin_layout Plain Layout
-69
+65
 \end_layout
 
 \end_inset
@@ -17639,7 +17524,7 @@ fraction of time down-draft sampling valve is activated
 \begin_inset Text
 
 \begin_layout Plain Layout
-70
+66
 \end_layout
 
 \end_inset
@@ -17677,7 +17562,7 @@ mean temperature of datalogger
 \begin_inset Text
 
 \begin_layout Plain Layout
-71
+67
 \end_layout
 
 \end_inset
