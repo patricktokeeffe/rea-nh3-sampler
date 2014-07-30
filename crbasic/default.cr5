@@ -342,12 +342,16 @@ Units rea_tmpr_dn_Avg2 = degC
 
 Dim sqrt_UV 'double-rotation calcs
 Dim sqrt_UVW
-Public rot_angles(4)
-Alias rot_angles(1) = CT
-Alias rot_angles(2) = ST
-Alias rot_angles(3) = CE
-Alias rot_angles(4) = SE
-Units rot_angles = radian
+Public rot_angles(6)
+Alias rot_angles(1) = CE
+Alias rot_angles(2) = SE
+Alias rot_angles(3) = CT
+Alias rot_angles(4) = ST
+Alias rot_angles(5) = eta
+Alias rot_angles(6) = theta
+Units rot_angles = dimless
+Units eta = degrees
+Units theta = degrees
 
 Public rotated(4) 'double-rotation outputs
 Alias rotated(1) = U_Avg
@@ -787,6 +791,9 @@ DataTable(stats,True,-1)
   Sample(1,SE,FP2)
   Sample(1,CT,FP2)
   Sample(1,ST,FP2)
+  Sample(1,eta,FP2)
+  Sample(1,theta,FP2)
+
   Sample(1,W_Std,FP2)
   Sample(1,deadband,FP2)
 
@@ -1336,8 +1343,8 @@ EndSub
 
 '---------------------
 Sub reset_rotangles()
+  Move(rot_angles(1),6,0,1)
   CT = 1.0
-  Move(rot_angles(2),3,0,3)
 EndSub
 
 Sub setup()
@@ -1558,7 +1565,12 @@ BeginProg
         SE = Uy_Avg/sqrt_UV
         CT = sqrt_UV/sqrt_UVW
         ST = Uz_Avg/sqrt_UVW
-        If (CE=NAN OR SE=NAN OR CT=NAN OR ST=NAN) Then reset_rotangles()
+        If (CE=NAN OR SE=NAN OR CT=NAN OR ST=NAN) Then 
+          reset_rotangles()
+        Else
+          eta = ATN2(SE,CE)*180/PI
+          theta = ATN2(ST,CT)*180/PI
+        EndIf
         U_Avg = Ux_Avg*CT*CE + Uy_Avg*CT*SE + Uz_Avg*ST
         V_Avg = Uy_Avg*CE - Ux_Avg*SE
         W_Avg = Uz_Avg*CT - Ux_Avg*ST*CE - Uy_Avg*ST*SE
