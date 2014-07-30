@@ -72,7 +72,6 @@ Const ZEROFLOW_MAX = 5 '<-- used 4 settings validation
 Const MFC_ZERO_MULT = ZEROFLOW_MAX / 5000 '0-5 sLpm / 0-5V
 Const MFC_ZERO_OFF = 0
 
-
 '==========================  IMPORTANT CONSTANTS  ============================
 '----- PHYSICAL -----
 Const Cpd = 1004.67 'specific heat capacity: dry air    J/(kg K)
@@ -130,7 +129,6 @@ Alias sonic(5) = sonic_diag
 Units sonic = m/s
 Units sonic_Ts = degC
 Units sonic_diag = bitmap
-
 Public disable_sonic As Boolean
 
 Public fast_co2_est
@@ -147,7 +145,6 @@ Units irga_diag = bitmap
 
 #If (DATA_SRCS=SDM_CSAT3A_EC150_2) Then
   Dim ec100_raw(12) 'Campbellsci EC100/EC150/CSAT3A
-
   Public extra_irga(3)
   Alias extra_irga(1) = irga_tmpr
   Alias extra_irga(2) = irga_CO2_signal
@@ -156,7 +153,6 @@ Units irga_diag = bitmap
   Units irga_CO2_signal = ratio
   Units irga_H2O_signal = ratio
 #EndIf
-
 Public disable_irga As Boolean
 
 Public hmp45c(2)
@@ -164,7 +160,6 @@ Alias hmp45c(1) = hmp_T
 Alias hmp45c(2) = hmp_RH
 Units hmp_T = degC
 Units hmp_RH = %
-
 Public hmp_e 'derived, not measured
 Units hmp_e = kPa
 
@@ -491,7 +486,6 @@ Dim rea_finished As Boolean 'openinterval data table trigger var
 Dim just_had_1hz_scan As Boolean 'data table exclusion flags
 Dim inbetween_1hz_scan As Boolean
 
-
 '============================ SETTINGS RETENTION =============================
 Dim filehandle As Long
 Const WRITEFILE = 0
@@ -615,11 +609,9 @@ Alias sch_settings(4) = run_tod 'hr of day
 Const SHLDSTATE_FILE = "CPU:rea_shield_state.dat"
 Public lastrun_shield_ON 'Boolean (but must be float to save in calfile)
 
-
 '===============================  DATA TABLES  ===============================
 
-'----- WORKING TABLES -----
-DataTable(work_lag,TRUE,LAG_SCANS)
+DataTable(work_lag,TRUE,LAG_SCANS) '--------------------------- WORKING TABLES 
   Sample(5,sonic(1),IEEE4)
   Sample(4,irga(1),IEEE4)
   #If (DATA_SRCS=SDM_CSAT3A_EC150_2) Then
@@ -643,7 +635,6 @@ DataTable(work_cov,TRUE,1)
   WindVector(1,-1*lag_Uy,lag_Ux,IEEE4,disable_sonic,0,1,2)
   'Opt2: mean horiz WS, rslt mean WS, rslt mean WD, WS-weighted WD sdev CSI eqn
   'TODO sonic_uptime
-
   Average(1,lag_CO2,IEEE4,disable_irga)
   Average(1,lag_H2O,IEEE4,disable_irga)
   Average(1,lag_irga_press,IEEE4,disable_irga)
@@ -658,17 +649,14 @@ DataTable(work_cov,TRUE,1)
   Covariance(4,cov_irga(1,2),IEEE4,disable_irga OR disable_sonic,4)
   Covariance(4,cov_irga(1,3),IEEE4,disable_irga OR disable_sonic,4)
   Average(1,lag_Tc,IEEE4,disable_irga OR disable_sonic OR lag_Tc=NAN)
-
   Average(1,hmp_T,IEEE4,(inbetween_1hz_scan OR hmp_T=NAN))
   Average(1,hmp_e,IEEE4,(inbetween_1hz_scan OR hmp_e=NAN))
-
   Average(1,rea_co2_up,IEEE4,rea_co2_up=NAN)
   Average(1,rea_co2_dn,IEEE4,rea_co2_dn=NAN)
   Average(1,rea_h2o_up,IEEE4,rea_h2o_up=NAN)
   Average(1,rea_h2o_dn,IEEE4,rea_h2o_dn=NAN)
   Average(1,rea_tmpr_up,IEEE4,rea_tmpr_up=NAN)
   Average(1,rea_tmpr_dn,IEEE4,rea_tmpr_dn=NAN)
-  
   Totalize(1,1,UINT4,NOT vlv_up_ON OR vlv_up_ON=NAN)
   Totalize(1,1,UINT4,NOT vlv_dn_ON OR vlv_dn_ON=NAN)
   Totalize(1,1,UINT4,False)
@@ -693,8 +681,7 @@ DataTable(work_rea,rea_finished,10)
   Average(1,rea_tmpr_dn,IEEE4,rea_tmpr_dn=NAN)
 EndTable
 
-'----- FINAL OUTPUTS -----
-DataTable(rea,True,10)
+DataTable(rea,True,10) '----------------------------------------- FINAL OUTPUTS
   OpenInterval
   CardOut(1,100)
   Sample(1,delta_CO2,FP2)
@@ -747,7 +734,6 @@ EndTable
 DataTable(stats,True,-1)
   DataInterval(0,STAT_INTV,Min,10)
   CardOut(1,-1)
-
   Sample(1,CO2_ppm_Avg,FP2)
   Sample(1,CO2_Avg,FP2)
   Sample(1,CO2_Std,FP2)
@@ -759,26 +745,16 @@ DataTable(stats,True,-1)
     Sample(1,irga_CO2_signal_Avg,FP2)
     Sample(1,irga_H2O_signal_Avg,FP2)
   #EndIf
-
   Sample(1,Ts_Avg,FP2)
   Sample(1,Ts_Std,FP2)
-
   Sample(1,Tc_Avg,FP2)
   Sample(1,Tc_Std,FP2)
   Sample(1,Uz_Std,FP2)
   Sample(1,L_,FP2)
   Sample(1,u_star,FP2)
   Sample(1,tau,IEEE4)
-
-  Sample(1,itt,IEEE4)
-'  Sample(1,itt_meas,IEEE4)
-'  Sample(1,itt_model,IEEE4)
-'  Sample(1,itt_diff,IEEE4)
-'  Sample(1,itt_absdiff,IEEE4)
-'  Sample(1,zeta,IEEE4)
-
+  Sample(1,itt,FP2)
   Sample(1,fetch_70,FP2)
-
   Sample(1,Fco2,FP2)
   Sample(1,Fco2_raw,FP2)
   Sample(1,Fco2_LE_wpl,FP2)
@@ -789,37 +765,30 @@ DataTable(stats,True,-1)
   Sample(1,Hc,FP2)
   Sample(1,Hs,FP2)
   Sample(1,Hs_raw,FP2)
-
   Sample(1,CE,FP2)
   Sample(1,SE,FP2)
   Sample(1,CT,FP2)
   Sample(1,ST,FP2)
   Sample(1,eta,FP2)
   Sample(1,theta,FP2)
-
   Sample(1,W_Std,FP2)
   Sample(1,deadband,FP2)
-
   Sample(1,WS_sclr_Avg,FP2)
   Sample(1,WS_rslt_Avg,FP2)
   Sample(1,WD_unit_Avg,FP2)
   Sample(1,WD_rslt_Avg,FP2)
   Sample(1,WD_Yamartino_Std,FP2)
   Sample(1,WD_CSI_Std,FP2)
-
   Sample(1,hmp_T_Avg,FP2)
   Sample(1,hmp_Tdew_Avg,FP2)
   Sample(1,hmp_RH_Avg,FP2)
   Sample(1,hmp_e_Avg,FP2)
-
   Sample(1,rho_a,FP2)
   Sample(1,rho_d,FP2)
   Sample(1,rho_v,FP2)
-  
   Sample(1,beta_CO2,FP2)
   Sample(1,beta_H2O,FP2)
   Sample(1,beta_Ts,FP2)
-
   Average(1,volFlow_up,FP2,(inbetween_1hz_scan OR volFlow_up=NAN))
   Average(1,volFlow_dn,FP2,(inbetween_1hz_scan OR volFlow_dn=NAN))
   Sample(1,delta_CO2,IEEE4)
@@ -827,11 +796,9 @@ DataTable(stats,True,-1)
   Sample(1,delta_Ts,IEEE4)
   Sample(1,vlv_up_fraction,FP2)
   Sample(1,vlv_dn_fraction,FP2)
-
   Average(1,massFlow_zero,FP2,(inbetween_1hz_scan OR massFlow_zero=NAN))
   Average(1,massFlow_up,FP2,(inbetween_1hz_scan OR massFlow_up=NAN))
   Average(1,massFlow_dn,FP2,(inbetween_1hz_scan OR massFlow_dn=NAN))
-
   Average(1,logger_tmpr,FP2,(inbetween_1hz_scan OR logger_tmpr=NAN))
   Average(1,logger_power,FP2,(inbetween_1hz_scan OR logger_power=NAN))
 EndTable
@@ -880,7 +847,6 @@ DataTable(info,1,50)
   Sample(1,VERSION,String)
     FieldNames("ProgVersion")
 EndTable
-
 
 '==============================  CUSTOM MENU  ================================
 Const Yes = True
@@ -981,7 +947,6 @@ DisplayMenu("REA DAQ",-1)
       MenuPick(Cancel,Yes)
   EndSubMenu
 EndMenu
-
 
 '===============================  FUNCTIONS  =================================
 
@@ -1130,8 +1095,7 @@ Sub update_deadband()
   neg_deadband = -1*deadband
 EndSub
 
-'--------------------
-Sub set_default_choices()
+Sub set_default_choices() '----------------------------------------------------
   ch_flow_auto_shld = DEF_FLOW_AUTO_SHLD
   ch_flowSP_shld = DEF_FLOWSP_WAIT
   ch_flowSP_zero = DEF_FLOWSP_ZERO
@@ -1226,8 +1190,7 @@ Sub setdefault_settings()
   load_settings()
 EndSub
 
-'--------------------
-Sub set_default_sch_settings()
+Sub set_default_sch_settings() '-----------------------------------------------
   ch_run_duration = DEF_RUN_DURATION
   ch_run_begintod = DEF_RUN_BEGINTOD
   ch_run_delay = DEF_RUN_DELAY
@@ -1274,11 +1237,9 @@ Sub setdefault_sch_settings()
   load_sch_settings()
 EndSub
 
-'--------------------
-Sub save_shield_state()
-  'HINT proxy variable used for compatibility with "Shield start-up state: AlwaysOff" option
-  '  but don't do "last_shield_ON = shield_ON" here b/c `load_shield_state()` will hiccup
-  Calfile(lastrun_shield_ON,1,SHLDSTATE_FILE,WRITEFILE)
+Sub save_shield_state() '------------------------------------------------------
+  'HINT Don't do "last_shield_ON = shield_ON" here b/c `load_shield_state()`
+  Calfile(lastrun_shield_ON,1,SHLDSTATE_FILE,WRITEFILE) 'will hiccup
 EndSub
 
 Sub load_shield_state()
@@ -1321,8 +1282,7 @@ Sub update_shield_state()
   EndIf
 EndSub
 
-'---------------------
-Sub autothrottle()
+Sub autothrottle() '-----------------------------------------------------------
   AvgRun(mean_up_flow,1,massFlow_up,5)
   AvgRun(mean_dn_flow,1,massFlow_dn,5)
   If (ABS(mean_up_flow - mean_dn_flow) > 0.05) Then
@@ -1355,8 +1315,7 @@ Sub end_run()
   Timer(RUN_TIMER,min,STOP_RESET)
 EndSub
 
-'---------------------
-Sub reset_rotangles()
+Sub reset_rotangles() '--------------------------------------------------------
   Move(rot_angles(1),6,0,1)
   CT = 1.0
 EndSub
@@ -1375,7 +1334,6 @@ Sub setup()
   SDMSpeed(SDM_SPEED)
   CallTable(info)
 EndSub
-
 
 '===============================  MAIN PROGRAM  ==============================
 BeginProg
@@ -1532,42 +1490,14 @@ BeginProg
       If (work_cov.Output(1,1)) Then
         GetRecord(cov_out(1),work_cov,1)
 
-        'TODO sonic_uptime
-        'TODO irga_uptime
-
         'Wind coordinate rotation: met->natural as described in:
         '  Chapter 3, Appendix A from Handbook of Micrometeorology, ed. Lee,
         '    Massman and Law
         '
-        'Also in:
         '  Finnigan J.J., Clement R., Malhi Y., Leuning R., Cleugh H.A. A
         '  re-evaluation of long-term flux measurement techniques, Part I:
         '  Averaging and Coordinate Rotation. Boundary-Layer Meteorology
         '  107: 1-48, 2003.
-        '
-        'Given original met components: Ux, Uy, Uz
-        '
-        'By forcing mean lateral & vertical winds towards zero, the rotated
-        ' "streamwise" vectors are given by:
-        '    U2 = Ux*CT*CE + Uy*CT*SE + Uz*ST
-        '    V2 = Uy*CE - Ux*SE
-        '    W2 = Uz*CT - Ux*ST*CE - Uy*ST*SE
-        '  where
-        '    CE = |U1|/sqrt( |U1|^2 + |V1|^2 )
-        '    SE = |V1|/sqrt( |U1|^2 + |V1|^2 )
-        '    CT = sqrt( |U1|^2 + |V1|^2 )/sqrt( |U1|^2 + |V1|^2 + |W1|^2 )
-        '    ST = |W1|/sqrt( |U1|^2 + |V1|^2 + |W1|^2 )
-        '
-        'These two rotations align base vector e1 (x-axis) to mean HZ WD and a
-        'third rotation is needed to fix e2,e3. This is done by forcing
-        'Cov(Uy,Uw) to zero but since it often results in physically
-        'unrealistic orientations, this step is also often ignored.
-        '    U3 = U2
-        '    V3 = V2*CB + W2*SB
-        '    W3 = W2*CB - V2*SB
-        '  where
-        '    CB = cos( 0.5*atan(2*Cov(V2,W2) / (Cov(V2,V2) - Cov(W2,W2))) )
-        '    SB = sin( 0.5*atan*2*Cov(V2,W2) / (Cov(V2,V2) - Cov(W2,W2))) )
         '
         'In this program, only first two rotations are performed. Rotated
         'values are used in flux calcs but be aware this procecure acts as a
