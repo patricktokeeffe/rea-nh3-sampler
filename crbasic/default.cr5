@@ -15,6 +15,9 @@
 'datalogger but do not check-in file with other than empty string
 Const VERSION = ""
 
+'HINTS:
+' - DO NOT use `IIF` instruction because it is proven to be bug-ridden
+
 '=====================  DEVICE CONFIGURATION  ================================
 Const SDM_CSAT3_LI7500_1 = 1 'aliases for menu
 Const SDM_CSAT3A_EC150_2 = 2
@@ -839,7 +842,6 @@ DataTable(info,1,50)
     FieldNames("flow_zero_waiting")
   Sample(1,flowSP_zero,FP2)
     FieldNames("flow_zero_running")
-'  Sample(1,(IIF(flowSP_auto, "automatic", "manual")),String)
 '  Sample(1,flowSP_updn,FP2)
     FieldNames("flow_sample")
   Sample(1,dband_mult,FP2)
@@ -1001,7 +1003,11 @@ Function military_to_FP(timestr) As Float
   If (timestr >= 100) Then
     Dim tmp
     tmp = timestr MOD 100
-    timestr = (timestr INTDV 100) + IIF(tmp >= 59, 0.9833, tmp/60.0)
+    If (tmp >= 59) Then
+      timestr = (timestr INTDV 100) + 0.9833
+    Else
+      timestr = (timestr INTDV 100) + tmp/60.0
+    EndIf
   EndIf
   Return (Round(timestr*2, 0)/2)
 EndFunction
@@ -1105,7 +1111,11 @@ Sub update_start_time()
     start_run = run_tod * 60
   Else
     RealTime(rtime)
-    start_run = ((hrofday+run_delay) MOD 24)*60 + IIF(minofhr >= 30, 60, 30)
+    If (minofhr >= 30) Then
+      start_run = ((hrofday+run_delay) MOD 24)*60 + 60
+    Else
+      start_run = ((hrofday+run_delay) MOD 24)*60 + 30
+    EndIf
   EndIf
 EndSub
 
@@ -1297,7 +1307,6 @@ Sub update_shield_state()
         setpnt_updn = flowSP_updn
       EndIf
     EndIf
-    'HACK an IIF is preferable except it returns wild values
     If (is_running) Then
       setpnt_zero = zero_SPval
     Else
