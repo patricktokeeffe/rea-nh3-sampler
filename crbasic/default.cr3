@@ -15,9 +15,6 @@
 'datalogger but do not check-in file with other than empty string
 Const VERSION = ""
 
-'HINTS:
-' - DO NOT use `IIF` instruction because it is proven to be bug-ridden
-
 '=====================  DEVICE CONFIGURATION  ================================
 Const SDM_CSAT3_LI7500_1 = 1 'aliases for menu
 Const SDM_CSAT3A_EC150_2 = 2
@@ -962,11 +959,7 @@ Function military_to_FP(timestr) As Float
   If (timestr >= 100) Then
     Dim tmp
     tmp = timestr MOD 100
-    If (tmp >= 59) Then
-      timestr = (timestr INTDV 100) + 0.9833
-    Else
-      timestr = (timestr INTDV 100) + tmp/60.0
-    EndIf
+    timestr = timestr INTDV 100 + IIF(tmp >= 59, 0.9833, tmp/60.0)
   EndIf
   Return (Round(timestr*2, 0)/2)
 EndFunction
@@ -1019,9 +1012,7 @@ EndFunction
 '
 '[L] = m
 Function Footprint70(L) As Float 'm
-  If (sonic_height=0 OR site_rufness=0 OR L=0 OR L=NAN) Then
-    Return NAN
-  EndIf
+  If (sonic_height=0 OR site_rufness=0 OR L=0 OR L=NAN) Then Return NAN
   Dim Dh, Ph, Zu, Zo
   Zo = site_rufness 'm
   Zu = sonic_height * (LOG(sonic_height/Zo) - 1 + (Zo/sonic_height)) 'm
@@ -1046,22 +1037,12 @@ EndFunction
 '[sigma_W] = m/s, [u_star] = m/s, [L] = m
 Function TurbulenceTest(sigma_W, u_star_, L) As Float '% difference
   Dim zeta, itt_model, itt_meas
-  If (sonic_height > 0) Then
-    zeta = sonic_height/L_
-    If (zeta < -2 OR zeta >= 1) Then
-      Return (-1)
-    Else
-      If (zeta < 0) Then
-        itt_model = 1.25 * (1+3*ABS(zeta))^0.333
-      Else
-        itt_model = 1.25 * (1+0.2*zeta)
-      EndIf
-      itt_meas = sigma_W/u_star_
-      Return Round(100*ABS(itt_meas-itt_model)/itt_model, 0)
-    EndIf
-  Else
-    Return (NAN)
-  EndIf
+  If (sonic_height <= 0) Then Return NAN
+  zeta = sonic_height/L_
+  If (zeta < -2 OR zeta >= 1) Then Return (-1)
+  itt_model = 1.25 * IIF(zeta < 0, (1+3*ABS(zeta))^0.333, 1+0.2*zeta)
+  itt_meas = sigma_W/u_star_
+  Return Round(100*ABS(itt_meas-itt_model)/itt_model, 0)
 EndFunction
 
 '===============================  SUBROUTINES  ===============================
@@ -1070,11 +1051,7 @@ Sub update_start_time()
     start_run = run_tod * 60
   Else
     RealTime(rtime)
-    If (minofhr >= 30) Then
-      start_run = ((hrofday+run_delay) MOD 24)*60 + 60
-    Else
-      start_run = ((hrofday+run_delay) MOD 24)*60 + 30
-    EndIf
+    start_run = ((hrofday+run_delay) MOD 24)*60 + IIF(minofhr >= 30, 60, 30)
   EndIf
 EndSub
 
@@ -1202,12 +1179,8 @@ Sub save_current_sch_choices()
   ch_run_duration = military_to_FP(ch_run_duration)
   If (ch_run_duration < RUNTIME_MIN) Then ch_run_duration = RUNTIME_MIN
   If (ch_run_duration > RUNTIME_MAX) Then ch_run_duration = RUNTIME_MAX
-  ch_run_tod = military_to_FP(ch_run_tod)
-  If (ch_run_tod < 0) Then
-    ch_run_tod = 0
-  Else
-    ch_run_tod = ch_run_tod MOD 24
-  EndIf
+  ch_run_tod = IIF(ch_run_tod <= 0, 0, military_to_FP(ch_run_tod) MOD 24)
+
   Move(sch_settings(1),NUM_SCHEDULE,sch_choice(1),NUM_SCHEDULE)
   Calfile(sch_settings,NUM_SCHEDULE,SCHEDULE_FILE,WRITEFILE)
 
@@ -1256,17 +1229,9 @@ Sub update_shield_state()
       shld_already_ON = True
       save_shield_state()
       'HINT initialize sample flow SP here but update SP within autothrottle()
-      If (flowSP_auto) Then
-        setpnt_updn = UPDNFLOW_MAX/MFC_UPDN_MULT
-      Else
-        setpnt_updn = flowSP_updn
-      EndIf
+      setpnt_updn = IIF(flowSP_auto, UPDNFLOW_MAX/MFC_UPDN_MULT, flowSP_updn)
     EndIf
-    If (is_running) Then
-      setpnt_zero = zero_SPval
-    Else
-      setpnt_zero = shld_SPval
-    EndIf
+    setpnt_zero = IIF(is_running, zero_SPval, shld_SPval)
   Else
     setpnt_updn = 0
     setpnt_zero = 0
@@ -1323,9 +1288,7 @@ Sub setup()
   load_settings()
   load_sch_settings()
   load_shield_state()
-  If (flow_auto_shld AND lastrun_shield_ON) Then
-    shield_ON = Enable
-  EndIf
+  If (flow_auto_shld AND lastrun_shield_ON) Then shield_ON = Enable
 
   SDMSpeed(SDM_SPEED)
   CallTable(info)
