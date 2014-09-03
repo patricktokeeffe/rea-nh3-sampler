@@ -37,8 +37,8 @@ ConstTable
 EndConstTable
 
 '----- WIRING -----
-Const HMP_T_DF = 11
-Const HMP_RH_DF = 12
+Const HMP_T_DF = 13
+Const HMP_RH_DF = 14
 
 Const MFC_UP_DF = 1
 Const MFC_ZERO_DF = 2
@@ -46,14 +46,14 @@ Const MFC_DN_DF = 3
 Const MFC_UPDN_CAO = 1 'MFCs share port
 Const MFC_ZERO_CAO = 2
 
-Const C_UPDN_OFF = 1 'C1: valve off for UP/DN MFCs
-'Const C_ZERO_OFF = 2 'C2: valve off for zero MFC
-'Const C_UPDN_PRG = 3 'C3: valve purge for UP/DN MFCs <- not implemented XXX
-'Const C_ZERO_PRG = 4 'C4: valve purge for zero MFC
-Const C_VLV_UP = 5   'C5: relay: 3-way valve at UP denuder inlet
-Const C_VLV_DN = 6   'C6: relay: 3-way valve at DN denuder inlet
-Const C_PUMP_ON = 7  'C7: relay: pump power
-Const C_MFC_ON = 8   'C8: relay: MFC power
+'Const C_UPDN_OFF =  'valve off for UP/DN MFCs
+'Const C_ZERO_OFF =  'valve off for zero MFC
+'Const C_UPDN_PRG =  'valve purge for UP/DN MFCs <- not implemented XXX
+'Const C_ZERO_PRG =  'valve purge for zero MFC
+Const C_VLV_UP = 1   'C1: relay: 3-way valve at UP denuder inlet
+Const C_VLV_DN = 2   'C2: relay: 3-way valve at DN denuder inlet
+Const C_PUMP_ON = 3  'C3: relay: pump power
+Const C_MFC_ON = 4   'C4: relay: MFC power
 
 '----- ANALOG SCALING -----
 Const HMP_T_MULT = (60 + 40) / 1000    '-40* - 60* / 0-1V
@@ -1339,7 +1339,7 @@ BeginProg
 
     update_shield_state()
     PortSet(C_MFC_ON, shield_ON)
-    PortSet(C_UPDN_OFF, NOT is_running)
+    'PortSet(C_UPDN_OFF, NOT is_running)
     ExciteCAO(MFC_UPDN_CAO,setpnt_updn,True)
     ExciteCAO(MFC_ZERO_CAO,setpnt_zero,True)
 
