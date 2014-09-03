@@ -1377,8 +1377,8 @@ BeginProg
     update_shield_state()
     PortSet(C_MFC_ON, shield_ON)
     PortSet(C_UPDN_OFF, NOT is_running)
-    ExciteCAO(MFC_UPDN_CAO,setpnt_updn,False,True) 'XXX do MFCs need boost opt?
-    ExciteCAO(MFC_ZERO_CAO,setpnt_zero,False,True)
+    ExciteCAO(MFC_UPDN_CAO,setpnt_updn,True)
+    ExciteCAO(MFC_ZERO_CAO,setpnt_zero,True)
 
     #If (DATA_SRCS=SDM_CSAT3_LI7500_1) Then
       CS7500(irga_CO2,1,LI7500_ADDR,LI7500_CMD)
