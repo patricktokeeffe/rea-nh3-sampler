@@ -8,3 +8,5 @@ Thumbs.db
 .~lock.*
 
 ignore.*
+
+/third-party/*.pdf
