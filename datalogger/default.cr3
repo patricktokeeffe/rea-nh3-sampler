@@ -1124,7 +1124,6 @@ Sub save_current_choices()
   If (ch_dband_mult < 0 OR (ch_dband_mult = 0 AND ch_dband_min > 0)) Then
     ch_dband_mult = DEF_DBAND_MULT
   EndIf
-  update_deadband()
   
   If (ch_throttle_min < UPDNFLOW_MIN/UPDNFLOW_MAX) Then
     ch_throttle_min = UPDNFLOW_MIN/UPDNFLOW_MAX
@@ -1132,14 +1131,15 @@ Sub save_current_choices()
     ch_throttle_min = 1
   EndIf
 
+  Move(settings(1),NUM_SETTINGS,choice(1),NUM_SETTINGS)
+  Calfile(settings,NUM_SETTINGS,SETTINGS_FILE,WRITEFILE)
+
   'Populate dependent variables
+  update_deadband()
   shld_SPval = ch_flowSP_shld/MFC_ZERO_MULT
   zero_SPval = ch_flowSP_zero/MFC_ZERO_MULT
   setpnt_updn = ch_flowSP_updn/MFC_UPDN_MULT 'TODO conditionally set this
     'to the manually defined value or automatically determined value?
-
-  Move(settings(1),NUM_SETTINGS,choice(1),NUM_SETTINGS)
-  Calfile(settings,NUM_SETTINGS,SETTINGS_FILE,WRITEFILE)
 EndSub
 
 Sub load_settings()
